@@ -44,6 +44,84 @@ const player = {
   dashCooldownMax: 120
 };
 
+const playerAnimation = {
+  state: "idle",
+  previousState: "idle",
+  stateFrame: 0
+};
+
+const characterVisuals = {
+  idle: {
+    name: "정지",
+    bobSpeed: 0.08,
+    bobAmount: 0.6,
+    bodyTop: 18,
+    leftBottom: 1,
+    rightBottom: 31,
+    centerBottom: 16,
+    headY: 0,
+    coreRadius: 4,
+    coreColor: "#7dd3fc",
+    shadowWidth: 16
+  },
+
+  walk: {
+    name: "걷기",
+    bobSpeed: 0.25,
+    bobAmount: 1.5,
+    bodyTop: 18,
+    leftBottom: 1,
+    rightBottom: 31,
+    centerBottom: 16,
+    headY: 0,
+    coreRadius: 4,
+    coreColor: "#7dd3fc",
+    shadowWidth: 16
+  },
+
+  jump: {
+    name: "점프",
+    bobSpeed: 0,
+    bobAmount: 0,
+    bodyTop: 19,
+    leftBottom: 4,
+    rightBottom: 28,
+    centerBottom: 16,
+    headY: -2,
+    coreRadius: 4,
+    coreColor: "#7dd3fc",
+    shadowWidth: 12
+  },
+
+  fall: {
+    name: "낙하",
+    bobSpeed: 0,
+    bobAmount: 0,
+    bodyTop: 17,
+    leftBottom: -1,
+    rightBottom: 33,
+    centerBottom: 16,
+    headY: 2,
+    coreRadius: 4,
+    coreColor: "#7dd3fc",
+    shadowWidth: 20
+  },
+
+  dash: {
+    name: "대시",
+    bobSpeed: 0,
+    bobAmount: 0,
+    bodyTop: 17,
+    leftBottom: 1,
+    rightBottom: 31,
+    centerBottom: 16,
+    headY: 0,
+    coreRadius: 5,
+    coreColor: "#fef08a",
+    shadowWidth: 24
+  }
+};
+
 const startPosition = {
   x: 70,
   y: 300
@@ -161,13 +239,46 @@ function getPlayerState() {
 }
 
 function getStateName(state) {
-  if (state === "idle") return "정지";
-  if (state === "walk") return "걷기";
-  if (state === "jump") return "점프";
-  if (state === "fall") return "낙하";
-  if (state === "dash") return "대시";
+  if (characterVisuals[state]) {
+    return characterVisuals[state].name;
+  }
 
   return "알 수 없음";
+}
+
+function updatePlayerAnimation() {
+  const nextState = getPlayerState();
+
+  if (nextState !== playerAnimation.state) {
+    playerAnimation.previousState = playerAnimation.state;
+    playerAnimation.state = nextState;
+    playerAnimation.stateFrame = 0;
+  } else {
+    playerAnimation.stateFrame += 1;
+  }
+}
+
+function getCharacterVisual(state) {
+  const visual = Object.assign({}, characterVisuals[state] || characterVisuals.idle);
+
+  if (state === "dash") {
+    visual.lean = player.facing * 4;
+    visual.leftBottom = player.facing === 1 ? -2 : 3;
+    visual.rightBottom = player.facing === 1 ? 29 : 34;
+    visual.centerBottom = player.facing === 1 ? 18 : 14;
+  } else {
+    visual.lean = 0;
+  }
+
+  return visual;
+}
+
+function getCharacterBob(visual) {
+  if (visual.bobSpeed === 0 || visual.bobAmount === 0) {
+    return 0;
+  }
+
+  return Math.sin(frameCount * visual.bobSpeed) * visual.bobAmount;
 }
 
 function getSolidObjects() {
@@ -825,77 +936,43 @@ function drawStateEffects(screenX, screenY, state) {
   ctx.restore();
 }
 
-function drawPlayerShadow(screenX, screenY, state) {
+function drawPlayerShadow(screenX, screenY, visual) {
   ctx.save();
-
-  let shadowWidth = 16;
-
-  if (state === "jump") {
-    shadowWidth = 12;
-  }
-
-  if (state === "fall") {
-    shadowWidth = 20;
-  }
-
-  if (state === "dash") {
-    shadowWidth = 24;
-  }
 
   ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
   ctx.beginPath();
-  ctx.ellipse(screenX + player.width / 2, screenY + player.height + 3, shadowWidth, 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(
+    screenX + player.width / 2,
+    screenY + player.height + 3,
+    visual.shadowWidth,
+    5,
+    0,
+    0,
+    Math.PI * 2
+  );
   ctx.fill();
 
   ctx.restore();
 }
 
-function drawPlayerBody(state, bob) {
-  const walkCycle = state === "walk" ? Math.sin(frameCount * 0.35) : 0;
-
-  let lean = 0;
-  let bodyTop = 18;
-  let leftBottom = 1;
-  let rightBottom = 31;
-  let centerBottom = 16;
-
-  if (state === "dash") {
-    lean = player.facing * 4;
-    bodyTop = 17;
-    leftBottom = player.facing === 1 ? -2 : 3;
-    rightBottom = player.facing === 1 ? 29 : 34;
-    centerBottom = player.facing === 1 ? 18 : 14;
-  }
-
-  if (state === "jump") {
-    bodyTop = 19;
-    leftBottom = 4;
-    rightBottom = 28;
-    centerBottom = 16;
-  }
-
-  if (state === "fall") {
-    bodyTop = 17;
-    leftBottom = -1;
-    rightBottom = 33;
-    centerBottom = 16;
-  }
+function drawCharacterBody(state, visual, bob) {
+  const walkCycle = state === "walk" ? Math.sin(playerAnimation.stateFrame * 0.35) : 0;
 
   ctx.save();
-  ctx.translate(lean, bob);
+  ctx.translate(visual.lean, bob);
 
   ctx.fillStyle = "#0f172a";
   ctx.strokeStyle = "#38bdf8";
   ctx.lineWidth = 2;
 
   ctx.beginPath();
-  ctx.moveTo(7, bodyTop);
-  ctx.lineTo(25, bodyTop);
-  ctx.lineTo(rightBottom, 44);
+  ctx.moveTo(7, visual.bodyTop);
+  ctx.lineTo(25, visual.bodyTop);
+  ctx.lineTo(visual.rightBottom, 44);
   ctx.lineTo(22, 48);
-  ctx.lineTo(centerBottom, 43);
+  ctx.lineTo(visual.centerBottom, 43);
   ctx.lineTo(10, 48);
-  ctx.lineTo(leftBottom, 44);
+  ctx.lineTo(visual.leftBottom, 44);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
@@ -929,33 +1006,18 @@ function drawPlayerBody(state, bob) {
     ctx.fillRect(18, 43, 7, 5);
   }
 
-  ctx.strokeStyle = state === "dash" ? "#fef08a" : "#7dd3fc";
+  ctx.strokeStyle = visual.coreColor;
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc(16, 29, state === "dash" ? 5 : 4, 0, Math.PI * 2);
+  ctx.arc(16, 29, visual.coreRadius, 0, Math.PI * 2);
   ctx.stroke();
 
   ctx.restore();
 }
 
-function drawPlayerHead(state, bob) {
-  let lean = 0;
-  let headY = 0;
-
-  if (state === "dash") {
-    lean = player.facing * 4;
-  }
-
-  if (state === "jump") {
-    headY = -2;
-  }
-
-  if (state === "fall") {
-    headY = 2;
-  }
-
+function drawCharacterHead(state, visual, bob) {
   ctx.save();
-  ctx.translate(lean, bob + headY);
+  ctx.translate(visual.lean, bob + visual.headY);
 
   ctx.strokeStyle = "#dbeafe";
   ctx.lineWidth = 3;
@@ -1006,33 +1068,31 @@ function drawPlayerHead(state, bob) {
   ctx.restore();
 }
 
+function drawVectorCharacter(screenX, screenY, state, visual, bob) {
+  ctx.save();
+  ctx.translate(screenX, screenY);
+
+  drawCharacterBody(state, visual, bob);
+  drawCharacterHead(state, visual, bob);
+
+  ctx.restore();
+}
+
 function drawPlayer() {
   const screenX = player.x - camera.x;
   const screenY = player.y - camera.y;
-  const state = getPlayerState();
 
-  let bob = 0;
-
-  if (state === "walk") {
-    bob = Math.sin(frameCount * 0.25) * 1.5;
-  }
-
-  if (state === "idle") {
-    bob = Math.sin(frameCount * 0.08) * 0.6;
-  }
+  const state = playerAnimation.state;
+  const visual = getCharacterVisual(state);
+  const bob = getCharacterBob(visual);
 
   if (state === "dash") {
     drawDashAfterImages(screenX, screenY, bob);
   }
 
   drawStateEffects(screenX, screenY, state);
-  drawPlayerShadow(screenX, screenY, state);
-
-  ctx.save();
-  ctx.translate(screenX, screenY);
-  drawPlayerBody(state, bob);
-  drawPlayerHead(state, bob);
-  ctx.restore();
+  drawPlayerShadow(screenX, screenY, visual);
+  drawVectorCharacter(screenX, screenY, state, visual, bob);
 }
 
 function drawMiniMap() {
@@ -1067,11 +1127,11 @@ function drawMiniMap() {
 
 function drawUI() {
   const currentRoom = getCurrentRoom();
-  const playerState = getPlayerState();
+  const playerState = playerAnimation.state;
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("5단계-3 수정판: 먼지형 이펙트", 20, 35);
+  ctx.fillText("5단계-4: 캐릭터 그래픽 구조 정리", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
@@ -1085,33 +1145,38 @@ function drawUI() {
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
 
+  ctx.fillStyle = "#cbd5e1";
+  ctx.fillText("상태 프레임: " + playerAnimation.stateFrame, 20, 180);
+
   if (gameState.hasKey) {
     ctx.fillStyle = "#fef08a";
-    ctx.fillText("열쇠: 보유 중", 20, 180);
+    ctx.fillText("열쇠: 보유 중", 20, 210);
   } else {
     ctx.fillStyle = "#fecaca";
-    ctx.fillText("열쇠: 없음", 20, 180);
+    ctx.fillText("열쇠: 없음", 20, 210);
   }
 
   if (player.dashCooldown <= 0) {
     ctx.fillStyle = "#bbf7d0";
-    ctx.fillText("대시: 사용 가능", 20, 210);
+    ctx.fillText("대시: 사용 가능", 20, 240);
   } else {
     const cooldownPercent = Math.ceil((player.dashCooldown / player.dashCooldownMax) * 100);
     ctx.fillStyle = "#fde68a";
-    ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 210);
+    ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 240);
   }
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
-  ctx.fillText(gameState.message, 20, 240);
+  ctx.fillText(gameState.message, 20, 270);
 
   drawMiniMap();
 }
 
 function update() {
   frameCount += 1;
+
   updatePlayer();
+  updatePlayerAnimation();
   updateParticles();
   updateCamera();
 }
