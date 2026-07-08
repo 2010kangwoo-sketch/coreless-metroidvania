@@ -41,7 +41,17 @@ const player = {
   dashDuration: 10,
   dashSpeed: 12,
   dashCooldown: 0,
-  dashCooldownMax: 120
+  dashCooldownMax: 120,
+
+  maxHealth: 5,
+  health: 5,
+  invincibleTimer: 0,
+
+  attackTimer: 0,
+  attackDuration: 12,
+  attackCooldown: 0,
+  attackCooldownMax: 26,
+  attackId: 0
 };
 
 const playerAnimation = {
@@ -136,8 +146,8 @@ const gameState = {
 
 const rooms = [
   { name: "방 1: 시작 구역", guide: "기본 이동과 점프", x: 0, width: 900, color: "#111827" },
-  { name: "방 2: 점프 연습 구역", guide: "발판을 밟고 위로 이동", x: 900, width: 900, color: "#172033" },
-  { name: "방 3: 대시 연습 구역", guide: "넓은 틈을 대시로 넘기", x: 1800, width: 900, color: "#1f1b2e" },
+  { name: "방 2: 점프 연습 구역", guide: "첫 번째 적을 피해 공격하기", x: 900, width: 900, color: "#172033" },
+  { name: "방 3: 대시 연습 구역", guide: "대시와 전투를 함께 사용", x: 1800, width: 900, color: "#1f1b2e" },
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
   { name: "방 5: 다음 지역 입구", guide: "다음 단계 연결 예정", x: 3600, width: 900, color: "#10251f" }
 ];
@@ -188,6 +198,41 @@ const keyItem = {
   collected: false
 };
 
+const enemies = [
+  {
+    name: "그늘 벌레",
+    x: 1130,
+    y: 384,
+    width: 34,
+    height: 36,
+    minX: 990,
+    maxX: 1600,
+    vx: 1.1,
+    maxHealth: 3,
+    health: 3,
+    alive: true,
+    hitTimer: 0,
+    invincibleTimer: 0,
+    hitByAttackId: -1
+  },
+  {
+    name: "균열 파수꾼",
+    x: 2320,
+    y: 384,
+    width: 38,
+    height: 36,
+    minX: 2220,
+    maxX: 2620,
+    vx: -1.25,
+    maxHealth: 4,
+    health: 4,
+    alive: true,
+    hitTimer: 0,
+    invincibleTimer: 0,
+    hitByAttackId: -1
+  }
+];
+
 document.addEventListener("keydown", function(event) {
   keys[event.code] = true;
 
@@ -198,6 +243,11 @@ document.addEventListener("keydown", function(event) {
 
   if (event.code === "ShiftLeft" || event.code === "ShiftRight" || event.code === "KeyK") {
     startDash();
+    event.preventDefault();
+  }
+
+  if (event.code === "KeyJ") {
+    startAttack();
     event.preventDefault();
   }
 });
@@ -399,6 +449,22 @@ function spawnDashParticles() {
   }
 }
 
+function spawnHitParticles(x, y, direction) {
+  for (let i = 0; i < 10; i++) {
+    addDashStreak(
+      x,
+      y + (Math.random() - 0.5) * 18,
+      direction * (1.5 + Math.random() * 3),
+      (Math.random() - 0.5) * 1.2,
+      12 + Math.random() * 20,
+      2 + Math.random() * 4,
+      14 + Math.random() * 8,
+      "rgba(248, 113, 113, 1)",
+      (Math.random() - 0.5) * 0.4
+    );
+  }
+}
+
 function updateParticles() {
   for (let i = particles.length - 1; i >= 0; i--) {
     const particle = particles[i];
@@ -546,6 +612,52 @@ function updateDash() {
   }
 }
 
+function startAttack() {
+  if (player.attackCooldown > 0) {
+    return;
+  }
+
+  player.attackTimer = player.attackDuration;
+  player.attackCooldown = player.attackCooldownMax;
+  player.attackId += 1;
+
+  gameState.message = "공격했습니다.";
+
+  const hitbox = getAttackHitbox();
+
+  spawnHitParticles(
+    hitbox.x + hitbox.width / 2,
+    hitbox.y + hitbox.height / 2,
+    player.facing
+  );
+}
+
+function updatePlayerCombat() {
+  if (player.attackTimer > 0) {
+    player.attackTimer -= 1;
+  }
+
+  if (player.attackCooldown > 0) {
+    player.attackCooldown -= 1;
+  }
+
+  if (player.invincibleTimer > 0) {
+    player.invincibleTimer -= 1;
+  }
+}
+
+function getAttackHitbox() {
+  const attackWidth = 48;
+  const attackHeight = 34;
+
+  return {
+    x: player.facing === 1 ? player.x + player.width - 2 : player.x - attackWidth + 2,
+    y: player.y + 8,
+    width: attackWidth,
+    height: attackHeight
+  };
+}
+
 function tryJump() {
   if (player.onGround) {
     spawnJumpParticles();
@@ -661,6 +773,151 @@ function moveVertically(previousOnGround, previousVy) {
   }
 }
 
+function updateEnemies() {
+  for (const enemy of enemies) {
+    if (!enemy.alive) {
+      continue;
+    }
+
+    enemy.x += enemy.vx;
+
+    if (enemy.x < enemy.minX) {
+      enemy.x = enemy.minX;
+      enemy.vx = Math.abs(enemy.vx);
+    }
+
+    if (enemy.x + enemy.width > enemy.maxX) {
+      enemy.x = enemy.maxX - enemy.width;
+      enemy.vx = -Math.abs(enemy.vx);
+    }
+
+    if (enemy.hitTimer > 0) {
+      enemy.hitTimer -= 1;
+    }
+
+    if (enemy.invincibleTimer > 0) {
+      enemy.invincibleTimer -= 1;
+    }
+  }
+}
+
+function checkAttackHits() {
+  if (player.attackTimer <= 0) {
+    return;
+  }
+
+  const hitbox = getAttackHitbox();
+
+  for (const enemy of enemies) {
+    if (!enemy.alive) {
+      continue;
+    }
+
+    if (enemy.hitByAttackId === player.attackId) {
+      continue;
+    }
+
+    if (isColliding(hitbox, enemy)) {
+      enemy.hitByAttackId = player.attackId;
+      enemy.health -= 1;
+      enemy.hitTimer = 14;
+      enemy.invincibleTimer = 12;
+
+      enemy.x += player.facing * 12;
+
+      spawnHitParticles(
+        enemy.x + enemy.width / 2,
+        enemy.y + enemy.height / 2,
+        player.facing
+      );
+
+      if (enemy.health <= 0) {
+        enemy.alive = false;
+        gameState.message = enemy.name + "를 쓰러뜨렸습니다.";
+      } else {
+        gameState.message = enemy.name + "에게 공격이 맞았습니다.";
+      }
+    }
+  }
+}
+
+function checkPlayerEnemyDamage() {
+  if (player.invincibleTimer > 0) {
+    return;
+  }
+
+  for (const enemy of enemies) {
+    if (!enemy.alive) {
+      continue;
+    }
+
+    if (isColliding(player, enemy)) {
+      takeDamage(enemy);
+      return;
+    }
+  }
+}
+
+function takeDamage(enemy) {
+  player.health -= 1;
+  player.invincibleTimer = 75;
+
+  const playerCenterX = player.x + player.width / 2;
+  const enemyCenterX = enemy.x + enemy.width / 2;
+
+  if (playerCenterX < enemyCenterX) {
+    player.vx = -7;
+    player.facing = 1;
+  } else {
+    player.vx = 7;
+    player.facing = -1;
+  }
+
+  player.vy = -7;
+  player.isDashing = false;
+
+  spawnHitParticles(
+    player.x + player.width / 2,
+    player.y + player.height / 2,
+    playerCenterX < enemyCenterX ? -1 : 1
+  );
+
+  if (player.health <= 0) {
+    respawnPlayer();
+  } else {
+    gameState.message = "피격되었습니다. 체력이 1 감소했습니다.";
+  }
+}
+
+function respawnPlayer() {
+  player.x = startPosition.x;
+  player.y = startPosition.y;
+  player.vx = 0;
+  player.vy = 0;
+  player.health = player.maxHealth;
+  player.invincibleTimer = 90;
+  player.isDashing = false;
+  player.attackTimer = 0;
+
+  gameState.message = "체력이 모두 줄어 시작 지점에서 다시 시작합니다.";
+
+  for (let i = 0; i < 18; i++) {
+    const direction = i % 2 === 0 ? -1 : 1;
+
+    addDustParticle(
+      player.x + player.width / 2,
+      player.y + player.height + 2,
+      direction * (1.2 + Math.random() * 2.2),
+      -0.5 - Math.random() * 1.2,
+      12 + Math.random() * 18,
+      3 + Math.random() * 3,
+      26 + Math.random() * 10,
+      "rgba(125, 211, 252, 1)",
+      direction * (0.05 + Math.random() * 0.2)
+    );
+  }
+}
+
 function checkKeyCollection() {
   if (!keyItem.collected && isColliding(player, keyItem)) {
     keyItem.collected = true;
@@ -682,6 +939,7 @@ function resetPlayer() {
   player.vy = 0;
   player.isDashing = false;
   player.dashTimer = 0;
+  player.invincibleTimer = 75;
   gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
 
   for (let i = 0; i < 16; i++) {
@@ -849,6 +1107,84 @@ function drawKeyItem() {
   ctx.fillText("열쇠", screenX - 4, screenY - 8);
 }
 
+function drawEnemies() {
+  for (const enemy of enemies) {
+    if (!enemy.alive) {
+      continue;
+    }
+
+    const screenX = enemy.x - camera.x;
+    const screenY = enemy.y - camera.y;
+    const facing = enemy.vx >= 0 ? 1 : -1;
+
+    ctx.save();
+
+    if (enemy.hitTimer > 0) {
+      ctx.globalAlpha = 0.55;
+    }
+
+    ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+    ctx.beginPath();
+    ctx.ellipse(
+      screenX + enemy.width / 2,
+      screenY + enemy.height + 4,
+      enemy.width / 2,
+      5,
+      0,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+
+    ctx.fillStyle = "#1f2937";
+    ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#94a3b8";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.ellipse(
+      screenX + enemy.width / 2,
+      screenY + enemy.height / 2,
+      enemy.width / 2,
+      enemy.height / 2,
+      0,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#38bdf8";
+    if (facing === 1) {
+      ctx.fillRect(screenX + 20, screenY + 12, 4, 6);
+      ctx.fillRect(screenX + 27, screenY + 12, 4, 6);
+    } else {
+      ctx.fillRect(screenX + 4, screenY + 12, 4, 6);
+      ctx.fillRect(screenX + 11, screenY + 12, 4, 6);
+    }
+
+    ctx.strokeStyle = "#64748b";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(screenX + 8, screenY + 28);
+    ctx.lineTo(screenX + 2, screenY + 34);
+    ctx.moveTo(screenX + 26, screenY + 28);
+    ctx.lineTo(screenX + 34, screenY + 34);
+    ctx.stroke();
+
+    const barWidth = 36;
+    const barHeight = 5;
+    const healthRatio = enemy.health / enemy.maxHealth;
+
+    ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+    ctx.fillRect(screenX - 1, screenY - 13, barWidth, barHeight);
+
+    ctx.fillStyle = "#f87171";
+    ctx.fillRect(screenX - 1, screenY - 13, barWidth * healthRatio, barHeight);
+
+    ctx.restore();
+  }
+}
+
 function drawRoomLabels() {
   for (const room of rooms) {
     const screenX = room.x + 35 - camera.x;
@@ -867,8 +1203,10 @@ function drawRoomLabels() {
 function drawWarnings() {
   const warnings = [
     { text: "낭떠러지", x: 845, y: 455 },
-    { text: "점프 구간", x: 1210, y: 270 },
+    { text: "적 등장", x: 1130, y: 370 },
+    { text: "J 키로 공격", x: 1270, y: 270 },
     { text: "대시 필요", x: 2070, y: 455 },
+    { text: "두 번째 적", x: 2300, y: 370 },
     { text: "열쇠 획득 구간", x: 3040, y: 250 },
     { text: "열쇠 없이는 통과 불가", x: 3450, y: 280 },
     { text: "다음 지역 입구", x: 4040, y: 260 }
@@ -897,6 +1235,56 @@ function drawDashAfterImages(screenX, screenY, bob) {
     drawRoundedRect(offsetX + 8, screenY + 4 + bob, 16, 16, 6);
     ctx.fill();
   }
+
+  ctx.restore();
+}
+
+function drawAttack() {
+  if (player.attackTimer <= 0) {
+    return;
+  }
+
+  const hitbox = getAttackHitbox();
+  const screenX = hitbox.x - camera.x;
+  const screenY = hitbox.y - camera.y;
+  const progress = player.attackTimer / player.attackDuration;
+
+  ctx.save();
+
+  ctx.globalAlpha = 0.35 + progress * 0.35;
+  ctx.fillStyle = "rgba(125, 211, 252, 0.28)";
+  drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 16);
+  ctx.fill();
+
+  ctx.globalAlpha = 0.85;
+  ctx.strokeStyle = "#e0f2fe";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+
+  if (player.facing === 1) {
+    ctx.moveTo(screenX + 6, screenY + 27);
+    ctx.quadraticCurveTo(screenX + 27, screenY - 4, screenX + 46, screenY + 13);
+  } else {
+    ctx.moveTo(screenX + 42, screenY + 27);
+    ctx.quadraticCurveTo(screenX + 21, screenY - 4, screenX + 2, screenY + 13);
+  }
+
+  ctx.stroke();
+
+  ctx.globalAlpha = 0.45;
+  ctx.strokeStyle = "#38bdf8";
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+
+  if (player.facing === 1) {
+    ctx.moveTo(screenX + 5, screenY + 30);
+    ctx.quadraticCurveTo(screenX + 30, screenY - 6, screenX + 47, screenY + 17);
+  } else {
+    ctx.moveTo(screenX + 43, screenY + 30);
+    ctx.quadraticCurveTo(screenX + 18, screenY - 6, screenX + 1, screenY + 17);
+  }
+
+  ctx.stroke();
 
   ctx.restore();
 }
@@ -1092,7 +1480,16 @@ function drawPlayer() {
 
   drawStateEffects(screenX, screenY, state);
   drawPlayerShadow(screenX, screenY, visual);
+
+  ctx.save();
+
+  if (player.invincibleTimer > 0 && frameCount % 8 < 4) {
+    ctx.globalAlpha = 0.45;
+  }
+
   drawVectorCharacter(screenX, screenY, state, visual, bob);
+
+  ctx.restore();
 }
 
 function drawMiniMap() {
@@ -1125,16 +1522,39 @@ function drawMiniMap() {
   ctx.fillRect(playerMarkerX - 2, mapY - 4, 4, mapHeight + 8);
 }
 
+function drawHealthUI() {
+  const startX = 20;
+  const startY = 285;
+
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "15px Arial";
+  ctx.fillText("체력", startX, startY);
+
+  for (let i = 0; i < player.maxHealth; i++) {
+    const x = startX + 45 + i * 24;
+    const y = startY - 13;
+
+    ctx.fillStyle = i < player.health ? "#f87171" : "rgba(148, 163, 184, 0.35)";
+    ctx.beginPath();
+    ctx.arc(x, y, 8, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "#fecaca";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+}
+
 function drawUI() {
   const currentRoom = getCurrentRoom();
   const playerState = playerAnimation.state;
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("5단계-4: 캐릭터 그래픽 구조 정리", 20, 35);
+  ctx.fillText("6단계-1: 기본 전투 시스템", 20, 35);
 
   ctx.font = "16px Arial";
-  ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
+  ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시 | J: 공격", 20, 65);
 
   ctx.fillStyle = "#bfdbfe";
   ctx.fillText("현재 방: " + currentRoom.name, 20, 95);
@@ -1165,9 +1585,11 @@ function drawUI() {
     ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 240);
   }
 
+  drawHealthUI();
+
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
-  ctx.fillText(gameState.message, 20, 270);
+  ctx.fillText(gameState.message, 20, 320);
 
   drawMiniMap();
 }
@@ -1177,6 +1599,10 @@ function update() {
 
   updatePlayer();
   updatePlayerAnimation();
+  updatePlayerCombat();
+  updateEnemies();
+  checkAttackHits();
+  checkPlayerEnemyDamage();
   updateParticles();
   updateCamera();
 }
@@ -1191,8 +1617,10 @@ function draw() {
   drawPlatforms();
   drawKeyItem();
   drawWarnings();
+  drawEnemies();
   drawParticles();
   drawPlayer();
+  drawAttack();
   drawUI();
 }
 
