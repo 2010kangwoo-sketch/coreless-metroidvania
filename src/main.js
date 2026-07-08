@@ -208,6 +208,9 @@ const enemies = [
     minX: 990,
     maxX: 1600,
     vx: 1.1,
+    speed: 1.35,
+    patrolDirection: 1,
+    chaseRange: 360,
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -224,6 +227,9 @@ const enemies = [
     minX: 2220,
     maxX: 2620,
     vx: -1.25,
+    speed: 1.45,
+    patrolDirection: -1,
+    chaseRange: 420,
     maxHealth: 4,
     health: 4,
     alive: true,
@@ -779,17 +785,8 @@ function updateEnemies() {
       continue;
     }
 
-    enemy.x += enemy.vx;
-
-    if (enemy.x < enemy.minX) {
-      enemy.x = enemy.minX;
-      enemy.vx = Math.abs(enemy.vx);
-    }
-
-    if (enemy.x + enemy.width > enemy.maxX) {
-      enemy.x = enemy.maxX - enemy.width;
-      enemy.vx = -Math.abs(enemy.vx);
-    }
+    updateEnemyAI(enemy);
+    moveEnemyHorizontally(enemy);
 
     if (enemy.hitTimer > 0) {
       enemy.hitTimer -= 1;
@@ -797,6 +794,95 @@ function updateEnemies() {
 
     if (enemy.invincibleTimer > 0) {
       enemy.invincibleTimer -= 1;
+    }
+  }
+}
+
+function updateEnemyAI(enemy) {
+  const enemyCenterX = enemy.x + enemy.width / 2;
+  const enemyCenterY = enemy.y + enemy.height / 2;
+
+  const playerCenterX = player.x + player.width / 2;
+  const playerCenterY = player.y + player.height / 2;
+
+  const distanceX = playerCenterX - enemyCenterX;
+  const distanceY = playerCenterY - enemyCenterY;
+
+  const playerIsClose =
+    Math.abs(distanceX) <= enemy.chaseRange &&
+    Math.abs(distanceY) <= 140;
+
+  if (playerIsClose) {
+    if (distanceX > 0) {
+      enemy.vx = enemy.speed;
+      enemy.patrolDirection = 1;
+    } else if (distanceX < 0) {
+      enemy.vx = -enemy.speed;
+      enemy.patrolDirection = -1;
+    } else {
+      enemy.vx = 0;
+    }
+  } else {
+    enemy.vx = enemy.patrolDirection * enemy.speed * 0.7;
+  }
+}
+
+function moveEnemyHorizontally(enemy) {
+  enemy.x += enemy.vx;
+
+  if (enemy.x < enemy.minX) {
+    enemy.x = enemy.minX;
+    enemy.patrolDirection = 1;
+    enemy.vx = Math.abs(enemy.speed);
+  }
+
+  if (enemy.x + enemy.width > enemy.maxX) {
+    enemy.x = enemy.maxX - enemy.width;
+    enemy.patrolDirection = -1;
+    enemy.vx = -Math.abs(enemy.speed);
+  }
+
+  for (const object of getSolidObjects()) {
+    if (isColliding(enemy, object)) {
+      if (enemy.vx > 0) {
+        enemy.x = object.x - enemy.width;
+        enemy.patrolDirection = -1;
+      } else if (enemy.vx < 0) {
+        enemy.x = object.x + object.width;
+        enemy.patrolDirection = 1;
+      }
+
+      enemy.vx = 0;
+    }
+  }
+}
+
+function knockbackEnemy(enemy, direction, distance) {
+  for (let i = 0; i < distance; i++) {
+    enemy.x += direction;
+
+    let blocked = false;
+
+    if (enemy.x < enemy.minX) {
+      enemy.x = enemy.minX;
+      blocked = true;
+    }
+
+    if (enemy.x + enemy.width > enemy.maxX) {
+      enemy.x = enemy.maxX - enemy.width;
+      blocked = true;
+    }
+
+    for (const object of getSolidObjects()) {
+      if (isColliding(enemy, object)) {
+        enemy.x -= direction;
+        blocked = true;
+        break;
+      }
+    }
+
+    if (blocked) {
+      break;
     }
   }
 }
@@ -823,7 +909,7 @@ function checkAttackHits() {
       enemy.hitTimer = 14;
       enemy.invincibleTimer = 12;
 
-      enemy.x += player.facing * 12;
+      knockbackEnemy(enemy, player.facing, 12);
 
       spawnHitParticles(
         enemy.x + enemy.width / 2,
