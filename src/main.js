@@ -183,12 +183,12 @@ const gravity = 0.65;
 
 const gameState = {
   hasKey: false,
-  message: "J 키로 공격하고, L 키로 회복할 수 있습니다."
+  message: "적의 붉은 예고 공격을 피하세요."
 };
 
 const rooms = [
   { name: "방 1: 시작 구역", guide: "기본 이동과 점프", x: 0, width: 900, color: "#111827" },
-  { name: "방 2: 전투 연습 구역", guide: "적을 공격해 코어 에너지를 모으기", x: 900, width: 900, color: "#172033" },
+  { name: "방 2: 적 공격 연습 구역", guide: "붉은 공격 예고를 보고 피하기", x: 900, width: 900, color: "#172033" },
   { name: "방 3: 대시 전투 구역", guide: "대시와 전투를 함께 사용", x: 1800, width: 900, color: "#1f1b2e" },
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
   { name: "방 5: 다음 지역 입구", guide: "다음 단계 연결 예정", x: 3600, width: 900, color: "#10251f" }
@@ -255,6 +255,15 @@ const enemies = [
     targetDirection: 1,
     chaseRange: 360,
     aiDecisionTimer: 0,
+
+    attackRange: 72,
+    attackCooldown: 0,
+    attackCooldownMax: 95,
+    attackTimer: 0,
+    attackDuration: 42,
+    attackDirection: 1,
+    attackHitPlayer: false,
+
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -276,6 +285,15 @@ const enemies = [
     targetDirection: -1,
     chaseRange: 420,
     aiDecisionTimer: 0,
+
+    attackRange: 78,
+    attackCooldown: 0,
+    attackCooldownMax: 105,
+    attackTimer: 0,
+    attackDuration: 44,
+    attackDirection: -1,
+    attackHitPlayer: false,
+
     maxHealth: 4,
     health: 4,
     alive: true,
@@ -579,6 +597,7 @@ function spawnHealParticles() {
 function spawnHealCompleteParticles() {
   for (let i = 0; i < 20; i++) {
     const angle = (Math.PI * 2 * i) / 20;
+
     addDashStreak(
       player.x + player.width / 2,
       player.y + player.height / 2,
@@ -589,6 +608,24 @@ function spawnHealCompleteParticles() {
       18 + Math.random() * 8,
       "rgba(134, 239, 172, 1)",
       angle
+    );
+  }
+}
+
+function spawnEnemyAttackParticles(enemy) {
+  const hitbox = getEnemyAttackHitbox(enemy);
+
+  for (let i = 0; i < 5; i++) {
+    addDashStreak(
+      hitbox.x + hitbox.width / 2,
+      hitbox.y + Math.random() * hitbox.height,
+      enemy.attackDirection * (1.2 + Math.random() * 2.2),
+      (Math.random() - 0.5) * 1.0,
+      12 + Math.random() * 18,
+      2 + Math.random() * 3,
+      12 + Math.random() * 6,
+      "rgba(248, 113, 113, 1)",
+      (Math.random() - 0.5) * 0.35
     );
   }
 }
@@ -992,6 +1029,7 @@ function updateEnemies() {
 
     updateEnemyAI(enemy);
     moveEnemyHorizontally(enemy);
+    updateEnemyCombat(enemy);
 
     if (enemy.hitTimer > 0) {
       enemy.hitTimer -= 1;
@@ -1019,6 +1057,17 @@ function updateEnemyAI(enemy) {
 
   if (enemy.aiDecisionTimer > 0) {
     enemy.aiDecisionTimer -= 1;
+  }
+
+  if (enemy.attackTimer > 0) {
+    enemy.vx = 0;
+    return;
+  }
+
+  if (canEnemyStartAttack(enemy, distanceX, distanceY)) {
+    startEnemyAttack(enemy, distanceX);
+    enemy.vx = 0;
+    return;
   }
 
   if (playerIsClose) {
@@ -1050,6 +1099,89 @@ function updateEnemyAI(enemy) {
   } else {
     enemy.vx = enemy.patrolDirection * enemy.speed * 0.7;
   }
+}
+
+function canEnemyStartAttack(enemy, distanceX, distanceY) {
+  if (enemy.attackCooldown > 0) {
+    return false;
+  }
+
+  if (enemy.attackTimer > 0) {
+    return false;
+  }
+
+  if (Math.abs(distanceX) > enemy.attackRange) {
+    return false;
+  }
+
+  if (Math.abs(distanceY) > 48) {
+    return false;
+  }
+
+  if (player.invincibleTimer > 0) {
+    return false;
+  }
+
+  return true;
+}
+
+function startEnemyAttack(enemy, distanceX) {
+  enemy.attackTimer = enemy.attackDuration;
+  enemy.attackCooldown = enemy.attackCooldownMax;
+  enemy.attackHitPlayer = false;
+
+  if (distanceX >= 0) {
+    enemy.attackDirection = 1;
+    enemy.targetDirection = 1;
+    enemy.patrolDirection = 1;
+  } else {
+    enemy.attackDirection = -1;
+    enemy.targetDirection = -1;
+    enemy.patrolDirection = -1;
+  }
+
+  gameState.message = enemy.name + "가 공격을 준비합니다.";
+}
+
+function updateEnemyCombat(enemy) {
+  if (enemy.attackCooldown > 0) {
+    enemy.attackCooldown -= 1;
+  }
+
+  if (enemy.attackTimer > 0) {
+    const previousAttackTimer = enemy.attackTimer;
+    enemy.attackTimer -= 1;
+
+    if (isEnemyAttackActive(enemy) && frameCount % 5 === 0) {
+      spawnEnemyAttackParticles(enemy);
+    }
+
+    if (previousAttackTimer > 0 && enemy.attackTimer <= 0) {
+      enemy.attackHitPlayer = false;
+    }
+  }
+}
+
+function isEnemyAttackActive(enemy) {
+  if (enemy.attackTimer <= 0) {
+    return false;
+  }
+
+  const elapsed = enemy.attackDuration - enemy.attackTimer;
+
+  return elapsed >= 18 && elapsed <= 30;
+}
+
+function getEnemyAttackHitbox(enemy) {
+  const attackWidth = 54;
+  const attackHeight = 34;
+
+  return {
+    x: enemy.attackDirection === 1 ? enemy.x + enemy.width - 2 : enemy.x - attackWidth + 2,
+    y: enemy.y + 2,
+    width: attackWidth,
+    height: attackHeight
+  };
 }
 
 function moveEnemyHorizontally(enemy) {
@@ -1161,6 +1293,34 @@ function checkAttackHits() {
   }
 }
 
+function checkEnemyAttackDamage() {
+  if (player.invincibleTimer > 0) {
+    return;
+  }
+
+  for (const enemy of enemies) {
+    if (!enemy.alive) {
+      continue;
+    }
+
+    if (!isEnemyAttackActive(enemy)) {
+      continue;
+    }
+
+    if (enemy.attackHitPlayer) {
+      continue;
+    }
+
+    const hitbox = getEnemyAttackHitbox(enemy);
+
+    if (isColliding(hitbox, player)) {
+      enemy.attackHitPlayer = true;
+      takeDamage(enemy, enemy.name + "의 공격에 맞았습니다.");
+      return;
+    }
+  }
+}
+
 function checkPlayerEnemyDamage() {
   if (player.invincibleTimer > 0) {
     return;
@@ -1171,14 +1331,18 @@ function checkPlayerEnemyDamage() {
       continue;
     }
 
+    if (enemy.attackTimer > 0) {
+      continue;
+    }
+
     if (isColliding(player, enemy)) {
-      takeDamage(enemy);
+      takeDamage(enemy, "적과 부딪혀 체력이 1 감소했습니다.");
       return;
     }
   }
 }
 
-function takeDamage(enemy) {
+function takeDamage(enemy, message) {
   if (player.healTimer > 0) {
     player.healTimer = 0;
     player.healingWillRestore = false;
@@ -1213,7 +1377,7 @@ function takeDamage(enemy) {
   if (player.health <= 0) {
     respawnPlayer();
   } else {
-    gameState.message = "피격되었습니다. 체력이 1 감소했습니다.";
+    gameState.message = message;
   }
 }
 
@@ -1449,7 +1613,7 @@ function drawEnemies() {
 
     const screenX = enemy.x - camera.x;
     const screenY = enemy.y - camera.y;
-    const facing = enemy.vx >= 0 ? 1 : -1;
+    const facing = enemy.attackTimer > 0 ? enemy.attackDirection : enemy.vx >= 0 ? 1 : -1;
 
     ctx.save();
 
@@ -1457,6 +1621,11 @@ function drawEnemies() {
       const shake = Math.sin(enemy.hitTimer * 2) * 2;
       ctx.translate(shake, 0);
       ctx.globalAlpha = 0.65;
+    }
+
+    if (enemy.attackTimer > 0 && enemy.hitTimer <= 0) {
+      const pulse = Math.sin(frameCount * 0.4) * 0.15;
+      ctx.globalAlpha = 0.85 + pulse;
     }
 
     ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
@@ -1472,9 +1641,15 @@ function drawEnemies() {
     );
     ctx.fill();
 
-    ctx.fillStyle = enemy.hitTimer > 0 ? "#3f1f2a" : "#1f2937";
-    ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#94a3b8";
-    ctx.lineWidth = enemy.hitTimer > 0 ? 3 : 2;
+    if (enemy.attackTimer > 0) {
+      ctx.fillStyle = "#3b1d1d";
+      ctx.strokeStyle = "#fca5a5";
+      ctx.lineWidth = 3;
+    } else {
+      ctx.fillStyle = enemy.hitTimer > 0 ? "#3f1f2a" : "#1f2937";
+      ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#94a3b8";
+      ctx.lineWidth = enemy.hitTimer > 0 ? 3 : 2;
+    }
 
     ctx.beginPath();
     ctx.ellipse(
@@ -1489,7 +1664,7 @@ function drawEnemies() {
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = enemy.hitTimer > 0 ? "#fca5a5" : "#38bdf8";
+    ctx.fillStyle = enemy.attackTimer > 0 ? "#fecaca" : enemy.hitTimer > 0 ? "#fca5a5" : "#38bdf8";
     if (facing === 1) {
       ctx.fillRect(screenX + 20, screenY + 12, 4, 6);
       ctx.fillRect(screenX + 27, screenY + 12, 4, 6);
@@ -1498,7 +1673,7 @@ function drawEnemies() {
       ctx.fillRect(screenX + 11, screenY + 12, 4, 6);
     }
 
-    ctx.strokeStyle = "#64748b";
+    ctx.strokeStyle = enemy.attackTimer > 0 ? "#fca5a5" : "#64748b";
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(screenX + 8, screenY + 28);
@@ -1516,6 +1691,84 @@ function drawEnemies() {
 
     ctx.fillStyle = "#f87171";
     ctx.fillRect(screenX - 1, screenY - 13, barWidth * healthRatio, barHeight);
+
+    ctx.restore();
+  }
+}
+
+function drawEnemyAttacks() {
+  for (const enemy of enemies) {
+    if (!enemy.alive) {
+      continue;
+    }
+
+    if (enemy.attackTimer <= 0) {
+      continue;
+    }
+
+    const hitbox = getEnemyAttackHitbox(enemy);
+    const screenX = hitbox.x - camera.x;
+    const screenY = hitbox.y - camera.y;
+
+    const elapsed = enemy.attackDuration - enemy.attackTimer;
+    const active = isEnemyAttackActive(enemy);
+
+    ctx.save();
+
+    if (!active) {
+      const warningAlpha = 0.18 + Math.sin(frameCount * 0.35) * 0.08;
+
+      ctx.globalAlpha = warningAlpha;
+      ctx.fillStyle = "#ef4444";
+      drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 12);
+      ctx.fill();
+
+      ctx.globalAlpha = 0.85;
+      ctx.strokeStyle = "#fca5a5";
+      ctx.lineWidth = 2;
+      drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 12);
+      ctx.stroke();
+
+      ctx.fillStyle = "#fecaca";
+      ctx.font = "18px Arial";
+      ctx.fillText("!", screenX + hitbox.width / 2 - 4, screenY - 6);
+    } else {
+      ctx.globalAlpha = 0.42;
+      ctx.fillStyle = "#ef4444";
+      drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 14);
+      ctx.fill();
+
+      ctx.globalAlpha = 0.9;
+      ctx.strokeStyle = "#fecaca";
+      ctx.lineWidth = 5;
+      ctx.lineCap = "round";
+      ctx.beginPath();
+
+      if (enemy.attackDirection === 1) {
+        ctx.moveTo(screenX + 4, screenY + 28);
+        ctx.quadraticCurveTo(screenX + 26, screenY - 8, screenX + 52, screenY + 16);
+      } else {
+        ctx.moveTo(screenX + 50, screenY + 28);
+        ctx.quadraticCurveTo(screenX + 28, screenY - 8, screenX + 2, screenY + 16);
+      }
+
+      ctx.stroke();
+
+      ctx.globalAlpha = 0.28;
+      ctx.strokeStyle = "#ef4444";
+      ctx.lineWidth = 13;
+      ctx.beginPath();
+
+      if (enemy.attackDirection === 1) {
+        ctx.moveTo(screenX + 2, screenY + 31);
+        ctx.quadraticCurveTo(screenX + 28, screenY - 10, screenX + 54, screenY + 20);
+      } else {
+        ctx.moveTo(screenX + 52, screenY + 31);
+        ctx.quadraticCurveTo(screenX + 26, screenY - 10, screenX, screenY + 20);
+      }
+
+      ctx.stroke();
+    }
 
     ctx.restore();
   }
@@ -1539,7 +1792,7 @@ function drawRoomLabels() {
 function drawWarnings() {
   const warnings = [
     { text: "낭떠러지", x: 845, y: 455 },
-    { text: "적 등장", x: 1130, y: 370 },
+    { text: "적 공격 예고 확인", x: 1090, y: 370 },
     { text: "J 공격 / L 회복", x: 1270, y: 270 },
     { text: "대시 필요", x: 2070, y: 455 },
     { text: "두 번째 적", x: 2300, y: 370 },
@@ -2012,7 +2265,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("6단계-3: 코어 에너지와 회복 시스템", 20, 35);
+  ctx.fillText("6단계-4: 적 공격 예고와 근접 공격 패턴", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -2071,6 +2324,7 @@ function update() {
   updatePlayerCombat();
   updateEnemies();
   checkAttackHits();
+  checkEnemyAttackDamage();
   checkPlayerEnemyDamage();
   updateParticles();
   updateCamera();
@@ -2088,6 +2342,7 @@ function drawWorld() {
   drawKeyItem();
   drawWarnings();
   drawEnemies();
+  drawEnemyAttacks();
   drawParticles();
   drawPlayer();
   drawAttack();
