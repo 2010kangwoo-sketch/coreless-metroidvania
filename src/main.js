@@ -3,6 +3,18 @@ const ctx = canvas.getContext("2d");
 
 const keys = {};
 
+const world = {
+  width: 2600,
+  height: 900
+};
+
+const camera = {
+  x: 0,
+  y: 0,
+  width: canvas.width,
+  height: canvas.height
+};
+
 const player = {
   x: 70,
   y: 300,
@@ -36,22 +48,29 @@ const startPosition = {
 
 const gravity = 0.65;
 
-// 발판 목록입니다.
-// x, y는 발판의 왼쪽 위 좌표입니다.
-// width는 가로 길이, height는 세로 높이입니다.
 const platforms = [
   { x: 0, y: 420, width: 330, height: 80 },
-  { x: 450, y: 420, width: 450, height: 80 },
+  { x: 450, y: 420, width: 360, height: 80 },
+  { x: 900, y: 420, width: 420, height: 80 },
+  { x: 1450, y: 420, width: 500, height: 80 },
+  { x: 2100, y: 420, width: 500, height: 80 },
 
   { x: 150, y: 340, width: 180, height: 24 },
   { x: 410, y: 285, width: 160, height: 24 },
   { x: 650, y: 340, width: 150, height: 24 },
 
-  { x: 540, y: 210, width: 100, height: 24 },
-  { x: 80, y: 250, width: 90, height: 24 },
+  { x: 980, y: 330, width: 180, height: 24 },
+  { x: 1220, y: 280, width: 150, height: 24 },
+  { x: 1530, y: 340, width: 170, height: 24 },
+  { x: 1780, y: 290, width: 160, height: 24 },
+
+  { x: 2050, y: 340, width: 170, height: 24 },
+  { x: 2300, y: 280, width: 190, height: 24 },
 
   // 벽처럼 쓰는 장애물
-  { x: 760, y: 260, width: 40, height: 80 }
+  { x: 760, y: 260, width: 40, height: 80 },
+  { x: 1360, y: 300, width: 40, height: 120 },
+  { x: 1960, y: 300, width: 40, height: 120 }
 ];
 
 document.addEventListener("keydown", function(event) {
@@ -177,8 +196,8 @@ function moveHorizontally() {
     player.vx = 0;
   }
 
-  if (player.x + player.width > canvas.width) {
-    player.x = canvas.width - player.width;
+  if (player.x + player.width > world.width) {
+    player.x = world.width - player.width;
     player.vx = 0;
   }
 }
@@ -202,7 +221,7 @@ function moveVertically() {
 }
 
 function checkFall() {
-  if (player.y > canvas.height + 100) {
+  if (player.y > world.height) {
     resetPlayer();
   }
 }
@@ -227,49 +246,91 @@ function updatePlayer() {
   checkFall();
 }
 
+function updateCamera() {
+  camera.x = player.x + player.width / 2 - camera.width / 2;
+  camera.y = player.y + player.height / 2 - camera.height / 2;
+
+  if (camera.x < 0) {
+    camera.x = 0;
+  }
+
+  if (camera.y < 0) {
+    camera.y = 0;
+  }
+
+  if (camera.x + camera.width > world.width) {
+    camera.x = world.width - camera.width;
+  }
+
+  if (camera.y + camera.height > world.height) {
+    camera.y = world.height - camera.height;
+  }
+}
+
 function drawBackground() {
   ctx.fillStyle = "#141414";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   ctx.fillStyle = "#0f172a";
-  ctx.fillRect(0, 420, canvas.width, canvas.height - 420);
+  ctx.fillRect(-camera.x, 420 - camera.y, world.width, world.height - 420);
+
+  // 배경 기둥 장식
+  for (let x = 200; x < world.width; x += 400) {
+    ctx.fillStyle = "#1e293b";
+    ctx.fillRect(x - camera.x, 120 - camera.y, 70, 300);
+  }
 }
 
 function drawPlatforms() {
   for (const platform of platforms) {
+    const screenX = platform.x - camera.x;
+    const screenY = platform.y - camera.y;
+
     ctx.fillStyle = "#475569";
-    ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+    ctx.fillRect(screenX, screenY, platform.width, platform.height);
 
     ctx.fillStyle = "#64748b";
-    ctx.fillRect(platform.x, platform.y, platform.width, 5);
+    ctx.fillRect(screenX, screenY, platform.width, 5);
   }
 }
 
 function drawGapWarning() {
   ctx.fillStyle = "#facc15";
   ctx.font = "14px Arial";
-  ctx.fillText("낭떠러지", 355, 455);
+
+  const warnings = [
+    { text: "낭떠러지", x: 355, y: 455 },
+    { text: "넓은 맵 구간", x: 980, y: 390 },
+    { text: "카메라 이동 테스트", x: 1750, y: 260 }
+  ];
+
+  for (const warning of warnings) {
+    ctx.fillText(warning.text, warning.x - camera.x, warning.y - camera.y);
+  }
 }
 
 function drawPlayer() {
+  const screenX = player.x - camera.x;
+  const screenY = player.y - camera.y;
+
   ctx.fillStyle = "#7dd3fc";
-  ctx.fillRect(player.x, player.y, player.width, player.height);
+  ctx.fillRect(screenX, screenY, player.width, player.height);
 
   ctx.fillStyle = "#e0f2fe";
 
   if (player.facing === 1) {
-    ctx.fillRect(player.x + 20, player.y + 12, 6, 6);
+    ctx.fillRect(screenX + 20, screenY + 12, 6, 6);
   } else {
-    ctx.fillRect(player.x + 6, player.y + 12, 6, 6);
+    ctx.fillRect(screenX + 6, screenY + 12, 6, 6);
   }
 
   if (player.isDashing) {
     ctx.fillStyle = "rgba(125, 211, 252, 0.35)";
 
     if (player.facing === 1) {
-      ctx.fillRect(player.x - 28, player.y + 8, 24, 32);
+      ctx.fillRect(screenX - 28, screenY + 8, 24, 32);
     } else {
-      ctx.fillRect(player.x + player.width + 4, player.y + 8, 24, 32);
+      ctx.fillRect(screenX + player.width + 4, screenY + 8, 24, 32);
     }
   }
 }
@@ -277,7 +338,7 @@ function drawPlayer() {
 function drawUI() {
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("3단계-2: 발판과 충돌 추가", 20, 35);
+  ctx.fillText("3단계-3: 넓은 맵과 카메라 추가", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
@@ -288,10 +349,13 @@ function drawUI() {
     const cooldownPercent = Math.ceil((player.dashCooldown / player.dashCooldownMax) * 100);
     ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 95);
   }
+
+  ctx.fillText("현재 위치 X: " + Math.floor(player.x) + " / " + world.width, 20, 125);
 }
 
 function update() {
   updatePlayer();
+  updateCamera();
 }
 
 function draw() {
