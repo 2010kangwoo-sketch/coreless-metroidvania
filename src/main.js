@@ -812,17 +812,47 @@ function updateEnemyAI(enemy) {
     Math.abs(distanceX) <= enemy.chaseRange &&
     Math.abs(distanceY) <= 140;
 
+  // 처음 실행될 때만 AI 판단용 값을 만들어 줍니다.
+  if (enemy.aiDecisionTimer === undefined) {
+    enemy.aiDecisionTimer = 0;
+  }
+
+  if (enemy.targetDirection === undefined) {
+    enemy.targetDirection = enemy.patrolDirection;
+  }
+
+  // 방향을 너무 자주 바꾸지 않도록 판단 시간을 둡니다.
+  if (enemy.aiDecisionTimer > 0) {
+    enemy.aiDecisionTimer -= 1;
+  }
+
   if (playerIsClose) {
-    if (distanceX > 0) {
-      enemy.vx = enemy.speed;
-      enemy.patrolDirection = 1;
-    } else if (distanceX < 0) {
-      enemy.vx = -enemy.speed;
-      enemy.patrolDirection = -1;
-    } else {
-      enemy.vx = 0;
+    // 플레이어가 적의 거의 위쪽에 있으면 좌우로 떨지 않고 멈춥니다.
+    if (Math.abs(distanceX) < 45) {
+      enemy.vx *= 0.82;
+
+      if (Math.abs(enemy.vx) < 0.08) {
+        enemy.vx = 0;
+      }
+
+      return;
     }
+
+    // 일정 시간이 지났을 때만 방향을 다시 판단합니다.
+    if (enemy.aiDecisionTimer <= 0) {
+      if (distanceX > 0) {
+        enemy.targetDirection = 1;
+      } else {
+        enemy.targetDirection = -1;
+      }
+
+      enemy.patrolDirection = enemy.targetDirection;
+      enemy.aiDecisionTimer = 16;
+    }
+
+    enemy.vx = enemy.targetDirection * enemy.speed;
   } else {
+    // 플레이어가 멀면 기존처럼 순찰합니다.
     enemy.vx = enemy.patrolDirection * enemy.speed * 0.7;
   }
 }
