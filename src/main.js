@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 const keys = {};
 
 const player = {
-  x: 100,
+  x: 70,
   y: 300,
   width: 32,
   height: 48,
@@ -29,13 +29,41 @@ const player = {
   dashCooldownMax: 120
 };
 
+const startPosition = {
+  x: 70,
+  y: 300
+};
+
 const gravity = 0.65;
-const floorY = 420;
+
+// 발판 목록입니다.
+// x, y는 발판의 왼쪽 위 좌표입니다.
+// width는 가로 길이, height는 세로 높이입니다.
+const platforms = [
+  { x: 0, y: 420, width: 330, height: 80 },
+  { x: 450, y: 420, width: 450, height: 80 },
+
+  { x: 150, y: 340, width: 180, height: 24 },
+  { x: 410, y: 285, width: 160, height: 24 },
+  { x: 650, y: 340, width: 150, height: 24 },
+
+  { x: 540, y: 210, width: 100, height: 24 },
+  { x: 80, y: 250, width: 90, height: 24 },
+
+  // 벽처럼 쓰는 장애물
+  { x: 760, y: 260, width: 40, height: 80 }
+];
 
 document.addEventListener("keydown", function(event) {
   keys[event.code] = true;
 
-  if (event.code === "Space" || event.code === "ShiftLeft" || event.code === "ShiftRight") {
+  if (event.code === "Space") {
+    tryJump();
+    event.preventDefault();
+  }
+
+  if (event.code === "ShiftLeft" || event.code === "ShiftRight" || event.code === "KeyK") {
+    startDash();
     event.preventDefault();
   }
 });
@@ -64,10 +92,6 @@ function updateDash() {
     player.dashCooldown -= 1;
   }
 
-  if (keys["ShiftLeft"] || keys["ShiftRight"] || keys["KeyK"]) {
-    startDash();
-  }
-
   if (player.isDashing) {
     player.vx = player.facing * player.dashSpeed;
     player.dashTimer -= 1;
@@ -75,6 +99,13 @@ function updateDash() {
     if (player.dashTimer <= 0) {
       player.isDashing = false;
     }
+  }
+}
+
+function tryJump() {
+  if (player.onGround) {
+    player.vy = player.jumpPower;
+    player.onGround = false;
   }
 }
 
@@ -110,35 +141,37 @@ function updatePlayerHorizontalMove() {
   }
 }
 
-function updatePlayerJump() {
-  if (keys["Space"] && player.onGround) {
-    player.vy = player.jumpPower;
-    player.onGround = false;
-  }
-}
-
 function updateGravity() {
   if (!player.isDashing) {
     player.vy += gravity;
   }
 }
 
-function updatePlayerPosition() {
+function isColliding(rectA, rectB) {
+  return (
+    rectA.x < rectB.x + rectB.width &&
+    rectA.x + rectA.width > rectB.x &&
+    rectA.y < rectB.y + rectB.height &&
+    rectA.y + rectA.height > rectB.y
+  );
+}
+
+function moveHorizontally() {
   player.x += player.vx;
-  player.y += player.vy;
-}
 
-function checkFloorCollision() {
-  if (player.y + player.height >= floorY) {
-    player.y = floorY - player.height;
-    player.vy = 0;
-    player.onGround = true;
-  } else {
-    player.onGround = false;
+  for (const platform of platforms) {
+    if (isColliding(player, platform)) {
+      if (player.vx > 0) {
+        player.x = platform.x - player.width;
+      } else if (player.vx < 0) {
+        player.x = platform.x + platform.width;
+      }
+
+      player.vx = 0;
+      player.isDashing = false;
+    }
   }
-}
 
-function checkWallCollision() {
   if (player.x < 0) {
     player.x = 0;
     player.vx = 0;
@@ -150,22 +183,72 @@ function checkWallCollision() {
   }
 }
 
+function moveVertically() {
+  player.y += player.vy;
+  player.onGround = false;
+
+  for (const platform of platforms) {
+    if (isColliding(player, platform)) {
+      if (player.vy > 0) {
+        player.y = platform.y - player.height;
+        player.vy = 0;
+        player.onGround = true;
+      } else if (player.vy < 0) {
+        player.y = platform.y + platform.height;
+        player.vy = 0;
+      }
+    }
+  }
+}
+
+function checkFall() {
+  if (player.y > canvas.height + 100) {
+    resetPlayer();
+  }
+}
+
+function resetPlayer() {
+  player.x = startPosition.x;
+  player.y = startPosition.y;
+  player.vx = 0;
+  player.vy = 0;
+  player.isDashing = false;
+  player.dashTimer = 0;
+}
+
 function updatePlayer() {
   updateDash();
   updatePlayerHorizontalMove();
-  updatePlayerJump();
   updateGravity();
-  updatePlayerPosition();
-  checkFloorCollision();
-  checkWallCollision();
+
+  moveHorizontally();
+  moveVertically();
+
+  checkFall();
 }
 
 function drawBackground() {
   ctx.fillStyle = "#141414";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#1f2937";
-  ctx.fillRect(0, floorY, canvas.width, canvas.height - floorY);
+  ctx.fillStyle = "#0f172a";
+  ctx.fillRect(0, 420, canvas.width, canvas.height - 420);
+}
+
+function drawPlatforms() {
+  for (const platform of platforms) {
+    ctx.fillStyle = "#475569";
+    ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+
+    ctx.fillStyle = "#64748b";
+    ctx.fillRect(platform.x, platform.y, platform.width, 5);
+  }
+}
+
+function drawGapWarning() {
+  ctx.fillStyle = "#facc15";
+  ctx.font = "14px Arial";
+  ctx.fillText("낭떠러지", 355, 455);
 }
 
 function drawPlayer() {
@@ -194,7 +277,7 @@ function drawPlayer() {
 function drawUI() {
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("3단계: 이동감 개선 + 대시 추가", 20, 35);
+  ctx.fillText("3단계-2: 발판과 충돌 추가", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
@@ -215,6 +298,8 @@ function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
   drawBackground();
+  drawPlatforms();
+  drawGapWarning();
   drawPlayer();
   drawUI();
 }
