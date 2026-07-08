@@ -138,6 +138,36 @@ function getCurrentRoom() {
   return rooms[0];
 }
 
+function getPlayerState() {
+  if (player.isDashing) {
+    return "dash";
+  }
+
+  if (!player.onGround && player.vy < 0) {
+    return "jump";
+  }
+
+  if (!player.onGround && player.vy >= 0) {
+    return "fall";
+  }
+
+  if (Math.abs(player.vx) > 0.25) {
+    return "walk";
+  }
+
+  return "idle";
+}
+
+function getStateName(state) {
+  if (state === "idle") return "정지";
+  if (state === "walk") return "걷기";
+  if (state === "jump") return "점프";
+  if (state === "fall") return "낙하";
+  if (state === "dash") return "대시";
+
+  return "알 수 없음";
+}
+
 function getSolidObjects() {
   const solidObjects = [...platforms];
 
@@ -493,35 +523,113 @@ function drawWarnings() {
 function drawDashAfterImages(screenX, screenY, bob) {
   ctx.save();
 
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 4; i++) {
     const offsetX = screenX - player.facing * i * 14;
-    const alpha = 0.18 - i * 0.04;
+    const alpha = 0.22 - i * 0.04;
 
     ctx.globalAlpha = alpha;
     ctx.fillStyle = "#7dd3fc";
-    drawRoundedRect(offsetX + 5, screenY + 8 + bob, 22, 32, 8);
+    drawRoundedRect(offsetX + 4, screenY + 7 + bob, 24, 32, 8);
     ctx.fill();
 
     ctx.fillStyle = "#e0f2fe";
-    drawRoundedRect(offsetX + 8, screenY + 5 + bob, 16, 16, 6);
+    drawRoundedRect(offsetX + 8, screenY + 4 + bob, 16, 16, 6);
     ctx.fill();
   }
 
   ctx.restore();
 }
 
-function drawPlayerShadow(screenX, screenY) {
+function drawStateEffects(screenX, screenY, state) {
   ctx.save();
-  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
-  ctx.beginPath();
-  ctx.ellipse(screenX + player.width / 2, screenY + player.height + 3, 16, 5, 0, 0, Math.PI * 2);
-  ctx.fill();
+
+  if (state === "jump") {
+    ctx.strokeStyle = "rgba(125, 211, 252, 0.35)";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(screenX + 6, screenY + 52);
+    ctx.lineTo(screenX + 2, screenY + 62);
+
+    ctx.moveTo(screenX + 16, screenY + 54);
+    ctx.lineTo(screenX + 16, screenY + 65);
+
+    ctx.moveTo(screenX + 26, screenY + 52);
+    ctx.lineTo(screenX + 31, screenY + 62);
+    ctx.stroke();
+  }
+
+  if (state === "fall") {
+    ctx.strokeStyle = "rgba(203, 213, 225, 0.25)";
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(screenX + 2, screenY - 8);
+    ctx.lineTo(screenX + 2, screenY + 5);
+
+    ctx.moveTo(screenX + 30, screenY - 6);
+    ctx.lineTo(screenX + 30, screenY + 8);
+    ctx.stroke();
+  }
+
   ctx.restore();
 }
 
-function drawPlayerBody(moving, bob) {
-  const walkCycle = moving ? Math.sin(frameCount * 0.35) : 0;
-  const lean = player.isDashing ? player.facing * 3 : 0;
+function drawPlayerShadow(screenX, screenY, state) {
+  ctx.save();
+
+  let shadowWidth = 16;
+
+  if (state === "jump") {
+    shadowWidth = 12;
+  }
+
+  if (state === "fall") {
+    shadowWidth = 20;
+  }
+
+  if (state === "dash") {
+    shadowWidth = 24;
+  }
+
+  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+  ctx.beginPath();
+  ctx.ellipse(screenX + player.width / 2, screenY + player.height + 3, shadowWidth, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawPlayerBody(state, bob) {
+  const walkCycle = state === "walk" ? Math.sin(frameCount * 0.35) : 0;
+
+  let lean = 0;
+  let bodyTop = 18;
+  let leftBottom = 1;
+  let rightBottom = 31;
+  let centerBottom = 16;
+
+  if (state === "dash") {
+    lean = player.facing * 4;
+    bodyTop = 17;
+    leftBottom = player.facing === 1 ? -2 : 3;
+    rightBottom = player.facing === 1 ? 29 : 34;
+    centerBottom = player.facing === 1 ? 18 : 14;
+  }
+
+  if (state === "jump") {
+    bodyTop = 19;
+    leftBottom = 4;
+    rightBottom = 28;
+    centerBottom = 16;
+  }
+
+  if (state === "fall") {
+    bodyTop = 17;
+    leftBottom = -1;
+    rightBottom = 33;
+    centerBottom = 16;
+  }
 
   ctx.save();
   ctx.translate(lean, bob);
@@ -529,14 +637,15 @@ function drawPlayerBody(moving, bob) {
   ctx.fillStyle = "#0f172a";
   ctx.strokeStyle = "#38bdf8";
   ctx.lineWidth = 2;
+
   ctx.beginPath();
-  ctx.moveTo(7, 18);
-  ctx.lineTo(25, 18);
-  ctx.lineTo(31, 44);
-  ctx.lineTo(21, 48);
-  ctx.lineTo(16, 43);
-  ctx.lineTo(11, 48);
-  ctx.lineTo(1, 44);
+  ctx.moveTo(7, bodyTop);
+  ctx.lineTo(25, bodyTop);
+  ctx.lineTo(rightBottom, 44);
+  ctx.lineTo(22, 48);
+  ctx.lineTo(centerBottom, 43);
+  ctx.lineTo(10, 48);
+  ctx.lineTo(leftBottom, 44);
   ctx.closePath();
   ctx.fill();
   ctx.stroke();
@@ -552,32 +661,70 @@ function drawPlayerBody(moving, bob) {
   ctx.fill();
 
   ctx.fillStyle = "#020617";
-  ctx.fillRect(8, 43 + walkCycle, 7, 5);
-  ctx.fillRect(18, 43 - walkCycle, 7, 5);
 
-  ctx.strokeStyle = "#7dd3fc";
+  if (state === "walk") {
+    ctx.fillRect(8, 43 + walkCycle, 7, 5);
+    ctx.fillRect(18, 43 - walkCycle, 7, 5);
+  } else if (state === "jump") {
+    ctx.fillRect(8, 42, 7, 5);
+    ctx.fillRect(18, 42, 7, 5);
+  } else if (state === "fall") {
+    ctx.fillRect(7, 44, 8, 5);
+    ctx.fillRect(18, 44, 8, 5);
+  } else if (state === "dash") {
+    ctx.fillRect(7 - player.facing * 2, 43, 8, 5);
+    ctx.fillRect(18 - player.facing * 2, 43, 8, 5);
+  } else {
+    ctx.fillRect(8, 43, 7, 5);
+    ctx.fillRect(18, 43, 7, 5);
+  }
+
+  ctx.strokeStyle = state === "dash" ? "#fef08a" : "#7dd3fc";
   ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.arc(16, 29, 4, 0, Math.PI * 2);
+  ctx.arc(16, 29, state === "dash" ? 5 : 4, 0, Math.PI * 2);
   ctx.stroke();
 
   ctx.restore();
 }
 
-function drawPlayerHead(bob) {
-  const lean = player.isDashing ? player.facing * 3 : 0;
+function drawPlayerHead(state, bob) {
+  let lean = 0;
+  let headY = 0;
+
+  if (state === "dash") {
+    lean = player.facing * 4;
+  }
+
+  if (state === "jump") {
+    headY = -2;
+  }
+
+  if (state === "fall") {
+    headY = 2;
+  }
 
   ctx.save();
-  ctx.translate(lean, bob);
+  ctx.translate(lean, bob + headY);
 
   ctx.strokeStyle = "#dbeafe";
   ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(9, 8);
-  ctx.quadraticCurveTo(4, 0, 2, -5);
-  ctx.moveTo(23, 8);
-  ctx.quadraticCurveTo(28, 0, 30, -5);
-  ctx.stroke();
+
+  if (state === "dash") {
+    ctx.beginPath();
+    ctx.moveTo(9, 8);
+    ctx.quadraticCurveTo(3 - player.facing * 4, 0, 2 - player.facing * 7, -5);
+    ctx.moveTo(23, 8);
+    ctx.quadraticCurveTo(29 - player.facing * 4, 0, 30 - player.facing * 7, -5);
+    ctx.stroke();
+  } else {
+    ctx.beginPath();
+    ctx.moveTo(9, 8);
+    ctx.quadraticCurveTo(4, 0, 2, -5);
+    ctx.moveTo(23, 8);
+    ctx.quadraticCurveTo(28, 0, 30, -5);
+    ctx.stroke();
+  }
 
   ctx.fillStyle = "#dbeafe";
   ctx.strokeStyle = "#f8fafc";
@@ -591,12 +738,19 @@ function drawPlayerHead(bob) {
   ctx.fill();
 
   ctx.fillStyle = "#020617";
+
+  let eyeOffset = 0;
+
+  if (state === "dash") {
+    eyeOffset = player.facing * 2;
+  }
+
   if (player.facing === 1) {
-    ctx.fillRect(14, 11, 3, 5);
-    ctx.fillRect(21, 11, 3, 5);
+    ctx.fillRect(14 + eyeOffset, 11, 3, 5);
+    ctx.fillRect(21 + eyeOffset, 11, 3, 5);
   } else {
-    ctx.fillRect(8, 11, 3, 5);
-    ctx.fillRect(15, 11, 3, 5);
+    ctx.fillRect(8 + eyeOffset, 11, 3, 5);
+    ctx.fillRect(15 + eyeOffset, 11, 3, 5);
   }
 
   ctx.restore();
@@ -605,19 +759,29 @@ function drawPlayerHead(bob) {
 function drawPlayer() {
   const screenX = player.x - camera.x;
   const screenY = player.y - camera.y;
-  const moving = Math.abs(player.vx) > 0.25 && player.onGround;
-  const bob = moving ? Math.sin(frameCount * 0.25) * 1.5 : 0;
+  const state = getPlayerState();
 
-  if (player.isDashing) {
+  let bob = 0;
+
+  if (state === "walk") {
+    bob = Math.sin(frameCount * 0.25) * 1.5;
+  }
+
+  if (state === "idle") {
+    bob = Math.sin(frameCount * 0.08) * 0.6;
+  }
+
+  if (state === "dash") {
     drawDashAfterImages(screenX, screenY, bob);
   }
 
-  drawPlayerShadow(screenX, screenY);
+  drawStateEffects(screenX, screenY, state);
+  drawPlayerShadow(screenX, screenY, state);
 
   ctx.save();
   ctx.translate(screenX, screenY);
-  drawPlayerBody(moving, bob);
-  drawPlayerHead(bob);
+  drawPlayerBody(state, bob);
+  drawPlayerHead(state, bob);
   ctx.restore();
 }
 
@@ -653,10 +817,11 @@ function drawMiniMap() {
 
 function drawUI() {
   const currentRoom = getCurrentRoom();
+  const playerState = getPlayerState();
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("5단계-1: 캐릭터 외형 개선", 20, 35);
+  ctx.fillText("5단계-2: 행동 상태별 자세 구분", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
@@ -667,25 +832,25 @@ function drawUI() {
   ctx.fillStyle = "#cbd5e1";
   ctx.fillText("방 설명: " + currentRoom.guide, 20, 120);
 
+  ctx.fillStyle = "#fef08a";
+  ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
+
   if (gameState.hasKey) {
     ctx.fillStyle = "#fef08a";
-    ctx.fillText("열쇠: 보유 중", 20, 150);
+    ctx.fillText("열쇠: 보유 중", 20, 180);
   } else {
     ctx.fillStyle = "#fecaca";
-    ctx.fillText("열쇠: 없음", 20, 150);
+    ctx.fillText("열쇠: 없음", 20, 180);
   }
 
   if (player.dashCooldown <= 0) {
     ctx.fillStyle = "#bbf7d0";
-    ctx.fillText("대시: 사용 가능", 20, 180);
+    ctx.fillText("대시: 사용 가능", 20, 210);
   } else {
     const cooldownPercent = Math.ceil((player.dashCooldown / player.dashCooldownMax) * 100);
     ctx.fillStyle = "#fde68a";
-    ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 180);
+    ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 210);
   }
-
-  ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("현재 위치 X: " + Math.floor(player.x) + " / " + world.width, 20, 210);
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
