@@ -182,59 +182,108 @@ function getSolidObjects() {
   return solidObjects;
 }
 
-function addParticle(x, y, vx, vy, size, life, color) {
+function addDustParticle(x, y, vx, vy, width, height, life, color, rotation) {
   particles.push({
+    type: "dust",
     x: x,
     y: y,
     vx: vx,
     vy: vy,
-    size: size,
+    width: width,
+    height: height,
     life: life,
     maxLife: life,
-    color: color
+    color: color,
+    rotation: rotation,
+    gravity: 0.025,
+    growX: 0.35,
+    growY: 0.015
+  });
+}
+
+function addDashStreak(x, y, vx, vy, width, height, life, color, rotation) {
+  particles.push({
+    type: "dash",
+    x: x,
+    y: y,
+    vx: vx,
+    vy: vy,
+    width: width,
+    height: height,
+    life: life,
+    maxLife: life,
+    color: color,
+    rotation: rotation,
+    gravity: 0,
+    growX: -0.15,
+    growY: -0.01
   });
 }
 
 function spawnJumpParticles() {
   for (let i = 0; i < 10; i++) {
-    addParticle(
-      player.x + player.width / 2,
-      player.y + player.height,
-      (Math.random() - 0.5) * 2.5,
-      Math.random() * 1.2,
-      3 + Math.random() * 3,
-      22 + Math.random() * 8,
-      "rgba(203, 213, 225, 1)"
+    const direction = Math.random() < 0.5 ? -1 : 1;
+
+    addDustParticle(
+      player.x + player.width / 2 + (Math.random() - 0.5) * 10,
+      player.y + player.height + 2,
+      direction * (0.7 + Math.random() * 1.8),
+      -0.15 + Math.random() * 0.45,
+      9 + Math.random() * 12,
+      2.5 + Math.random() * 2.5,
+      20 + Math.random() * 10,
+      "rgba(148, 163, 184, 1)",
+      (Math.random() - 0.5) * 0.35
     );
   }
 }
 
 function spawnLandingParticles(power) {
-  const count = Math.min(18, 8 + Math.floor(power));
+  const count = Math.min(24, 10 + Math.floor(power * 1.5));
 
   for (let i = 0; i < count; i++) {
-    addParticle(
-      player.x + player.width / 2,
-      player.y + player.height,
-      (Math.random() - 0.5) * 4.2,
-      -Math.random() * 2.0,
-      3 + Math.random() * 4,
-      26 + Math.random() * 12,
-      "rgba(148, 163, 184, 1)"
+    const direction = i % 2 === 0 ? -1 : 1;
+
+    addDustParticle(
+      player.x + player.width / 2 + (Math.random() - 0.5) * 8,
+      player.y + player.height + 2,
+      direction * (1.0 + Math.random() * 3.0),
+      -0.3 - Math.random() * 0.9,
+      12 + Math.random() * 18,
+      3 + Math.random() * 3,
+      24 + Math.random() * 14,
+      "rgba(148, 163, 184, 1)",
+      direction * (0.05 + Math.random() * 0.25)
+    );
+  }
+
+  for (let i = 0; i < 4; i++) {
+    addDustParticle(
+      player.x + player.width / 2 + (Math.random() - 0.5) * 14,
+      player.y + player.height + 3,
+      (Math.random() - 0.5) * 0.6,
+      -0.1,
+      18 + Math.random() * 18,
+      3 + Math.random() * 2,
+      18 + Math.random() * 8,
+      "rgba(203, 213, 225, 1)",
+      (Math.random() - 0.5) * 0.2
     );
   }
 }
 
 function spawnDashParticles() {
-  for (let i = 0; i < 16; i++) {
-    addParticle(
-      player.x + player.width / 2 - player.facing * 12,
-      player.y + 24 + (Math.random() - 0.5) * 24,
-      -player.facing * (2.5 + Math.random() * 2.5),
-      (Math.random() - 0.5) * 1.4,
+  for (let i = 0; i < 14; i++) {
+    addDashStreak(
+      player.x + player.width / 2 - player.facing * (8 + Math.random() * 20),
+      player.y + 12 + Math.random() * 28,
+      -player.facing * (1.5 + Math.random() * 3.0),
+      (Math.random() - 0.5) * 0.8,
+      18 + Math.random() * 24,
       3 + Math.random() * 4,
-      22 + Math.random() * 12,
-      "rgba(125, 211, 252, 1)"
+      18 + Math.random() * 8,
+      "rgba(125, 211, 252, 1)",
+      (Math.random() - 0.5) * 0.18
     );
   }
 }
@@ -245,7 +294,19 @@ function updateParticles() {
 
     particle.x += particle.vx;
     particle.y += particle.vy;
-    particle.vy += 0.08;
+    particle.vy += particle.gravity;
+
+    particle.width += particle.growX;
+    particle.height += particle.growY;
+
+    if (particle.width < 1) {
+      particle.width = 1;
+    }
+
+    if (particle.height < 1) {
+      particle.height = 1;
+    }
+
     particle.life -= 1;
 
     if (particle.life <= 0) {
@@ -262,11 +323,67 @@ function drawParticles() {
     const screenX = particle.x - camera.x;
     const screenY = particle.y - camera.y;
 
+    ctx.save();
     ctx.globalAlpha = alpha;
-    ctx.fillStyle = particle.color;
-    ctx.beginPath();
-    ctx.arc(screenX, screenY, particle.size * alpha, 0, Math.PI * 2);
-    ctx.fill();
+
+    if (particle.type === "dust") {
+      ctx.translate(screenX, screenY);
+      ctx.rotate(particle.rotation);
+
+      ctx.fillStyle = particle.color;
+      ctx.beginPath();
+      ctx.ellipse(
+        0,
+        0,
+        particle.width * (1 + (1 - alpha) * 0.6),
+        particle.height * alpha,
+        0,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+
+      ctx.globalAlpha = alpha * 0.25;
+      ctx.beginPath();
+      ctx.ellipse(
+        0,
+        0,
+        particle.width * 1.5,
+        particle.height * 1.2,
+        0,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+    }
+
+    if (particle.type === "dash") {
+      ctx.translate(screenX, screenY);
+      ctx.rotate(particle.rotation);
+
+      ctx.fillStyle = particle.color;
+      drawRoundedRect(
+        -particle.width / 2,
+        -particle.height / 2,
+        particle.width,
+        particle.height,
+        particle.height / 2
+      );
+      ctx.fill();
+
+      ctx.globalAlpha = alpha * 0.35;
+      ctx.fillStyle = "#e0f2fe";
+      drawRoundedRect(
+        -particle.width / 2,
+        -particle.height / 4,
+        particle.width * 0.8,
+        particle.height / 2,
+        particle.height / 4
+      );
+      ctx.fill();
+    }
+
+    ctx.restore();
   }
 
   ctx.restore();
@@ -299,14 +416,16 @@ function updateDash() {
     player.dashTimer -= 1;
 
     if (frameCount % 2 === 0) {
-      addParticle(
-        player.x + player.width / 2 - player.facing * 14,
-        player.y + 24 + (Math.random() - 0.5) * 20,
-        -player.facing * (1.5 + Math.random() * 1.5),
-        (Math.random() - 0.5) * 0.8,
+      addDashStreak(
+        player.x + player.width / 2 - player.facing * 18,
+        player.y + 12 + Math.random() * 28,
+        -player.facing * (1.0 + Math.random() * 2.0),
+        (Math.random() - 0.5) * 0.5,
+        12 + Math.random() * 18,
         2 + Math.random() * 3,
-        14 + Math.random() * 8,
-        "rgba(125, 211, 252, 1)"
+        12 + Math.random() * 7,
+        "rgba(125, 211, 252, 1)",
+        (Math.random() - 0.5) * 0.15
       );
     }
 
@@ -454,15 +573,19 @@ function resetPlayer() {
   player.dashTimer = 0;
   gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
 
-  for (let i = 0; i < 20; i++) {
-    addParticle(
+  for (let i = 0; i < 16; i++) {
+    const direction = i % 2 === 0 ? -1 : 1;
+
+    addDustParticle(
       player.x + player.width / 2,
-      player.y + player.height,
-      (Math.random() - 0.5) * 4,
-      -Math.random() * 3,
-      3 + Math.random() * 4,
-      28 + Math.random() * 10,
-      "rgba(125, 211, 252, 1)"
+      player.y + player.height + 2,
+      direction * (1.2 + Math.random() * 2.2),
+      -0.5 - Math.random() * 1.2,
+      12 + Math.random() * 18,
+      3 + Math.random() * 3,
+      26 + Math.random() * 10,
+      "rgba(125, 211, 252, 1)",
+      direction * (0.05 + Math.random() * 0.2)
     );
   }
 }
@@ -948,7 +1071,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("5단계-3: 착지와 대시 이펙트 강화", 20, 35);
+  ctx.fillText("5단계-3 수정판: 먼지형 이펙트", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
