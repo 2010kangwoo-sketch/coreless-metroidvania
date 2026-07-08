@@ -2,6 +2,7 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 const keys = {};
+let frameCount = 0;
 
 const world = {
   width: 4500,
@@ -62,37 +63,31 @@ const rooms = [
 ];
 
 const platforms = [
-  // 방 1
   { x: 0, y: 420, width: 840, height: 80 },
   { x: 150, y: 350, width: 180, height: 24 },
   { x: 450, y: 315, width: 180, height: 24 },
 
-  // 방 2
   { x: 920, y: 420, width: 820, height: 80 },
   { x: 1030, y: 350, width: 170, height: 24 },
   { x: 1260, y: 300, width: 150, height: 24 },
   { x: 1510, y: 350, width: 170, height: 24 },
 
-  // 방 3
   { x: 1820, y: 420, width: 260, height: 80 },
   { x: 2220, y: 420, width: 420, height: 80 },
   { x: 1890, y: 345, width: 130, height: 24 },
   { x: 2130, y: 360, width: 90, height: 24 },
   { x: 2320, y: 330, width: 150, height: 24 },
 
-  // 방 4
   { x: 2700, y: 420, width: 820, height: 80 },
   { x: 2830, y: 350, width: 160, height: 24 },
   { x: 3060, y: 300, width: 160, height: 24 },
   { x: 3300, y: 350, width: 160, height: 24 },
 
-  // 방 5
   { x: 3600, y: 420, width: 900, height: 80 },
   { x: 3740, y: 340, width: 180, height: 24 },
   { x: 4000, y: 290, width: 180, height: 24 },
   { x: 4260, y: 340, width: 160, height: 24 },
 
-  // 벽 장애물
   { x: 760, y: 260, width: 40, height: 80 },
   { x: 1660, y: 300, width: 40, height: 120 },
   { x: 2500, y: 300, width: 40, height: 120 }
@@ -102,9 +97,6 @@ const doors = [
   { x: 860, y: 330, width: 40, height: 90, text: "문 1", locked: false, open: true },
   { x: 1760, y: 330, width: 40, height: 90, text: "문 2", locked: false, open: true },
   { x: 2660, y: 330, width: 40, height: 90, text: "문 3", locked: false, open: true },
-
-  // 수정된 잠긴 문
-  // y를 80으로 올리고 height를 340으로 키워서 점프로 넘어가지 못하게 했습니다.
   { x: 3560, y: 80, width: 40, height: 340, text: "잠긴 문", locked: true, open: false }
 ];
 
@@ -247,9 +239,6 @@ function moveHorizontally() {
 
   for (const object of getSolidObjects()) {
     if (isColliding(player, object)) {
-
-      // 수정된 부분
-      // 열쇠가 있으면, 캐릭터를 밀어내기 전에 문을 먼저 열어줍니다.
       if (object.locked && !object.open) {
         if (gameState.hasKey) {
           object.open = true;
@@ -355,6 +344,20 @@ function updateCamera() {
   if (camera.y + camera.height > world.height) {
     camera.y = world.height - camera.height;
   }
+}
+
+function drawRoundedRect(x, y, width, height, radius) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
 }
 
 function drawRoomBackgrounds() {
@@ -487,30 +490,135 @@ function drawWarnings() {
   }
 }
 
+function drawDashAfterImages(screenX, screenY, bob) {
+  ctx.save();
+
+  for (let i = 1; i <= 3; i++) {
+    const offsetX = screenX - player.facing * i * 14;
+    const alpha = 0.18 - i * 0.04;
+
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = "#7dd3fc";
+    drawRoundedRect(offsetX + 5, screenY + 8 + bob, 22, 32, 8);
+    ctx.fill();
+
+    ctx.fillStyle = "#e0f2fe";
+    drawRoundedRect(offsetX + 8, screenY + 5 + bob, 16, 16, 6);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawPlayerShadow(screenX, screenY) {
+  ctx.save();
+  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+  ctx.beginPath();
+  ctx.ellipse(screenX + player.width / 2, screenY + player.height + 3, 16, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawPlayerBody(moving, bob) {
+  const walkCycle = moving ? Math.sin(frameCount * 0.35) : 0;
+  const lean = player.isDashing ? player.facing * 3 : 0;
+
+  ctx.save();
+  ctx.translate(lean, bob);
+
+  ctx.fillStyle = "#0f172a";
+  ctx.strokeStyle = "#38bdf8";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(7, 18);
+  ctx.lineTo(25, 18);
+  ctx.lineTo(31, 44);
+  ctx.lineTo(21, 48);
+  ctx.lineTo(16, 43);
+  ctx.lineTo(11, 48);
+  ctx.lineTo(1, 44);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#1e293b";
+  ctx.beginPath();
+  ctx.moveTo(10, 24);
+  ctx.lineTo(22, 24);
+  ctx.lineTo(24, 42);
+  ctx.lineTo(16, 38);
+  ctx.lineTo(8, 42);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = "#020617";
+  ctx.fillRect(8, 43 + walkCycle, 7, 5);
+  ctx.fillRect(18, 43 - walkCycle, 7, 5);
+
+  ctx.strokeStyle = "#7dd3fc";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(16, 29, 4, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawPlayerHead(bob) {
+  const lean = player.isDashing ? player.facing * 3 : 0;
+
+  ctx.save();
+  ctx.translate(lean, bob);
+
+  ctx.strokeStyle = "#dbeafe";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(9, 8);
+  ctx.quadraticCurveTo(4, 0, 2, -5);
+  ctx.moveTo(23, 8);
+  ctx.quadraticCurveTo(28, 0, 30, -5);
+  ctx.stroke();
+
+  ctx.fillStyle = "#dbeafe";
+  ctx.strokeStyle = "#f8fafc";
+  ctx.lineWidth = 2;
+  drawRoundedRect(5, 4, 22, 18, 7);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#bfdbfe";
+  drawRoundedRect(7, 13, 18, 7, 4);
+  ctx.fill();
+
+  ctx.fillStyle = "#020617";
+  if (player.facing === 1) {
+    ctx.fillRect(14, 11, 3, 5);
+    ctx.fillRect(21, 11, 3, 5);
+  } else {
+    ctx.fillRect(8, 11, 3, 5);
+    ctx.fillRect(15, 11, 3, 5);
+  }
+
+  ctx.restore();
+}
+
 function drawPlayer() {
   const screenX = player.x - camera.x;
   const screenY = player.y - camera.y;
-
-  ctx.fillStyle = "#7dd3fc";
-  ctx.fillRect(screenX, screenY, player.width, player.height);
-
-  ctx.fillStyle = "#e0f2fe";
-
-  if (player.facing === 1) {
-    ctx.fillRect(screenX + 20, screenY + 12, 6, 6);
-  } else {
-    ctx.fillRect(screenX + 6, screenY + 12, 6, 6);
-  }
+  const moving = Math.abs(player.vx) > 0.25 && player.onGround;
+  const bob = moving ? Math.sin(frameCount * 0.25) * 1.5 : 0;
 
   if (player.isDashing) {
-    ctx.fillStyle = "rgba(125, 211, 252, 0.35)";
-
-    if (player.facing === 1) {
-      ctx.fillRect(screenX - 28, screenY + 8, 24, 32);
-    } else {
-      ctx.fillRect(screenX + player.width + 4, screenY + 8, 24, 32);
-    }
+    drawDashAfterImages(screenX, screenY, bob);
   }
+
+  drawPlayerShadow(screenX, screenY);
+
+  ctx.save();
+  ctx.translate(screenX, screenY);
+  drawPlayerBody(moving, bob);
+  drawPlayerHead(bob);
+  ctx.restore();
 }
 
 function drawMiniMap() {
@@ -548,7 +656,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("4단계-2 수정: 열쇠와 잠긴 문", 20, 35);
+  ctx.fillText("5단계-1: 캐릭터 외형 개선", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
@@ -587,6 +695,7 @@ function drawUI() {
 }
 
 function update() {
+  frameCount += 1;
   updatePlayer();
   updateCamera();
 }
