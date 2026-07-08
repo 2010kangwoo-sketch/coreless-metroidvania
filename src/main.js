@@ -54,6 +54,13 @@ const player = {
   health: 5,
   invincibleTimer: 0,
 
+  coreEnergy: 0,
+  maxCoreEnergy: 6,
+  healCost: 3,
+  healTimer: 0,
+  healDuration: 55,
+  healingWillRestore: false,
+
   attackTimer: 0,
   attackDuration: 13,
   attackCooldown: 0,
@@ -150,6 +157,20 @@ const characterVisuals = {
     coreRadius: 5,
     coreColor: "#e0f2fe",
     shadowWidth: 18
+  },
+
+  heal: {
+    name: "회복",
+    bobSpeed: 0.12,
+    bobAmount: 0.4,
+    bodyTop: 18,
+    leftBottom: 2,
+    rightBottom: 30,
+    centerBottom: 16,
+    headY: -1,
+    coreRadius: 6,
+    coreColor: "#86efac",
+    shadowWidth: 18
   }
 };
 
@@ -162,12 +183,12 @@ const gravity = 0.65;
 
 const gameState = {
   hasKey: false,
-  message: "J 키로 공격할 수 있습니다."
+  message: "J 키로 공격하고, L 키로 회복할 수 있습니다."
 };
 
 const rooms = [
   { name: "방 1: 시작 구역", guide: "기본 이동과 점프", x: 0, width: 900, color: "#111827" },
-  { name: "방 2: 전투 연습 구역", guide: "적을 공격하고 피격 반응 확인", x: 900, width: 900, color: "#172033" },
+  { name: "방 2: 전투 연습 구역", guide: "적을 공격해 코어 에너지를 모으기", x: 900, width: 900, color: "#172033" },
   { name: "방 3: 대시 전투 구역", guide: "대시와 전투를 함께 사용", x: 1800, width: 900, color: "#1f1b2e" },
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
   { name: "방 5: 다음 지역 입구", guide: "다음 단계 연결 예정", x: 3600, width: 900, color: "#10251f" }
@@ -281,6 +302,11 @@ document.addEventListener("keydown", function(event) {
     startAttack();
     event.preventDefault();
   }
+
+  if (event.code === "KeyL") {
+    startHeal();
+    event.preventDefault();
+  }
 });
 
 document.addEventListener("keyup", function(event) {
@@ -327,6 +353,10 @@ function getCurrentRoom() {
 function getPlayerState() {
   if (player.isDashing) {
     return "dash";
+  }
+
+  if (player.healTimer > 0) {
+    return "heal";
   }
 
   if (player.attackTimer > 0) {
@@ -530,6 +560,39 @@ function spawnHitParticles(x, y, direction) {
   }
 }
 
+function spawnHealParticles() {
+  for (let i = 0; i < 3; i++) {
+    addDashStreak(
+      player.x + player.width / 2 + (Math.random() - 0.5) * 18,
+      player.y + player.height - 4,
+      (Math.random() - 0.5) * 0.6,
+      -1.2 - Math.random() * 1.2,
+      8 + Math.random() * 10,
+      2 + Math.random() * 3,
+      18 + Math.random() * 8,
+      "rgba(134, 239, 172, 1)",
+      (Math.random() - 0.5) * 0.5
+    );
+  }
+}
+
+function spawnHealCompleteParticles() {
+  for (let i = 0; i < 20; i++) {
+    const angle = (Math.PI * 2 * i) / 20;
+    addDashStreak(
+      player.x + player.width / 2,
+      player.y + player.height / 2,
+      Math.cos(angle) * (1.2 + Math.random()),
+      Math.sin(angle) * (1.2 + Math.random()),
+      10 + Math.random() * 12,
+      2 + Math.random() * 3,
+      18 + Math.random() * 8,
+      "rgba(134, 239, 172, 1)",
+      angle
+    );
+  }
+}
+
 function updateParticles() {
   for (let i = particles.length - 1; i >= 0; i--) {
     const particle = particles[i];
@@ -632,6 +695,10 @@ function drawParticles() {
 }
 
 function startDash() {
+  if (player.healTimer > 0) {
+    return;
+  }
+
   if (player.dashCooldown > 0) {
     return;
   }
@@ -678,6 +745,10 @@ function updateDash() {
 }
 
 function startAttack() {
+  if (player.healTimer > 0) {
+    return;
+  }
+
   if (player.attackCooldown > 0) {
     return;
   }
@@ -697,6 +768,46 @@ function startAttack() {
   );
 }
 
+function startHeal() {
+  if (player.healTimer > 0) {
+    return;
+  }
+
+  if (!player.onGround) {
+    gameState.message = "회복은 땅 위에서만 할 수 있습니다.";
+    return;
+  }
+
+  if (player.health >= player.maxHealth) {
+    gameState.message = "이미 체력이 가득 차 있습니다.";
+    return;
+  }
+
+  if (player.coreEnergy < player.healCost) {
+    gameState.message = "코어 에너지가 부족합니다.";
+    return;
+  }
+
+  if (player.isDashing || player.attackTimer > 0) {
+    return;
+  }
+
+  player.coreEnergy -= player.healCost;
+  player.healTimer = player.healDuration;
+  player.healingWillRestore = true;
+  player.vx = 0;
+
+  gameState.message = "코어 에너지로 회복 중입니다. 맞으면 끊깁니다.";
+}
+
+function gainCoreEnergy(amount) {
+  player.coreEnergy += amount;
+
+  if (player.coreEnergy > player.maxCoreEnergy) {
+    player.coreEnergy = player.maxCoreEnergy;
+  }
+}
+
 function updatePlayerCombat() {
   if (player.attackTimer > 0) {
     player.attackTimer -= 1;
@@ -708,6 +819,27 @@ function updatePlayerCombat() {
 
   if (player.invincibleTimer > 0) {
     player.invincibleTimer -= 1;
+  }
+
+  if (player.healTimer > 0) {
+    player.healTimer -= 1;
+
+    if (frameCount % 4 === 0) {
+      spawnHealParticles();
+    }
+
+    if (player.healTimer <= 0 && player.healingWillRestore) {
+      player.health += 1;
+
+      if (player.health > player.maxHealth) {
+        player.health = player.maxHealth;
+      }
+
+      player.healingWillRestore = false;
+      gameState.message = "체력을 1 회복했습니다.";
+      spawnHealCompleteParticles();
+      startScreenShake(6, 3);
+    }
   }
 }
 
@@ -724,6 +856,10 @@ function getAttackHitbox() {
 }
 
 function tryJump() {
+  if (player.healTimer > 0) {
+    return;
+  }
+
   if (player.onGround) {
     spawnJumpParticles();
 
@@ -733,6 +869,16 @@ function tryJump() {
 }
 
 function updatePlayerHorizontalMove() {
+  if (player.healTimer > 0) {
+    player.vx *= 0.6;
+
+    if (Math.abs(player.vx) < 0.05) {
+      player.vx = 0;
+    }
+
+    return;
+  }
+
   let moving = false;
 
   if (keys["KeyA"]) {
@@ -993,6 +1139,7 @@ function checkAttackHits() {
       enemy.hitTimer = 18;
       enemy.invincibleTimer = 12;
 
+      gainCoreEnergy(1);
       knockbackEnemy(enemy, player.facing, 16);
 
       startHitStop(5);
@@ -1006,9 +1153,9 @@ function checkAttackHits() {
 
       if (enemy.health <= 0) {
         enemy.alive = false;
-        gameState.message = enemy.name + "를 쓰러뜨렸습니다.";
+        gameState.message = enemy.name + "를 쓰러뜨렸습니다. 코어 에너지 획득.";
       } else {
-        gameState.message = enemy.name + "에게 공격이 맞았습니다.";
+        gameState.message = enemy.name + "에게 공격이 맞았습니다. 코어 에너지 +1";
       }
     }
   }
@@ -1032,6 +1179,11 @@ function checkPlayerEnemyDamage() {
 }
 
 function takeDamage(enemy) {
+  if (player.healTimer > 0) {
+    player.healTimer = 0;
+    player.healingWillRestore = false;
+  }
+
   player.health -= 1;
   player.invincibleTimer = 75;
 
@@ -1074,6 +1226,8 @@ function respawnPlayer() {
   player.invincibleTimer = 90;
   player.isDashing = false;
   player.attackTimer = 0;
+  player.healTimer = 0;
+  player.healingWillRestore = false;
 
   gameState.message = "체력이 모두 줄어 시작 지점에서 다시 시작합니다.";
 
@@ -1116,6 +1270,8 @@ function resetPlayer() {
   player.isDashing = false;
   player.dashTimer = 0;
   player.invincibleTimer = 75;
+  player.healTimer = 0;
+  player.healingWillRestore = false;
   gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
 
   for (let i = 0; i < 16; i++) {
@@ -1384,7 +1540,7 @@ function drawWarnings() {
   const warnings = [
     { text: "낭떠러지", x: 845, y: 455 },
     { text: "적 등장", x: 1130, y: 370 },
-    { text: "J 키로 공격", x: 1270, y: 270 },
+    { text: "J 공격 / L 회복", x: 1270, y: 270 },
     { text: "대시 필요", x: 2070, y: 455 },
     { text: "두 번째 적", x: 2300, y: 370 },
     { text: "열쇠 획득 구간", x: 3040, y: 250 },
@@ -1555,6 +1711,33 @@ function drawPlayerShadow(screenX, screenY, visual) {
   ctx.restore();
 }
 
+function drawHealAura(screenX, screenY) {
+  if (player.healTimer <= 0) {
+    return;
+  }
+
+  const progress = 1 - player.healTimer / player.healDuration;
+  const radius = 18 + progress * 12;
+  const pulse = Math.sin(frameCount * 0.25) * 4;
+
+  ctx.save();
+
+  ctx.globalAlpha = 0.25;
+  ctx.strokeStyle = "#86efac";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(screenX + player.width / 2, screenY + player.height / 2, radius + pulse, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.globalAlpha = 0.12;
+  ctx.fillStyle = "#86efac";
+  ctx.beginPath();
+  ctx.arc(screenX + player.width / 2, screenY + player.height / 2, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
 function drawCharacterBody(state, visual, bob) {
   const walkCycle = state === "walk" ? Math.sin(playerAnimation.stateFrame * 0.35) : 0;
 
@@ -1562,7 +1745,7 @@ function drawCharacterBody(state, visual, bob) {
   ctx.translate(visual.lean, bob);
 
   ctx.fillStyle = "#0f172a";
-  ctx.strokeStyle = "#38bdf8";
+  ctx.strokeStyle = state === "heal" ? "#86efac" : "#38bdf8";
   ctx.lineWidth = 2;
 
   ctx.beginPath();
@@ -1631,6 +1814,15 @@ function drawCharacterBody(state, visual, bob) {
   ctx.arc(16, 29, visual.coreRadius, 0, Math.PI * 2);
   ctx.stroke();
 
+  if (state === "heal") {
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = "#86efac";
+    ctx.beginPath();
+    ctx.arc(16, 29, 10 + Math.sin(frameCount * 0.25) * 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
   ctx.restore();
 }
 
@@ -1665,13 +1857,13 @@ function drawCharacterHead(state, visual, bob) {
   }
 
   ctx.fillStyle = "#dbeafe";
-  ctx.strokeStyle = "#f8fafc";
+  ctx.strokeStyle = state === "heal" ? "#86efac" : "#f8fafc";
   ctx.lineWidth = 2;
   drawRoundedRect(5, 4, 22, 18, 7);
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = "#bfdbfe";
+  ctx.fillStyle = state === "heal" ? "#bbf7d0" : "#bfdbfe";
   drawRoundedRect(7, 13, 18, 7, 4);
   ctx.fill();
 
@@ -1722,6 +1914,7 @@ function drawPlayer() {
 
   drawStateEffects(screenX, screenY, state);
   drawPlayerShadow(screenX, screenY, visual);
+  drawHealAura(screenX, screenY);
 
   ctx.save();
 
@@ -1787,16 +1980,42 @@ function drawHealthUI() {
   }
 }
 
+function drawCoreEnergyUI() {
+  const startX = 20;
+  const startY = 315;
+
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "15px Arial";
+  ctx.fillText("코어 에너지", startX, startY);
+
+  for (let i = 0; i < player.maxCoreEnergy; i++) {
+    const x = startX + 90 + i * 18;
+    const y = startY - 13;
+
+    ctx.fillStyle = i < player.coreEnergy ? "#86efac" : "rgba(148, 163, 184, 0.3)";
+    drawRoundedRect(x, y, 12, 12, 4);
+    ctx.fill();
+
+    ctx.strokeStyle = "#bbf7d0";
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+
+  ctx.fillStyle = "#cbd5e1";
+  ctx.font = "13px Arial";
+  ctx.fillText("L 회복: 에너지 3칸 소모", startX, startY + 22);
+}
+
 function drawUI() {
   const currentRoom = getCurrentRoom();
   const playerState = playerAnimation.state;
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("6단계-2: 전투 손맛 개선", 20, 35);
+  ctx.fillText("6단계-3: 코어 에너지와 회복 시스템", 20, 35);
 
   ctx.font = "16px Arial";
-  ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시 | J: 공격", 20, 65);
+  ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
 
   ctx.fillStyle = "#bfdbfe";
   ctx.fillText("현재 방: " + currentRoom.name, 20, 95);
@@ -1828,10 +2047,11 @@ function drawUI() {
   }
 
   drawHealthUI();
+  drawCoreEnergyUI();
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
-  ctx.fillText(gameState.message, 20, 320);
+  ctx.fillText(gameState.message, 20, 360);
 
   drawMiniMap();
 }
