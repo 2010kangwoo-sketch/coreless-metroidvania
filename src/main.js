@@ -4,7 +4,7 @@ const ctx = canvas.getContext("2d");
 const keys = {};
 
 const world = {
-  width: 2600,
+  width: 4500,
   height: 900
 };
 
@@ -48,29 +48,86 @@ const startPosition = {
 
 const gravity = 0.65;
 
+const rooms = [
+  {
+    name: "방 1: 시작 구역",
+    guide: "기본 이동과 점프",
+    x: 0,
+    width: 900,
+    color: "#111827"
+  },
+  {
+    name: "방 2: 점프 연습 구역",
+    guide: "발판을 밟고 위로 이동",
+    x: 900,
+    width: 900,
+    color: "#172033"
+  },
+  {
+    name: "방 3: 대시 연습 구역",
+    guide: "넓은 틈을 대시로 넘기",
+    x: 1800,
+    width: 900,
+    color: "#1f1b2e"
+  },
+  {
+    name: "방 4: 잠긴 통로 구역",
+    guide: "조건부 문 구조 준비",
+    x: 2700,
+    width: 900,
+    color: "#201a1a"
+  },
+  {
+    name: "방 5: 다음 지역 입구",
+    guide: "다음 단계 연결 예정",
+    x: 3600,
+    width: 900,
+    color: "#10251f"
+  }
+];
+
 const platforms = [
-  { x: 0, y: 420, width: 330, height: 80 },
-  { x: 450, y: 420, width: 360, height: 80 },
-  { x: 900, y: 420, width: 420, height: 80 },
-  { x: 1450, y: 420, width: 500, height: 80 },
-  { x: 2100, y: 420, width: 500, height: 80 },
+  // 방 1: 시작 구역
+  { x: 0, y: 420, width: 840, height: 80 },
+  { x: 150, y: 350, width: 180, height: 24 },
+  { x: 450, y: 315, width: 180, height: 24 },
 
-  { x: 150, y: 340, width: 180, height: 24 },
-  { x: 410, y: 285, width: 160, height: 24 },
-  { x: 650, y: 340, width: 150, height: 24 },
+  // 방 2: 점프 연습 구역
+  { x: 920, y: 420, width: 820, height: 80 },
+  { x: 1030, y: 350, width: 170, height: 24 },
+  { x: 1260, y: 300, width: 150, height: 24 },
+  { x: 1510, y: 350, width: 170, height: 24 },
 
-  { x: 980, y: 330, width: 180, height: 24 },
-  { x: 1220, y: 280, width: 150, height: 24 },
-  { x: 1530, y: 340, width: 170, height: 24 },
-  { x: 1780, y: 290, width: 160, height: 24 },
+  // 방 3: 대시 연습 구역
+  { x: 1820, y: 420, width: 260, height: 80 },
+  { x: 2220, y: 420, width: 420, height: 80 },
+  { x: 1890, y: 345, width: 130, height: 24 },
+  { x: 2130, y: 360, width: 90, height: 24 },
+  { x: 2320, y: 330, width: 150, height: 24 },
 
-  { x: 2050, y: 340, width: 170, height: 24 },
-  { x: 2300, y: 280, width: 190, height: 24 },
+  // 방 4: 잠긴 통로 구역
+  { x: 2700, y: 420, width: 820, height: 80 },
+  { x: 2830, y: 350, width: 160, height: 24 },
+  { x: 3060, y: 300, width: 160, height: 24 },
+  { x: 3300, y: 350, width: 160, height: 24 },
+
+  // 방 5: 다음 지역 입구
+  { x: 3600, y: 420, width: 900, height: 80 },
+  { x: 3740, y: 340, width: 180, height: 24 },
+  { x: 4000, y: 290, width: 180, height: 24 },
+  { x: 4260, y: 340, width: 160, height: 24 },
 
   // 벽처럼 쓰는 장애물
   { x: 760, y: 260, width: 40, height: 80 },
-  { x: 1360, y: 300, width: 40, height: 120 },
-  { x: 1960, y: 300, width: 40, height: 120 }
+  { x: 1660, y: 300, width: 40, height: 120 },
+  { x: 2500, y: 300, width: 40, height: 120 }
+];
+
+const doors = [
+  { x: 860, y: 330, width: 40, height: 90, text: "문 1" },
+  { x: 1760, y: 330, width: 40, height: 90, text: "문 2" },
+  { x: 2660, y: 330, width: 40, height: 90, text: "문 3" },
+  { x: 3560, y: 330, width: 40, height: 90, text: "문 4" }
 ];
 
 document.addEventListener("keydown", function(event) {
@@ -90,6 +147,18 @@ document.addEventListener("keydown", function(event) {
 document.addEventListener("keyup", function(event) {
   keys[event.code] = false;
 });
+
+function getCurrentRoom() {
+  const playerCenterX = player.x + player.width / 2;
+
+  for (const room of rooms) {
+    if (playerCenterX >= room.x && playerCenterX < room.x + room.width) {
+      return room;
+    }
+  }
+
+  return rooms[0];
+}
 
 function startDash() {
   if (player.dashCooldown > 0) {
@@ -267,17 +336,28 @@ function updateCamera() {
   }
 }
 
-function drawBackground() {
-  ctx.fillStyle = "#141414";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+function drawRoomBackgrounds() {
+  for (const room of rooms) {
+    ctx.fillStyle = room.color;
+    ctx.fillRect(room.x - camera.x, 0 - camera.y, room.width, world.height);
+  }
 
-  ctx.fillStyle = "#0f172a";
-  ctx.fillRect(-camera.x, 420 - camera.y, world.width, world.height - 420);
+  for (const room of rooms) {
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(room.x - camera.x, 0 - camera.y, room.width, world.height);
+  }
+}
 
-  // 배경 기둥 장식
-  for (let x = 200; x < world.width; x += 400) {
-    ctx.fillStyle = "#1e293b";
+function drawBackgroundDecorations() {
+  for (let x = 180; x < world.width; x += 360) {
+    ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
     ctx.fillRect(x - camera.x, 120 - camera.y, 70, 300);
+  }
+
+  for (let x = 0; x < world.width; x += 120) {
+    ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
+    ctx.fillRect(x - camera.x, 0 - camera.y, 2, world.height);
   }
 }
 
@@ -294,17 +374,51 @@ function drawPlatforms() {
   }
 }
 
-function drawGapWarning() {
-  ctx.fillStyle = "#facc15";
-  ctx.font = "14px Arial";
+function drawDoors() {
+  for (const door of doors) {
+    const screenX = door.x - camera.x;
+    const screenY = door.y - camera.y;
 
+    ctx.fillStyle = "rgba(56, 189, 248, 0.22)";
+    ctx.fillRect(screenX, screenY, door.width, door.height);
+
+    ctx.strokeStyle = "#38bdf8";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(screenX, screenY, door.width, door.height);
+
+    ctx.fillStyle = "#e0f2fe";
+    ctx.font = "13px Arial";
+    ctx.fillText(door.text, screenX - 3, screenY - 8);
+  }
+}
+
+function drawRoomLabels() {
+  for (const room of rooms) {
+    const screenX = room.x + 35 - camera.x;
+    const screenY = 90 - camera.y;
+
+    ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
+    ctx.font = "22px Arial";
+    ctx.fillText(room.name, screenX, screenY);
+
+    ctx.fillStyle = "rgba(203, 213, 225, 0.85)";
+    ctx.font = "15px Arial";
+    ctx.fillText(room.guide, screenX, screenY + 28);
+  }
+}
+
+function drawWarnings() {
   const warnings = [
-    { text: "낭떠러지", x: 355, y: 455 },
-    { text: "넓은 맵 구간", x: 980, y: 390 },
-    { text: "카메라 이동 테스트", x: 1750, y: 260 }
+    { text: "낭떠러지", x: 845, y: 455 },
+    { text: "점프 구간", x: 1210, y: 270 },
+    { text: "대시 필요", x: 2070, y: 455 },
+    { text: "잠긴 문 구조는 다음 단계에서 구현", x: 3140, y: 390 },
+    { text: "다음 지역 입구", x: 4040, y: 260 }
   ];
 
   for (const warning of warnings) {
+    ctx.fillStyle = "#facc15";
+    ctx.font = "14px Arial";
     ctx.fillText(warning.text, warning.x - camera.x, warning.y - camera.y);
   }
 }
@@ -335,22 +449,65 @@ function drawPlayer() {
   }
 }
 
+function drawMiniMap() {
+  const mapX = canvas.width - 270;
+  const mapY = 25;
+  const mapWidth = 230;
+  const mapHeight = 34;
+
+  ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+  ctx.fillRect(mapX - 10, mapY - 10, mapWidth + 20, mapHeight + 38);
+
+  ctx.fillStyle = "#cbd5e1";
+  ctx.font = "13px Arial";
+  ctx.fillText("방 구조", mapX, mapY - 16);
+
+  for (const room of rooms) {
+    const roomX = mapX + (room.x / world.width) * mapWidth;
+    const roomW = (room.width / world.width) * mapWidth;
+
+    ctx.fillStyle = "rgba(148, 163, 184, 0.28)";
+    ctx.fillRect(roomX, mapY, roomW - 2, mapHeight);
+
+    ctx.strokeStyle = "rgba(226, 232, 240, 0.5)";
+    ctx.strokeRect(roomX, mapY, roomW - 2, mapHeight);
+  }
+
+  const playerMarkerX = mapX + (player.x / world.width) * mapWidth;
+
+  ctx.fillStyle = "#7dd3fc";
+  ctx.fillRect(playerMarkerX - 2, mapY - 4, 4, mapHeight + 8);
+}
+
 function drawUI() {
+  const currentRoom = getCurrentRoom();
+
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("3단계-3: 넓은 맵과 카메라 추가", 20, 35);
+  ctx.fillText("4단계-1: 방 단위 구조 추가", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
 
+  ctx.fillStyle = "#bfdbfe";
+  ctx.fillText("현재 방: " + currentRoom.name, 20, 95);
+
+  ctx.fillStyle = "#cbd5e1";
+  ctx.fillText("방 설명: " + currentRoom.guide, 20, 120);
+
   if (player.dashCooldown <= 0) {
-    ctx.fillText("대시: 사용 가능", 20, 95);
+    ctx.fillStyle = "#bbf7d0";
+    ctx.fillText("대시: 사용 가능", 20, 150);
   } else {
     const cooldownPercent = Math.ceil((player.dashCooldown / player.dashCooldownMax) * 100);
-    ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 95);
+    ctx.fillStyle = "#fde68a";
+    ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 150);
   }
 
-  ctx.fillText("현재 위치 X: " + Math.floor(player.x) + " / " + world.width, 20, 125);
+  ctx.fillStyle = "#cbd5e1";
+  ctx.fillText("현재 위치 X: " + Math.floor(player.x) + " / " + world.width, 20, 180);
+
+  drawMiniMap();
 }
 
 function update() {
@@ -361,9 +518,12 @@ function update() {
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  drawBackground();
+  drawRoomBackgrounds();
+  drawBackgroundDecorations();
+  drawRoomLabels();
+  drawDoors();
   drawPlatforms();
-  drawGapWarning();
+  drawWarnings();
   drawPlayer();
   drawUI();
 }
