@@ -210,7 +210,9 @@ const enemies = [
     vx: 1.1,
     speed: 1.35,
     patrolDirection: 1,
+    targetDirection: 1,
     chaseRange: 360,
+    aiDecisionTimer: 0,
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -229,7 +231,9 @@ const enemies = [
     vx: -1.25,
     speed: 1.45,
     patrolDirection: -1,
+    targetDirection: -1,
     chaseRange: 420,
+    aiDecisionTimer: 0,
     maxHealth: 4,
     health: 4,
     alive: true,
@@ -810,25 +814,17 @@ function updateEnemyAI(enemy) {
 
   const playerIsClose =
     Math.abs(distanceX) <= enemy.chaseRange &&
-    Math.abs(distanceY) <= 140;
+    Math.abs(distanceY) <= 160;
 
-  // 처음 실행될 때만 AI 판단용 값을 만들어 줍니다.
-  if (enemy.aiDecisionTimer === undefined) {
-    enemy.aiDecisionTimer = 0;
-  }
-
-  if (enemy.targetDirection === undefined) {
-    enemy.targetDirection = enemy.patrolDirection;
-  }
-
-  // 방향을 너무 자주 바꾸지 않도록 판단 시간을 둡니다.
   if (enemy.aiDecisionTimer > 0) {
     enemy.aiDecisionTimer -= 1;
   }
 
   if (playerIsClose) {
-    // 플레이어가 적의 거의 위쪽에 있으면 좌우로 떨지 않고 멈춥니다.
-    if (Math.abs(distanceX) < 45) {
+    const playerIsAboveEnemy = playerCenterY < enemyCenterY - 38;
+    const playerIsAlmostSameX = Math.abs(distanceX) < 42;
+
+    if (playerIsAboveEnemy && playerIsAlmostSameX) {
       enemy.vx *= 0.82;
 
       if (Math.abs(enemy.vx) < 0.08) {
@@ -838,21 +834,19 @@ function updateEnemyAI(enemy) {
       return;
     }
 
-    // 일정 시간이 지났을 때만 방향을 다시 판단합니다.
     if (enemy.aiDecisionTimer <= 0) {
-      if (distanceX > 0) {
+      if (distanceX > 8) {
         enemy.targetDirection = 1;
-      } else {
+      } else if (distanceX < -8) {
         enemy.targetDirection = -1;
       }
 
       enemy.patrolDirection = enemy.targetDirection;
-      enemy.aiDecisionTimer = 16;
+      enemy.aiDecisionTimer = 14;
     }
 
     enemy.vx = enemy.targetDirection * enemy.speed;
   } else {
-    // 플레이어가 멀면 기존처럼 순찰합니다.
     enemy.vx = enemy.patrolDirection * enemy.speed * 0.7;
   }
 }
@@ -863,12 +857,14 @@ function moveEnemyHorizontally(enemy) {
   if (enemy.x < enemy.minX) {
     enemy.x = enemy.minX;
     enemy.patrolDirection = 1;
+    enemy.targetDirection = 1;
     enemy.vx = Math.abs(enemy.speed);
   }
 
   if (enemy.x + enemy.width > enemy.maxX) {
     enemy.x = enemy.maxX - enemy.width;
     enemy.patrolDirection = -1;
+    enemy.targetDirection = -1;
     enemy.vx = -Math.abs(enemy.speed);
   }
 
@@ -877,12 +873,15 @@ function moveEnemyHorizontally(enemy) {
       if (enemy.vx > 0) {
         enemy.x = object.x - enemy.width;
         enemy.patrolDirection = -1;
+        enemy.targetDirection = -1;
       } else if (enemy.vx < 0) {
         enemy.x = object.x + object.width;
         enemy.patrolDirection = 1;
+        enemy.targetDirection = 1;
       }
 
       enemy.vx = 0;
+      enemy.aiDecisionTimer = 16;
     }
   }
 }
@@ -1667,7 +1666,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("6단계-1: 기본 전투 시스템", 20, 35);
+  ctx.fillText("6단계-1 수정판: 추적형 적 AI", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시 | J: 공격", 20, 65);
