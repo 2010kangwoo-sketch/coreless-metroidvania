@@ -3,121 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Coreless Metroidvania</title>
-
-  <style>
-    body {
-      margin: 0;
-      background: #111;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-    }
-
-    h1 {
-      margin-top: 20px;
-    }
-
-    canvas {
-      background: #222;
-      display: block;
-      margin: 30px auto;
-      border: 2px solid #555;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <h1>Coreless Metroidvania</h1>
-  <p>A/D로 이동, Space로 점프</p>
+  <p class="info">A/D로 이동, Space로 점프</p>
 
   <canvas id="gameCanvas" width="900" height="500"></canvas>
 
-  <script>
-    const canvas = document.getElementById("gameCanvas");
-    const ctx = canvas.getContext("2d");
-
-    const keys = {};
-
-    const player = {
-      x: 100,
-      y: 300,
-      width: 32,
-      height: 48,
-      vx: 0,
-      vy: 0,
-      speed: 4,
-      jumpPower: -12,
-      onGround: false
-    };
-
-    const gravity = 0.6;
-    const floorY = 420;
-
-    document.addEventListener("keydown", function(event) {
-      keys[event.code] = true;
-    });
-
-    document.addEventListener("keyup", function(event) {
-      keys[event.code] = false;
-    });
-
-    function update() {
-      player.vx = 0;
-
-      if (keys["KeyA"]) {
-        player.vx = -player.speed;
-      }
-
-      if (keys["KeyD"]) {
-        player.vx = player.speed;
-      }
-
-      if (keys["Space"] && player.onGround) {
-        player.vy = player.jumpPower;
-        player.onGround = false;
-      }
-
-      player.vy += gravity;
-
-      player.x += player.vx;
-      player.y += player.vy;
-
-      if (player.y + player.height >= floorY) {
-        player.y = floorY - player.height;
-        player.vy = 0;
-        player.onGround = true;
-      }
-
-      if (player.x < 0) {
-        player.x = 0;
-      }
-
-      if (player.x + player.width > canvas.width) {
-        player.x = canvas.width - player.width;
-      }
-    }
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#444";
-      ctx.fillRect(0, floorY, canvas.width, canvas.height - floorY);
-
-      ctx.fillStyle = "#7dd3fc";
-      ctx.fillRect(player.x, player.y, player.width, player.height);
-
-      ctx.fillStyle = "white";
-      ctx.font = "20px Arial";
-      ctx.fillText("1단계 테스트 맵", 20, 35);
-    }
-
-    function gameLoop() {
-      update();
-      draw();
-      requestAnimationFrame(gameLoop);
-    }
-
-    gameLoop();
-  </script>
+  <script src="src/main.js"></script>
 </body>
 </html>
