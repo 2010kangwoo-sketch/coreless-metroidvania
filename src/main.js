@@ -8,6 +8,7 @@ let hitStopTimer = 0;
 let screenShakeTimer = 0;
 let screenShakeMaxTimer = 0;
 let screenShakePower = 0;
+let lastPlayerAttackWallSparkId = -1;
 
 const particles = [];
 const projectiles = [];
@@ -76,103 +77,13 @@ const playerAnimation = {
 };
 
 const characterVisuals = {
-  idle: {
-    name: "정지",
-    bobSpeed: 0.08,
-    bobAmount: 0.6,
-    bodyTop: 18,
-    leftBottom: 1,
-    rightBottom: 31,
-    centerBottom: 16,
-    headY: 0,
-    coreRadius: 4,
-    coreColor: "#7dd3fc",
-    shadowWidth: 16
-  },
-
-  walk: {
-    name: "걷기",
-    bobSpeed: 0.25,
-    bobAmount: 1.5,
-    bodyTop: 18,
-    leftBottom: 1,
-    rightBottom: 31,
-    centerBottom: 16,
-    headY: 0,
-    coreRadius: 4,
-    coreColor: "#7dd3fc",
-    shadowWidth: 16
-  },
-
-  jump: {
-    name: "점프",
-    bobSpeed: 0,
-    bobAmount: 0,
-    bodyTop: 19,
-    leftBottom: 4,
-    rightBottom: 28,
-    centerBottom: 16,
-    headY: -2,
-    coreRadius: 4,
-    coreColor: "#7dd3fc",
-    shadowWidth: 12
-  },
-
-  fall: {
-    name: "낙하",
-    bobSpeed: 0,
-    bobAmount: 0,
-    bodyTop: 17,
-    leftBottom: -1,
-    rightBottom: 33,
-    centerBottom: 16,
-    headY: 2,
-    coreRadius: 4,
-    coreColor: "#7dd3fc",
-    shadowWidth: 20
-  },
-
-  dash: {
-    name: "대시",
-    bobSpeed: 0,
-    bobAmount: 0,
-    bodyTop: 17,
-    leftBottom: 1,
-    rightBottom: 31,
-    centerBottom: 16,
-    headY: 0,
-    coreRadius: 5,
-    coreColor: "#fef08a",
-    shadowWidth: 24
-  },
-
-  attack: {
-    name: "공격",
-    bobSpeed: 0,
-    bobAmount: 0,
-    bodyTop: 18,
-    leftBottom: 2,
-    rightBottom: 30,
-    centerBottom: 16,
-    headY: 0,
-    coreRadius: 5,
-    coreColor: "#e0f2fe",
-    shadowWidth: 18
-  },
-
-  heal: {
-    name: "회복",
-    bobSpeed: 0.12,
-    bobAmount: 0.4,
-    bodyTop: 18,
-    leftBottom: 2,
-    rightBottom: 30,
-    centerBottom: 16,
-    headY: -1,
-    coreRadius: 6,
-    coreColor: "#86efac",
-    shadowWidth: 18
-  }
+  idle: { name: "정지", coreColor: "#7dd3fc" },
+  walk: { name: "걷기", coreColor: "#7dd3fc" },
+  jump: { name: "점프", coreColor: "#7dd3fc" },
+  fall: { name: "낙하", coreColor: "#7dd3fc" },
+  dash: { name: "대시", coreColor: "#fef08a" },
+  attack: { name: "공격", coreColor: "#e0f2fe" },
+  heal: { name: "회복", coreColor: "#86efac" }
 };
 
 const startPosition = {
@@ -184,7 +95,7 @@ const gravity = 0.65;
 
 const gameState = {
   hasKey: false,
-  message: "새로운 적이 추가되었습니다. 비행 적과 원거리 적을 조심하세요."
+  message: "공중 적과 벽 차단 공격 판정이 수정되었습니다."
 };
 
 const rooms = [
@@ -265,6 +176,7 @@ const enemies = [
     attackDuration: 42,
     attackDirection: 1,
     attackHitPlayer: false,
+    attackWallSparked: false,
 
     maxHealth: 3,
     health: 3,
@@ -297,6 +209,7 @@ const enemies = [
     attackDuration: 44,
     attackDirection: -1,
     attackHitPlayer: false,
+    attackWallSparked: false,
 
     maxHealth: 4,
     health: 4,
@@ -316,15 +229,14 @@ const enemies = [
     minX: 1850,
     maxX: 2630,
     minY: 205,
-    maxY: 360,
-    baseY: 245,
+    maxY: 420,
     vx: 1.1,
     vy: 0,
-    speed: 1.55,
-    verticalSpeed: 1.05,
+    speed: 1.65,
+    verticalSpeed: 1.45,
     patrolDirection: 1,
     targetDirection: 1,
-    chaseRange: 430,
+    chaseRange: 520,
     floatAngle: 0,
     aiDecisionTimer: 0,
 
@@ -346,7 +258,7 @@ const enemies = [
     minX: 3740,
     maxX: 4140,
     vx: 0,
-    speed: 0.6,
+    speed: 0.65,
     patrolDirection: -1,
     targetDirection: -1,
     chaseRange: 480,
@@ -483,34 +395,6 @@ function updatePlayerAnimation() {
   }
 }
 
-function getCharacterVisual(state) {
-  const visual = Object.assign({}, characterVisuals[state] || characterVisuals.idle);
-
-  if (state === "dash") {
-    visual.lean = player.facing * 4;
-    visual.leftBottom = player.facing === 1 ? -2 : 3;
-    visual.rightBottom = player.facing === 1 ? 29 : 34;
-    visual.centerBottom = player.facing === 1 ? 18 : 14;
-  } else if (state === "attack") {
-    visual.lean = player.facing * 3;
-    visual.leftBottom = player.facing === 1 ? 0 : 4;
-    visual.rightBottom = player.facing === 1 ? 28 : 32;
-    visual.centerBottom = player.facing === 1 ? 18 : 14;
-  } else {
-    visual.lean = 0;
-  }
-
-  return visual;
-}
-
-function getCharacterBob(visual) {
-  if (visual.bobSpeed === 0 || visual.bobAmount === 0) {
-    return 0;
-  }
-
-  return Math.sin(frameCount * visual.bobSpeed) * visual.bobAmount;
-}
-
 function getSolidObjects() {
   const solidObjects = [...platforms];
 
@@ -523,19 +407,142 @@ function getSolidObjects() {
   return solidObjects;
 }
 
+function isAttackBlockingObject(object) {
+  return object.height >= 50 && object.width <= 90;
+}
+
+function getClippedHitboxByWalls(hitbox, owner, direction) {
+  const clipped = {
+    x: hitbox.x,
+    y: hitbox.y,
+    width: hitbox.width,
+    height: hitbox.height
+  };
+
+  for (const object of getSolidObjects()) {
+    if (!isAttackBlockingObject(object)) {
+      continue;
+    }
+
+    if (!isColliding(hitbox, object)) {
+      continue;
+    }
+
+    if (direction === 1) {
+      const wallIsInFront = object.x >= owner.x + owner.width - 2;
+
+      if (wallIsInFront) {
+        const newRight = Math.min(clipped.x + clipped.width, object.x);
+        clipped.width = Math.max(0, newRight - clipped.x);
+      }
+    } else {
+      const wallRight = object.x + object.width;
+      const wallIsInFront = wallRight <= owner.x + 2;
+
+      if (wallIsInFront) {
+        const oldRight = clipped.x + clipped.width;
+        clipped.x = Math.max(clipped.x, wallRight);
+        clipped.width = Math.max(0, oldRight - clipped.x);
+      }
+    }
+  }
+
+  return clipped;
+}
+
+function isHitboxClipped(original, clipped) {
+  return (
+    Math.abs(original.x - clipped.x) > 0.1 ||
+    Math.abs(original.width - clipped.width) > 0.1
+  );
+}
+
+function getWallSparkPoint(clipped, direction) {
+  if (direction === 1) {
+    return {
+      x: clipped.x + clipped.width,
+      y: clipped.y + clipped.height / 2
+    };
+  }
+
+  return {
+    x: clipped.x,
+    y: clipped.y + clipped.height / 2
+  };
+}
+
+function spawnWallSparkParticles(x, y, direction) {
+  for (let i = 0; i < 12; i++) {
+    addDashStreak(
+      x,
+      y + (Math.random() - 0.5) * 22,
+      direction * (1.0 + Math.random() * 2.8),
+      (Math.random() - 0.5) * 2.0,
+      8 + Math.random() * 14,
+      2 + Math.random() * 3,
+      12 + Math.random() * 8,
+      "rgba(251, 191, 36, 1)",
+      (Math.random() - 0.5) * 0.6
+    );
+  }
+}
+
+function checkPlayerAttackWallSpark(originalHitbox, clippedHitbox) {
+  if (!isHitboxClipped(originalHitbox, clippedHitbox)) {
+    return;
+  }
+
+  if (lastPlayerAttackWallSparkId === player.attackId) {
+    return;
+  }
+
+  lastPlayerAttackWallSparkId = player.attackId;
+
+  const point = getWallSparkPoint(clippedHitbox, player.facing);
+
+  spawnWallSparkParticles(point.x, point.y, -player.facing);
+  startScreenShake(4, 2);
+  gameState.message = "공격이 벽에 막혔습니다.";
+}
+
+function getBlockedEnemyAttackHitbox(enemy) {
+  const rawHitbox = getEnemyAttackHitbox(enemy);
+  return getClippedHitboxByWalls(rawHitbox, enemy, enemy.attackDirection);
+}
+
+function checkEnemyAttackWallSpark(enemy) {
+  const rawHitbox = getEnemyAttackHitbox(enemy);
+  const clippedHitbox = getBlockedEnemyAttackHitbox(enemy);
+
+  if (!isHitboxClipped(rawHitbox, clippedHitbox)) {
+    return;
+  }
+
+  if (enemy.attackWallSparked) {
+    return;
+  }
+
+  enemy.attackWallSparked = true;
+
+  const point = getWallSparkPoint(clippedHitbox, enemy.attackDirection);
+
+  spawnWallSparkParticles(point.x, point.y, -enemy.attackDirection);
+  startScreenShake(4, 2);
+}
+
 function addDustParticle(x, y, vx, vy, width, height, life, color, rotation) {
   particles.push({
     type: "dust",
-    x: x,
-    y: y,
-    vx: vx,
-    vy: vy,
-    width: width,
-    height: height,
-    life: life,
+    x,
+    y,
+    vx,
+    vy,
+    width,
+    height,
+    life,
     maxLife: life,
-    color: color,
-    rotation: rotation,
+    color,
+    rotation,
     gravity: 0.025,
     growX: 0.35,
     growY: 0.015
@@ -545,16 +552,16 @@ function addDustParticle(x, y, vx, vy, width, height, life, color, rotation) {
 function addDashStreak(x, y, vx, vy, width, height, life, color, rotation) {
   particles.push({
     type: "dash",
-    x: x,
-    y: y,
-    vx: vx,
-    vy: vy,
-    width: width,
-    height: height,
-    life: life,
+    x,
+    y,
+    vx,
+    vy,
+    width,
+    height,
+    life,
     maxLife: life,
-    color: color,
-    rotation: rotation,
+    color,
+    rotation,
     gravity: 0,
     growX: -0.15,
     growY: -0.01
@@ -595,20 +602,6 @@ function spawnLandingParticles(power) {
       24 + Math.random() * 14,
       "rgba(148, 163, 184, 1)",
       direction * (0.05 + Math.random() * 0.25)
-    );
-  }
-
-  for (let i = 0; i < 4; i++) {
-    addDustParticle(
-      player.x + player.width / 2 + (Math.random() - 0.5) * 14,
-      player.y + player.height + 3,
-      (Math.random() - 0.5) * 0.6,
-      -0.1,
-      18 + Math.random() * 18,
-      3 + Math.random() * 2,
-      18 + Math.random() * 8,
-      "rgba(203, 213, 225, 1)",
-      (Math.random() - 0.5) * 0.2
     );
   }
 }
@@ -680,7 +673,11 @@ function spawnHealCompleteParticles() {
 }
 
 function spawnEnemyAttackParticles(enemy) {
-  const hitbox = getEnemyAttackHitbox(enemy);
+  const hitbox = getBlockedEnemyAttackHitbox(enemy);
+
+  if (hitbox.width <= 2) {
+    return;
+  }
 
   for (let i = 0; i < 5; i++) {
     addDashStreak(
@@ -722,80 +719,6 @@ function updateParticles() {
       particles.splice(i, 1);
     }
   }
-}
-
-function drawParticles() {
-  ctx.save();
-
-  for (const particle of particles) {
-    const alpha = particle.life / particle.maxLife;
-    const screenX = particle.x - camera.x;
-    const screenY = particle.y - camera.y;
-
-    ctx.save();
-    ctx.globalAlpha = alpha;
-
-    if (particle.type === "dust") {
-      ctx.translate(screenX, screenY);
-      ctx.rotate(particle.rotation);
-
-      ctx.fillStyle = particle.color;
-      ctx.beginPath();
-      ctx.ellipse(
-        0,
-        0,
-        particle.width * (1 + (1 - alpha) * 0.6),
-        particle.height * alpha,
-        0,
-        0,
-        Math.PI * 2
-      );
-      ctx.fill();
-
-      ctx.globalAlpha = alpha * 0.25;
-      ctx.beginPath();
-      ctx.ellipse(
-        0,
-        0,
-        particle.width * 1.5,
-        particle.height * 1.2,
-        0,
-        0,
-        Math.PI * 2
-      );
-      ctx.fill();
-    }
-
-    if (particle.type === "dash") {
-      ctx.translate(screenX, screenY);
-      ctx.rotate(particle.rotation);
-
-      ctx.fillStyle = particle.color;
-      drawRoundedRect(
-        -particle.width / 2,
-        -particle.height / 2,
-        particle.width,
-        particle.height,
-        particle.height / 2
-      );
-      ctx.fill();
-
-      ctx.globalAlpha = alpha * 0.35;
-      ctx.fillStyle = "#e0f2fe";
-      drawRoundedRect(
-        -particle.width / 2,
-        -particle.height / 4,
-        particle.width * 0.8,
-        particle.height / 2,
-        particle.height / 4
-      );
-      ctx.fill();
-    }
-
-    ctx.restore();
-  }
-
-  ctx.restore();
 }
 
 function startDash() {
@@ -1021,6 +944,10 @@ function updateGravity() {
 }
 
 function isColliding(rectA, rectB) {
+  if (rectA.width <= 0 || rectA.height <= 0 || rectB.width <= 0 || rectB.height <= 0) {
+    return false;
+  }
+
   return (
     rectA.x < rectB.x + rectB.width &&
     rectA.x + rectA.width > rectB.x &&
@@ -1190,7 +1117,7 @@ function updateFlyingEnemy(enemy) {
 
   const playerIsClose =
     Math.abs(distanceX) <= enemy.chaseRange &&
-    Math.abs(distanceY) <= 220;
+    Math.abs(distanceY) <= 260;
 
   enemy.floatAngle += 0.05;
 
@@ -1200,25 +1127,25 @@ function updateFlyingEnemy(enemy) {
 
   if (playerIsClose) {
     if (enemy.aiDecisionTimer <= 0) {
-      if (distanceX > 10) {
+      if (distanceX > 8) {
         enemy.targetDirection = 1;
-      } else if (distanceX < -10) {
+      } else if (distanceX < -8) {
         enemy.targetDirection = -1;
       }
 
-      enemy.aiDecisionTimer = 12;
+      enemy.aiDecisionTimer = 10;
     }
 
-    if (Math.abs(distanceX) > 12) {
+    if (Math.abs(distanceX) > 10) {
       enemy.vx = enemy.targetDirection * enemy.speed;
     } else {
-      enemy.vx *= 0.85;
+      enemy.vx *= 0.82;
     }
 
-    if (Math.abs(distanceY) > 16) {
+    if (Math.abs(distanceY) > 10) {
       enemy.vy = distanceY > 0 ? enemy.verticalSpeed : -enemy.verticalSpeed;
     } else {
-      enemy.vy *= 0.75;
+      enemy.vy *= 0.72;
     }
   } else {
     enemy.vx = enemy.patrolDirection * enemy.speed * 0.75;
@@ -1276,6 +1203,7 @@ function updateShooterEnemy(enemy) {
   if (enemy.shootTimer > 0) {
     const elapsed = enemy.shootDuration - enemy.shootTimer;
 
+    enemy.vx = 0;
     enemy.shootTimer -= 1;
 
     if (!enemy.shootFired && elapsed >= 24) {
@@ -1297,10 +1225,26 @@ function updateShooterEnemy(enemy) {
     Math.abs(distanceY) <= enemy.shootVerticalRange;
 
   if (playerInShootRange && enemy.shootCooldown <= 0) {
+    enemy.vx = 0;
     enemy.shootTimer = enemy.shootDuration;
     enemy.shootFired = false;
     gameState.message = enemy.name + "가 원거리 공격을 준비합니다.";
+    return;
   }
+
+  if (Math.abs(distanceX) <= enemy.chaseRange && Math.abs(distanceY) <= 180) {
+    if (Math.abs(distanceX) < 210) {
+      enemy.vx = -enemy.targetDirection * enemy.speed;
+    } else if (Math.abs(distanceX) > 330) {
+      enemy.vx = enemy.targetDirection * enemy.speed;
+    } else {
+      enemy.vx = enemy.patrolDirection * enemy.speed * 0.35;
+    }
+  } else {
+    enemy.vx = enemy.patrolDirection * enemy.speed * 0.7;
+  }
+
+  moveEnemyHorizontally(enemy);
 }
 
 function canEnemyStartAttack(enemy, distanceX, distanceY) {
@@ -1331,6 +1275,7 @@ function startEnemyAttack(enemy, distanceX) {
   enemy.attackTimer = enemy.attackDuration;
   enemy.attackCooldown = enemy.attackCooldownMax;
   enemy.attackHitPlayer = false;
+  enemy.attackWallSparked = false;
 
   if (distanceX >= 0) {
     enemy.attackDirection = 1;
@@ -1354,12 +1299,17 @@ function updateEnemyCombat(enemy) {
     const previousAttackTimer = enemy.attackTimer;
     enemy.attackTimer -= 1;
 
-    if (isEnemyAttackActive(enemy) && frameCount % 5 === 0) {
-      spawnEnemyAttackParticles(enemy);
+    if (isEnemyAttackActive(enemy)) {
+      checkEnemyAttackWallSpark(enemy);
+
+      if (frameCount % 5 === 0) {
+        spawnEnemyAttackParticles(enemy);
+      }
     }
 
     if (previousAttackTimer > 0 && enemy.attackTimer <= 0) {
       enemy.attackHitPlayer = false;
+      enemy.attackWallSparked = false;
     }
   }
 }
@@ -1384,6 +1334,19 @@ function getEnemyAttackHitbox(enemy) {
     width: attackWidth,
     height: attackHeight
   };
+}
+
+function getEnemyContactHitbox(enemy) {
+  if (enemy.type === "flying") {
+    return {
+      x: enemy.x - 6,
+      y: enemy.y - 8,
+      width: enemy.width + 12,
+      height: enemy.height + 18
+    };
+  }
+
+  return enemy;
 }
 
 function moveEnemyHorizontally(enemy) {
@@ -1454,7 +1417,7 @@ function knockbackEnemy(enemy, direction, distance) {
 function spawnEnemyProjectile(enemy) {
   const direction = enemy.shootDirection;
 
-  const projectile = {
+  projectiles.push({
     x: direction === 1 ? enemy.x + enemy.width : enemy.x - 18,
     y: enemy.y + enemy.height / 2 - 4,
     width: 18,
@@ -1463,9 +1426,8 @@ function spawnEnemyProjectile(enemy) {
     vy: 0,
     life: 150,
     sourceName: enemy.name
-  };
+  });
 
-  projectiles.push(projectile);
   gameState.message = enemy.name + "가 투사체를 발사했습니다.";
 }
 
@@ -1478,6 +1440,7 @@ function updateProjectiles() {
     projectile.life -= 1;
 
     let removeProjectile = false;
+    let hitWall = false;
 
     if (projectile.life <= 0) {
       removeProjectile = true;
@@ -1490,11 +1453,24 @@ function updateProjectiles() {
     for (const object of getSolidObjects()) {
       if (isColliding(projectile, object)) {
         removeProjectile = true;
+        hitWall = true;
         break;
       }
     }
 
     if (removeProjectile) {
+      if (hitWall) {
+        const direction = projectile.vx > 0 ? -1 : 1;
+
+        spawnWallSparkParticles(
+          projectile.vx > 0 ? projectile.x + projectile.width : projectile.x,
+          projectile.y + projectile.height / 2,
+          direction
+        );
+
+        startScreenShake(3, 1.8);
+      }
+
       projectiles.splice(i, 1);
     }
   }
@@ -1505,7 +1481,14 @@ function checkAttackHits() {
     return;
   }
 
-  const hitbox = getAttackHitbox();
+  const rawHitbox = getAttackHitbox();
+  const hitbox = getClippedHitboxByWalls(rawHitbox, player, player.facing);
+
+  checkPlayerAttackWallSpark(rawHitbox, hitbox);
+
+  if (hitbox.width <= 2) {
+    return;
+  }
 
   for (const enemy of enemies) {
     if (!enemy.alive) {
@@ -1566,7 +1549,7 @@ function checkEnemyAttackDamage() {
       continue;
     }
 
-    const hitbox = getEnemyAttackHitbox(enemy);
+    const hitbox = getBlockedEnemyAttackHitbox(enemy);
 
     if (isColliding(hitbox, player)) {
       enemy.attackHitPlayer = true;
@@ -1611,7 +1594,9 @@ function checkPlayerEnemyDamage() {
       continue;
     }
 
-    if (isColliding(player, enemy)) {
+    const contactBox = getEnemyContactHitbox(enemy);
+
+    if (isColliding(player, contactBox)) {
       takeDamage(enemy, enemy.name + "와 부딪혀 체력이 1 감소했습니다.");
       return;
     }
@@ -1670,22 +1655,6 @@ function respawnPlayer() {
   player.healingWillRestore = false;
 
   gameState.message = "체력이 모두 줄어 시작 지점에서 다시 시작합니다.";
-
-  for (let i = 0; i < 18; i++) {
-    const direction = i % 2 === 0 ? -1 : 1;
-
-    addDustParticle(
-      player.x + player.width / 2,
-      player.y + player.height + 2,
-      direction * (1.2 + Math.random() * 2.2),
-      -0.5 - Math.random() * 1.2,
-      12 + Math.random() * 18,
-      3 + Math.random() * 3,
-      26 + Math.random() * 10,
-      "rgba(125, 211, 252, 1)",
-      direction * (0.05 + Math.random() * 0.2)
-    );
-  }
 }
 
 function checkKeyCollection() {
@@ -1713,22 +1682,6 @@ function resetPlayer() {
   player.healTimer = 0;
   player.healingWillRestore = false;
   gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
-
-  for (let i = 0; i < 16; i++) {
-    const direction = i % 2 === 0 ? -1 : 1;
-
-    addDustParticle(
-      player.x + player.width / 2,
-      player.y + player.height + 2,
-      direction * (1.2 + Math.random() * 2.2),
-      -0.5 - Math.random() * 1.2,
-      12 + Math.random() * 18,
-      3 + Math.random() * 3,
-      26 + Math.random() * 10,
-      "rgba(125, 211, 252, 1)",
-      direction * (0.05 + Math.random() * 0.2)
-    );
-  }
 }
 
 function updatePlayer() {
@@ -1897,6 +1850,18 @@ function drawEnemies() {
   }
 }
 
+function drawEnemyHealthBar(enemy, screenX, screenY) {
+  const barWidth = 38;
+  const barHeight = 5;
+  const healthRatio = enemy.health / enemy.maxHealth;
+
+  ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+  ctx.fillRect(screenX - 1, screenY - 13, barWidth, barHeight);
+
+  ctx.fillStyle = "#f87171";
+  ctx.fillRect(screenX - 1, screenY - 13, barWidth * healthRatio, barHeight);
+}
+
 function drawMeleeEnemy(enemy) {
   const screenX = enemy.x - camera.x;
   const screenY = enemy.y - camera.y;
@@ -1905,53 +1870,25 @@ function drawMeleeEnemy(enemy) {
   ctx.save();
 
   if (enemy.hitTimer > 0) {
-    const shake = Math.sin(enemy.hitTimer * 2) * 2;
-    ctx.translate(shake, 0);
+    ctx.translate(Math.sin(enemy.hitTimer * 2) * 2, 0);
     ctx.globalAlpha = 0.65;
-  }
-
-  if (enemy.attackTimer > 0 && enemy.hitTimer <= 0) {
-    const pulse = Math.sin(frameCount * 0.4) * 0.15;
-    ctx.globalAlpha = 0.85 + pulse;
   }
 
   ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
   ctx.beginPath();
-  ctx.ellipse(
-    screenX + enemy.width / 2,
-    screenY + enemy.height + 4,
-    enemy.width / 2,
-    5,
-    0,
-    0,
-    Math.PI * 2
-  );
+  ctx.ellipse(screenX + enemy.width / 2, screenY + enemy.height + 4, enemy.width / 2, 5, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  if (enemy.attackTimer > 0) {
-    ctx.fillStyle = "#3b1d1d";
-    ctx.strokeStyle = "#fca5a5";
-    ctx.lineWidth = 3;
-  } else {
-    ctx.fillStyle = enemy.hitTimer > 0 ? "#3f1f2a" : "#1f2937";
-    ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#94a3b8";
-    ctx.lineWidth = enemy.hitTimer > 0 ? 3 : 2;
-  }
+  ctx.fillStyle = enemy.attackTimer > 0 ? "#3b1d1d" : enemy.hitTimer > 0 ? "#3f1f2a" : "#1f2937";
+  ctx.strokeStyle = enemy.attackTimer > 0 ? "#fca5a5" : enemy.hitTimer > 0 ? "#fecaca" : "#94a3b8";
+  ctx.lineWidth = enemy.attackTimer > 0 || enemy.hitTimer > 0 ? 3 : 2;
 
   ctx.beginPath();
-  ctx.ellipse(
-    screenX + enemy.width / 2,
-    screenY + enemy.height / 2,
-    enemy.width / 2,
-    enemy.height / 2,
-    0,
-    0,
-    Math.PI * 2
-  );
+  ctx.ellipse(screenX + enemy.width / 2, screenY + enemy.height / 2, enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = enemy.attackTimer > 0 ? "#fecaca" : enemy.hitTimer > 0 ? "#fca5a5" : "#38bdf8";
+  ctx.fillStyle = enemy.attackTimer > 0 ? "#fecaca" : "#38bdf8";
   if (facing === 1) {
     ctx.fillRect(screenX + 20, screenY + 12, 4, 6);
     ctx.fillRect(screenX + 27, screenY + 12, 4, 6);
@@ -1959,15 +1896,6 @@ function drawMeleeEnemy(enemy) {
     ctx.fillRect(screenX + 4, screenY + 12, 4, 6);
     ctx.fillRect(screenX + 11, screenY + 12, 4, 6);
   }
-
-  ctx.strokeStyle = enemy.attackTimer > 0 ? "#fca5a5" : "#64748b";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(screenX + 8, screenY + 28);
-  ctx.lineTo(screenX + 2, screenY + 34);
-  ctx.moveTo(screenX + 26, screenY + 28);
-  ctx.lineTo(screenX + 34, screenY + 34);
-  ctx.stroke();
 
   drawEnemyHealthBar(enemy, screenX, screenY);
 
@@ -1982,22 +1910,13 @@ function drawFlyingEnemy(enemy) {
   ctx.save();
 
   if (enemy.hitTimer > 0) {
-    const shake = Math.sin(enemy.hitTimer * 2) * 2;
-    ctx.translate(shake, 0);
+    ctx.translate(Math.sin(enemy.hitTimer * 2) * 2, 0);
     ctx.globalAlpha = 0.65;
   }
 
   ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
   ctx.beginPath();
-  ctx.ellipse(
-    screenX + enemy.width / 2,
-    screenY + enemy.height + 12,
-    enemy.width / 2,
-    4,
-    0,
-    0,
-    Math.PI * 2
-  );
+  ctx.ellipse(screenX + enemy.width / 2, screenY + enemy.height + 12, enemy.width / 2, 4, 0, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = enemy.hitTimer > 0 ? "#3f1f2a" : "#111827";
@@ -2021,15 +1940,7 @@ function drawFlyingEnemy(enemy) {
   ctx.fillStyle = enemy.hitTimer > 0 ? "#4c1d2d" : "#1e1b4b";
   ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#c4b5fd";
   ctx.beginPath();
-  ctx.ellipse(
-    screenX + enemy.width / 2,
-    screenY + enemy.height / 2,
-    enemy.width / 2,
-    enemy.height / 2,
-    0,
-    0,
-    Math.PI * 2
-  );
+  ctx.ellipse(screenX + enemy.width / 2, screenY + enemy.height / 2, enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.stroke();
 
@@ -2050,27 +1961,13 @@ function drawShooterEnemy(enemy) {
   ctx.save();
 
   if (enemy.hitTimer > 0) {
-    const shake = Math.sin(enemy.hitTimer * 2) * 2;
-    ctx.translate(shake, 0);
+    ctx.translate(Math.sin(enemy.hitTimer * 2) * 2, 0);
     ctx.globalAlpha = 0.65;
-  }
-
-  if (enemy.shootTimer > 0) {
-    const pulse = Math.sin(frameCount * 0.4) * 0.12;
-    ctx.globalAlpha = 0.9 + pulse;
   }
 
   ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
   ctx.beginPath();
-  ctx.ellipse(
-    screenX + enemy.width / 2,
-    screenY + enemy.height + 4,
-    enemy.width / 2,
-    5,
-    0,
-    0,
-    Math.PI * 2
-  );
+  ctx.ellipse(screenX + enemy.width / 2, screenY + enemy.height + 4, enemy.width / 2, 5, 0, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = enemy.shootTimer > 0 ? "#3b1d1d" : "#10251f";
@@ -2097,18 +1994,6 @@ function drawShooterEnemy(enemy) {
   ctx.restore();
 }
 
-function drawEnemyHealthBar(enemy, screenX, screenY) {
-  const barWidth = 38;
-  const barHeight = 5;
-  const healthRatio = enemy.health / enemy.maxHealth;
-
-  ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
-  ctx.fillRect(screenX - 1, screenY - 13, barWidth, barHeight);
-
-  ctx.fillStyle = "#f87171";
-  ctx.fillRect(screenX - 1, screenY - 13, barWidth * healthRatio, barHeight);
-}
-
 function drawEnemyAttacks() {
   for (const enemy of enemies) {
     if (!enemy.alive) {
@@ -2130,7 +2015,12 @@ function drawMeleeEnemyAttack(enemy) {
     return;
   }
 
-  const hitbox = getEnemyAttackHitbox(enemy);
+  const hitbox = getBlockedEnemyAttackHitbox(enemy);
+
+  if (hitbox.width <= 2) {
+    return;
+  }
+
   const screenX = hitbox.x - camera.x;
   const screenY = hitbox.y - camera.y;
   const active = isEnemyAttackActive(enemy);
@@ -2168,9 +2058,9 @@ function drawMeleeEnemyAttack(enemy) {
 
     if (enemy.attackDirection === 1) {
       ctx.moveTo(screenX + 4, screenY + 28);
-      ctx.quadraticCurveTo(screenX + 26, screenY - 8, screenX + 52, screenY + 16);
+      ctx.quadraticCurveTo(screenX + 26, screenY - 8, screenX + hitbox.width - 2, screenY + 16);
     } else {
-      ctx.moveTo(screenX + 50, screenY + 28);
+      ctx.moveTo(screenX + hitbox.width - 4, screenY + 28);
       ctx.quadraticCurveTo(screenX + 28, screenY - 8, screenX + 2, screenY + 16);
     }
 
@@ -2178,6 +2068,45 @@ function drawMeleeEnemyAttack(enemy) {
   }
 
   ctx.restore();
+}
+
+function getShooterChargeLength(enemy, maxLength) {
+  const startX = enemy.shootDirection === 1 ? enemy.x + enemy.width : enemy.x;
+  const startY = enemy.y + enemy.height / 2;
+
+  let length = maxLength;
+
+  for (const object of getSolidObjects()) {
+    if (!isAttackBlockingObject(object)) {
+      continue;
+    }
+
+    if (startY < object.y || startY > object.y + object.height) {
+      continue;
+    }
+
+    if (enemy.shootDirection === 1) {
+      if (object.x >= startX) {
+        const distance = object.x - startX;
+
+        if (distance < length) {
+          length = distance;
+        }
+      }
+    } else {
+      const wallRight = object.x + object.width;
+
+      if (wallRight <= startX) {
+        const distance = startX - wallRight;
+
+        if (distance < length) {
+          length = distance;
+        }
+      }
+    }
+  }
+
+  return Math.max(0, length);
 }
 
 function drawShooterCharge(enemy) {
@@ -2191,9 +2120,10 @@ function drawShooterCharge(enemy) {
   const screenX = startX - camera.x;
   const screenY = startY - camera.y;
 
+  const length = getShooterChargeLength(enemy, 180);
+
   ctx.save();
 
-  const length = 180;
   const alpha = 0.2 + Math.sin(frameCount * 0.35) * 0.08;
 
   ctx.globalAlpha = alpha;
@@ -2220,11 +2150,6 @@ function drawShooterCharge(enemy) {
   ctx.restore();
 }
 
-function updateProjectilesAndDamage() {
-  updateProjectiles();
-  checkProjectileDamage();
-}
-
 function drawProjectiles() {
   for (const projectile of projectiles) {
     const screenX = projectile.x - camera.x;
@@ -2246,6 +2171,63 @@ function drawProjectiles() {
 
     ctx.restore();
   }
+}
+
+function drawParticles() {
+  ctx.save();
+
+  for (const particle of particles) {
+    const alpha = particle.life / particle.maxLife;
+    const screenX = particle.x - camera.x;
+    const screenY = particle.y - camera.y;
+
+    ctx.save();
+    ctx.globalAlpha = alpha;
+    ctx.translate(screenX, screenY);
+    ctx.rotate(particle.rotation);
+
+    if (particle.type === "dust") {
+      ctx.fillStyle = particle.color;
+      ctx.beginPath();
+      ctx.ellipse(
+        0,
+        0,
+        particle.width * (1 + (1 - alpha) * 0.6),
+        particle.height * alpha,
+        0,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+    }
+
+    if (particle.type === "dash") {
+      ctx.fillStyle = particle.color;
+      drawRoundedRect(
+        -particle.width / 2,
+        -particle.height / 2,
+        particle.width,
+        particle.height,
+        particle.height / 2
+      );
+      ctx.fill();
+
+      ctx.globalAlpha = alpha * 0.35;
+      ctx.fillStyle = "#e0f2fe";
+      drawRoundedRect(
+        -particle.width / 2,
+        -particle.height / 4,
+        particle.width * 0.8,
+        particle.height / 2,
+        particle.height / 4
+      );
+      ctx.fill();
+    }
+
+    ctx.restore();
+  }
+
+  ctx.restore();
 }
 
 function drawRoomLabels() {
@@ -2283,7 +2265,7 @@ function drawWarnings() {
   }
 }
 
-function drawDashAfterImages(screenX, screenY, bob) {
+function drawDashAfterImages(screenX, screenY) {
   ctx.save();
 
   for (let i = 1; i <= 4; i++) {
@@ -2292,11 +2274,11 @@ function drawDashAfterImages(screenX, screenY, bob) {
 
     ctx.globalAlpha = alpha;
     ctx.fillStyle = "#7dd3fc";
-    drawRoundedRect(offsetX + 4, screenY + 7 + bob, 24, 32, 8);
+    drawRoundedRect(offsetX + 4, screenY + 7, 24, 32, 8);
     ctx.fill();
 
     ctx.fillStyle = "#e0f2fe";
-    drawRoundedRect(offsetX + 8, screenY + 4 + bob, 16, 16, 6);
+    drawRoundedRect(offsetX + 8, screenY + 4, 16, 16, 6);
     ctx.fill();
   }
 
@@ -2308,7 +2290,13 @@ function drawAttack() {
     return;
   }
 
-  const hitbox = getAttackHitbox();
+  const rawHitbox = getAttackHitbox();
+  const hitbox = getClippedHitboxByWalls(rawHitbox, player, player.facing);
+
+  if (hitbox.width <= 2) {
+    return;
+  }
+
   const screenX = hitbox.x - camera.x;
   const screenY = hitbox.y - camera.y;
   const progress = player.attackTimer / player.attackDuration;
@@ -2324,20 +2312,10 @@ function drawAttack() {
 
   if (player.facing === 1) {
     ctx.moveTo(screenX + 5, screenY + 30);
-    ctx.quadraticCurveTo(
-      screenX + 22 + sweep * 10,
-      screenY - 8,
-      screenX + 50,
-      screenY + 12 + sweep * 5
-    );
+    ctx.quadraticCurveTo(screenX + 22 + sweep * 10, screenY - 8, screenX + hitbox.width - 2, screenY + 12 + sweep * 5);
   } else {
-    ctx.moveTo(screenX + 47, screenY + 30);
-    ctx.quadraticCurveTo(
-      screenX + 30 - sweep * 10,
-      screenY - 8,
-      screenX + 2,
-      screenY + 12 + sweep * 5
-    );
+    ctx.moveTo(screenX + hitbox.width - 5, screenY + 30);
+    ctx.quadraticCurveTo(screenX + 30 - sweep * 10, screenY - 8, screenX + 2, screenY + 12 + sweep * 5);
   }
 
   ctx.stroke();
@@ -2349,281 +2327,13 @@ function drawAttack() {
 
   if (player.facing === 1) {
     ctx.moveTo(screenX + 2, screenY + 32);
-    ctx.quadraticCurveTo(
-      screenX + 28 + sweep * 8,
-      screenY - 10,
-      screenX + 52,
-      screenY + 18
-    );
+    ctx.quadraticCurveTo(screenX + 28 + sweep * 8, screenY - 10, screenX + hitbox.width, screenY + 18);
   } else {
-    ctx.moveTo(screenX + 50, screenY + 32);
-    ctx.quadraticCurveTo(
-      screenX + 24 - sweep * 8,
-      screenY - 10,
-      screenX,
-      screenY + 18
-    );
+    ctx.moveTo(screenX + hitbox.width - 2, screenY + 32);
+    ctx.quadraticCurveTo(screenX + 24 - sweep * 8, screenY - 10, screenX, screenY + 18);
   }
 
   ctx.stroke();
-
-  ctx.globalAlpha = 0.22;
-  ctx.strokeStyle = "#bfdbfe";
-  ctx.lineWidth = 18;
-  ctx.beginPath();
-
-  if (player.facing === 1) {
-    ctx.moveTo(screenX + 0, screenY + 35);
-    ctx.quadraticCurveTo(screenX + 30, screenY - 12, screenX + 54, screenY + 22);
-  } else {
-    ctx.moveTo(screenX + 52, screenY + 35);
-    ctx.quadraticCurveTo(screenX + 22, screenY - 12, screenX - 2, screenY + 22);
-  }
-
-  ctx.stroke();
-
-  ctx.restore();
-}
-
-function drawStateEffects(screenX, screenY, state) {
-  ctx.save();
-
-  if (state === "jump") {
-    ctx.strokeStyle = "rgba(125, 211, 252, 0.35)";
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    ctx.moveTo(screenX + 6, screenY + 52);
-    ctx.lineTo(screenX + 2, screenY + 62);
-
-    ctx.moveTo(screenX + 16, screenY + 54);
-    ctx.lineTo(screenX + 16, screenY + 65);
-
-    ctx.moveTo(screenX + 26, screenY + 52);
-    ctx.lineTo(screenX + 31, screenY + 62);
-    ctx.stroke();
-  }
-
-  if (state === "fall") {
-    ctx.strokeStyle = "rgba(203, 213, 225, 0.25)";
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    ctx.moveTo(screenX + 2, screenY - 8);
-    ctx.lineTo(screenX + 2, screenY + 5);
-
-    ctx.moveTo(screenX + 30, screenY - 6);
-    ctx.lineTo(screenX + 30, screenY + 8);
-    ctx.stroke();
-  }
-
-  ctx.restore();
-}
-
-function drawPlayerShadow(screenX, screenY, visual) {
-  ctx.save();
-
-  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
-  ctx.beginPath();
-  ctx.ellipse(
-    screenX + player.width / 2,
-    screenY + player.height + 3,
-    visual.shadowWidth,
-    5,
-    0,
-    0,
-    Math.PI * 2
-  );
-  ctx.fill();
-
-  ctx.restore();
-}
-
-function drawHealAura(screenX, screenY) {
-  if (player.healTimer <= 0) {
-    return;
-  }
-
-  const progress = 1 - player.healTimer / player.healDuration;
-  const radius = 18 + progress * 12;
-  const pulse = Math.sin(frameCount * 0.25) * 4;
-
-  ctx.save();
-
-  ctx.globalAlpha = 0.25;
-  ctx.strokeStyle = "#86efac";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.arc(screenX + player.width / 2, screenY + player.height / 2, radius + pulse, 0, Math.PI * 2);
-  ctx.stroke();
-
-  ctx.globalAlpha = 0.12;
-  ctx.fillStyle = "#86efac";
-  ctx.beginPath();
-  ctx.arc(screenX + player.width / 2, screenY + player.height / 2, radius, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.restore();
-}
-
-function drawCharacterBody(state, visual, bob) {
-  const walkCycle = state === "walk" ? Math.sin(playerAnimation.stateFrame * 0.35) : 0;
-
-  ctx.save();
-  ctx.translate(visual.lean, bob);
-
-  ctx.fillStyle = "#0f172a";
-  ctx.strokeStyle = state === "heal" ? "#86efac" : "#38bdf8";
-  ctx.lineWidth = 2;
-
-  ctx.beginPath();
-  ctx.moveTo(7, visual.bodyTop);
-  ctx.lineTo(25, visual.bodyTop);
-  ctx.lineTo(visual.rightBottom, 44);
-  ctx.lineTo(22, 48);
-  ctx.lineTo(visual.centerBottom, 43);
-  ctx.lineTo(10, 48);
-  ctx.lineTo(visual.leftBottom, 44);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = "#1e293b";
-  ctx.beginPath();
-  ctx.moveTo(10, 24);
-  ctx.lineTo(22, 24);
-  ctx.lineTo(24, 42);
-  ctx.lineTo(16, 38);
-  ctx.lineTo(8, 42);
-  ctx.closePath();
-  ctx.fill();
-
-  if (state === "attack") {
-    ctx.strokeStyle = "#e0f2fe";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-
-    if (player.facing === 1) {
-      ctx.moveTo(23, 25);
-      ctx.lineTo(34, 20);
-    } else {
-      ctx.moveTo(9, 25);
-      ctx.lineTo(-2, 20);
-    }
-
-    ctx.stroke();
-  }
-
-  ctx.fillStyle = "#020617";
-
-  if (state === "walk") {
-    ctx.fillRect(8, 43 + walkCycle, 7, 5);
-    ctx.fillRect(18, 43 - walkCycle, 7, 5);
-  } else if (state === "jump") {
-    ctx.fillRect(8, 42, 7, 5);
-    ctx.fillRect(18, 42, 7, 5);
-  } else if (state === "fall") {
-    ctx.fillRect(7, 44, 8, 5);
-    ctx.fillRect(18, 44, 8, 5);
-  } else if (state === "dash") {
-    ctx.fillRect(7 - player.facing * 2, 43, 8, 5);
-    ctx.fillRect(18 - player.facing * 2, 43, 8, 5);
-  } else if (state === "attack") {
-    ctx.fillRect(7 - player.facing, 43, 8, 5);
-    ctx.fillRect(18 - player.facing, 43, 8, 5);
-  } else {
-    ctx.fillRect(8, 43, 7, 5);
-    ctx.fillRect(18, 43, 7, 5);
-  }
-
-  ctx.strokeStyle = visual.coreColor;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(16, 29, visual.coreRadius, 0, Math.PI * 2);
-  ctx.stroke();
-
-  if (state === "heal") {
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = "#86efac";
-    ctx.beginPath();
-    ctx.arc(16, 29, 10 + Math.sin(frameCount * 0.25) * 2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-
-  ctx.restore();
-}
-
-function drawCharacterHead(state, visual, bob) {
-  ctx.save();
-  ctx.translate(visual.lean, bob + visual.headY);
-
-  ctx.strokeStyle = "#dbeafe";
-  ctx.lineWidth = 3;
-
-  if (state === "dash") {
-    ctx.beginPath();
-    ctx.moveTo(9, 8);
-    ctx.quadraticCurveTo(3 - player.facing * 4, 0, 2 - player.facing * 7, -5);
-    ctx.moveTo(23, 8);
-    ctx.quadraticCurveTo(29 - player.facing * 4, 0, 30 - player.facing * 7, -5);
-    ctx.stroke();
-  } else if (state === "attack") {
-    ctx.beginPath();
-    ctx.moveTo(9, 8);
-    ctx.quadraticCurveTo(4 - player.facing * 2, 0, 2 - player.facing * 3, -5);
-    ctx.moveTo(23, 8);
-    ctx.quadraticCurveTo(28 - player.facing * 2, 0, 30 - player.facing * 3, -5);
-    ctx.stroke();
-  } else {
-    ctx.beginPath();
-    ctx.moveTo(9, 8);
-    ctx.quadraticCurveTo(4, 0, 2, -5);
-    ctx.moveTo(23, 8);
-    ctx.quadraticCurveTo(28, 0, 30, -5);
-    ctx.stroke();
-  }
-
-  ctx.fillStyle = "#dbeafe";
-  ctx.strokeStyle = state === "heal" ? "#86efac" : "#f8fafc";
-  ctx.lineWidth = 2;
-  drawRoundedRect(5, 4, 22, 18, 7);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = state === "heal" ? "#bbf7d0" : "#bfdbfe";
-  drawRoundedRect(7, 13, 18, 7, 4);
-  ctx.fill();
-
-  ctx.fillStyle = "#020617";
-
-  let eyeOffset = 0;
-
-  if (state === "dash") {
-    eyeOffset = player.facing * 2;
-  }
-
-  if (state === "attack") {
-    eyeOffset = player.facing * 1;
-  }
-
-  if (player.facing === 1) {
-    ctx.fillRect(14 + eyeOffset, 11, 3, 5);
-    ctx.fillRect(21 + eyeOffset, 11, 3, 5);
-  } else {
-    ctx.fillRect(8 + eyeOffset, 11, 3, 5);
-    ctx.fillRect(15 + eyeOffset, 11, 3, 5);
-  }
-
-  ctx.restore();
-}
-
-function drawVectorCharacter(screenX, screenY, state, visual, bob) {
-  ctx.save();
-  ctx.translate(screenX, screenY);
-
-  drawCharacterBody(state, visual, bob);
-  drawCharacterHead(state, visual, bob);
 
   ctx.restore();
 }
@@ -2631,18 +2341,11 @@ function drawVectorCharacter(screenX, screenY, state, visual, bob) {
 function drawPlayer() {
   const screenX = player.x - camera.x;
   const screenY = player.y - camera.y;
-
   const state = playerAnimation.state;
-  const visual = getCharacterVisual(state);
-  const bob = getCharacterBob(visual);
 
   if (state === "dash") {
-    drawDashAfterImages(screenX, screenY, bob);
+    drawDashAfterImages(screenX, screenY);
   }
-
-  drawStateEffects(screenX, screenY, state);
-  drawPlayerShadow(screenX, screenY, visual);
-  drawHealAura(screenX, screenY);
 
   ctx.save();
 
@@ -2650,7 +2353,64 @@ function drawPlayer() {
     ctx.globalAlpha = 0.45;
   }
 
-  drawVectorCharacter(screenX, screenY, state, visual, bob);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+  ctx.beginPath();
+  ctx.ellipse(screenX + player.width / 2, screenY + player.height + 3, 16, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (state === "heal") {
+    ctx.globalAlpha = 0.25;
+    ctx.strokeStyle = "#86efac";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(screenX + player.width / 2, screenY + player.height / 2, 24 + Math.sin(frameCount * 0.25) * 4, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.globalAlpha = player.invincibleTimer > 0 && frameCount % 8 < 4 ? 0.45 : 1;
+  }
+
+  ctx.fillStyle = "#0f172a";
+  ctx.strokeStyle = state === "heal" ? "#86efac" : "#38bdf8";
+  ctx.lineWidth = 2;
+  drawRoundedRect(screenX + 4, screenY + 14, 24, 32, 8);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#dbeafe";
+  ctx.strokeStyle = state === "heal" ? "#86efac" : "#f8fafc";
+  drawRoundedRect(screenX + 5, screenY + 3, 22, 18, 7);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#020617";
+  if (player.facing === 1) {
+    ctx.fillRect(screenX + 14, screenY + 10, 3, 5);
+    ctx.fillRect(screenX + 21, screenY + 10, 3, 5);
+  } else {
+    ctx.fillRect(screenX + 8, screenY + 10, 3, 5);
+    ctx.fillRect(screenX + 15, screenY + 10, 3, 5);
+  }
+
+  ctx.strokeStyle = characterVisuals[state].coreColor;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(screenX + 16, screenY + 29, state === "heal" ? 6 : 4, 0, Math.PI * 2);
+  ctx.stroke();
+
+  if (state === "attack") {
+    ctx.strokeStyle = "#e0f2fe";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    if (player.facing === 1) {
+      ctx.moveTo(screenX + 25, screenY + 25);
+      ctx.lineTo(screenX + 36, screenY + 20);
+    } else {
+      ctx.moveTo(screenX + 7, screenY + 25);
+      ctx.lineTo(screenX - 4, screenY + 20);
+    }
+
+    ctx.stroke();
+  }
 
   ctx.restore();
 }
@@ -2740,7 +2500,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("6단계-5: 적 종류 확장", 20, 35);
+  ctx.fillText("6단계-5 수정판2: 공중 적 + 벽 차단 공격 판정", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -2782,6 +2542,11 @@ function drawUI() {
   ctx.fillText(gameState.message, 20, 360);
 
   drawMiniMap();
+}
+
+function updateProjectilesAndDamage() {
+  updateProjectiles();
+  checkProjectileDamage();
 }
 
 function update() {
