@@ -48,87 +48,70 @@ const startPosition = {
 
 const gravity = 0.65;
 
+const gameState = {
+  hasKey: false,
+  message: "열쇠를 찾아 잠긴 문을 열어보세요."
+};
+
 const rooms = [
-  {
-    name: "방 1: 시작 구역",
-    guide: "기본 이동과 점프",
-    x: 0,
-    width: 900,
-    color: "#111827"
-  },
-  {
-    name: "방 2: 점프 연습 구역",
-    guide: "발판을 밟고 위로 이동",
-    x: 900,
-    width: 900,
-    color: "#172033"
-  },
-  {
-    name: "방 3: 대시 연습 구역",
-    guide: "넓은 틈을 대시로 넘기",
-    x: 1800,
-    width: 900,
-    color: "#1f1b2e"
-  },
-  {
-    name: "방 4: 잠긴 통로 구역",
-    guide: "조건부 문 구조 준비",
-    x: 2700,
-    width: 900,
-    color: "#201a1a"
-  },
-  {
-    name: "방 5: 다음 지역 입구",
-    guide: "다음 단계 연결 예정",
-    x: 3600,
-    width: 900,
-    color: "#10251f"
-  }
+  { name: "방 1: 시작 구역", guide: "기본 이동과 점프", x: 0, width: 900, color: "#111827" },
+  { name: "방 2: 점프 연습 구역", guide: "발판을 밟고 위로 이동", x: 900, width: 900, color: "#172033" },
+  { name: "방 3: 대시 연습 구역", guide: "넓은 틈을 대시로 넘기", x: 1800, width: 900, color: "#1f1b2e" },
+  { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
+  { name: "방 5: 다음 지역 입구", guide: "다음 단계 연결 예정", x: 3600, width: 900, color: "#10251f" }
 ];
 
 const platforms = [
-  // 방 1: 시작 구역
+  // 방 1
   { x: 0, y: 420, width: 840, height: 80 },
   { x: 150, y: 350, width: 180, height: 24 },
   { x: 450, y: 315, width: 180, height: 24 },
 
-  // 방 2: 점프 연습 구역
+  // 방 2
   { x: 920, y: 420, width: 820, height: 80 },
   { x: 1030, y: 350, width: 170, height: 24 },
   { x: 1260, y: 300, width: 150, height: 24 },
   { x: 1510, y: 350, width: 170, height: 24 },
 
-  // 방 3: 대시 연습 구역
+  // 방 3
   { x: 1820, y: 420, width: 260, height: 80 },
   { x: 2220, y: 420, width: 420, height: 80 },
   { x: 1890, y: 345, width: 130, height: 24 },
   { x: 2130, y: 360, width: 90, height: 24 },
   { x: 2320, y: 330, width: 150, height: 24 },
 
-  // 방 4: 잠긴 통로 구역
+  // 방 4
   { x: 2700, y: 420, width: 820, height: 80 },
   { x: 2830, y: 350, width: 160, height: 24 },
   { x: 3060, y: 300, width: 160, height: 24 },
   { x: 3300, y: 350, width: 160, height: 24 },
 
-  // 방 5: 다음 지역 입구
+  // 방 5
   { x: 3600, y: 420, width: 900, height: 80 },
   { x: 3740, y: 340, width: 180, height: 24 },
   { x: 4000, y: 290, width: 180, height: 24 },
   { x: 4260, y: 340, width: 160, height: 24 },
 
-  // 벽처럼 쓰는 장애물
+  // 벽 장애물
   { x: 760, y: 260, width: 40, height: 80 },
   { x: 1660, y: 300, width: 40, height: 120 },
   { x: 2500, y: 300, width: 40, height: 120 }
 ];
 
 const doors = [
-  { x: 860, y: 330, width: 40, height: 90, text: "문 1" },
-  { x: 1760, y: 330, width: 40, height: 90, text: "문 2" },
-  { x: 2660, y: 330, width: 40, height: 90, text: "문 3" },
-  { x: 3560, y: 330, width: 40, height: 90, text: "문 4" }
+  { x: 860, y: 330, width: 40, height: 90, text: "문 1", locked: false, open: true },
+  { x: 1760, y: 330, width: 40, height: 90, text: "문 2", locked: false, open: true },
+  { x: 2660, y: 330, width: 40, height: 90, text: "문 3", locked: false, open: true },
+  { x: 3560, y: 300, width: 40, height: 120, text: "잠긴 문", locked: true, open: false }
 ];
+
+const keyItem = {
+  x: 3155,
+  y: 260,
+  width: 24,
+  height: 24,
+  collected: false
+};
 
 document.addEventListener("keydown", function(event) {
   keys[event.code] = true;
@@ -160,14 +143,21 @@ function getCurrentRoom() {
   return rooms[0];
 }
 
-function startDash() {
-  if (player.dashCooldown > 0) {
-    return;
+function getSolidObjects() {
+  const solidObjects = [...platforms];
+
+  for (const door of doors) {
+    if (door.locked && !door.open) {
+      solidObjects.push(door);
+    }
   }
 
-  if (player.isDashing) {
-    return;
-  }
+  return solidObjects;
+}
+
+function startDash() {
+  if (player.dashCooldown > 0) return;
+  if (player.isDashing) return;
 
   player.isDashing = true;
   player.dashTimer = player.dashDuration;
@@ -247,16 +237,20 @@ function isColliding(rectA, rectB) {
 function moveHorizontally() {
   player.x += player.vx;
 
-  for (const platform of platforms) {
-    if (isColliding(player, platform)) {
+  for (const object of getSolidObjects()) {
+    if (isColliding(player, object)) {
       if (player.vx > 0) {
-        player.x = platform.x - player.width;
+        player.x = object.x - player.width;
       } else if (player.vx < 0) {
-        player.x = platform.x + platform.width;
+        player.x = object.x + object.width;
       }
 
       player.vx = 0;
       player.isDashing = false;
+
+      if (object.locked && !object.open) {
+        gameState.message = "잠긴 문입니다. 열쇠가 필요합니다.";
+      }
     }
   }
 
@@ -275,16 +269,33 @@ function moveVertically() {
   player.y += player.vy;
   player.onGround = false;
 
-  for (const platform of platforms) {
-    if (isColliding(player, platform)) {
+  for (const object of getSolidObjects()) {
+    if (isColliding(player, object)) {
       if (player.vy > 0) {
-        player.y = platform.y - player.height;
+        player.y = object.y - player.height;
         player.vy = 0;
         player.onGround = true;
       } else if (player.vy < 0) {
-        player.y = platform.y + platform.height;
+        player.y = object.y + object.height;
         player.vy = 0;
       }
+    }
+  }
+}
+
+function checkKeyCollection() {
+  if (!keyItem.collected && isColliding(player, keyItem)) {
+    keyItem.collected = true;
+    gameState.hasKey = true;
+    gameState.message = "열쇠를 획득했습니다. 이제 잠긴 문을 열 수 있습니다.";
+  }
+}
+
+function checkDoorUnlock() {
+  for (const door of doors) {
+    if (door.locked && !door.open && gameState.hasKey && isColliding(player, door)) {
+      door.open = true;
+      gameState.message = "잠긴 문이 열렸습니다.";
     }
   }
 }
@@ -302,6 +313,7 @@ function resetPlayer() {
   player.vy = 0;
   player.isDashing = false;
   player.dashTimer = 0;
+  gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
 }
 
 function updatePlayer() {
@@ -312,6 +324,8 @@ function updatePlayer() {
   moveHorizontally();
   moveVertically();
 
+  checkKeyCollection();
+  checkDoorUnlock();
   checkFall();
 }
 
@@ -319,13 +333,8 @@ function updateCamera() {
   camera.x = player.x + player.width / 2 - camera.width / 2;
   camera.y = player.y + player.height / 2 - camera.height / 2;
 
-  if (camera.x < 0) {
-    camera.x = 0;
-  }
-
-  if (camera.y < 0) {
-    camera.y = 0;
-  }
+  if (camera.x < 0) camera.x = 0;
+  if (camera.y < 0) camera.y = 0;
 
   if (camera.x + camera.width > world.width) {
     camera.x = world.width - camera.width;
@@ -379,17 +388,59 @@ function drawDoors() {
     const screenX = door.x - camera.x;
     const screenY = door.y - camera.y;
 
-    ctx.fillStyle = "rgba(56, 189, 248, 0.22)";
-    ctx.fillRect(screenX, screenY, door.width, door.height);
+    if (door.locked && !door.open) {
+      ctx.fillStyle = "rgba(248, 113, 113, 0.55)";
+      ctx.fillRect(screenX, screenY, door.width, door.height);
 
-    ctx.strokeStyle = "#38bdf8";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(screenX, screenY, door.width, door.height);
+      ctx.strokeStyle = "#fecaca";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(screenX, screenY, door.width, door.height);
 
-    ctx.fillStyle = "#e0f2fe";
-    ctx.font = "13px Arial";
-    ctx.fillText(door.text, screenX - 3, screenY - 8);
+      ctx.fillStyle = "#fee2e2";
+      ctx.font = "13px Arial";
+      ctx.fillText(door.text, screenX - 10, screenY - 8);
+    } else if (door.locked && door.open) {
+      ctx.fillStyle = "rgba(34, 197, 94, 0.28)";
+      ctx.fillRect(screenX, screenY, door.width, door.height);
+
+      ctx.strokeStyle = "#86efac";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(screenX, screenY, door.width, door.height);
+
+      ctx.fillStyle = "#bbf7d0";
+      ctx.font = "13px Arial";
+      ctx.fillText("열린 문", screenX - 7, screenY - 8);
+    } else {
+      ctx.fillStyle = "rgba(56, 189, 248, 0.22)";
+      ctx.fillRect(screenX, screenY, door.width, door.height);
+
+      ctx.strokeStyle = "#38bdf8";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(screenX, screenY, door.width, door.height);
+
+      ctx.fillStyle = "#e0f2fe";
+      ctx.font = "13px Arial";
+      ctx.fillText(door.text, screenX - 3, screenY - 8);
+    }
   }
+}
+
+function drawKeyItem() {
+  if (keyItem.collected) {
+    return;
+  }
+
+  const screenX = keyItem.x - camera.x;
+  const screenY = keyItem.y - camera.y;
+
+  ctx.fillStyle = "#facc15";
+  ctx.fillRect(screenX, screenY + 8, 18, 8);
+  ctx.fillRect(screenX + 14, screenY + 4, 8, 16);
+  ctx.fillRect(screenX + 20, screenY + 10, 5, 5);
+
+  ctx.fillStyle = "#fef08a";
+  ctx.font = "13px Arial";
+  ctx.fillText("열쇠", screenX - 4, screenY - 8);
 }
 
 function drawRoomLabels() {
@@ -412,7 +463,8 @@ function drawWarnings() {
     { text: "낭떠러지", x: 845, y: 455 },
     { text: "점프 구간", x: 1210, y: 270 },
     { text: "대시 필요", x: 2070, y: 455 },
-    { text: "잠긴 문 구조는 다음 단계에서 구현", x: 3140, y: 390 },
+    { text: "열쇠 획득 구간", x: 3040, y: 250 },
+    { text: "열쇠 없이는 통과 불가", x: 3450, y: 280 },
     { text: "다음 지역 입구", x: 4040, y: 260 }
   ];
 
@@ -484,7 +536,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("4단계-1: 방 단위 구조 추가", 20, 35);
+  ctx.fillText("4단계-2: 열쇠와 잠긴 문 추가", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
@@ -495,17 +547,29 @@ function drawUI() {
   ctx.fillStyle = "#cbd5e1";
   ctx.fillText("방 설명: " + currentRoom.guide, 20, 120);
 
+  if (gameState.hasKey) {
+    ctx.fillStyle = "#fef08a";
+    ctx.fillText("열쇠: 보유 중", 20, 150);
+  } else {
+    ctx.fillStyle = "#fecaca";
+    ctx.fillText("열쇠: 없음", 20, 150);
+  }
+
   if (player.dashCooldown <= 0) {
     ctx.fillStyle = "#bbf7d0";
-    ctx.fillText("대시: 사용 가능", 20, 150);
+    ctx.fillText("대시: 사용 가능", 20, 180);
   } else {
     const cooldownPercent = Math.ceil((player.dashCooldown / player.dashCooldownMax) * 100);
     ctx.fillStyle = "#fde68a";
-    ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 150);
+    ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 180);
   }
 
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("현재 위치 X: " + Math.floor(player.x) + " / " + world.width, 20, 180);
+  ctx.fillText("현재 위치 X: " + Math.floor(player.x) + " / " + world.width, 20, 210);
+
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "15px Arial";
+  ctx.fillText(gameState.message, 20, 240);
 
   drawMiniMap();
 }
@@ -523,6 +587,7 @@ function draw() {
   drawRoomLabels();
   drawDoors();
   drawPlatforms();
+  drawKeyItem();
   drawWarnings();
   drawPlayer();
   drawUI();
