@@ -4,6 +4,11 @@ const ctx = canvas.getContext("2d");
 const keys = {};
 let frameCount = 0;
 
+let hitStopTimer = 0;
+let screenShakeTimer = 0;
+let screenShakeMaxTimer = 0;
+let screenShakePower = 0;
+
 const particles = [];
 
 const world = {
@@ -15,7 +20,9 @@ const camera = {
   x: 0,
   y: 0,
   width: canvas.width,
-  height: canvas.height
+  height: canvas.height,
+  shakeX: 0,
+  shakeY: 0
 };
 
 const player = {
@@ -48,9 +55,9 @@ const player = {
   invincibleTimer: 0,
 
   attackTimer: 0,
-  attackDuration: 12,
+  attackDuration: 13,
   attackCooldown: 0,
-  attackCooldownMax: 26,
+  attackCooldownMax: 24,
   attackId: 0
 };
 
@@ -129,6 +136,20 @@ const characterVisuals = {
     coreRadius: 5,
     coreColor: "#fef08a",
     shadowWidth: 24
+  },
+
+  attack: {
+    name: "공격",
+    bobSpeed: 0,
+    bobAmount: 0,
+    bodyTop: 18,
+    leftBottom: 2,
+    rightBottom: 30,
+    centerBottom: 16,
+    headY: 0,
+    coreRadius: 5,
+    coreColor: "#e0f2fe",
+    shadowWidth: 18
   }
 };
 
@@ -141,13 +162,13 @@ const gravity = 0.65;
 
 const gameState = {
   hasKey: false,
-  message: "열쇠를 찾아 잠긴 문을 열어보세요."
+  message: "J 키로 공격할 수 있습니다."
 };
 
 const rooms = [
   { name: "방 1: 시작 구역", guide: "기본 이동과 점프", x: 0, width: 900, color: "#111827" },
-  { name: "방 2: 점프 연습 구역", guide: "첫 번째 적을 피해 공격하기", x: 900, width: 900, color: "#172033" },
-  { name: "방 3: 대시 연습 구역", guide: "대시와 전투를 함께 사용", x: 1800, width: 900, color: "#1f1b2e" },
+  { name: "방 2: 전투 연습 구역", guide: "적을 공격하고 피격 반응 확인", x: 900, width: 900, color: "#172033" },
+  { name: "방 3: 대시 전투 구역", guide: "대시와 전투를 함께 사용", x: 1800, width: 900, color: "#1f1b2e" },
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
   { name: "방 5: 다음 지역 입구", guide: "다음 단계 연결 예정", x: 3600, width: 900, color: "#10251f" }
 ];
@@ -266,6 +287,31 @@ document.addEventListener("keyup", function(event) {
   keys[event.code] = false;
 });
 
+function startHitStop(duration) {
+  if (duration > hitStopTimer) {
+    hitStopTimer = duration;
+  }
+}
+
+function startScreenShake(duration, power) {
+  screenShakeTimer = duration;
+  screenShakeMaxTimer = duration;
+  screenShakePower = power;
+}
+
+function updateScreenShake() {
+  if (screenShakeTimer > 0) {
+    screenShakeTimer -= 1;
+
+    const ratio = screenShakeTimer / screenShakeMaxTimer;
+    camera.shakeX = (Math.random() - 0.5) * screenShakePower * ratio;
+    camera.shakeY = (Math.random() - 0.5) * screenShakePower * ratio;
+  } else {
+    camera.shakeX = 0;
+    camera.shakeY = 0;
+  }
+}
+
 function getCurrentRoom() {
   const playerCenterX = player.x + player.width / 2;
 
@@ -281,6 +327,10 @@ function getCurrentRoom() {
 function getPlayerState() {
   if (player.isDashing) {
     return "dash";
+  }
+
+  if (player.attackTimer > 0) {
+    return "attack";
   }
 
   if (!player.onGround && player.vy < 0) {
@@ -325,6 +375,11 @@ function getCharacterVisual(state) {
     visual.lean = player.facing * 4;
     visual.leftBottom = player.facing === 1 ? -2 : 3;
     visual.rightBottom = player.facing === 1 ? 29 : 34;
+    visual.centerBottom = player.facing === 1 ? 18 : 14;
+  } else if (state === "attack") {
+    visual.lean = player.facing * 3;
+    visual.leftBottom = player.facing === 1 ? 0 : 4;
+    visual.rightBottom = player.facing === 1 ? 28 : 32;
     visual.centerBottom = player.facing === 1 ? 18 : 14;
   } else {
     visual.lean = 0;
@@ -460,13 +515,13 @@ function spawnDashParticles() {
 }
 
 function spawnHitParticles(x, y, direction) {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 12; i++) {
     addDashStreak(
       x,
       y + (Math.random() - 0.5) * 18,
-      direction * (1.5 + Math.random() * 3),
-      (Math.random() - 0.5) * 1.2,
-      12 + Math.random() * 20,
+      direction * (1.8 + Math.random() * 3.6),
+      (Math.random() - 0.5) * 1.4,
+      14 + Math.random() * 24,
       2 + Math.random() * 4,
       14 + Math.random() * 8,
       "rgba(248, 113, 113, 1)",
@@ -657,12 +712,12 @@ function updatePlayerCombat() {
 }
 
 function getAttackHitbox() {
-  const attackWidth = 48;
-  const attackHeight = 34;
+  const attackWidth = 52;
+  const attackHeight = 38;
 
   return {
-    x: player.facing === 1 ? player.x + player.width - 2 : player.x - attackWidth + 2,
-    y: player.y + 8,
+    x: player.facing === 1 ? player.x + player.width - 3 : player.x - attackWidth + 3,
+    y: player.y + 6,
     width: attackWidth,
     height: attackHeight
   };
@@ -935,10 +990,13 @@ function checkAttackHits() {
     if (isColliding(hitbox, enemy)) {
       enemy.hitByAttackId = player.attackId;
       enemy.health -= 1;
-      enemy.hitTimer = 14;
+      enemy.hitTimer = 18;
       enemy.invincibleTimer = 12;
 
-      knockbackEnemy(enemy, player.facing, 12);
+      knockbackEnemy(enemy, player.facing, 16);
+
+      startHitStop(5);
+      startScreenShake(8, 5);
 
       spawnHitParticles(
         enemy.x + enemy.width / 2,
@@ -990,6 +1048,9 @@ function takeDamage(enemy) {
 
   player.vy = -7;
   player.isDashing = false;
+
+  startHitStop(4);
+  startScreenShake(10, 6);
 
   spawnHitParticles(
     player.x + player.width / 2,
@@ -1108,6 +1169,8 @@ function updateCamera() {
   if (camera.y + camera.height > world.height) {
     camera.y = world.height - camera.height;
   }
+
+  updateScreenShake();
 }
 
 function drawRoundedRect(x, y, width, height, radius) {
@@ -1235,7 +1298,9 @@ function drawEnemies() {
     ctx.save();
 
     if (enemy.hitTimer > 0) {
-      ctx.globalAlpha = 0.55;
+      const shake = Math.sin(enemy.hitTimer * 2) * 2;
+      ctx.translate(shake, 0);
+      ctx.globalAlpha = 0.65;
     }
 
     ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
@@ -1251,9 +1316,9 @@ function drawEnemies() {
     );
     ctx.fill();
 
-    ctx.fillStyle = "#1f2937";
+    ctx.fillStyle = enemy.hitTimer > 0 ? "#3f1f2a" : "#1f2937";
     ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#94a3b8";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = enemy.hitTimer > 0 ? 3 : 2;
 
     ctx.beginPath();
     ctx.ellipse(
@@ -1268,7 +1333,7 @@ function drawEnemies() {
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = enemy.hitTimer > 0 ? "#fca5a5" : "#38bdf8";
     if (facing === 1) {
       ctx.fillRect(screenX + 20, screenY + 12, 4, 6);
       ctx.fillRect(screenX + 27, screenY + 12, 4, 6);
@@ -1363,40 +1428,72 @@ function drawAttack() {
   const screenX = hitbox.x - camera.x;
   const screenY = hitbox.y - camera.y;
   const progress = player.attackTimer / player.attackDuration;
+  const sweep = 1 - progress;
 
   ctx.save();
-
-  ctx.globalAlpha = 0.35 + progress * 0.35;
-  ctx.fillStyle = "rgba(125, 211, 252, 0.28)";
-  drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 16);
-  ctx.fill();
+  ctx.lineCap = "round";
 
   ctx.globalAlpha = 0.85;
   ctx.strokeStyle = "#e0f2fe";
-  ctx.lineWidth = 4;
+  ctx.lineWidth = 5;
   ctx.beginPath();
 
   if (player.facing === 1) {
-    ctx.moveTo(screenX + 6, screenY + 27);
-    ctx.quadraticCurveTo(screenX + 27, screenY - 4, screenX + 46, screenY + 13);
+    ctx.moveTo(screenX + 5, screenY + 30);
+    ctx.quadraticCurveTo(
+      screenX + 22 + sweep * 10,
+      screenY - 8,
+      screenX + 50,
+      screenY + 12 + sweep * 5
+    );
   } else {
-    ctx.moveTo(screenX + 42, screenY + 27);
-    ctx.quadraticCurveTo(screenX + 21, screenY - 4, screenX + 2, screenY + 13);
+    ctx.moveTo(screenX + 47, screenY + 30);
+    ctx.quadraticCurveTo(
+      screenX + 30 - sweep * 10,
+      screenY - 8,
+      screenX + 2,
+      screenY + 12 + sweep * 5
+    );
   }
 
   ctx.stroke();
 
   ctx.globalAlpha = 0.45;
   ctx.strokeStyle = "#38bdf8";
-  ctx.lineWidth = 8;
+  ctx.lineWidth = 12;
   ctx.beginPath();
 
   if (player.facing === 1) {
-    ctx.moveTo(screenX + 5, screenY + 30);
-    ctx.quadraticCurveTo(screenX + 30, screenY - 6, screenX + 47, screenY + 17);
+    ctx.moveTo(screenX + 2, screenY + 32);
+    ctx.quadraticCurveTo(
+      screenX + 28 + sweep * 8,
+      screenY - 10,
+      screenX + 52,
+      screenY + 18
+    );
   } else {
-    ctx.moveTo(screenX + 43, screenY + 30);
-    ctx.quadraticCurveTo(screenX + 18, screenY - 6, screenX + 1, screenY + 17);
+    ctx.moveTo(screenX + 50, screenY + 32);
+    ctx.quadraticCurveTo(
+      screenX + 24 - sweep * 8,
+      screenY - 10,
+      screenX,
+      screenY + 18
+    );
+  }
+
+  ctx.stroke();
+
+  ctx.globalAlpha = 0.22;
+  ctx.strokeStyle = "#bfdbfe";
+  ctx.lineWidth = 18;
+  ctx.beginPath();
+
+  if (player.facing === 1) {
+    ctx.moveTo(screenX + 0, screenY + 35);
+    ctx.quadraticCurveTo(screenX + 30, screenY - 12, screenX + 54, screenY + 22);
+  } else {
+    ctx.moveTo(screenX + 52, screenY + 35);
+    ctx.quadraticCurveTo(screenX + 22, screenY - 12, screenX - 2, screenY + 22);
   }
 
   ctx.stroke();
@@ -1490,6 +1587,22 @@ function drawCharacterBody(state, visual, bob) {
   ctx.closePath();
   ctx.fill();
 
+  if (state === "attack") {
+    ctx.strokeStyle = "#e0f2fe";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+
+    if (player.facing === 1) {
+      ctx.moveTo(23, 25);
+      ctx.lineTo(34, 20);
+    } else {
+      ctx.moveTo(9, 25);
+      ctx.lineTo(-2, 20);
+    }
+
+    ctx.stroke();
+  }
+
   ctx.fillStyle = "#020617";
 
   if (state === "walk") {
@@ -1504,6 +1617,9 @@ function drawCharacterBody(state, visual, bob) {
   } else if (state === "dash") {
     ctx.fillRect(7 - player.facing * 2, 43, 8, 5);
     ctx.fillRect(18 - player.facing * 2, 43, 8, 5);
+  } else if (state === "attack") {
+    ctx.fillRect(7 - player.facing, 43, 8, 5);
+    ctx.fillRect(18 - player.facing, 43, 8, 5);
   } else {
     ctx.fillRect(8, 43, 7, 5);
     ctx.fillRect(18, 43, 7, 5);
@@ -1532,6 +1648,13 @@ function drawCharacterHead(state, visual, bob) {
     ctx.moveTo(23, 8);
     ctx.quadraticCurveTo(29 - player.facing * 4, 0, 30 - player.facing * 7, -5);
     ctx.stroke();
+  } else if (state === "attack") {
+    ctx.beginPath();
+    ctx.moveTo(9, 8);
+    ctx.quadraticCurveTo(4 - player.facing * 2, 0, 2 - player.facing * 3, -5);
+    ctx.moveTo(23, 8);
+    ctx.quadraticCurveTo(28 - player.facing * 2, 0, 30 - player.facing * 3, -5);
+    ctx.stroke();
   } else {
     ctx.beginPath();
     ctx.moveTo(9, 8);
@@ -1558,6 +1681,10 @@ function drawCharacterHead(state, visual, bob) {
 
   if (state === "dash") {
     eyeOffset = player.facing * 2;
+  }
+
+  if (state === "attack") {
+    eyeOffset = player.facing * 1;
   }
 
   if (player.facing === 1) {
@@ -1666,7 +1793,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("6단계-1 수정판: 추적형 적 AI", 20, 35);
+  ctx.fillText("6단계-2: 전투 손맛 개선", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시 | J: 공격", 20, 65);
@@ -1712,6 +1839,13 @@ function drawUI() {
 function update() {
   frameCount += 1;
 
+  if (hitStopTimer > 0) {
+    hitStopTimer -= 1;
+    updateParticles();
+    updateCamera();
+    return;
+  }
+
   updatePlayer();
   updatePlayerAnimation();
   updatePlayerCombat();
@@ -1722,8 +1856,9 @@ function update() {
   updateCamera();
 }
 
-function draw() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+function drawWorld() {
+  ctx.save();
+  ctx.translate(camera.shakeX, camera.shakeY);
 
   drawRoomBackgrounds();
   drawBackgroundDecorations();
@@ -1736,6 +1871,14 @@ function draw() {
   drawParticles();
   drawPlayer();
   drawAttack();
+
+  ctx.restore();
+}
+
+function draw() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawWorld();
   drawUI();
 }
 
