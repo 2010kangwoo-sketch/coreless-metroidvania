@@ -4,6 +4,8 @@ const ctx = canvas.getContext("2d");
 const keys = {};
 let frameCount = 0;
 
+const particles = [];
+
 const world = {
   width: 4500,
   height: 900
@@ -180,6 +182,96 @@ function getSolidObjects() {
   return solidObjects;
 }
 
+function addParticle(x, y, vx, vy, size, life, color) {
+  particles.push({
+    x: x,
+    y: y,
+    vx: vx,
+    vy: vy,
+    size: size,
+    life: life,
+    maxLife: life,
+    color: color
+  });
+}
+
+function spawnJumpParticles() {
+  for (let i = 0; i < 10; i++) {
+    addParticle(
+      player.x + player.width / 2,
+      player.y + player.height,
+      (Math.random() - 0.5) * 2.5,
+      Math.random() * 1.2,
+      3 + Math.random() * 3,
+      22 + Math.random() * 8,
+      "rgba(203, 213, 225, 1)"
+    );
+  }
+}
+
+function spawnLandingParticles(power) {
+  const count = Math.min(18, 8 + Math.floor(power));
+
+  for (let i = 0; i < count; i++) {
+    addParticle(
+      player.x + player.width / 2,
+      player.y + player.height,
+      (Math.random() - 0.5) * 4.2,
+      -Math.random() * 2.0,
+      3 + Math.random() * 4,
+      26 + Math.random() * 12,
+      "rgba(148, 163, 184, 1)"
+    );
+  }
+}
+
+function spawnDashParticles() {
+  for (let i = 0; i < 16; i++) {
+    addParticle(
+      player.x + player.width / 2 - player.facing * 12,
+      player.y + 24 + (Math.random() - 0.5) * 24,
+      -player.facing * (2.5 + Math.random() * 2.5),
+      (Math.random() - 0.5) * 1.4,
+      3 + Math.random() * 4,
+      22 + Math.random() * 12,
+      "rgba(125, 211, 252, 1)"
+    );
+  }
+}
+
+function updateParticles() {
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const particle = particles[i];
+
+    particle.x += particle.vx;
+    particle.y += particle.vy;
+    particle.vy += 0.08;
+    particle.life -= 1;
+
+    if (particle.life <= 0) {
+      particles.splice(i, 1);
+    }
+  }
+}
+
+function drawParticles() {
+  ctx.save();
+
+  for (const particle of particles) {
+    const alpha = particle.life / particle.maxLife;
+    const screenX = particle.x - camera.x;
+    const screenY = particle.y - camera.y;
+
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = particle.color;
+    ctx.beginPath();
+    ctx.arc(screenX, screenY, particle.size * alpha, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
 function startDash() {
   if (player.dashCooldown > 0) {
     return;
@@ -193,6 +285,8 @@ function startDash() {
   player.dashTimer = player.dashDuration;
   player.dashCooldown = player.dashCooldownMax;
   player.vy = 0;
+
+  spawnDashParticles();
 }
 
 function updateDash() {
@@ -204,6 +298,18 @@ function updateDash() {
     player.vx = player.facing * player.dashSpeed;
     player.dashTimer -= 1;
 
+    if (frameCount % 2 === 0) {
+      addParticle(
+        player.x + player.width / 2 - player.facing * 14,
+        player.y + 24 + (Math.random() - 0.5) * 20,
+        -player.facing * (1.5 + Math.random() * 1.5),
+        (Math.random() - 0.5) * 0.8,
+        2 + Math.random() * 3,
+        14 + Math.random() * 8,
+        "rgba(125, 211, 252, 1)"
+      );
+    }
+
     if (player.dashTimer <= 0) {
       player.isDashing = false;
     }
@@ -212,6 +318,8 @@ function updateDash() {
 
 function tryJump() {
   if (player.onGround) {
+    spawnJumpParticles();
+
     player.vy = player.jumpPower;
     player.onGround = false;
   }
@@ -301,7 +409,7 @@ function moveHorizontally() {
   }
 }
 
-function moveVertically() {
+function moveVertically(previousOnGround, previousVy) {
   player.y += player.vy;
   player.onGround = false;
 
@@ -311,6 +419,10 @@ function moveVertically() {
         player.y = object.y - player.height;
         player.vy = 0;
         player.onGround = true;
+
+        if (!previousOnGround && previousVy > 4) {
+          spawnLandingParticles(previousVy);
+        }
       } else if (player.vy < 0) {
         player.y = object.y + object.height;
         player.vy = 0;
@@ -341,15 +453,30 @@ function resetPlayer() {
   player.isDashing = false;
   player.dashTimer = 0;
   gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
+
+  for (let i = 0; i < 20; i++) {
+    addParticle(
+      player.x + player.width / 2,
+      player.y + player.height,
+      (Math.random() - 0.5) * 4,
+      -Math.random() * 3,
+      3 + Math.random() * 4,
+      28 + Math.random() * 10,
+      "rgba(125, 211, 252, 1)"
+    );
+  }
 }
 
 function updatePlayer() {
+  const previousOnGround = player.onGround;
+  const previousVy = player.vy;
+
   updateDash();
   updatePlayerHorizontalMove();
   updateGravity();
 
   moveHorizontally();
-  moveVertically();
+  moveVertically(previousOnGround, previousVy);
 
   checkKeyCollection();
   checkFall();
@@ -821,7 +948,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("5단계-2: 행동 상태별 자세 구분", 20, 35);
+  ctx.fillText("5단계-3: 착지와 대시 이펙트 강화", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
@@ -862,6 +989,7 @@ function drawUI() {
 function update() {
   frameCount += 1;
   updatePlayer();
+  updateParticles();
   updateCamera();
 }
 
@@ -875,6 +1003,7 @@ function draw() {
   drawPlatforms();
   drawKeyItem();
   drawWarnings();
+  drawParticles();
   drawPlayer();
   drawUI();
 }
