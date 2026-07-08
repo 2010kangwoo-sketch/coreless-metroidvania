@@ -102,7 +102,10 @@ const doors = [
   { x: 860, y: 330, width: 40, height: 90, text: "문 1", locked: false, open: true },
   { x: 1760, y: 330, width: 40, height: 90, text: "문 2", locked: false, open: true },
   { x: 2660, y: 330, width: 40, height: 90, text: "문 3", locked: false, open: true },
-  { x: 3560, y: 300, width: 40, height: 120, text: "잠긴 문", locked: true, open: false }
+
+  // 수정된 잠긴 문
+  // y를 80으로 올리고 height를 340으로 키워서 점프로 넘어가지 못하게 했습니다.
+  { x: 3560, y: 80, width: 40, height: 340, text: "잠긴 문", locked: true, open: false }
 ];
 
 const keyItem = {
@@ -156,8 +159,13 @@ function getSolidObjects() {
 }
 
 function startDash() {
-  if (player.dashCooldown > 0) return;
-  if (player.isDashing) return;
+  if (player.dashCooldown > 0) {
+    return;
+  }
+
+  if (player.isDashing) {
+    return;
+  }
 
   player.isDashing = true;
   player.dashTimer = player.dashDuration;
@@ -239,6 +247,19 @@ function moveHorizontally() {
 
   for (const object of getSolidObjects()) {
     if (isColliding(player, object)) {
+
+      // 수정된 부분
+      // 열쇠가 있으면, 캐릭터를 밀어내기 전에 문을 먼저 열어줍니다.
+      if (object.locked && !object.open) {
+        if (gameState.hasKey) {
+          object.open = true;
+          gameState.message = "잠긴 문이 열렸습니다.";
+          continue;
+        } else {
+          gameState.message = "잠긴 문입니다. 열쇠가 필요합니다.";
+        }
+      }
+
       if (player.vx > 0) {
         player.x = object.x - player.width;
       } else if (player.vx < 0) {
@@ -247,10 +268,6 @@ function moveHorizontally() {
 
       player.vx = 0;
       player.isDashing = false;
-
-      if (object.locked && !object.open) {
-        gameState.message = "잠긴 문입니다. 열쇠가 필요합니다.";
-      }
     }
   }
 
@@ -291,15 +308,6 @@ function checkKeyCollection() {
   }
 }
 
-function checkDoorUnlock() {
-  for (const door of doors) {
-    if (door.locked && !door.open && gameState.hasKey && isColliding(player, door)) {
-      door.open = true;
-      gameState.message = "잠긴 문이 열렸습니다.";
-    }
-  }
-}
-
 function checkFall() {
   if (player.y > world.height) {
     resetPlayer();
@@ -325,7 +333,6 @@ function updatePlayer() {
   moveVertically();
 
   checkKeyCollection();
-  checkDoorUnlock();
   checkFall();
 }
 
@@ -333,8 +340,13 @@ function updateCamera() {
   camera.x = player.x + player.width / 2 - camera.width / 2;
   camera.y = player.y + player.height / 2 - camera.height / 2;
 
-  if (camera.x < 0) camera.x = 0;
-  if (camera.y < 0) camera.y = 0;
+  if (camera.x < 0) {
+    camera.x = 0;
+  }
+
+  if (camera.y < 0) {
+    camera.y = 0;
+  }
 
   if (camera.x + camera.width > world.width) {
     camera.x = world.width - camera.width;
@@ -536,7 +548,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("4단계-2: 열쇠와 잠긴 문 추가", 20, 35);
+  ctx.fillText("4단계-2 수정: 열쇠와 잠긴 문", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시", 20, 65);
