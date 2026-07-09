@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v51: 12단계-3 숨겨진 방, 보상, 되돌아가기 구조 추가
+// v52: 13단계-1 맵 데이터 구조 정리. 실제 게임용 월드 재설계를 위한 방 단위 데이터 기반
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "12단계-3 v51: 숨겨진 방과 보상, 되돌아가기 구조가 추가되었습니다.",
+  message: "13단계-1 v52: 맵 데이터 구조를 방 단위로 정리했습니다.",
   hiddenRewards: 0
 };
 
@@ -180,15 +180,117 @@ const endingLines = [
   "중심을 잃은 존재가 다시 자신의 원점을 찾는 이야기."
 ];
 
-const rooms = [
-  { name: "대형 방 1: 무너진 입구", guide: "한 방 안에 상층, 중층, 하층이 함께 있는 시작 대형 공간", x: 0, width: 1800, color: "#111827" },
-  { name: "대형 방 2: 깊은 회랑", guide: "넓은 전투 공간과 아래층 우회 통로", x: 1800, width: 1800, color: "#172033" },
-  { name: "대형 방 3: 능력의 수직정원", guide: "이중 점프 획득 후 벽 점프 수직 통로 연습", x: 3600, width: 1800, color: "#1f1b2e" },
-  { name: "대형 방 4: 잠긴 용광로", guide: "열쇠를 찾고 잠긴 문까지 돌아오는 대형 구조", x: 5400, width: 1800, color: "#201a1a" },
-  { name: "대형 방 5: 기억의 탑", guide: "상하층을 오가며 기억의 문으로 접근", x: 7200, width: 1800, color: "#10251f" },
-  { name: "대형 방 6: 핵의 심연", guide: "기억 핵을 얻기 위한 넓은 수직 탐험 구역", x: 9000, width: 1800, color: "#1a1328" },
-  { name: "대형 방 7: 최종 공동", guide: "화면 여러 개 분량의 넓은 최종 보스방", x: 10800, width: 1800, color: "#061520" }
+const roomBlueprints = [
+  {
+    id: "outer_ruins_entry",
+    name: "대형 방 1: 무너진 입구",
+    guide: "한 방 안에 상층, 중층, 하층이 함께 있는 시작 대형 공간",
+    role: "tutorial_entry",
+    bounds: { x: 0, y: 0, width: 1800, height: 1600 },
+    cameraBounds: { x: 0, y: 0, width: 1800, height: 1600 },
+    color: "#111827",
+    requiredAbilities: [],
+    mainPath: "기본 이동과 점프를 익히고, 상층 보상과 하층 우회로를 동시에 보여주는 입구 구역",
+    connections: { right: "deep_corridor" },
+    tags: ["start", "multi_layer", "return_reward"]
+  },
+  {
+    id: "deep_corridor",
+    name: "대형 방 2: 깊은 회랑",
+    guide: "넓은 전투 공간과 아래층 우회 통로",
+    role: "combat_and_dash_test",
+    bounds: { x: 1800, y: 0, width: 1800, height: 1600 },
+    cameraBounds: { x: 1800, y: 0, width: 1800, height: 1600 },
+    color: "#172033",
+    requiredAbilities: ["dash"],
+    mainPath: "중층 진행로와 하층 대시 장벽을 통해 능력 활용을 확인하는 회랑",
+    connections: { left: "outer_ruins_entry", right: "vertical_garden" },
+    tags: ["combat", "dash_barrier", "lower_route"]
+  },
+  {
+    id: "vertical_garden",
+    name: "대형 방 3: 능력의 수직정원",
+    guide: "이중 점프 획득 후 벽 점프 수직 통로 연습",
+    role: "vertical_movement_training",
+    bounds: { x: 3600, y: 0, width: 1800, height: 1600 },
+    cameraBounds: { x: 3600, y: 0, width: 1800, height: 1600 },
+    color: "#1f1b2e",
+    requiredAbilities: ["doubleJump", "wallJump"],
+    mainPath: "이중 점프와 벽 점프를 실제 이동 루트에서 사용하게 만드는 수직형 방",
+    connections: { left: "deep_corridor", right: "locked_furnace" },
+    tags: ["double_jump", "wall_jump", "vertical"]
+  },
+  {
+    id: "locked_furnace",
+    name: "대형 방 4: 잠긴 용광로",
+    guide: "열쇠를 찾고 잠긴 문까지 돌아오는 대형 구조",
+    role: "key_and_backtrack",
+    bounds: { x: 5400, y: 0, width: 1800, height: 1600 },
+    cameraBounds: { x: 5400, y: 0, width: 1800, height: 1600 },
+    color: "#201a1a",
+    requiredAbilities: ["key"],
+    mainPath: "열쇠 획득과 되돌아가기 구조를 확인하는 잠긴 구역",
+    connections: { left: "vertical_garden", right: "memory_tower" },
+    tags: ["locked_door", "key", "heat_theme"]
+  },
+  {
+    id: "memory_tower",
+    name: "대형 방 5: 기억의 탑",
+    guide: "상하층을 오가며 기억의 문으로 접근",
+    role: "fragment_gate_and_secret",
+    bounds: { x: 7200, y: 0, width: 1800, height: 1600 },
+    cameraBounds: { x: 7200, y: 0, width: 1800, height: 1600 },
+    color: "#10251f",
+    requiredAbilities: ["memoryFragment"],
+    mainPath: "기억 조각을 사용해 다음 구역으로 진입하고 숨겨진 보상을 찾는 탑형 방",
+    connections: { left: "locked_furnace", right: "core_abyss" },
+    tags: ["memory_gate", "secret_reward", "tower"]
+  },
+  {
+    id: "core_abyss",
+    name: "대형 방 6: 핵의 심연",
+    guide: "기억 핵을 얻기 위한 넓은 수직 탐험 구역",
+    role: "core_reward_and_abyss_route",
+    bounds: { x: 9000, y: 0, width: 1800, height: 1600 },
+    cameraBounds: { x: 9000, y: 0, width: 1800, height: 1600 },
+    color: "#1a1328",
+    requiredAbilities: ["wallJump", "downAttackBounce"],
+    mainPath: "아래 공격 튕김과 수직 탐험을 통해 기억 핵에 도달하는 심연 구역",
+    connections: { left: "memory_tower", right: "final_cavern" },
+    tags: ["core", "abyss", "pogo_route"]
+  },
+  {
+    id: "final_cavern",
+    name: "대형 방 7: 최종 공동",
+    guide: "화면 여러 개 분량의 넓은 최종 보스방",
+    role: "boss_arena",
+    bounds: { x: 10800, y: 0, width: 1800, height: 1600 },
+    cameraBounds: { x: 10800, y: 0, width: 1800, height: 1600 },
+    color: "#061520",
+    requiredAbilities: ["memoryCore"],
+    mainPath: "보스전과 엔딩 보상을 담당하는 최종 전투 공간",
+    connections: { left: "core_abyss" },
+    tags: ["boss", "ending"]
+  }
 ];
+
+const rooms = roomBlueprints.map(function(room) {
+  return {
+    id: room.id,
+    name: room.name,
+    guide: room.guide,
+    role: room.role,
+    x: room.bounds.x,
+    y: room.bounds.y,
+    width: room.bounds.width,
+    height: room.bounds.height,
+    color: room.color,
+    cameraBounds: room.cameraBounds,
+    requiredAbilities: room.requiredAbilities,
+    connections: room.connections,
+    tags: room.tags
+  };
+});
 
 const platforms = [
   // 대형 방 1: 무너진 입구. 시작 화면 1개가 아니라 상층/하층을 함께 가진 대형 공간
@@ -436,6 +538,89 @@ const boss = {
   phaseTwoAnnounced: false,
   defeatStarted: false
 };
+
+function getRoomBlueprintForX(x) {
+  for (const room of roomBlueprints) {
+    if (x >= room.bounds.x && x < room.bounds.x + room.bounds.width) {
+      return room;
+    }
+  }
+
+  return roomBlueprints[0];
+}
+
+function getObjectCenterForMapIndex(object) {
+  const width = object.width || 0;
+  return object.x + width / 2;
+}
+
+function createMapObjectSummary(object, category) {
+  return {
+    category,
+    type: object.type || object.text || object.name || category,
+    name: object.name || object.text || object.type || category,
+    x: object.x,
+    y: object.y,
+    width: object.width || 0,
+    height: object.height || 0,
+    requiresDoubleJump: !!object.requiresDoubleJump,
+    requiresMemoryFragments: object.requiresMemoryFragments || 0,
+    requiresMemoryCores: object.requiresMemoryCores || 0,
+    hiddenReward: !!object.hiddenReward,
+    locked: !!object.locked
+  };
+}
+
+function addObjectsToRoomIndex(index, objects, category) {
+  for (const object of objects) {
+    const room = getRoomBlueprintForX(getObjectCenterForMapIndex(object));
+    index[room.id][category].push(createMapObjectSummary(object, category));
+  }
+}
+
+function buildRoomObjectIndex() {
+  const index = {};
+
+  for (const room of roomBlueprints) {
+    index[room.id] = {
+      platforms: [],
+      doors: [],
+      enemies: [],
+      rewards: [],
+      hazards: [],
+      keyItems: [],
+      abilityItems: [],
+      bossObjects: []
+    };
+  }
+
+  addObjectsToRoomIndex(index, platforms, "platforms");
+  addObjectsToRoomIndex(index, doors, "doors");
+  addObjectsToRoomIndex(index, enemies, "enemies");
+  addObjectsToRoomIndex(index, rewardItems, "rewards");
+  addObjectsToRoomIndex(index, dashHazards, "hazards");
+  addObjectsToRoomIndex(index, [keyItem], "keyItems");
+  addObjectsToRoomIndex(index, abilityItems, "abilityItems");
+  addObjectsToRoomIndex(index, [boss], "bossObjects");
+
+  return index;
+}
+
+const mapData = {
+  version: "v52",
+  stage: "13-1",
+  purpose: "최종 월드 재설계를 위해 기존 테스트맵을 방 단위 데이터로 인덱싱한다.",
+  roomCount: roomBlueprints.length,
+  worldBounds: world,
+  rooms: roomBlueprints,
+  roomObjectIndex: buildRoomObjectIndex()
+};
+
+function getCurrentRoomData() {
+  const currentRoom = getCurrentRoom();
+  return mapData.roomObjectIndex[currentRoom.id] || null;
+}
+
 
 function createMeleeEnemy(name, x, y, width, height, minX, maxX, speed, health, attackRange, attackCooldownMax) {
   return {
@@ -4893,17 +5078,17 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("12단계-3 v51: 숨겨진 방과 보상 루트", 20, 35);
+  ctx.fillText("13단계-1 v52: 맵 데이터 구조 정리", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
   ctx.fillText("현재 방: " + currentRoom.name, 20, 95);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("방 설명: " + currentRoom.guide, 20, 120);
+  ctx.fillText("방 설명: " + currentRoom.guide + " / 역할: " + currentRoom.role, 20, 120);
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("능력 활용: 이중 점프 / 대시 장벽 / 벽 점프 / 아래 공격 튕김", 20, 180);
+  ctx.fillText("맵 구조: 방 데이터 / 발판 / 적 / 보상 / 장벽 인덱스 정리", 20, 180);
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
