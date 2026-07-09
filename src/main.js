@@ -14,7 +14,7 @@ const particles = [];
 const projectiles = [];
 
 const world = {
-  width: 5400,
+  width: 6300,
   height: 900
 };
 
@@ -185,7 +185,8 @@ const gameState = {
   hasKey: false,
   memoryFragments: 0,
   memoryCores: 0,
-  message: "기억 조각을 모아 기억의 문을 여세요."
+  originCores: 0,
+  message: "기억 핵을 얻어 최종 문을 여세요."
 };
 
 const rooms = [
@@ -194,7 +195,8 @@ const rooms = [
   { name: "방 3: 능력 해금 구역", guide: "이중 점프 능력 획득", x: 1800, width: 900, color: "#1f1b2e" },
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
   { name: "방 5: 기억의 문 구역", guide: "기억 조각으로 특수 문 열기", x: 3600, width: 900, color: "#10251f" },
-  { name: "방 6: 기억의 문 너머", guide: "숨겨진 핵심 보상 획득", x: 4500, width: 900, color: "#1a1328" }
+  { name: "방 6: 기억 핵 구역", guide: "기억 핵 획득", x: 4500, width: 900, color: "#1a1328" },
+  { name: "방 7: 최종 기억실", guide: "기억 핵으로 열린 최종 구역", x: 5400, width: 900, color: "#061520" }
 ];
 
 const platforms = [
@@ -231,10 +233,15 @@ const platforms = [
   { x: 4100, y: 215, width: 140, height: 24 },
   { x: 4350, y: 265, width: 110, height: 24 },
 
-  { x: 4500, y: 420, width: 850, height: 80 },
+  { x: 4500, y: 420, width: 900, height: 80 },
   { x: 4620, y: 350, width: 160, height: 24 },
   { x: 4860, y: 305, width: 160, height: 24 },
   { x: 5100, y: 350, width: 160, height: 24 },
+
+  { x: 5400, y: 420, width: 900, height: 80 },
+  { x: 5530, y: 350, width: 170, height: 24 },
+  { x: 5770, y: 300, width: 170, height: 24 },
+  { x: 6020, y: 350, width: 160, height: 24 },
 
   { x: 760, y: 260, width: 40, height: 80 },
   { x: 1660, y: 300, width: 40, height: 120 },
@@ -246,7 +253,8 @@ const doors = [
   { x: 1760, y: 330, width: 40, height: 90, text: "문 2", locked: false, open: true },
   { x: 2660, y: 330, width: 40, height: 90, text: "문 3", locked: false, open: true },
   { x: 3560, y: 80, width: 40, height: 340, text: "잠긴 문", locked: true, open: false },
-  { x: 4460, y: 80, width: 40, height: 340, text: "기억의 문", locked: true, open: false, requiresMemoryFragments: 1 }
+  { x: 4460, y: 80, width: 40, height: 340, text: "기억의 문", locked: true, open: false, requiresMemoryFragments: 1 },
+  { x: 5360, y: 80, width: 40, height: 340, text: "최종 문", locked: true, open: false, requiresMemoryCores: 1 }
 ];
 
 const keyItem = {
@@ -286,6 +294,15 @@ const rewardItems = [
     y: 305,
     width: 28,
     height: 28,
+    collected: false
+  },
+  {
+    type: "originCore",
+    name: "원점 코어",
+    x: 6040,
+    y: 305,
+    width: 30,
+    height: 30,
     collected: false
   }
 ];
@@ -1179,7 +1196,16 @@ function moveHorizontally() {
   for (const object of getSolidObjects()) {
     if (isColliding(player, object)) {
       if (object.locked && !object.open) {
-        if (object.requiresMemoryFragments) {
+        if (object.requiresMemoryCores) {
+          if (gameState.memoryCores >= object.requiresMemoryCores) {
+            object.open = true;
+            gameState.message = "기억 핵이 반응하여 최종 문이 열렸습니다.";
+            startScreenShake(14, 4);
+            continue;
+          } else {
+            gameState.message = "최종 문입니다. 기억 핵 1개가 필요합니다.";
+          }
+        } else if (object.requiresMemoryFragments) {
           if (gameState.memoryFragments >= object.requiresMemoryFragments) {
             object.open = true;
             gameState.message = "기억 조각이 반응하여 기억의 문이 열렸습니다.";
@@ -1954,26 +1980,33 @@ function checkRewardCollection() {
 
       if (item.type === "memoryCore") {
         gameState.memoryCores += 1;
-        gameState.message = "기억 핵을 획득했습니다. 숨겨진 문 너머의 핵심 보상입니다.";
+        gameState.message = "기억 핵을 획득했습니다. 이제 최종 문을 열 수 있습니다.";
         spawnRewardBurst(item, "rgba(216, 180, 254, 1)");
         startScreenShake(12, 4);
+      }
+
+      if (item.type === "originCore") {
+        gameState.originCores += 1;
+        gameState.message = "원점 코어를 획득했습니다. 현재 버전의 최종 목표를 달성했습니다.";
+        spawnRewardBurst(item, "rgba(125, 211, 252, 1)");
+        startScreenShake(18, 5);
       }
     }
   }
 }
 
 function spawnRewardBurst(item, color) {
-  for (let i = 0; i < 28; i++) {
-    const angle = (Math.PI * 2 * i) / 28;
+  for (let i = 0; i < 32; i++) {
+    const angle = (Math.PI * 2 * i) / 32;
 
     addDashStreak(
       item.x + item.width / 2,
       item.y + item.height / 2,
-      Math.cos(angle) * (1.2 + Math.random() * 2.0),
-      Math.sin(angle) * (1.2 + Math.random() * 2.0),
+      Math.cos(angle) * (1.2 + Math.random() * 2.2),
+      Math.sin(angle) * (1.2 + Math.random() * 2.2),
       10 + Math.random() * 16,
       2 + Math.random() * 3,
-      20 + Math.random() * 10,
+      22 + Math.random() * 10,
       color,
       angle
     );
@@ -2115,6 +2148,34 @@ function drawDoors() {
   for (const door of doors) {
     const screenX = door.x - camera.x;
     const screenY = door.y - camera.y;
+
+    if (door.requiresMemoryCores) {
+      if (door.open) {
+        ctx.fillStyle = "rgba(14, 165, 233, 0.22)";
+        ctx.fillRect(screenX, screenY, door.width, door.height);
+
+        ctx.strokeStyle = "#7dd3fc";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(screenX, screenY, door.width, door.height);
+
+        ctx.fillStyle = "#e0f2fe";
+        ctx.font = "13px Arial";
+        ctx.fillText("열린 최종 문", screenX - 26, screenY - 8);
+      } else {
+        ctx.fillStyle = "rgba(14, 116, 144, 0.58)";
+        ctx.fillRect(screenX, screenY, door.width, door.height);
+
+        ctx.strokeStyle = "#e0f2fe";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(screenX, screenY, door.width, door.height);
+
+        ctx.fillStyle = "#e0f2fe";
+        ctx.font = "13px Arial";
+        ctx.fillText("기억 핵 1개 필요", screenX - 40, screenY - 8);
+      }
+
+      continue;
+    }
 
     if (door.requiresMemoryFragments) {
       if (door.open) {
@@ -2258,7 +2319,17 @@ function drawRewardItems() {
 
     ctx.save();
 
-    if (item.type === "memoryCore") {
+    if (item.type === "originCore") {
+      ctx.globalAlpha = 0.34;
+      ctx.fillStyle = "#7dd3fc";
+      ctx.beginPath();
+      ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 28 + pulse, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#0c4a6e";
+      ctx.strokeStyle = "#e0f2fe";
+    } else if (item.type === "memoryCore") {
       ctx.globalAlpha = 0.3;
       ctx.fillStyle = "#c4b5fd";
       ctx.beginPath();
@@ -2285,12 +2356,29 @@ function drawRewardItems() {
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = item.type === "memoryCore" ? "#f5d0fe" : "#fef3c7";
-    ctx.beginPath();
-    ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 5, 0, Math.PI * 2);
-    ctx.fill();
+    if (item.type === "originCore") {
+      ctx.fillStyle = "#e0f2fe";
+      ctx.beginPath();
+      ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 6, 0, Math.PI * 2);
+      ctx.fill();
 
-    ctx.strokeStyle = item.type === "memoryCore" ? "#e9d5ff" : "#fde68a";
+      ctx.strokeStyle = "#bae6fd";
+    } else if (item.type === "memoryCore") {
+      ctx.fillStyle = "#f5d0fe";
+      ctx.beginPath();
+      ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "#e9d5ff";
+    } else {
+      ctx.fillStyle = "#fef3c7";
+      ctx.beginPath();
+      ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = "#fde68a";
+    }
+
     ctx.lineWidth = 2;
     ctx.beginPath();
     ctx.moveTo(screenX + item.width / 2, screenY + 4);
@@ -2299,7 +2387,7 @@ function drawRewardItems() {
     ctx.lineTo(screenX + item.width - 4, screenY + item.height / 2);
     ctx.stroke();
 
-    ctx.fillStyle = item.type === "memoryCore" ? "#f5d0fe" : "#fef3c7";
+    ctx.fillStyle = item.type === "originCore" ? "#e0f2fe" : item.type === "memoryCore" ? "#f5d0fe" : "#fef3c7";
     ctx.font = "13px Arial";
     ctx.fillText(item.name, screenX - 14, screenY - 10);
 
@@ -2734,8 +2822,10 @@ function drawWarnings() {
     { text: "이중 점프 구간", x: 3860, y: 225 },
     { text: "원거리 적", x: 3890, y: 360 },
     { text: "기억 조각 1개 필요", x: 4390, y: 70 },
-    { text: "기억의 문 너머", x: 4620, y: 325 },
-    { text: "기억 핵", x: 5085, y: 290 }
+    { text: "기억 핵", x: 5085, y: 290 },
+    { text: "기억 핵 1개 필요", x: 5300, y: 70 },
+    { text: "최종 기억실", x: 5520, y: 325 },
+    { text: "원점 코어", x: 6000, y: 290 }
   ];
 
   for (const warning of warnings) {
@@ -3120,7 +3210,7 @@ function drawMiniMap() {
 
 function drawHealthUI() {
   const startX = 20;
-  const startY = 335;
+  const startY = 360;
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
@@ -3143,7 +3233,7 @@ function drawHealthUI() {
 
 function drawCoreEnergyUI() {
   const startX = 20;
-  const startY = 365;
+  const startY = 390;
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
@@ -3173,7 +3263,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("7단계-3: 기억 조각으로 특수 문 열기", 20, 35);
+  ctx.fillText("7단계-4: 기억 핵으로 최종 문 열기", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프/이중 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -3221,12 +3311,15 @@ function drawUI() {
   ctx.fillStyle = "#e9d5ff";
   ctx.fillText("기억 핵: " + gameState.memoryCores + "개", 20, 315);
 
+  ctx.fillStyle = "#bae6fd";
+  ctx.fillText("원점 코어: " + gameState.originCores + "개", 20, 340);
+
   drawHealthUI();
   drawCoreEnergyUI();
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
-  ctx.fillText(gameState.message, 20, 410);
+  ctx.fillText(gameState.message, 20, 435);
 
   drawMiniMap();
 }
