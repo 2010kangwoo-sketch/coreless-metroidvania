@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v47: 12단계-1 대형 방 안정화 수정본
+// v48: 12단계-1 보스전 공격 높이 보정 수정본
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "12단계-1 v47: 대형 방 구조를 유지하면서 적 이동, 절벽 감지, 보스 카메라를 안정화했습니다."
+  message: "12단계-1 v48: 보스전 파편 낙하와 레이저 높이를 대형 보스방 바닥 기준으로 보정했습니다."
 };
 
 const endingLines = [
@@ -2406,22 +2406,25 @@ function updateShardWarnings() {
 }
 
 function spawnMemoryShardFromWarning(warning) {
+  const spawnY = warning.y - 620;
+
   projectiles.push({
     type: "memoryShard",
     x: warning.x - 10,
-    y: 130,
+    y: spawnY,
     width: 20,
     height: 28,
     vx: 0,
-    vy: isBossPhaseTwo() ? 6.3 : 5.1,
-    life: 95,
+    vy: isBossPhaseTwo() ? 8.8 : 7.4,
+    life: 150,
+    groundY: warning.y,
     sourceName: boss.name
   });
 
   for (let i = 0; i < 6; i++) {
     addDashStreak(
       warning.x,
-      150,
+      spawnY + 20,
       (Math.random() - 0.5) * 1.2,
       0.5 + Math.random() * 1.2,
       8 + Math.random() * 8,
@@ -2598,7 +2601,11 @@ function startBossLaserAttack() {
   boss.alpha = 1;
   boss.laserDirection = centerX(player) >= centerX(boss) ? 1 : -1;
   boss.facing = boss.laserDirection;
-  boss.laserY = clamp(player.y + 16, 245, 392);
+
+  const laserHeight = isBossPhaseTwo() ? 30 : 26;
+  const bossFloorY = 620;
+  boss.laserY = clamp(centerY(player) - laserHeight / 2, 220, bossFloorY - laserHeight - 2);
+
   gameState.message = isBossPhaseTwo()
     ? "2페이즈: 보스가 빠르게 가로 레이저를 충전합니다."
     : "기억 파수자가 가로 레이저를 충전합니다. 높이를 보고 피하세요.";
@@ -2798,7 +2805,7 @@ function updateProjectiles() {
       removeProjectile = true;
     }
 
-    if (projectile.type === "memoryShard" && projectile.y > 455) {
+    if (projectile.type === "memoryShard" && projectile.y > (projectile.groundY || 620) + 42) {
       removeProjectile = true;
     }
 
@@ -2830,10 +2837,12 @@ function updateProjectiles() {
 }
 
 function spawnMemoryShardImpact(projectile) {
+  const impactY = projectile.groundY || projectile.y;
+
   for (let i = 0; i < 10; i++) {
     addDashStreak(
       projectile.x + projectile.width / 2,
-      420,
+      impactY,
       (Math.random() - 0.5) * 2.2,
       -0.3 - Math.random() * 1.5,
       8 + Math.random() * 10,
@@ -3952,6 +3961,7 @@ function drawShardWarnings() {
   for (const warning of shardWarnings) {
     const screenX = warning.x - camera.x;
     const groundY = warning.y - camera.y;
+    const warningTopY = warning.y - 620 - camera.y;
     const progress = 1 - warning.timer / warning.maxTimer;
     const ringRadiusX = 18 + progress * 12;
     const ringRadiusY = 7 + progress * 3;
@@ -3965,12 +3975,12 @@ function drawShardWarnings() {
     ctx.strokeStyle = "#e0f2fe";
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(screenX, 130 - camera.y);
+    ctx.moveTo(screenX, warningTopY);
     ctx.lineTo(screenX, groundY - 5);
     ctx.stroke();
     ctx.fillStyle = "#e0f2fe";
     ctx.font = "16px Arial";
-    ctx.fillText("!", screenX - 4, 120 - camera.y);
+    ctx.fillText("!", screenX - 4, warningTopY - 10);
     ctx.restore();
   }
 }
@@ -4699,7 +4709,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("12단계-1 v47: 대형 방 안정화 수정", 20, 35);
+  ctx.fillText("12단계-1 v48: 보스전 공격 높이 보정", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
