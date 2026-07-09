@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v56 안정화 재검토본: 원래 무빙, 표지판, 체크포인트, 최적화 구조를 점검했습니다.",
+  message: "13단계-2 v56 렉/슬로우모션 수정본: 원래 무빙을 유지하고 렌더링을 더 줄였습니다.",
   hiddenRewards: 0
 };
 
@@ -2449,7 +2449,7 @@ function hasGroundAhead(enemy, direction) {
     height: 18
   };
 
-  for (const platform of platforms) {
+  for (const platform of getNearbyObjects(platforms, 1400, 1000)) {
     if (!isGroundLikePlatform(platform)) {
       continue;
     }
@@ -3762,47 +3762,96 @@ function drawCheckpoints() {
 }
 
 function drawRoomBackgrounds() {
-  // v56 opt: 카메라 근처의 방 배경만 그린다.
+  // v56 lag-fix: 거대한 방 배경을 월드 전체 높이로 그리지 않고, 현재 화면에 보이는 부분만 그린다.
+  // 이전 방식처럼 8000px 이상 높이의 사각형을 매 프레임 그리면, 실제 캐릭터 속도는 그대로여도 화면 전체가 슬로우모션처럼 보일 수 있다.
+  const visibleTop = Math.max(0, camera.y - 30);
+  const visibleBottom = Math.min(world.height, camera.y + canvas.height + 30);
+  const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+  const visibleLeft = camera.x - optimizationSettings.roomBackgroundMargin;
+  const visibleRight = camera.x + canvas.width + optimizationSettings.roomBackgroundMargin;
+
   for (const room of rooms) {
-    if (!isObjectNearCamera(room, optimizationSettings.roomBackgroundMargin, world.height)) {
+    const roomLeft = room.x;
+    const roomRight = room.x + room.width;
+
+    if (roomRight < visibleLeft || roomLeft > visibleRight) {
+      continue;
+    }
+
+    const drawLeft = Math.max(roomLeft, camera.x - 30);
+    const drawRight = Math.min(roomRight, camera.x + canvas.width + 30);
+    const drawWidth = Math.max(0, drawRight - drawLeft);
+
+    if (drawWidth <= 0 || visibleHeight <= 0) {
       continue;
     }
 
     ctx.fillStyle = room.color;
-    ctx.fillRect(room.x - camera.x, 0 - camera.y, room.width, world.height);
+    ctx.fillRect(drawLeft - camera.x, visibleTop - camera.y, drawWidth, visibleHeight);
   }
 
   for (const room of rooms) {
-    if (!isObjectNearCamera(room, optimizationSettings.roomBackgroundMargin, world.height)) {
+    const roomLeft = room.x;
+    const roomRight = room.x + room.width;
+
+    if (roomRight < visibleLeft || roomLeft > visibleRight) {
       continue;
     }
 
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
+    const drawLeft = Math.max(roomLeft, camera.x - 30);
+    const drawRight = Math.min(roomRight, camera.x + canvas.width + 30);
+    const drawWidth = Math.max(0, drawRight - drawLeft);
+
+    if (drawWidth <= 0 || visibleHeight <= 0) {
+      continue;
+    }
+
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
     ctx.lineWidth = 2;
-    ctx.strokeRect(room.x - camera.x, 0 - camera.y, room.width, world.height);
+    ctx.strokeRect(drawLeft - camera.x, visibleTop - camera.y, drawWidth, visibleHeight);
   }
 }
 
 function drawBackgroundDecorations() {
-  // v56 opt: 배경 장식도 카메라 주변 구간만 반복한다.
+  // v56 lag-fix: 배경 기둥과 격자선도 화면 안쪽만 그린다.
+  const screenTop = -40;
+  const screenBottom = canvas.height + 40;
+  const visibleWorldTop = camera.y - 80;
+  const visibleWorldBottom = camera.y + canvas.height + 80;
+
   const startColumn = Math.max(0, Math.floor((camera.x - 520) / 360) * 360);
   const endColumn = Math.min(world.width, camera.x + canvas.width + 520);
 
   for (let x = startColumn + 180; x < endColumn; x += 360) {
+    const top = 120;
+    const height = 300;
+    const bottom = top + height;
+
+    if (bottom < visibleWorldTop || top > visibleWorldBottom) {
+      continue;
+    }
+
     ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
-    ctx.fillRect(x - camera.x, 120 - camera.y, 70, 300);
+    ctx.fillRect(x - camera.x, top - camera.y, 70, height);
   }
 
   const startGrid = Math.max(0, Math.floor((camera.x - 260) / 120) * 120);
   const endGrid = Math.min(world.width, camera.x + canvas.width + 260);
 
   for (let x = startGrid; x < endGrid; x += 120) {
-    ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
-    ctx.fillRect(x - camera.x, 0 - camera.y, 2, world.height);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.025)";
+    ctx.fillRect(x - camera.x, screenTop, 2, screenBottom - screenTop);
   }
 }
 
 function drawBossRoomDecorations() {
+  // v56 lag-fix: 보스방 장식은 보스방 근처에서만 그린다.
+  const bossDecorRect = { x: 10800, y: 40, width: 1700, height: 620 };
+
+  if (!isObjectNearCamera(bossDecorRect, 260, 260)) {
+    return;
+  }
+
   ctx.save();
   ctx.globalAlpha = 0.22;
   ctx.strokeStyle = "#7dd3fc";
@@ -4778,14 +4827,18 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "v56 1차 보강: 튜토리얼은 소형 방, 첫 지역은 초대형 방 6개", x: 120, y: 210 },
-    { text: "각 초대형 방에는 체크포인트가 있어 낙하 시 마지막 저장점으로 복귀", x: 8700, y: 960 },
-    { text: "현재 단계는 전체 골격과 카메라 기믹 확인용", x: 13600, y: 1180 },
-    { text: "하층은 강제 구멍 낙하가 아니라 선택 진입 구조로 유지", x: 21600, y: 2380 },
-    { text: "세로 상승 구역은 이후 큰 벽 안의 파인 공간으로 보강 예정", x: 34200, y: 3950 }
+    { text: "v56 1차 보강: 튜토리얼은 소형 방, 첫 지역은 초대형 방 6개", x: 120, y: 210, width: 520, height: 24 },
+    { text: "각 초대형 방에는 체크포인트가 있어 낙하 시 마지막 저장점으로 복귀", x: 8700, y: 960, width: 560, height: 24 },
+    { text: "현재 단계는 전체 골격과 카메라 기믹 확인용", x: 13600, y: 1180, width: 460, height: 24 },
+    { text: "하층은 강제 구멍 낙하가 아니라 선택 진입 구조로 유지", x: 21600, y: 2380, width: 520, height: 24 },
+    { text: "세로 상승 구역은 이후 큰 벽 안의 파인 공간으로 보강 예정", x: 34200, y: 3950, width: 540, height: 24 }
   ];
 
   for (const warning of warnings) {
+    if (!isObjectNearCamera(warning, 160, 120)) {
+      continue;
+    }
+
     ctx.fillStyle = "#facc15";
     ctx.font = "14px Arial";
     ctx.fillText(warning.text, warning.x - camera.x, warning.y - camera.y);
@@ -5357,7 +5410,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v56 안정화 재검토: 원래 무빙 + 최적화 점검", 20, 35);
+  ctx.fillText("13단계-2 v56 렉 수정: 원래 무빙 + 슬로우모션 방지", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -5446,10 +5499,36 @@ function draw() {
   drawEndingPanel();
 }
 
-function gameLoop() {
-  update();
+// v56 lag-fix: 렉이 생기면 화면뿐 아니라 착지/낙하 모션까지 느려 보이는 문제가 생긴다.
+// requestAnimationFrame이 느려질 때 update를 보정해서, 캐릭터 자체가 슬로우모션처럼 보이는 현상을 줄인다.
+let lastLoopTime = 0;
+let loopAccumulator = 0;
+const fixedLoopStep = 1000 / 60;
+const maxLoopSubSteps = 2;
+
+function gameLoop(timestamp) {
+  if (!lastLoopTime) {
+    lastLoopTime = timestamp;
+  }
+
+  const elapsed = Math.min(timestamp - lastLoopTime, fixedLoopStep * maxLoopSubSteps);
+  lastLoopTime = timestamp;
+  loopAccumulator += elapsed;
+
+  let subSteps = 0;
+
+  while (loopAccumulator >= fixedLoopStep && subSteps < maxLoopSubSteps) {
+    update();
+    loopAccumulator -= fixedLoopStep;
+    subSteps += 1;
+  }
+
+  if (subSteps >= maxLoopSubSteps) {
+    loopAccumulator = 0;
+  }
+
   draw();
   requestAnimationFrame(gameLoop);
 }
 
-gameLoop();
+requestAnimationFrame(gameLoop);
