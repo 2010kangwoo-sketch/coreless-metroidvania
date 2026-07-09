@@ -42,13 +42,13 @@ const camera = {
   shakeY: 0,
   bossFocusTimer: 0,
 
-  // v43: 카메라가 캐릭터를 더 중앙에 두고, 방향 전환 때 뚝 끊기지 않도록 조정
-  smoothness: 0.085,
-  lookAheadX: 34,
-  lookDownY: 24,
+  // v44: 캐릭터 중앙 고정 카메라. 방향 전환용 look-ahead를 제거해 카메라 튐을 줄임
+  smoothnessX: 0.18,
+  smoothnessY: 0.12,
+  snapDistanceX: 260,
+  snapDistanceY: 180,
   currentLookAheadX: 0,
-  currentLookDownY: 0,
-  lookAheadSmoothness: 0.045
+  currentLookDownY: 0
 };
 
 const gravity = 0.65;
@@ -62,16 +62,17 @@ const player = {
   vx: 0,
   vy: 0,
 
-  // v43: 즉각적인 방향 반전 대신 자연스러운 가속/감속이 생기도록 조정
-  groundAcceleration: 0.48,
-  airAcceleration: 0.26,
-  groundDeceleration: 0.42,
-  airDeceleration: 0.16,
-  turnAccelerationMultiplier: 1.22,
-  groundFriction: 0.84,
-  airFriction: 0.96,
-  maxSpeed: 5.5,
-  maxAirSpeed: 4.9,
+  // v44: 방향 전환 시 먼저 감속한 뒤 반대 방향으로 가속되도록 조정
+  groundAcceleration: 0.42,
+  airAcceleration: 0.24,
+  groundDeceleration: 0.50,
+  airDeceleration: 0.22,
+  turnDeceleration: 0.68,
+  turnThreshold: 0.72,
+  groundFriction: 0.86,
+  airFriction: 0.965,
+  maxSpeed: 5.35,
+  maxAirSpeed: 4.8,
 
   jumpPower: -13.1,
   onGround: false,
@@ -1383,11 +1384,18 @@ function updatePlayerHorizontalMove() {
   const deceleration = player.onGround ? player.groundDeceleration : player.airDeceleration;
 
   if (inputDirection !== 0) {
-    const targetVelocity = inputDirection * currentMaxSpeed;
-    const isTurning = Math.abs(player.vx) > 0.25 && Math.sign(player.vx) !== inputDirection;
-    const accelerationToUse = isTurning ? acceleration * player.turnAccelerationMultiplier : acceleration;
+    const isTurning = Math.abs(player.vx) > player.turnThreshold && Math.sign(player.vx) !== inputDirection;
 
-    player.vx = approach(player.vx, targetVelocity, accelerationToUse);
+    // v44: 반대 방향 입력이 들어와도 속도를 즉시 뒤집지 않고, 먼저 0에 가깝게 감속한다.
+    // 이렇게 해야 방향 전환이 부드러우면서도 게임 진행에 지장이 없을 정도로 반응성이 유지된다.
+    if (isTurning) {
+      const turnSlowdown = player.onGround ? player.turnDeceleration : player.airDeceleration;
+      player.vx = approach(player.vx, 0, turnSlowdown);
+    } else {
+      const targetVelocity = inputDirection * currentMaxSpeed;
+      player.vx = approach(player.vx, targetVelocity, acceleration);
+    }
+
     player.facing = inputDirection;
   } else {
     player.vx = approach(player.vx, 0, deceleration);
@@ -2970,32 +2978,15 @@ function updatePlayerAnimation() {
 }
 
 function updateCamera() {
-  const maxCameraSpeedReference = player.onGround ? player.maxSpeed : player.maxAirSpeed;
-  const velocityRatio = clamp(player.vx / maxCameraSpeedReference, -1, 1);
-
-  let targetLookAheadX = 0;
-  let targetLookDownY = 0;
-
-  if (Math.abs(player.vx) > 0.35) {
-    targetLookAheadX = velocityRatio * camera.lookAheadX;
-  }
-
-  if (player.vy > 6 && !player.onGround) {
-    targetLookDownY = camera.lookDownY;
-  }
-
-  camera.currentLookAheadX += (targetLookAheadX - camera.currentLookAheadX) * camera.lookAheadSmoothness;
-  camera.currentLookDownY += (targetLookDownY - camera.currentLookDownY) * camera.lookAheadSmoothness;
-
-  let targetX = centerX(player) - camera.width / 2 + camera.currentLookAheadX;
-  let targetY = centerY(player) - camera.height / 2 + camera.currentLookDownY;
+  // v44: 방향 전환 때 화면이 튀는 원인이었던 look-ahead 카메라를 제거한다.
+  // 기본 상태에서는 캐릭터의 중심이 화면 중앙에 오도록 목표 지점을 잡는다.
+  let targetX = centerX(player) - camera.width / 2;
+  let targetY = centerY(player) - camera.height / 2;
 
   if (gameState.bossFightStarted && player.x > 5400 && boss.alive) {
     const bossRoomCenterX = 5850;
     targetX = bossRoomCenterX - camera.width / 2;
     targetY = 0;
-    camera.currentLookAheadX *= 0.85;
-    camera.currentLookDownY *= 0.85;
 
     if (camera.bossFocusTimer > 0) {
       camera.bossFocusTimer -= 1;
@@ -3005,11 +2996,19 @@ function updateCamera() {
   targetX = clamp(targetX, 0, world.width - camera.width);
   targetY = clamp(targetY, 0, world.height - camera.height);
 
-  camera.x += (targetX - camera.x) * camera.smoothness;
-  camera.y += (targetY - camera.y) * camera.smoothness;
+  const distanceX = targetX - camera.x;
+  const distanceY = targetY - camera.y;
 
-  camera.x = clamp(camera.x, 0, world.width - camera.width);
-  camera.y = clamp(camera.y, 0, world.height - camera.height);
+  // 너무 멀리 벌어졌을 때는 늦게 따라오지 않도록 조금 더 빠르게 보정한다.
+  const smoothX = Math.abs(distanceX) > camera.snapDistanceX ? 0.32 : camera.smoothnessX;
+  const smoothY = Math.abs(distanceY) > camera.snapDistanceY ? 0.24 : camera.smoothnessY;
+
+  camera.x += distanceX * smoothX;
+  camera.y += distanceY * smoothY;
+
+  // 소수점 카메라 좌표가 픽셀 떨림을 만들 수 있어 최종 좌표를 정리한다.
+  camera.x = Math.round(clamp(camera.x, 0, world.width - camera.width) * 100) / 100;
+  camera.y = Math.round(clamp(camera.y, 0, world.height - camera.height) * 100) / 100;
 
   updateScreenShake();
 }
@@ -4555,7 +4554,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("11단계-2+3 v43: 카메라와 조작감 보정", 20, 35);
+  ctx.fillText("11단계-2+3 v44: 중앙 카메라와 방향전환 보정", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
