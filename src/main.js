@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v56: 13단계-2 1차 제작 보강. 튜토리얼 소형 방, 카메라 기믹, 초대형 방 체크포인트 추가
+// v56: 13단계-2 1차 제작 보강 수정. 초대형 맵용 빠른 무빙 프로필 적용
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -63,16 +63,17 @@ const player = {
   vy: 0,
 
   // v44: 방향 전환 시 먼저 감속한 뒤 반대 방향으로 가속되도록 조정
-  groundAcceleration: 0.54,
-  airAcceleration: 0.30,
-  groundDeceleration: 0.56,
-  airDeceleration: 0.26,
-  turnDeceleration: 0.78,
-  turnThreshold: 0.72,
-  groundFriction: 0.89,
-  airFriction: 0.965,
-  maxSpeed: 6.05,
-  maxAirSpeed: 5.35,
+  // v56 speed fix: 방 크기가 매우 커졌기 때문에 이동감을 대형 맵 기준으로 다시 조정
+  groundAcceleration: 0.82,
+  airAcceleration: 0.44,
+  groundDeceleration: 0.74,
+  airDeceleration: 0.34,
+  turnDeceleration: 1.05,
+  turnThreshold: 0.64,
+  groundFriction: 0.93,
+  airFriction: 0.972,
+  maxSpeed: 8.15,
+  maxAirSpeed: 7.05,
 
   jumpPower: -13.1,
   onGround: false,
@@ -103,14 +104,14 @@ const player = {
 
   isDashing: false,
   dashTimer: 0,
-  dashDuration: 10,
-  dashSpeed: 12.8,
+  dashDuration: 11,
+  dashSpeed: 16.2,
   dashCooldown: 0,
   dashCooldownMax: 110,
   dashInvincibleTimer: 0,
   dashInvincibleMax: 14,
   dashEndLagTimer: 0,
-  dashEndLagMax: 4,
+  dashEndLagMax: 3,
 
   attackDirection: "side",
   attackRecoilX: 1.8,
@@ -167,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v56 1차 보강 수정: 무빙 속도 회복, 바닥형 표지판 가시성 개선, 체크포인트를 유지했습니다.",
+  message: "13단계-2 v56 1차 보강 수정: 초대형 맵용 빠른 무빙, 바닥형 표지판, 체크포인트를 적용했습니다.",
   hiddenRewards: 0
 };
 
@@ -5193,7 +5194,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v56 1차 보강 수정: 무빙 회복 + 바닥 표지판", 20, 35);
+  ctx.fillText("13단계-2 v56 1차 보강 수정: 초대형 맵용 빠른 무빙", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
