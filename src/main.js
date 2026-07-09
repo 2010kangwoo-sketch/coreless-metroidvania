@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v48: 12단계-1 보스전 공격 높이 보정 수정본
+// v49: 12단계-2 능력 활용 구간 추가
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "12단계-1 v48: 보스전 파편 낙하와 레이저 높이를 대형 보스방 바닥 기준으로 보정했습니다."
+  message: "12단계-2 v49: 이중 점프, 대시, 벽 점프, 아래 공격 튕김 활용 구간이 추가되었습니다."
 };
 
 const endingLines = [
@@ -314,6 +314,21 @@ const platforms = [
   { x: 9950, y: 910, width: 38, height: 330, wallJumpTest: true },
   { x: 10480, y: 480, width: 38, height: 340, wallJumpTest: true },
 
+  // 12-2: 능력 활용 구간. 기존 능력을 실제 진행에 쓰도록 추가한 발판과 통로
+  { x: 2620, y: 760, width: 120, height: 24, abilityChallenge: "dash" },
+  { x: 2920, y: 760, width: 120, height: 24, abilityChallenge: "dash" },
+  { x: 3230, y: 760, width: 120, height: 24, abilityChallenge: "dash" },
+  { x: 4010, y: 250, width: 110, height: 24, requiresDoubleJump: true, abilityChallenge: "doubleJump" },
+  { x: 4230, y: 190, width: 110, height: 24, requiresDoubleJump: true, abilityChallenge: "doubleJump" },
+  { x: 4450, y: 140, width: 120, height: 24, requiresDoubleJump: true, abilityChallenge: "doubleJump" },
+  { x: 7700, y: 260, width: 36, height: 310, wallJumpTest: true, abilityChallenge: "wallJump" },
+  { x: 8000, y: 330, width: 36, height: 350, wallJumpTest: true, abilityChallenge: "wallJump" },
+  { x: 8320, y: 260, width: 36, height: 330, wallJumpTest: true, abilityChallenge: "wallJump" },
+  { x: 9250, y: 1240, width: 150, height: 26, abilityChallenge: "pogo" },
+  { x: 9600, y: 1240, width: 150, height: 26, abilityChallenge: "pogo" },
+  { x: 9950, y: 1240, width: 150, height: 26, abilityChallenge: "pogo" },
+  { x: 10300, y: 1240, width: 150, height: 26, abilityChallenge: "pogo" },
+
   // 대형 방 7: 최종 공동. 보스전도 화면 하나보다 넓은 공간으로 확장
   { x: 10800, y: 620, width: 1800, height: 80 },
   { x: 10980, y: 420, width: 160, height: 24 },
@@ -346,12 +361,22 @@ const rewardItems = [
   { type: "originCore", name: "원점 코어", x: 12140, y: 572, width: 30, height: 30, collected: false, requiresBossDefeated: true }
 ];
 
+const dashHazards = [
+  { name: "기억 장벽", x: 2795, y: 660, width: 42, height: 260 },
+  { name: "균열 장벽", x: 6370, y: 470, width: 44, height: 350 },
+  { name: "기억 장벽", x: 8210, y: 610, width: 44, height: 360 }
+];
+
 const enemies = [
   createMeleeEnemy("그늘 벌레", 2140, 584, 34, 36, 1880, 3380, 1.35, 3, 72, 95),
   createMeleeEnemy("균열 파수꾼", 4620, 584, 38, 36, 3700, 5260, 1.45, 4, 78, 105),
   createMeleeEnemy("용광로 파수꾼", 6420, 584, 38, 36, 5520, 7040, 1.45, 4, 78, 105),
   createFlyingEnemy("공허 박쥐", 4040, 330),
-  createShooterEnemy("균열 사수", 7920, 578)
+  createFlyingEnemy("튕김 표식", 9440, 1140),
+  createFlyingEnemy("튕김 표식", 9820, 1120),
+  createFlyingEnemy("튕김 표식", 10180, 1120),
+  createShooterEnemy("균열 사수", 7920, 578),
+  createShooterEnemy("장벽 감시자", 6320, 578)
 ];
 
 const boss = {
@@ -1637,6 +1662,7 @@ function updatePlayer() {
   checkKeyCollection();
   checkAbilityCollection();
   checkRewardCollection();
+  checkDashHazardDamage();
   checkFall();
 }
 
@@ -1715,6 +1741,25 @@ function checkRewardCollection() {
       spawnRewardBurst(item, "rgba(125, 211, 252, 1)");
       startScreenShake(20, 6);
     }
+  }
+}
+
+function checkDashHazardDamage() {
+  for (const hazard of dashHazards) {
+    if (!isColliding(player, hazard)) {
+      continue;
+    }
+
+    if (player.dashInvincibleTimer > 0) {
+      gameState.message = hazard.name + "을 대시 무적으로 통과했습니다.";
+      continue;
+    }
+
+    if (isPlayerDamageInvincible()) {
+      continue;
+    }
+
+    takeDamage(hazard, hazard.name + "에 닿았습니다. 대시 초반 무적으로 통과해 보세요.");
   }
 }
 
@@ -3279,19 +3324,67 @@ function drawBossRoomDecorations() {
   ctx.restore();
 }
 
+function drawDashHazards() {
+  for (const hazard of dashHazards) {
+    const screenX = hazard.x - camera.x;
+    const screenY = hazard.y - camera.y;
+    const pulse = 0.42 + Math.sin(frameCount * 0.12) * 0.12;
+
+    ctx.save();
+    ctx.globalAlpha = pulse;
+    ctx.fillStyle = "#7c2d12";
+    drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 10);
+    ctx.fill();
+
+    ctx.globalAlpha = 0.92;
+    ctx.strokeStyle = "#fef3c7";
+    ctx.lineWidth = 2;
+    drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 10);
+    ctx.stroke();
+
+    ctx.globalAlpha = 0.38;
+    ctx.fillStyle = "#facc15";
+    for (let y = 12; y < hazard.height; y += 38) {
+      ctx.fillRect(screenX + 7, screenY + y, hazard.width - 14, 8);
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#fef3c7";
+    ctx.font = "12px Arial";
+    ctx.fillText("대시", screenX - 2, screenY - 8);
+    ctx.restore();
+  }
+}
+
 function drawPlatforms() {
   for (const platform of platforms) {
     const screenX = platform.x - camera.x;
     const screenY = platform.y - camera.y;
 
     if (platform.wallJumpTest) {
-      ctx.fillStyle = "#1e293b";
+      ctx.fillStyle = platform.abilityChallenge === "wallJump" ? "#1e3a5f" : "#1e293b";
       ctx.fillRect(screenX, screenY, platform.width, platform.height);
-      ctx.fillStyle = "rgba(125, 211, 252, 0.55)";
+      ctx.fillStyle = platform.abilityChallenge === "wallJump" ? "#7dd3fc" : "rgba(125, 211, 252, 0.55)";
       ctx.fillRect(screenX, screenY, 5, platform.height);
       ctx.fillRect(screenX + platform.width - 5, screenY, 5, platform.height);
       ctx.strokeStyle = "rgba(125, 211, 252, 0.85)";
       ctx.lineWidth = 2;
+      ctx.strokeRect(screenX, screenY, platform.width, platform.height);
+    } else if (platform.abilityChallenge === "dash") {
+      ctx.fillStyle = "#3f2a16";
+      ctx.fillRect(screenX, screenY, platform.width, platform.height);
+      ctx.fillStyle = "#facc15";
+      ctx.fillRect(screenX, screenY, platform.width, 5);
+      ctx.strokeStyle = "rgba(253, 230, 138, 0.72)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(screenX, screenY, platform.width, platform.height);
+    } else if (platform.abilityChallenge === "pogo") {
+      ctx.fillStyle = "#16332a";
+      ctx.fillRect(screenX, screenY, platform.width, platform.height);
+      ctx.fillStyle = "#86efac";
+      ctx.fillRect(screenX, screenY, platform.width, 5);
+      ctx.strokeStyle = "rgba(187, 247, 208, 0.72)";
+      ctx.lineWidth = 1;
       ctx.strokeRect(screenX, screenY, platform.width, platform.height);
     } else if (platform.requiresDoubleJump) {
       ctx.fillStyle = player.hasDoubleJump ? "#4c1d95" : "rgba(76, 29, 149, 0.42)";
@@ -4114,7 +4207,7 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "12-1 v46: 방 하나가 화면 여러 개 분량인 대형 구조로 재설계됨", x: 80, y: 300 },
+    { text: "12-2 v49: 대형 방 안에 능력 활용 구간을 추가함", x: 80, y: 300 },
     { text: "대형 방 1: 상층 기억 조각은 나중에 이중 점프 후 회수", x: 1050, y: 185 },
     { text: "하층 통로: 떨어져도 바로 리셋되지 않고 다른 경로로 이어짐", x: 860, y: 790 },
     { text: "대형 방 2: 중층 전투 / 상층 경로 / 하층 우회가 한 공간에 공존", x: 1980, y: 330 },
@@ -4134,7 +4227,12 @@ function drawWarnings() {
     { text: "기억 핵 1개 필요", x: 10620, y: 205 },
     { text: "대형 최종 보스방: 화면 하나보다 훨씬 넓은 공동", x: 11060, y: 390 },
     { text: "보스방 입장 시 봉인", x: 10880, y: 575 },
-    { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 11940, y: 550 }
+    { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 11940, y: 550 },
+    { text: "12-2: 대시 장벽은 Shift/K 대시 초반 무적으로 통과", x: 2620, y: 735 },
+    { text: "이중 점프 연속 발판", x: 3950, y: 225 },
+    { text: "벽 점프 수직 시험: 좌우 벽을 번갈아 타고 상승", x: 7560, y: 240 },
+    { text: "아래 공격 튕김 구간: 공중 S+J로 적중하면 위로 튕김", x: 9200, y: 1210 },
+    { text: "능력 조합 목표: 벽 점프 → 대시 → 이중 점프 → 아래 공격 튕김", x: 9410, y: 1370 }
   ];
 
   for (const warning of warnings) {
@@ -4709,7 +4807,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("12단계-1 v48: 보스전 공격 높이 보정", 20, 35);
+  ctx.fillText("12단계-2 v49: 능력 활용 구간 추가", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -4719,7 +4817,7 @@ function drawUI() {
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("대형 방 유지 | 지상 적 절벽 감지 | 공중 적 추적 | 보스 카메라 보정", 20, 180);
+  ctx.fillText("능력 활용: 이중 점프 / 대시 장벽 / 벽 점프 / 아래 공격 튕김", 20, 180);
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
@@ -4765,6 +4863,7 @@ function drawWorld() {
   drawRoomLabels();
   drawDoors();
   drawBossArenaGates();
+  drawDashHazards();
   drawPlatforms();
   drawKeyItem();
   drawAbilityItems();
