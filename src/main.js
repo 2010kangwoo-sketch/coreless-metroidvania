@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v46: 12단계-1 대형 방 구조 재설계 통합본
+// v47: 12단계-1 대형 방 안정화 수정본
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "12단계-1 v46: 방 하나하나가 화면 여러 개 분량의 대형 공간으로 재설계되었습니다."
+  message: "12단계-1 v47: 대형 방 구조를 유지하면서 적 이동, 절벽 감지, 보스 카메라를 안정화했습니다."
 };
 
 const endingLines = [
@@ -203,9 +203,10 @@ const platforms = [
   { x: 820, y: 810, width: 250, height: 30 },
   { x: 1110, y: 955, width: 260, height: 30 },
   { x: 1410, y: 1090, width: 310, height: 30 },
-  { x: 760, y: 660, width: 38, height: 210, wallJumpTest: true },
-  { x: 1050, y: 725, width: 38, height: 250, wallJumpTest: true },
-  { x: 1340, y: 845, width: 38, height: 250, wallJumpTest: true },
+  { x: 280, y: 720, width: 170, height: 26 },
+  { x: 520, y: 850, width: 190, height: 26 },
+  { x: 1210, y: 780, width: 170, height: 26 },
+  { x: 1510, y: 930, width: 170, height: 26 },
 
   // 대형 방 2: 깊은 회랑. 중앙 전투, 상층 경로, 하층 우회가 한 방 안에 공존
   { x: 1800, y: 620, width: 520, height: 80 },
@@ -224,6 +225,10 @@ const platforms = [
   { x: 2300, y: 760, width: 38, height: 230, wallJumpTest: true },
   { x: 2590, y: 850, width: 38, height: 260, wallJumpTest: true },
   { x: 3230, y: 630, width: 38, height: 230, wallJumpTest: true },
+  { x: 1860, y: 1060, width: 170, height: 26 },
+  { x: 2170, y: 1185, width: 180, height: 26 },
+  { x: 3120, y: 1125, width: 190, height: 26 },
+  { x: 3420, y: 980, width: 140, height: 26 },
 
   // 대형 방 3: 능력의 수직정원. 이중 점프 획득 뒤 긴 수직 통로를 테스트
   { x: 3600, y: 620, width: 560, height: 80 },
@@ -245,6 +250,10 @@ const platforms = [
   { x: 4510, y: 870, width: 38, height: 250, wallJumpTest: true },
   { x: 4950, y: 500, width: 38, height: 360, wallJumpTest: true },
   { x: 5180, y: 430, width: 38, height: 360, wallJumpTest: true },
+  { x: 3710, y: 1240, width: 190, height: 26 },
+  { x: 4160, y: 1310, width: 180, height: 26 },
+  { x: 4680, y: 1260, width: 190, height: 26 },
+  { x: 5070, y: 1120, width: 160, height: 26 },
 
   // 대형 방 4: 잠긴 용광로. 열쇠가 있는 상층과 돌아오는 하층을 크게 분리
   { x: 5400, y: 620, width: 630, height: 80 },
@@ -425,17 +434,18 @@ function createFlyingEnemy(name, x, y) {
     y,
     width: 38,
     height: 28,
-    minX: 1850,
-    maxX: 2630,
-    minY: 205,
-    maxY: 420,
+    minX: Math.max(0, x - 700),
+    maxX: Math.min(world.width, x + 760),
+    minY: 90,
+    maxY: 1250,
     vx: 1.1,
     vy: 0,
-    speed: 1.65,
-    verticalSpeed: 1.45,
+    speed: 1.78,
+    verticalSpeed: 1.75,
     patrolDirection: 1,
     targetDirection: 1,
-    chaseRange: 520,
+    chaseRange: 780,
+    verticalChaseRange: 820,
     floatAngle: 0,
     aiDecisionTimer: 0,
     maxHealth: 3,
@@ -455,8 +465,8 @@ function createShooterEnemy(name, x, y) {
     y,
     width: 36,
     height: 42,
-    minX: 3740,
-    maxX: 4140,
+    minX: Math.max(0, x - 420),
+    maxX: Math.min(world.width, x + 420),
     vx: 0,
     vy: 0,
     speed: 0.65,
@@ -1812,7 +1822,7 @@ function updateMeleeEnemyAI(enemy) {
 function updateFlyingEnemy(enemy) {
   const distanceX = centerX(player) - centerX(enemy);
   const distanceY = centerY(player) - centerY(enemy);
-  const playerIsClose = Math.abs(distanceX) <= enemy.chaseRange && Math.abs(distanceY) <= 260;
+  const playerIsClose = Math.abs(distanceX) <= enemy.chaseRange && Math.abs(distanceY) <= enemy.verticalChaseRange;
   enemy.floatAngle += 0.05;
 
   if (enemy.aiDecisionTimer > 0) {
@@ -1827,22 +1837,16 @@ function updateFlyingEnemy(enemy) {
         enemy.targetDirection = -1;
       }
 
-      enemy.aiDecisionTimer = 10;
+      enemy.aiDecisionTimer = 8;
     }
 
-    if (Math.abs(distanceX) > 10) {
-      enemy.vx = enemy.targetDirection * enemy.speed;
-    } else {
-      enemy.vx *= 0.82;
-    }
+    const targetVx = Math.abs(distanceX) > 12 ? enemy.targetDirection * enemy.speed : 0;
+    const targetVy = Math.abs(distanceY) > 12 ? Math.sign(distanceY) * enemy.verticalSpeed : 0;
 
-    if (Math.abs(distanceY) > 10) {
-      enemy.vy = distanceY > 0 ? enemy.verticalSpeed : -enemy.verticalSpeed;
-    } else {
-      enemy.vy *= 0.72;
-    }
+    enemy.vx = approach(enemy.vx, targetVx, 0.16);
+    enemy.vy = approach(enemy.vy, targetVy, 0.16);
   } else {
-    enemy.vx = enemy.patrolDirection * enemy.speed * 0.75;
+    enemy.vx = approach(enemy.vx, enemy.patrolDirection * enemy.speed * 0.75, 0.08);
     enemy.vy = Math.sin(enemy.floatAngle) * 0.7;
   }
 
@@ -2028,7 +2032,60 @@ function getEnemyContactHitbox(enemy) {
   return enemy;
 }
 
+function isGroundLikePlatform(object) {
+  if (!object) {
+    return false;
+  }
+
+  if (object.width < 70) {
+    return false;
+  }
+
+  if (object.height > 100 && object.width < 120) {
+    return false;
+  }
+
+  return true;
+}
+
+function hasGroundAhead(enemy, direction) {
+  const probe = {
+    x: direction === 1 ? enemy.x + enemy.width + 8 : enemy.x - 18,
+    y: enemy.y + enemy.height + 2,
+    width: 18,
+    height: 18
+  };
+
+  for (const platform of platforms) {
+    if (!isGroundLikePlatform(platform)) {
+      continue;
+    }
+
+    if (isColliding(probe, platform)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function reverseGroundEnemyAtEdge(enemy) {
+  enemy.patrolDirection *= -1;
+  enemy.targetDirection = enemy.patrolDirection;
+  enemy.vx = enemy.patrolDirection * Math.abs(enemy.speed) * 0.7;
+  enemy.aiDecisionTimer = 18;
+}
+
 function moveEnemyHorizontally(enemy) {
+  if (enemy.type !== "flying" && Math.abs(enemy.vx) > 0.05) {
+    const moveDirection = enemy.vx > 0 ? 1 : -1;
+
+    if (!hasGroundAhead(enemy, moveDirection)) {
+      reverseGroundEnemyAtEdge(enemy);
+      return;
+    }
+  }
+
   enemy.x += enemy.vx;
 
   if (enemy.x < enemy.minX) {
@@ -2112,7 +2169,7 @@ function startBossFightIfNeeded() {
     gameState.bossStartBannerTimer = 120;
     boss.patternIndex = 0;
     boss.attackCooldown = 18;
-    camera.bossFocusTimer = 100;
+    camera.bossFocusTimer = 0;
     gameState.message = "보스방이 봉인되었습니다. 기억 파수자와의 전투가 시작됩니다.";
     spawnBossIntroParticles();
     startScreenShake(22, 7);
@@ -2330,7 +2387,7 @@ function spawnMemoryShardWarningRandom(delay) {
 function spawnMemoryShardWarning(x, delay) {
   shardWarnings.push({
     x: clamp(x, 10920, 12300),
-    y: 420,
+    y: 620,
     timer: delay,
     maxTimer: delay
   });
@@ -3068,9 +3125,13 @@ function updateCamera() {
   let targetY = centerY(player) - camera.height / 2;
 
   if (gameState.bossFightStarted && player.x > 10800 && boss.alive) {
-    const bossRoomCenterX = 11700;
-    targetX = bossRoomCenterX - camera.width / 2;
-    targetY = 0;
+    const midpointX = (centerX(player) + centerX(boss)) / 2;
+    const midpointY = (centerY(player) + centerY(boss)) / 2;
+
+    targetX = midpointX - camera.width / 2;
+    targetY = midpointY - camera.height / 2 + 35;
+
+    targetX = clamp(targetX, 10800, 12600 - camera.width);
 
     if (camera.bossFocusTimer > 0) {
       camera.bossFocusTimer -= 1;
@@ -3215,12 +3276,12 @@ function drawPlatforms() {
     const screenY = platform.y - camera.y;
 
     if (platform.wallJumpTest) {
-      ctx.fillStyle = "#064e3b";
+      ctx.fillStyle = "#1e293b";
       ctx.fillRect(screenX, screenY, platform.width, platform.height);
-      ctx.fillStyle = "rgba(167, 243, 208, 0.65)";
+      ctx.fillStyle = "rgba(125, 211, 252, 0.55)";
       ctx.fillRect(screenX, screenY, 5, platform.height);
       ctx.fillRect(screenX + platform.width - 5, screenY, 5, platform.height);
-      ctx.strokeStyle = "rgba(167, 243, 208, 0.85)";
+      ctx.strokeStyle = "rgba(125, 211, 252, 0.85)";
       ctx.lineWidth = 2;
       ctx.strokeRect(screenX, screenY, platform.width, platform.height);
     } else if (platform.requiresDoubleJump) {
@@ -4638,7 +4699,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("12단계-1 v46: 대형 방 구조 재설계", 20, 35);
+  ctx.fillText("12단계-1 v47: 대형 방 안정화 수정", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -4648,7 +4709,7 @@ function drawUI() {
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("방 하나가 화면 2~4개 분량이 되도록 대형 공간으로 재설계", 20, 180);
+  ctx.fillText("대형 방 유지 | 지상 적 절벽 감지 | 공중 적 추적 | 보스 카메라 보정", 20, 180);
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
