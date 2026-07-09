@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v45: 12단계-1 맵 확장과 방 구조 재설계 통합본
+// v46: 12단계-1 대형 방 구조 재설계 통합본
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -29,8 +29,8 @@ const shardWarnings = [];
 const floatingTexts = [];
 
 const world = {
-  width: 6300,
-  height: 1200
+  width: 12600,
+  height: 1600
 };
 
 const camera = {
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "12단계-1: 맵이 세로로 확장되고, 수직 이동/하층 통로 구조가 추가되었습니다."
+  message: "12단계-1 v46: 방 하나하나가 화면 여러 개 분량의 대형 공간으로 재설계되었습니다."
 };
 
 const endingLines = [
@@ -180,144 +180,181 @@ const endingLines = [
 ];
 
 const rooms = [
-  { name: "방 1: 시작 구역", guide: "기본 이동, 점프, 첫 하층 통로", x: 0, width: 900, color: "#111827" },
-  { name: "방 2: 근접 전투 구역", guide: "상층 발판과 하층 우회 통로", x: 900, width: 900, color: "#172033" },
-  { name: "방 3: 능력 해금 구역", guide: "이중 점프와 벽 점프 연습", x: 1800, width: 900, color: "#1f1b2e" },
-  { name: "방 4: 잠긴 통로 구역", guide: "열쇠, 하층 회랑, 수직 복귀 구간", x: 2700, width: 900, color: "#201a1a" },
-  { name: "방 5: 기억의 문 구역", guide: "이중 점프와 벽 점프를 섞는 수직 구조", x: 3600, width: 900, color: "#10251f" },
-  { name: "방 6: 기억 핵 구역", guide: "상층/하층이 연결된 기억 핵 접근 구간", x: 4500, width: 900, color: "#1a1328" },
-  { name: "방 7: 최종 보스방", guide: "확장된 맵 끝의 최종 전투", x: 5400, width: 900, color: "#061520" }
+  { name: "대형 방 1: 무너진 입구", guide: "한 방 안에 상층, 중층, 하층이 함께 있는 시작 대형 공간", x: 0, width: 1800, color: "#111827" },
+  { name: "대형 방 2: 깊은 회랑", guide: "넓은 전투 공간과 아래층 우회 통로", x: 1800, width: 1800, color: "#172033" },
+  { name: "대형 방 3: 능력의 수직정원", guide: "이중 점프 획득 후 벽 점프 수직 통로 연습", x: 3600, width: 1800, color: "#1f1b2e" },
+  { name: "대형 방 4: 잠긴 용광로", guide: "열쇠를 찾고 잠긴 문까지 돌아오는 대형 구조", x: 5400, width: 1800, color: "#201a1a" },
+  { name: "대형 방 5: 기억의 탑", guide: "상하층을 오가며 기억의 문으로 접근", x: 7200, width: 1800, color: "#10251f" },
+  { name: "대형 방 6: 핵의 심연", guide: "기억 핵을 얻기 위한 넓은 수직 탐험 구역", x: 9000, width: 1800, color: "#1a1328" },
+  { name: "대형 방 7: 최종 공동", guide: "화면 여러 개 분량의 넓은 최종 보스방", x: 10800, width: 1800, color: "#061520" }
 ];
 
 const platforms = [
-  // 방 1: 시작 구역과 첫 하층 통로
-  { x: 0, y: 420, width: 840, height: 80 },
-  { x: 150, y: 350, width: 180, height: 24 },
-  { x: 450, y: 315, width: 180, height: 24 },
-  { x: 630, y: 135, width: 110, height: 24, requiresDoubleJump: true },
-  { x: 790, y: 105, width: 100, height: 24, requiresDoubleJump: true },
-  { x: 930, y: 135, width: 110, height: 24, requiresDoubleJump: true },
-  { x: 805, y: 610, width: 190, height: 28 },
-  { x: 965, y: 700, width: 180, height: 28 },
-  { x: 1125, y: 790, width: 210, height: 28 },
-  { x: 980, y: 515, width: 36, height: 150, wallJumpTest: true },
-  { x: 1125, y: 585, width: 36, height: 185, wallJumpTest: true },
+  // 대형 방 1: 무너진 입구. 시작 화면 1개가 아니라 상층/하층을 함께 가진 대형 공간
+  { x: 0, y: 520, width: 720, height: 80 },
+  { x: 760, y: 620, width: 360, height: 70 },
+  { x: 1160, y: 520, width: 520, height: 80 },
+  { x: 1700, y: 520, width: 100, height: 80 },
+  { x: 180, y: 440, width: 210, height: 24 },
+  { x: 500, y: 380, width: 210, height: 24 },
+  { x: 850, y: 315, width: 180, height: 24 },
+  { x: 1190, y: 250, width: 150, height: 24, requiresDoubleJump: true },
+  { x: 1450, y: 215, width: 160, height: 24, requiresDoubleJump: true },
+  { x: 820, y: 810, width: 250, height: 30 },
+  { x: 1110, y: 955, width: 260, height: 30 },
+  { x: 1410, y: 1090, width: 310, height: 30 },
+  { x: 760, y: 660, width: 38, height: 210, wallJumpTest: true },
+  { x: 1050, y: 725, width: 38, height: 250, wallJumpTest: true },
+  { x: 1340, y: 845, width: 38, height: 250, wallJumpTest: true },
 
-  // 방 2: 근접 전투 구역, 상층/하층 분리
-  { x: 920, y: 420, width: 820, height: 80 },
-  { x: 1030, y: 350, width: 170, height: 24 },
-  { x: 1260, y: 300, width: 150, height: 24 },
-  { x: 1510, y: 350, width: 170, height: 24 },
-  { x: 1230, y: 185, width: 160, height: 24 },
-  { x: 1460, y: 160, width: 155, height: 24 },
-  { x: 1650, y: 230, width: 120, height: 24 },
-  { x: 1370, y: 735, width: 210, height: 28 },
-  { x: 1600, y: 665, width: 180, height: 28 },
+  // 대형 방 2: 깊은 회랑. 중앙 전투, 상층 경로, 하층 우회가 한 방 안에 공존
+  { x: 1800, y: 620, width: 520, height: 80 },
+  { x: 2380, y: 620, width: 500, height: 80 },
+  { x: 2930, y: 620, width: 630, height: 80 },
+  { x: 1900, y: 500, width: 190, height: 24 },
+  { x: 2200, y: 440, width: 180, height: 24 },
+  { x: 2510, y: 385, width: 180, height: 24 },
+  { x: 2830, y: 330, width: 190, height: 24 },
+  { x: 3180, y: 275, width: 180, height: 24 },
+  { x: 2050, y: 830, width: 240, height: 30 },
+  { x: 2340, y: 980, width: 230, height: 30 },
+  { x: 2640, y: 1120, width: 230, height: 30 },
+  { x: 2940, y: 1010, width: 250, height: 30 },
+  { x: 3250, y: 850, width: 240, height: 30 },
+  { x: 2300, y: 760, width: 38, height: 230, wallJumpTest: true },
+  { x: 2590, y: 850, width: 38, height: 260, wallJumpTest: true },
+  { x: 3230, y: 630, width: 38, height: 230, wallJumpTest: true },
 
-  // 방 3: 능력 해금 구역과 벽 점프 테스트
-  { x: 1820, y: 420, width: 260, height: 80 },
-  { x: 2220, y: 420, width: 420, height: 80 },
-  { x: 1890, y: 345, width: 130, height: 24 },
-  { x: 2130, y: 360, width: 90, height: 24 },
-  { x: 2320, y: 330, width: 150, height: 24 },
-  { x: 2475, y: 205, width: 34, height: 145, wallJumpTest: true },
-  { x: 2605, y: 165, width: 34, height: 185, wallJumpTest: true },
-  { x: 1840, y: 640, width: 190, height: 28 },
-  { x: 2060, y: 720, width: 170, height: 28 },
-  { x: 2290, y: 670, width: 180, height: 28 },
-  { x: 2500, y: 745, width: 170, height: 28 },
-  { x: 2070, y: 545, width: 34, height: 155, wallJumpTest: true },
-  { x: 2210, y: 495, width: 34, height: 185, wallJumpTest: true },
+  // 대형 방 3: 능력의 수직정원. 이중 점프 획득 뒤 긴 수직 통로를 테스트
+  { x: 3600, y: 620, width: 560, height: 80 },
+  { x: 4300, y: 620, width: 520, height: 80 },
+  { x: 4900, y: 620, width: 460, height: 80 },
+  { x: 3740, y: 500, width: 180, height: 24 },
+  { x: 4040, y: 445, width: 160, height: 24 },
+  { x: 4300, y: 395, width: 150, height: 24 },
+  { x: 4540, y: 335, width: 150, height: 24 },
+  { x: 4820, y: 270, width: 170, height: 24 },
+  { x: 5100, y: 205, width: 170, height: 24, requiresDoubleJump: true },
+  { x: 3720, y: 830, width: 230, height: 30 },
+  { x: 4040, y: 985, width: 230, height: 30 },
+  { x: 4360, y: 1130, width: 260, height: 30 },
+  { x: 4700, y: 1010, width: 230, height: 30 },
+  { x: 5020, y: 850, width: 240, height: 30 },
+  { x: 3890, y: 680, width: 38, height: 250, wallJumpTest: true },
+  { x: 4200, y: 760, width: 38, height: 260, wallJumpTest: true },
+  { x: 4510, y: 870, width: 38, height: 250, wallJumpTest: true },
+  { x: 4950, y: 500, width: 38, height: 360, wallJumpTest: true },
+  { x: 5180, y: 430, width: 38, height: 360, wallJumpTest: true },
 
-  // 방 4: 열쇠와 잠긴 문으로 이어지는 하층 회랑
-  { x: 2700, y: 420, width: 820, height: 80 },
-  { x: 2830, y: 350, width: 160, height: 24 },
-  { x: 3060, y: 300, width: 160, height: 24 },
-  { x: 3300, y: 350, width: 160, height: 24 },
-  { x: 2760, y: 615, width: 220, height: 28 },
-  { x: 3020, y: 700, width: 210, height: 28 },
-  { x: 3260, y: 620, width: 190, height: 28 },
-  { x: 3465, y: 515, width: 34, height: 180, wallJumpTest: true },
-  { x: 3340, y: 555, width: 34, height: 150, wallJumpTest: true },
+  // 대형 방 4: 잠긴 용광로. 열쇠가 있는 상층과 돌아오는 하층을 크게 분리
+  { x: 5400, y: 620, width: 630, height: 80 },
+  { x: 6120, y: 620, width: 520, height: 80 },
+  { x: 6720, y: 620, width: 440, height: 80 },
+  { x: 5520, y: 500, width: 190, height: 24 },
+  { x: 5820, y: 430, width: 180, height: 24 },
+  { x: 6120, y: 365, width: 190, height: 24 },
+  { x: 6440, y: 300, width: 190, height: 24 },
+  { x: 6780, y: 380, width: 170, height: 24 },
+  { x: 5580, y: 870, width: 260, height: 30 },
+  { x: 5900, y: 1020, width: 260, height: 30 },
+  { x: 6240, y: 1150, width: 270, height: 30 },
+  { x: 6600, y: 1010, width: 240, height: 30 },
+  { x: 6900, y: 840, width: 220, height: 30 },
+  { x: 5750, y: 700, width: 38, height: 300, wallJumpTest: true },
+  { x: 6070, y: 820, width: 38, height: 300, wallJumpTest: true },
+  { x: 6550, y: 710, width: 38, height: 300, wallJumpTest: true },
+  { x: 7000, y: 500, width: 38, height: 250, wallJumpTest: true },
 
-  // 방 5: 기억의 문 이후 수직 플랫폼 구간
-  { x: 3600, y: 420, width: 900, height: 80 },
-  { x: 3740, y: 340, width: 180, height: 24 },
-  { x: 4000, y: 290, width: 180, height: 24 },
-  { x: 4260, y: 340, width: 160, height: 24 },
-  { x: 3860, y: 245, width: 130, height: 24 },
-  { x: 4100, y: 215, width: 140, height: 24 },
-  { x: 4350, y: 265, width: 110, height: 24 },
-  { x: 3660, y: 645, width: 180, height: 28 },
-  { x: 3890, y: 735, width: 190, height: 28 },
-  { x: 4130, y: 650, width: 170, height: 28 },
-  { x: 4380, y: 735, width: 150, height: 28 },
-  { x: 3920, y: 500, width: 34, height: 170, wallJumpTest: true },
-  { x: 4065, y: 560, width: 34, height: 175, wallJumpTest: true },
+  // 대형 방 5: 기억의 탑. 이중 점프와 벽 점프가 섞이는 높은 방
+  { x: 7200, y: 620, width: 500, height: 80 },
+  { x: 7800, y: 620, width: 480, height: 80 },
+  { x: 8400, y: 620, width: 520, height: 80 },
+  { x: 7320, y: 520, width: 170, height: 24 },
+  { x: 7600, y: 455, width: 160, height: 24 },
+  { x: 7890, y: 390, width: 160, height: 24 },
+  { x: 8180, y: 325, width: 160, height: 24 },
+  { x: 8460, y: 260, width: 160, height: 24 },
+  { x: 8700, y: 205, width: 150, height: 24, requiresDoubleJump: true },
+  { x: 7330, y: 850, width: 220, height: 30 },
+  { x: 7620, y: 1005, width: 230, height: 30 },
+  { x: 7940, y: 1150, width: 240, height: 30 },
+  { x: 8280, y: 1010, width: 230, height: 30 },
+  { x: 8600, y: 850, width: 240, height: 30 },
+  { x: 7480, y: 680, width: 38, height: 310, wallJumpTest: true },
+  { x: 7790, y: 790, width: 38, height: 320, wallJumpTest: true },
+  { x: 8100, y: 905, width: 38, height: 300, wallJumpTest: true },
+  { x: 8500, y: 470, width: 38, height: 330, wallJumpTest: true },
+  { x: 8720, y: 400, width: 38, height: 330, wallJumpTest: true },
 
-  // 방 6: 기억 핵 구역의 상층/하층 연결
-  { x: 4500, y: 420, width: 900, height: 80 },
-  { x: 4620, y: 350, width: 160, height: 24 },
-  { x: 4860, y: 305, width: 160, height: 24 },
-  { x: 5100, y: 350, width: 160, height: 24 },
-  { x: 4610, y: 610, width: 170, height: 28 },
-  { x: 4840, y: 710, width: 170, height: 28 },
-  { x: 5070, y: 625, width: 175, height: 28 },
-  { x: 5215, y: 525, width: 34, height: 185, wallJumpTest: true },
-  { x: 5090, y: 575, width: 34, height: 150, wallJumpTest: true },
+  // 대형 방 6: 핵의 심연. 기억 핵을 획득하는 넓은 하강/상승 구조
+  { x: 9000, y: 620, width: 520, height: 80 },
+  { x: 9620, y: 620, width: 510, height: 80 },
+  { x: 10220, y: 620, width: 520, height: 80 },
+  { x: 9140, y: 510, width: 170, height: 24 },
+  { x: 9440, y: 445, width: 170, height: 24 },
+  { x: 9740, y: 380, width: 170, height: 24 },
+  { x: 10040, y: 315, width: 170, height: 24 },
+  { x: 10340, y: 250, width: 170, height: 24 },
+  { x: 9120, y: 865, width: 230, height: 30 },
+  { x: 9440, y: 1015, width: 230, height: 30 },
+  { x: 9780, y: 1160, width: 260, height: 30 },
+  { x: 10140, y: 1025, width: 240, height: 30 },
+  { x: 10440, y: 850, width: 240, height: 30 },
+  { x: 9300, y: 700, width: 38, height: 330, wallJumpTest: true },
+  { x: 9620, y: 820, width: 38, height: 330, wallJumpTest: true },
+  { x: 9950, y: 910, width: 38, height: 330, wallJumpTest: true },
+  { x: 10480, y: 480, width: 38, height: 340, wallJumpTest: true },
 
-  // 방 7: 최종 보스방
-  { x: 5400, y: 420, width: 900, height: 80 },
-  { x: 5480, y: 245, width: 120, height: 24 },
-  { x: 5760, y: 225, width: 170, height: 24 },
-  { x: 6110, y: 245, width: 120, height: 24 },
-
-  // 기존 세로 벽과 지역 경계 구조물
-  { x: 760, y: 260, width: 40, height: 80 },
-  { x: 1660, y: 300, width: 40, height: 120 },
-  { x: 2500, y: 300, width: 40, height: 120 }
+  // 대형 방 7: 최종 공동. 보스전도 화면 하나보다 넓은 공간으로 확장
+  { x: 10800, y: 620, width: 1800, height: 80 },
+  { x: 10980, y: 420, width: 160, height: 24 },
+  { x: 11280, y: 345, width: 190, height: 24 },
+  { x: 11600, y: 315, width: 210, height: 24 },
+  { x: 11960, y: 345, width: 190, height: 24 },
+  { x: 12260, y: 420, width: 160, height: 24 }
 ];
 
 const doors = [
-  { x: 860, y: 330, width: 40, height: 90, text: "문 1", locked: false, open: true },
-  { x: 1760, y: 330, width: 40, height: 90, text: "문 2", locked: false, open: true },
-  { x: 2660, y: 330, width: 40, height: 90, text: "문 3", locked: false, open: true },
-  { x: 3560, y: 80, width: 40, height: 340, text: "잠긴 문", locked: true, open: false },
-  { x: 4460, y: 80, width: 40, height: 340, text: "기억의 문", locked: true, open: false, requiresMemoryFragments: 1 },
-  { x: 5360, y: 80, width: 40, height: 340, text: "최종 문", locked: true, open: false, requiresMemoryCores: 1 }
+  { x: 1760, y: 410, width: 40, height: 210, text: "문 1", locked: false, open: true },
+  { x: 3560, y: 410, width: 40, height: 210, text: "문 2", locked: false, open: true },
+  { x: 5360, y: 410, width: 40, height: 210, text: "문 3", locked: false, open: true },
+  { x: 7160, y: 260, width: 40, height: 360, text: "잠긴 문", locked: true, open: false },
+  { x: 8960, y: 220, width: 40, height: 400, text: "기억의 문", locked: true, open: false, requiresMemoryFragments: 1 },
+  { x: 10760, y: 220, width: 40, height: 400, text: "최종 문", locked: true, open: false, requiresMemoryCores: 1 }
 ];
 
 const bossArenaGates = [
-  { x: 5408, y: 80, width: 34, height: 340, text: "보스전 봉인" }
+  { x: 10808, y: 220, width: 34, height: 400, text: "보스전 봉인" }
 ];
 
-const keyItem = { x: 3155, y: 260, width: 24, height: 24, collected: false };
+const keyItem = { x: 6525, y: 266, width: 24, height: 24, collected: false };
 const abilityItems = [
-  { type: "doubleJump", name: "이중 점프", x: 2160, y: 320, width: 28, height: 28, collected: false }
+  { type: "doubleJump", name: "이중 점프", x: 4320, y: 355, width: 28, height: 28, collected: false }
 ];
 const rewardItems = [
-  { type: "memoryFragment", name: "기억 조각", x: 955, y: 95, width: 24, height: 24, collected: false },
-  { type: "memoryCore", name: "기억 핵", x: 5120, y: 305, width: 28, height: 28, collected: false },
-  { type: "originCore", name: "원점 코어", x: 6040, y: 372, width: 30, height: 30, collected: false, requiresBossDefeated: true }
+  { type: "memoryFragment", name: "기억 조각", x: 1490, y: 175, width: 24, height: 24, collected: false },
+  { type: "memoryCore", name: "기억 핵", x: 10385, y: 210, width: 28, height: 28, collected: false },
+  { type: "originCore", name: "원점 코어", x: 12140, y: 572, width: 30, height: 30, collected: false, requiresBossDefeated: true }
 ];
 
 const enemies = [
-  createMeleeEnemy("그늘 벌레", 1130, 384, 34, 36, 990, 1600, 1.35, 3, 72, 95),
-  createMeleeEnemy("균열 파수꾼", 2320, 384, 38, 36, 2220, 2620, 1.45, 4, 78, 105),
-  createFlyingEnemy("공허 박쥐", 2030, 245),
-  createShooterEnemy("균열 사수", 3920, 378)
+  createMeleeEnemy("그늘 벌레", 2140, 584, 34, 36, 1880, 3380, 1.35, 3, 72, 95),
+  createMeleeEnemy("균열 파수꾼", 4620, 584, 38, 36, 3700, 5260, 1.45, 4, 78, 105),
+  createMeleeEnemy("용광로 파수꾼", 6420, 584, 38, 36, 5520, 7040, 1.45, 4, 78, 105),
+  createFlyingEnemy("공허 박쥐", 4040, 330),
+  createShooterEnemy("균열 사수", 7920, 578)
 ];
 
 const boss = {
   type: "boss",
   name: "기억 파수자",
-  x: 5770,
-  y: 348,
-  baseY: 348,
+  x: 11580,
+  y: 548,
+  baseY: 548,
   width: 72,
   height: 72,
-  minX: 5475,
-  maxX: 6210,
+  minX: 10940,
+  maxX: 12380,
   vx: 0,
   speed: 1.25,
   facing: -1,
@@ -333,9 +370,9 @@ const boss = {
   attackType: "none",
   attackFired: false,
   patternIndex: 0,
-  startX: 5770,
-  targetX: 5770,
-  targetY: 348,
+  startX: 11580,
+  targetX: 11580,
+  targetY: 548,
   slamHitDone: false,
   laserHitDone: false,
   laserY: 0,
@@ -2058,7 +2095,7 @@ function knockbackEnemy(enemy, direction, distance) {
 }
 
 function startBossFightIfNeeded() {
-  const playerEnteredBossRoom = player.x > 5460;
+  const playerEnteredBossRoom = player.x > 10860;
 
   if (!playerEnteredBossRoom) {
     return;
@@ -2115,7 +2152,7 @@ function updateBoss() {
     return;
   }
 
-  const playerInBossRoom = player.x > 5400;
+  const playerInBossRoom = player.x > 10800;
 
   if (!playerInBossRoom) {
     return;
@@ -2286,13 +2323,13 @@ function spawnMemoryShardWarningNearPlayer(delay) {
 }
 
 function spawnMemoryShardWarningRandom(delay) {
-  const warningX = 5480 + Math.random() * 690;
+  const warningX = 10920 + Math.random() * 1350;
   spawnMemoryShardWarning(warningX, delay);
 }
 
 function spawnMemoryShardWarning(x, delay) {
   shardWarnings.push({
-    x: clamp(x, 5460, 6220),
+    x: clamp(x, 10920, 12300),
     y: 420,
     timer: delay,
     maxTimer: delay
@@ -2904,7 +2941,7 @@ function checkPlayerEnemyDamage() {
     }
   }
 
-  if (boss.alive && !boss.hidden && player.x > 5400 && boss.contactCooldown <= 0 && isColliding(player, boss)) {
+  if (boss.alive && !boss.hidden && player.x > 10800 && boss.contactCooldown <= 0 && isColliding(player, boss)) {
     boss.contactCooldown = 45;
     takeDamage(boss, "기억 파수자와 충돌했습니다.");
   }
@@ -3030,8 +3067,8 @@ function updateCamera() {
   let targetX = centerX(player) - camera.width / 2;
   let targetY = centerY(player) - camera.height / 2;
 
-  if (gameState.bossFightStarted && player.x > 5400 && boss.alive) {
-    const bossRoomCenterX = 5850;
+  if (gameState.bossFightStarted && player.x > 10800 && boss.alive) {
+    const bossRoomCenterX = 11700;
     targetX = bossRoomCenterX - camera.width / 2;
     targetY = 0;
 
@@ -3148,7 +3185,7 @@ function drawBossRoomDecorations() {
   ctx.strokeStyle = "#7dd3fc";
   ctx.lineWidth = 2;
 
-  for (let x = 5480; x <= 6220; x += 120) {
+  for (let x = 10920; x <= 12300; x += 160) {
     ctx.beginPath();
     ctx.moveTo(x - camera.x, 80 - camera.y);
     ctx.lineTo(x + 35 - camera.x, 390 - camera.y);
@@ -3158,7 +3195,7 @@ function drawBossRoomDecorations() {
   ctx.globalAlpha = 0.16;
   ctx.fillStyle = "#38bdf8";
 
-  for (let x = 5520; x <= 6180; x += 160) {
+  for (let x = 10980; x <= 12240; x += 220) {
     ctx.beginPath();
     ctx.arc(x - camera.x, 155 - camera.y, 22 + Math.sin(frameCount * 0.04 + x) * 4, 0, Math.PI * 2);
     ctx.fill();
@@ -3167,7 +3204,7 @@ function drawBossRoomDecorations() {
   ctx.globalAlpha = 0.12;
   ctx.fillStyle = "#f43f5e";
   ctx.beginPath();
-  ctx.arc(5850 - camera.x, 250 - camera.y, 120 + Math.sin(frameCount * 0.035) * 8, 0, Math.PI * 2);
+  ctx.arc(11700 - camera.x, 420 - camera.y, 170 + Math.sin(frameCount * 0.035) * 10, 0, Math.PI * 2);
   ctx.fill();
   ctx.restore();
 }
@@ -3750,7 +3787,7 @@ function drawBossShardRainWarning() {
   const screenY = boss.y - camera.y;
   ctx.globalAlpha = 0.22 + Math.sin(frameCount * 0.3) * 0.08;
   ctx.fillStyle = "#7dd3fc";
-  ctx.fillRect(5450 - camera.x, 70 - camera.y, 770, 40);
+  ctx.fillRect(10920 - camera.x, 250 - camera.y, 1380, 44);
   ctx.globalAlpha = 0.95;
   ctx.fillStyle = "#e0f2fe";
   ctx.font = "bold 22px Arial";
@@ -4006,33 +4043,27 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "12-1: 맵 세로 확장 / 하층 통로 추가", x: 80, y: 255 },
-    { text: "낭떠러지 아래에 새 하층 발판이 생겼습니다", x: 805, y: 585 },
-    { text: "이중 점프 후 돌아오면 진입 가능", x: 610, y: 115 },
-    { text: "숨겨진 기억 조각", x: 910, y: 82 },
-    { text: "하층 우회 통로", x: 1050, y: 760 },
-    { text: "근접 적", x: 1090, y: 370 },
-    { text: "J 공격 / W+J 위 공격 / 공중 S+J 아래 공격", x: 1270, y: 270 },
-    { text: "상층 발판 경로", x: 1230, y: 155 },
-    { text: "비행 적", x: 2010, y: 215 },
-    { text: "이중 점프 능력", x: 2125, y: 305 },
-    { text: "벽 미끄러짐 / 벽 점프 테스트", x: 2425, y: 178 },
-    { text: "벽에 붙고 Space를 누르면 반대쪽으로 튕김", x: 2390, y: 195 },
-    { text: "새 하층 발판: 떨어져도 바로 리셋되지 않음", x: 1840, y: 615 },
-    { text: "대시 필요", x: 2070, y: 455 },
-    { text: "두 번째 근접 적", x: 2300, y: 370 },
-    { text: "열쇠 획득 구간", x: 3040, y: 250 },
-    { text: "하층 회랑에서 벽 점프로 복귀", x: 3020, y: 675 },
-    { text: "열쇠 없이는 통과 불가", x: 3450, y: 280 },
-    { text: "이중 점프 구간", x: 3860, y: 225 },
-    { text: "원거리 적", x: 3890, y: 360 },
-    { text: "기억 조각 1개 필요", x: 4390, y: 70 },
-    { text: "기억의 문 뒤쪽 하층 구조", x: 3890, y: 710 },
-    { text: "기억 핵", x: 5085, y: 290 },
-    { text: "기억 핵 1개 필요", x: 5300, y: 70 },
-    { text: "보스방 입장 시 봉인", x: 5448, y: 325 },
-    { text: "최종 보스: 파편 / 충격파 / 내려찍기 / 순간이동 / 레이저", x: 5580, y: 255 },
-    { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 5850, y: 270 }
+    { text: "12-1 v46: 방 하나가 화면 여러 개 분량인 대형 구조로 재설계됨", x: 80, y: 300 },
+    { text: "대형 방 1: 상층 기억 조각은 나중에 이중 점프 후 회수", x: 1050, y: 185 },
+    { text: "하층 통로: 떨어져도 바로 리셋되지 않고 다른 경로로 이어짐", x: 860, y: 790 },
+    { text: "대형 방 2: 중층 전투 / 상층 경로 / 하층 우회가 한 공간에 공존", x: 1980, y: 330 },
+    { text: "근접 적", x: 2110, y: 570 },
+    { text: "상층 발판 경로", x: 2820, y: 300 },
+    { text: "대형 방 3: 이중 점프 능력", x: 4200, y: 365 },
+    { text: "벽 미끄러짐 / 벽 점프 수직 통로", x: 4880, y: 465 },
+    { text: "벽에 붙은 상태에서 Space: 반대 방향 벽 점프", x: 4870, y: 490 },
+    { text: "대형 방 4: 열쇠를 얻고 잠긴 문까지 이동", x: 6100, y: 340 },
+    { text: "열쇠", x: 6500, y: 255 },
+    { text: "잠긴 문: 열쇠 필요", x: 7040, y: 245 },
+    { text: "대형 방 5: 기억의 문으로 이어지는 높은 탑 구조", x: 7520, y: 365 },
+    { text: "원거리 적", x: 7880, y: 560 },
+    { text: "기억 조각 1개 필요", x: 8810, y: 205 },
+    { text: "대형 방 6: 기억 핵을 얻는 심연 구조", x: 9600, y: 360 },
+    { text: "기억 핵", x: 10340, y: 200 },
+    { text: "기억 핵 1개 필요", x: 10620, y: 205 },
+    { text: "대형 최종 보스방: 화면 하나보다 훨씬 넓은 공동", x: 11060, y: 390 },
+    { text: "보스방 입장 시 봉인", x: 10880, y: 575 },
+    { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 11940, y: 550 }
   ];
 
   for (const warning of warnings) {
@@ -4466,7 +4497,7 @@ function drawCoreEnergyUI() {
 }
 
 function drawBossHealthBar() {
-  if (!boss.alive || player.x < 5300) {
+  if (!boss.alive || player.x < 10700) {
     return;
   }
 
@@ -4506,11 +4537,11 @@ function drawBossClearEffect() {
   ctx.save();
   ctx.globalAlpha = alpha * 0.26;
   ctx.fillStyle = "#7dd3fc";
-  ctx.fillRect(5400 - camera.x, 0 - camera.y, 900, world.height);
+  ctx.fillRect(10800 - camera.x, 0 - camera.y, 1800, world.height);
   ctx.globalAlpha = alpha;
   ctx.fillStyle = "#e0f2fe";
   ctx.font = "bold 26px Arial";
-  ctx.fillText("보스방 봉인이 해제되었습니다", 5600 - camera.x, 190 - camera.y);
+  ctx.fillText("보스방 봉인이 해제되었습니다", 11400 - camera.x, 360 - camera.y);
   ctx.restore();
 }
 
@@ -4607,7 +4638,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("12단계-1 v45: 맵 확장과 방 구조 재설계", 20, 35);
+  ctx.fillText("12단계-1 v46: 대형 방 구조 재설계", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -4617,7 +4648,7 @@ function drawUI() {
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("맵 세로 확장 + 하층 통로 + 상층 발판 + 벽 점프 복귀 구간", 20, 180);
+  ctx.fillText("방 하나가 화면 2~4개 분량이 되도록 대형 공간으로 재설계", 20, 180);
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
