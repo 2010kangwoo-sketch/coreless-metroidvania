@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v53: 13단계-2 1차 초안. 튜토리얼과 첫 번째 지역을 실제 게임용 대형 구조로 재설계
+// v56: 13단계-2 1차 제작. 튜토리얼 구역과 초대형 방 6개의 전체 블록아웃
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -29,8 +29,8 @@ const shardWarnings = [];
 const floatingTexts = [];
 
 const world = {
-  width: 9000,
-  height: 1800
+  width: 44000,
+  height: 8200
 };
 
 const camera = {
@@ -52,7 +52,7 @@ const camera = {
 };
 
 const gravity = 0.65;
-const startPosition = { x: 80, y: 340 };
+const startPosition = { x: 90, y: 540 };
 
 const player = {
   x: startPosition.x,
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v53 1차: 튜토리얼과 첫 번째 지역의 초대형 구조 초안입니다.",
+  message: "13단계-2 v56 1차 제작: 튜토리얼 구역과 초대형 방 6개의 전체 블록아웃입니다.",
   hiddenRewards: 0
 };
 
@@ -182,71 +182,97 @@ const endingLines = [
 
 const roomBlueprints = [
   {
-    id: "tutorial_wake_hall",
-    name: "튜토리얼: 깨어난 통로",
-    guide: "짧은 복도 안에서 이동, 점프, 공격, 대시를 순서대로 확인하는 시작 구간",
-    role: "tutorial_foundation",
-    bounds: { x: 0, y: 0, width: 1400, height: 1800 },
-    cameraBounds: { x: 0, y: 0, width: 1400, height: 1800 },
+    id: "tutorial_zone_blockout",
+    name: "튜토리얼 구역 - 기능 학습 복도",
+    guide: "좁은 방 여러 개로 나눌 예정인 튜토리얼 구역. 이번 v56에서는 전체 위치와 길이만 먼저 잡는다.",
+    role: "tutorial_zone_blockout",
+    bounds: { x: 0, y: 0, width: 8500, height: 8200 },
+    cameraBounds: { x: 0, y: 0, width: 8500, height: 1600 },
     color: "#111827",
     requiredAbilities: [],
-    mainPath: "낮은 턱, 작은 적, 짧은 대시 틈을 통해 기본 조작을 익히고 첫 중앙 방으로 진입한다.",
-    connections: { right: "outer_ruins_hub" },
-    tags: ["tutorial", "start", "basic_move", "dash_intro"]
+    mainPath: "이동, 점프, 공격, 대시, 벽 점프, 아래 공격 튕김을 각각 작은 방에서 배우도록 분리할 예정. 이번 단계는 전체 구간 길이와 기본 바닥만 확정한다.",
+    connections: { right: "entry_cliff_blockout" },
+    tags: ["tutorial", "blockout", "signs_later", "separated_rooms_later"]
   },
   {
-    id: "outer_ruins_hub",
-    name: "지역 1: 잊힌 외곽 - 중앙 폐허",
-    guide: "상층, 중층, 하층이 한눈에 보이는 첫 번째 초대형 허브 방",
-    role: "first_region_hub",
-    bounds: { x: 1400, y: 0, width: 2800, height: 1800 },
-    cameraBounds: { x: 1400, y: 0, width: 2800, height: 1800 },
+    id: "entry_cliff_blockout",
+    name: "지역 1-1: 진입 절벽",
+    guide: "튜토리얼 직후 처음 만나는 초대형 방. 갑자기 공간이 넓어졌다는 인상을 주기 위한 첫 진입 구간이다.",
+    role: "mega_room_1_entry_cliff",
+    bounds: { x: 8500, y: 0, width: 5000, height: 8200 },
+    cameraBounds: { x: 8500, y: 0, width: 5000, height: 3600 },
+    color: "#142033",
+    requiredAbilities: [],
+    mainPath: "넓은 바닥, 높은 벽, 위쪽에 보이는 보상 공간, 아래쪽이 아닌 옆쪽으로 이어지는 안정적 진입 흐름을 만든다.",
+    connections: { left: "tutorial_zone_blockout", right: "central_cavern_blockout" },
+    tags: ["first_area", "mega_room", "entry", "vertical_hint"]
+  },
+  {
+    id: "central_cavern_blockout",
+    name: "지역 1-2: 중앙 대공동",
+    guide: "첫 번째 지역의 핵심 허브. 상층, 중층, 하층 흐름이 한 방 안에서 보이는 가장 큰 공간이다.",
+    role: "mega_room_2_main_hub",
+    bounds: { x: 13500, y: 0, width: 8000, height: 8200 },
+    cameraBounds: { x: 13500, y: 0, width: 8000, height: 6200 },
     color: "#172033",
-    requiredAbilities: ["dash", "wallJump"],
-    mainPath: "중층은 메인 진행, 하층은 위험한 우회로, 상층은 되돌아오기와 보상을 담당하는 첫 지역의 기준 방이다.",
-    connections: { left: "tutorial_wake_hall", right: "lower_ruins_channel", up: "upper_spire_route" },
-    tags: ["first_area", "hub", "multi_layer", "return_reward"]
+    requiredAbilities: ["dash"],
+    mainPath: "주 진행로는 중층으로 두고, 상층 보상 루트와 하층 선택 루트가 한눈에 느껴지도록 공간만 크게 잡는다.",
+    connections: { left: "entry_cliff_blockout", right: "lower_ruins_blockout", up: "vertical_ascent_blockout" },
+    tags: ["first_area", "mega_room", "hub", "multi_layer", "blockout"]
   },
   {
-    id: "lower_ruins_channel",
-    name: "지역 1: 잊힌 외곽 - 하층 폐허 수로",
-    guide: "떨어져도 막다른 길이 아니라 보상과 지름길로 이어지는 하층 루트",
-    role: "risk_reward_lower_path",
-    bounds: { x: 4200, y: 0, width: 1600, height: 1800 },
-    cameraBounds: { x: 4200, y: 0, width: 1600, height: 1800 },
+    id: "lower_ruins_blockout",
+    name: "지역 1-3: 하층 폐허",
+    guide: "구멍으로 강제 낙하하지 않고, 플레이어가 직접 선택해서 내려가는 하층 탐험 구역이다.",
+    role: "mega_room_3_lower_ruins",
+    bounds: { x: 21500, y: 0, width: 6000, height: 8200 },
+    cameraBounds: { x: 21500, y: 1800, width: 6000, height: 5200 },
     color: "#0f1f1f",
-    requiredAbilities: ["downAttackBounce"],
-    mainPath: "넓은 하강 공간, 아래 공격 튕김 표식, 하층 보상을 통해 중앙 폐허로 돌아갈 이유를 만든다.",
-    connections: { left: "outer_ruins_hub", right: "upper_spire_route" },
-    tags: ["lower_route", "pogo", "reward", "shortcut"]
+    requiredAbilities: [],
+    mainPath: "낮은 천장과 넓은 하층 바닥을 중심으로, 나중에 위험하지만 보상이 있는 구간으로 다듬는다.",
+    connections: { left: "central_cavern_blockout", right: "long_ruin_corridor_blockout" },
+    tags: ["first_area", "mega_room", "lower_route", "optional_descent", "no_forced_pit"]
   },
   {
-    id: "upper_spire_route",
-    name: "지역 1: 잊힌 외곽 - 상층 첨탑길",
-    guide: "벽 점프와 이중 점프를 사용해 높은 층으로 올라가는 상층 이동 루트",
-    role: "vertical_route_and_backtrack",
-    bounds: { x: 5800, y: 0, width: 1600, height: 1800 },
-    cameraBounds: { x: 5800, y: 0, width: 1600, height: 1800 },
-    color: "#1f1b2e",
-    requiredAbilities: ["doubleJump", "wallJump"],
-    mainPath: "상층 보상과 되돌아가기 루트를 담당하며, 첫 지역에서 이동 능력의 기준 간격을 테스트한다.",
-    connections: { left: "lower_ruins_channel", right: "sealed_aqueduct_gate" },
-    tags: ["upper_route", "double_jump", "wall_jump", "hidden_reward"]
+    id: "long_ruin_corridor_blockout",
+    name: "지역 1-4: 긴 폐허 회랑",
+    guide: "가로로 긴 방이지만 단순 평지가 되지 않도록, 위아래 단차와 우회 발판을 넣을 예정인 주 진행로이다.",
+    role: "mega_room_4_horizontal_complexity",
+    bounds: { x: 27500, y: 0, width: 6500, height: 8200 },
+    cameraBounds: { x: 27500, y: 0, width: 6500, height: 4200 },
+    color: "#191c2b",
+    requiredAbilities: [],
+    mainPath: "가로 진행 속에 낮은 천장, 높은 천장, 위쪽 우회로, 아래쪽 보상 틈을 넣기 위한 초안 공간이다.",
+    connections: { left: "lower_ruins_blockout", right: "vertical_ascent_blockout" },
+    tags: ["first_area", "mega_room", "horizontal", "route_variation"]
   },
   {
-    id: "sealed_aqueduct_gate",
-    name: "지역 1: 잊힌 외곽 - 두 번째 지역 입구",
-    guide: "아직 완성하지 않은 두 번째 지역으로 이어지는 봉인된 문과 복귀 공간",
-    role: "future_region_gate",
-    bounds: { x: 7400, y: 0, width: 1600, height: 1800 },
-    cameraBounds: { x: 7400, y: 0, width: 1600, height: 1800 },
-    color: "#201a1a",
+    id: "vertical_ascent_blockout",
+    name: "지역 1-5: 세로 상승 폐허",
+    guide: "세로로 긴 맵에서 위로 복잡하게 올라가는 핵심 구역. 벽타기 기둥 난사가 아니라 큰 지형 자체를 타고 오르는 방향으로 만든다.",
+    role: "mega_room_5_vertical_ascent",
+    bounds: { x: 34000, y: 0, width: 5000, height: 8200 },
+    cameraBounds: { x: 34000, y: 0, width: 5000, height: 8200 },
+    color: "#211b33",
+    requiredAbilities: ["wallJump", "doubleJump"],
+    mainPath: "높은 좌우 벽, 중간 쉼터, 파인 착지 공간, 대각선 상승 루트가 들어갈 초대형 세로 방이다.",
+    connections: { left: "long_ruin_corridor_blockout", right: "sealed_gate_blockout" },
+    tags: ["first_area", "mega_room", "vertical", "ascent", "dynamic_space"]
+  },
+  {
+    id: "sealed_gate_blockout",
+    name: "지역 1-6: 봉인 관문",
+    guide: "첫 번째 지역의 끝이자 두 번째 지역 입구를 예고하는 초대형 마무리 방이다.",
+    role: "mega_room_6_next_region_gate",
+    bounds: { x: 39000, y: 0, width: 5000, height: 8200 },
+    cameraBounds: { x: 39000, y: 0, width: 5000, height: 4200 },
+    color: "#241a1a",
     requiredAbilities: ["futureAbility"],
-    mainPath: "13-2 1차에서는 전체 게임을 만들지 않고, 다음 지역의 존재만 보여주는 막힌 입구로 남긴다.",
-    connections: { left: "upper_spire_route" },
-    tags: ["next_area_gate", "not_final", "blocked"]
+    mainPath: "큰 봉인문과 넓은 마지막 공간을 배치하고, 두 번째 지역은 아직 열지 않는다.",
+    connections: { left: "vertical_ascent_blockout" },
+    tags: ["first_area", "mega_room", "gate", "future_region"]
   }
-];
+]
 
 const rooms = roomBlueprints.map(function(room) {
   return {
@@ -267,147 +293,153 @@ const rooms = roomBlueprints.map(function(room) {
 });
 
 const platforms = [
-  // 튜토리얼: 깨어난 통로. 짧지만 조작을 순서대로 확인하는 시작 구간
-  { x: 0, y: 560, width: 520, height: 90, area: "tutorial" },
-  { x: 640, y: 560, width: 360, height: 90, area: "tutorial", abilityChallenge: "jump_gap" },
-  { x: 1080, y: 560, width: 290, height: 90, area: "tutorial" },
-  { x: 170, y: 480, width: 170, height: 24, area: "tutorial" },
-  { x: 430, y: 430, width: 160, height: 24, area: "tutorial" },
-  { x: 780, y: 500, width: 150, height: 24, area: "tutorial", abilityChallenge: "attack_intro" },
-  { x: 1040, y: 435, width: 160, height: 24, area: "tutorial", abilityChallenge: "dash_intro" },
-  { x: 1220, y: 360, width: 120, height: 24, area: "tutorial", secretRoute: "튜토리얼 상층 되돌아오기" },
-  { x: 1260, y: 720, width: 120, height: 26, area: "tutorial", secretRoute: "튜토리얼 하층 작은 보상" },
+  // 13-2-1 v56: 전체 블록아웃. 세부 장식보다 튜토리얼 구역과 초대형 방 6개의 큰 뼈대를 먼저 확정한다.
+  // 튜토리얼 구역: 이후 v57에서 표지판과 작은 기능별 방으로 세분화 예정
+  { x: 0, y: 680, width: 1200, height: 110, area: "tutorial_move_room" },
+  { x: 1200, y: 680, width: 1200, height: 110, area: "tutorial_jump_room" },
+  { x: 2400, y: 680, width: 1200, height: 110, area: "tutorial_attack_room" },
+  { x: 3600, y: 680, width: 1200, height: 110, area: "tutorial_dash_room" },
+  { x: 4800, y: 680, width: 1200, height: 110, area: "tutorial_wall_room" },
+  { x: 6000, y: 680, width: 1250, height: 110, area: "tutorial_down_attack_room" },
+  { x: 7250, y: 680, width: 1250, height: 110, area: "tutorial_exit_room" },
+  { x: 1500, y: 555, width: 260, height: 28, area: "tutorial_jump_hint" },
+  { x: 1900, y: 500, width: 260, height: 28, area: "tutorial_jump_hint" },
+  { x: 3900, y: 565, width: 340, height: 28, area: "tutorial_dash_hint" },
+  { x: 5150, y: 560, width: 260, height: 30, area: "tutorial_wall_hint" },
+  { x: 5560, y: 495, width: 260, height: 30, area: "tutorial_wall_hint" },
+  { x: 6420, y: 555, width: 300, height: 28, area: "tutorial_pogo_hint" },
 
-  // 지역 1 중앙 폐허: 화면 여러 개 분량의 초대형 허브. 중층 메인 진행로
-  { x: 1400, y: 680, width: 620, height: 90, area: "central_hub" },
-  { x: 2100, y: 680, width: 520, height: 90, area: "central_hub", abilityChallenge: "dash_gap" },
-  { x: 2700, y: 680, width: 520, height: 90, area: "central_hub" },
-  { x: 3320, y: 680, width: 760, height: 90, area: "central_hub" },
-  { x: 4080, y: 680, width: 120, height: 90, area: "central_hub" },
+  // 초대형 방 1: 진입 절벽. 넓은 세계로 들어오는 감각을 주는 기본 골격
+  { x: 8500, y: 1080, width: 1100, height: 120, area: "entry_cliff_floor" },
+  { x: 9600, y: 1080, width: 1000, height: 120, area: "entry_cliff_floor" },
+  { x: 10600, y: 1080, width: 1100, height: 120, area: "entry_cliff_floor" },
+  { x: 11700, y: 1080, width: 900, height: 120, area: "entry_cliff_floor" },
+  { x: 12450, y: 930, width: 720, height: 70, area: "entry_cliff_rise" },
+  { x: 8900, y: 820, width: 520, height: 46, area: "entry_cliff_upper_visible" },
+  { x: 9650, y: 650, width: 480, height: 46, area: "entry_cliff_upper_visible" },
+  { x: 10450, y: 500, width: 460, height: 46, area: "entry_cliff_upper_visible", secretRoute: "진입 절벽 상층 보상 후보" },
 
-  // 중앙 폐허: 플레이어에게 위쪽 루트가 있음을 보이게 하는 상층 발판
-  { x: 1540, y: 565, width: 210, height: 24, area: "central_upper_hint" },
-  { x: 1840, y: 500, width: 190, height: 24, area: "central_upper_hint" },
-  { x: 2160, y: 440, width: 180, height: 24, area: "central_upper_hint" },
-  { x: 2490, y: 380, width: 170, height: 24, area: "central_upper_hint" },
-  { x: 2830, y: 335, width: 160, height: 24, area: "central_upper_hint" },
-  { x: 3180, y: 455, width: 180, height: 24, area: "central_upper_hint" },
-  { x: 3500, y: 390, width: 190, height: 24, area: "central_upper_hint", requiresDoubleJump: true },
-  { x: 3810, y: 325, width: 180, height: 24, area: "central_upper_hint", requiresDoubleJump: true },
+  // 초대형 방 2: 중앙 대공동. 첫 지역의 허브가 될 가장 큰 공간의 기본 골격
+  { x: 13500, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
+  { x: 14800, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
+  { x: 16100, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
+  { x: 17400, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
+  { x: 18700, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
+  { x: 20000, y: 1300, width: 1500, height: 130, area: "central_cavern_main_floor" },
+  { x: 13900, y: 1080, width: 520, height: 50, area: "central_cavern_mid_shelf" },
+  { x: 14880, y: 930, width: 520, height: 50, area: "central_cavern_mid_shelf" },
+  { x: 15960, y: 810, width: 560, height: 50, area: "central_cavern_mid_shelf" },
+  { x: 17150, y: 720, width: 560, height: 50, area: "central_cavern_upper_hint" },
+  { x: 18400, y: 610, width: 560, height: 50, area: "central_cavern_upper_hint", requiresDoubleJump: true },
+  { x: 19700, y: 520, width: 600, height: 50, area: "central_cavern_upper_hint", requiresDoubleJump: true, secretRoute: "중앙 대공동 상층 보상 후보" },
+  { x: 14400, y: 1900, width: 1150, height: 110, area: "central_cavern_lower_preview" },
+  { x: 16050, y: 2100, width: 1100, height: 110, area: "central_cavern_lower_preview" },
+  { x: 17850, y: 1950, width: 1250, height: 110, area: "central_cavern_lower_preview" },
 
-  // 중앙 폐허: 벽 점프 축. 너무 어렵게 막기보다 넓은 세로 공간을 먼저 체감하게 함
-  { x: 1740, y: 690, width: 42, height: 300, wallJumpTest: true, area: "central_wall_jump" },
-  { x: 1970, y: 805, width: 42, height: 320, wallJumpTest: true, area: "central_wall_jump" },
-  { x: 2520, y: 700, width: 42, height: 280, wallJumpTest: true, area: "central_wall_jump" },
-  { x: 3060, y: 560, width: 42, height: 330, wallJumpTest: true, area: "central_wall_jump" },
+  // 초대형 방 3: 하층 폐허. 강제 낙하가 아니라 선택적으로 내려가는 넓은 하층 골격
+  { x: 21500, y: 2500, width: 1200, height: 130, area: "lower_ruins_floor" },
+  { x: 22700, y: 2500, width: 1200, height: 130, area: "lower_ruins_floor" },
+  { x: 23900, y: 2500, width: 1200, height: 130, area: "lower_ruins_floor" },
+  { x: 25100, y: 2500, width: 1200, height: 130, area: "lower_ruins_floor" },
+  { x: 26300, y: 2500, width: 1200, height: 130, area: "lower_ruins_floor" },
+  { x: 21850, y: 2260, width: 520, height: 54, area: "lower_ruins_shelf" },
+  { x: 22950, y: 2140, width: 560, height: 54, area: "lower_ruins_shelf" },
+  { x: 24200, y: 2220, width: 560, height: 54, area: "lower_ruins_shelf" },
+  { x: 25550, y: 2060, width: 600, height: 54, area: "lower_ruins_shelf", secretRoute: "하층 폐허 보상 후보" },
 
-  // 중앙 폐허: 하층으로 떨어져도 의미 있는 우회로가 되도록 넓은 하단 지형 배치
-  { x: 1500, y: 940, width: 260, height: 32, area: "central_lower" },
-  { x: 1840, y: 1090, width: 260, height: 32, area: "central_lower" },
-  { x: 2220, y: 1240, width: 280, height: 32, area: "central_lower" },
-  { x: 2620, y: 1360, width: 260, height: 32, area: "central_lower" },
-  { x: 3020, y: 1220, width: 260, height: 32, area: "central_lower" },
-  { x: 3420, y: 1040, width: 250, height: 32, area: "central_lower" },
-  { x: 3800, y: 890, width: 240, height: 32, area: "central_lower" },
+  // 초대형 방 4: 긴 폐허 회랑. 가로로 길지만 높낮이 변화가 들어갈 기본 골격
+  { x: 27500, y: 1180, width: 1300, height: 120, area: "long_corridor_floor" },
+  { x: 28800, y: 1240, width: 1300, height: 120, area: "long_corridor_floor" },
+  { x: 30100, y: 1100, width: 1300, height: 120, area: "long_corridor_floor" },
+  { x: 31400, y: 1200, width: 1300, height: 120, area: "long_corridor_floor" },
+  { x: 32700, y: 1120, width: 1300, height: 120, area: "long_corridor_floor" },
+  { x: 28100, y: 940, width: 560, height: 50, area: "long_corridor_upper_bypass" },
+  { x: 29250, y: 830, width: 560, height: 50, area: "long_corridor_upper_bypass" },
+  { x: 30500, y: 760, width: 580, height: 50, area: "long_corridor_upper_bypass" },
+  { x: 31850, y: 900, width: 600, height: 50, area: "long_corridor_upper_bypass", secretRoute: "긴 회랑 상층 보상 후보" },
 
-  // 하층 폐허 수로: 위험하지만 보상과 복귀 루트가 있는 큰 하층 방
-  { x: 4200, y: 760, width: 480, height: 90, area: "lower_channel" },
-  { x: 4760, y: 760, width: 400, height: 90, area: "lower_channel" },
-  { x: 5260, y: 760, width: 420, height: 90, area: "lower_channel" },
-  { x: 4280, y: 1010, width: 220, height: 30, area: "lower_channel" },
-  { x: 4580, y: 1160, width: 210, height: 30, area: "lower_channel", abilityChallenge: "pogo" },
-  { x: 4900, y: 1300, width: 220, height: 30, area: "lower_channel", abilityChallenge: "pogo" },
-  { x: 5230, y: 1165, width: 230, height: 30, area: "lower_channel", abilityChallenge: "pogo" },
-  { x: 5540, y: 1010, width: 230, height: 30, area: "lower_channel" },
-  { x: 4400, y: 1420, width: 170, height: 26, area: "lower_secret", secretRoute: "하층 가장 깊은 보상" },
-  { x: 4710, y: 1510, width: 190, height: 26, area: "lower_secret", secretRoute: "하층 가장 깊은 보상" },
-  { x: 5090, y: 1460, width: 190, height: 26, area: "lower_secret", secretRoute: "하층 가장 깊은 보상" },
+  // 초대형 방 5: 세로 상승 폐허. 이후 복잡한 상승 구조를 만들기 위한 큰 벽과 쉼터 골격
+  { x: 34000, y: 4100, width: 1000, height: 140, area: "vertical_ascent_base" },
+  { x: 35000, y: 4100, width: 950, height: 140, area: "vertical_ascent_base" },
+  { x: 35950, y: 4100, width: 1050, height: 140, area: "vertical_ascent_base" },
+  { x: 37000, y: 4100, width: 1000, height: 140, area: "vertical_ascent_base" },
+  { x: 38000, y: 4100, width: 1000, height: 140, area: "vertical_ascent_base" },
+  { x: 34300, y: 3550, width: 620, height: 58, area: "vertical_ascent_shelf" },
+  { x: 35200, y: 3160, width: 620, height: 58, area: "vertical_ascent_shelf" },
+  { x: 36200, y: 2740, width: 640, height: 58, area: "vertical_ascent_shelf" },
+  { x: 37300, y: 2320, width: 650, height: 58, area: "vertical_ascent_shelf" },
+  { x: 35700, y: 1900, width: 600, height: 58, area: "vertical_ascent_shelf", requiresDoubleJump: true },
+  { x: 34600, y: 1500, width: 620, height: 58, area: "vertical_ascent_shelf", requiresDoubleJump: true, secretRoute: "세로 상승 상층 보상 후보" },
+  { x: 38100, y: 1120, width: 620, height: 58, area: "vertical_ascent_top_exit", requiresDoubleJump: true },
 
-  // 상층 첨탑길: 이중 점프 획득 후 올라가는 광활한 수직 루트
-  { x: 5800, y: 720, width: 450, height: 85, area: "upper_spire" },
-  { x: 6350, y: 720, width: 390, height: 85, area: "upper_spire" },
-  { x: 6860, y: 720, width: 390, height: 85, area: "upper_spire" },
-  { x: 5900, y: 595, width: 180, height: 24, area: "upper_spire" },
-  { x: 6190, y: 520, width: 160, height: 24, area: "upper_spire" },
-  { x: 6460, y: 455, width: 160, height: 24, area: "upper_spire", requiresDoubleJump: true },
-  { x: 6740, y: 385, width: 160, height: 24, area: "upper_spire", requiresDoubleJump: true },
-  { x: 7010, y: 310, width: 150, height: 24, area: "upper_spire", requiresDoubleJump: true },
-  { x: 7280, y: 250, width: 150, height: 24, area: "upper_spire", requiresDoubleJump: true, secretRoute: "상층 첨탑 보상" },
-  { x: 5960, y: 890, width: 42, height: 330, wallJumpTest: true, area: "upper_wall_jump" },
-  { x: 6250, y: 790, width: 42, height: 330, wallJumpTest: true, area: "upper_wall_jump" },
-  { x: 6550, y: 700, width: 42, height: 330, wallJumpTest: true, area: "upper_wall_jump" },
-  { x: 6900, y: 560, width: 42, height: 360, wallJumpTest: true, area: "upper_wall_jump" },
-  { x: 7160, y: 470, width: 42, height: 360, wallJumpTest: true, area: "upper_wall_jump" },
-  { x: 6020, y: 1070, width: 210, height: 30, area: "upper_return" },
-  { x: 6320, y: 1220, width: 230, height: 30, area: "upper_return" },
-  { x: 6660, y: 1360, width: 230, height: 30, area: "upper_return" },
-  { x: 7040, y: 1225, width: 230, height: 30, area: "upper_return" },
-
-  // 두 번째 지역 입구: 아직 본격 제작하지 않는 막힌 구간. 13-2에서는 존재감만 보여줌
-  { x: 7400, y: 720, width: 520, height: 90, area: "future_gate" },
-  { x: 8020, y: 720, width: 420, height: 90, area: "future_gate" },
-  { x: 8500, y: 720, width: 380, height: 90, area: "future_gate" },
-  { x: 7580, y: 570, width: 180, height: 24, area: "future_gate_hint" },
-  { x: 7850, y: 500, width: 180, height: 24, area: "future_gate_hint" },
-  { x: 8130, y: 430, width: 180, height: 24, area: "future_gate_hint" }
+  // 초대형 방 6: 봉인 관문. 두 번째 지역을 예고하는 마무리 공간
+  { x: 39000, y: 1180, width: 1200, height: 130, area: "sealed_gate_floor" },
+  { x: 40200, y: 1180, width: 1200, height: 130, area: "sealed_gate_floor" },
+  { x: 41400, y: 1180, width: 1200, height: 130, area: "sealed_gate_floor" },
+  { x: 42600, y: 1180, width: 1400, height: 130, area: "sealed_gate_floor" },
+  { x: 39800, y: 930, width: 560, height: 54, area: "sealed_gate_overlook" },
+  { x: 40950, y: 800, width: 580, height: 54, area: "sealed_gate_overlook" },
+  { x: 42250, y: 680, width: 620, height: 54, area: "sealed_gate_overlook", secretRoute: "봉인 관문 전망대 후보" }
 ];
 
 const doors = [
-  { x: 1360, y: 420, width: 40, height: 210, text: "중앙 폐허", locked: false, open: true },
-  { x: 4160, y: 560, width: 40, height: 230, text: "하층 수로", locked: false, open: true },
-  { x: 5760, y: 560, width: 40, height: 260, text: "상층 첨탑", locked: false, open: true },
-  { x: 4935, y: 880, width: 48, height: 300, text: "하층 지름길", locked: true, open: false },
-  { x: 8460, y: 300, width: 64, height: 430, text: "두 번째 지역", locked: true, open: false, requiresMemoryCores: 1 }
+  { x: 8460, y: 500, width: 44, height: 300, text: "진입 절벽", locked: false, open: true },
+  { x: 13460, y: 850, width: 44, height: 360, text: "중앙 대공동", locked: false, open: true },
+  { x: 21460, y: 2180, width: 44, height: 360, text: "하층 폐허", locked: false, open: true },
+  { x: 27460, y: 900, width: 44, height: 360, text: "긴 폐허 회랑", locked: false, open: true },
+  { x: 33960, y: 3650, width: 44, height: 420, text: "세로 상승 폐허", locked: false, open: true },
+  { x: 38960, y: 820, width: 44, height: 420, text: "봉인 관문", locked: false, open: true },
+  { x: 43380, y: 660, width: 80, height: 560, text: "두 번째 지역", locked: true, open: false, requiresMemoryCores: 1 }
 ];
 
 const bossArenaGates = [];
 
-const keyItem = { x: 4550, y: 1122, width: 24, height: 24, collected: false };
+const keyItem = { x: 42300, y: 640, width: 24, height: 24, collected: false };
 const abilityItems = [
-  { type: "doubleJump", name: "이중 점프", x: 3195, y: 415, width: 28, height: 28, collected: false }
+  { type: "doubleJump", name: "이중 점프", x: 15020, y: 892, width: 28, height: 28, collected: false }
 ];
 const rewardItems = [
-  { type: "memoryFragment", name: "기억 조각", x: 5450, y: 970, width: 24, height: 24, collected: false },
-  { type: "memoryFragment", name: "숨은 기억 조각", x: 1285, y: 322, width: 24, height: 24, collected: false, hiddenReward: true },
-  { type: "coreCapacity", name: "하층 코어 용량", x: 5125, y: 1425, width: 26, height: 26, collected: false, hiddenReward: true },
-  { type: "healthCore", name: "상층 체력 코어", x: 7325, y: 212, width: 26, height: 26, collected: false, hiddenReward: true },
-  { type: "memoryFragment", name: "중앙 폐허 상층 조각", x: 3815, y: 288, width: 24, height: 24, collected: false, hiddenReward: true }
+  { type: "memoryFragment", name: "진입 절벽 상층 기억 조각", x: 10495, y: 462, width: 24, height: 24, collected: false, hiddenReward: true },
+  { type: "memoryFragment", name: "중앙 대공동 상층 기억 조각", x: 19750, y: 482, width: 24, height: 24, collected: false, hiddenReward: true },
+  { type: "coreCapacity", name: "하층 폐허 코어 용량", x: 25600, y: 2022, width: 26, height: 26, collected: false, hiddenReward: true },
+  { type: "memoryFragment", name: "긴 회랑 상층 기억 조각", x: 31920, y: 862, width: 24, height: 24, collected: false, hiddenReward: true },
+  { type: "healthCore", name: "세로 상승 체력 코어", x: 34650, y: 1462, width: 26, height: 26, collected: false, hiddenReward: true },
+  { type: "memoryFragment", name: "봉인 관문 전망대 기억 조각", x: 42310, y: 642, width: 24, height: 24, collected: false, hiddenReward: true }
 ];
 
-const dashHazards = [
-  { name: "대시 장벽", x: 2050, y: 585, width: 42, height: 220 },
-  { name: "상층 기억 장벽", x: 6675, y: 460, width: 44, height: 260 }
-];
+const dashHazards = [];
 
 const enemies = [
-  createMeleeEnemy("작은 그늘", 860, 524, 32, 34, 660, 1250, 1.05, 2, 68, 100),
-  createMeleeEnemy("폐허 벌레", 2350, 644, 34, 36, 1500, 3100, 1.25, 3, 72, 100),
-  createMeleeEnemy("하층 파수꾼", 4980, 724, 38, 36, 4280, 5620, 1.35, 4, 78, 110),
-  createMeleeEnemy("첨탑 파수꾼", 6600, 684, 38, 36, 5920, 7240, 1.3, 4, 78, 110),
-  createFlyingEnemy("공허 박쥐", 2860, 520),
-  createFlyingEnemy("하층 튕김 표식", 4620, 1100),
-  createFlyingEnemy("하층 튕김 표식", 5000, 1240),
-  createFlyingEnemy("상층 박쥐", 6900, 360),
-  createShooterEnemy("폐허 사수", 3560, 638),
-  createShooterEnemy("문지기 사수", 8080, 678)
+  createMeleeEnemy("튜토리얼 그림자", 2850, 644, 32, 34, 2450, 3400, 1.0, 2, 68, 100),
+  createMeleeEnemy("진입 절벽 벌레", 11100, 1044, 36, 36, 9300, 12400, 1.1, 3, 72, 105),
+  createMeleeEnemy("중앙 폐허 파수꾼", 16750, 1264, 38, 36, 14000, 21000, 1.15, 4, 78, 112),
+  createMeleeEnemy("하층 폐허 벌레", 24100, 2464, 38, 36, 21800, 27200, 1.15, 4, 78, 112),
+  createMeleeEnemy("회랑 파수꾼", 30600, 1064, 38, 36, 27800, 33500, 1.15, 4, 78, 112),
+  createMeleeEnemy("봉인 관문 파수꾼", 41700, 1144, 40, 38, 39200, 43700, 1.1, 4, 78, 112),
+  createFlyingEnemy("진입 절벽 박쥐", 10200, 760),
+  createFlyingEnemy("중앙 대공동 박쥐", 18100, 800),
+  createFlyingEnemy("하층 폐허 박쥐", 25200, 2160),
+  createFlyingEnemy("세로 상승 박쥐", 36500, 2450),
+  createShooterEnemy("중앙 대공동 사수", 19950, 1260),
+  createShooterEnemy("봉인 관문 사수", 42400, 1140)
 ];
 
 const boss = {
   type: "boss",
   name: "기억 파수자",
-  x: 11200,
-  y: 548,
-  baseY: 548,
+  x: 42800,
+  y: 1108,
+  baseY: 1108,
   width: 72,
   height: 72,
-  minX: 10940,
-  maxX: 12380,
+  minX: 41800,
+  maxX: 43600,
   vx: 0,
   speed: 1.25,
   facing: -1,
   maxHealth: 26,
   health: 26,
-  alive: true,
+  alive: false,
   hitTimer: 0,
   hitByAttackId: -1,
   attackCooldown: 20,
@@ -417,9 +449,9 @@ const boss = {
   attackType: "none",
   attackFired: false,
   patternIndex: 0,
-  startX: 11200,
-  targetX: 11200,
-  targetY: 548,
+  startX: 42800,
+  targetX: 42800,
+  targetY: 1108,
   slamHitDone: false,
   laserHitDone: false,
   laserY: 0,
@@ -499,9 +531,9 @@ function buildRoomObjectIndex() {
 }
 
 const mapData = {
-  version: "v52",
-  stage: "13-1",
-  purpose: "최종 월드 재설계를 위해 기존 테스트맵을 방 단위 데이터로 인덱싱한다.",
+  version: "v56",
+  stage: "13-2-1",
+  purpose: "튜토리얼 구역과 초대형 방 6개의 전체 블록아웃을 만든다. 세부 장식보다 첫 지역의 크기, 위치, 연결 방향을 먼저 확정한다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -2333,7 +2365,7 @@ function knockbackEnemy(enemy, direction, distance) {
 }
 
 function startBossFightIfNeeded() {
-  const playerEnteredBossRoom = player.x > 10860;
+  const playerEnteredBossRoom = false;
 
   if (!playerEnteredBossRoom) {
     return;
@@ -2390,7 +2422,7 @@ function updateBoss() {
     return;
   }
 
-  const playerInBossRoom = player.x > 10800;
+  const playerInBossRoom = false;
 
   if (!playerInBossRoom) {
     return;
@@ -3188,7 +3220,7 @@ function checkPlayerEnemyDamage() {
     }
   }
 
-  if (boss.alive && !boss.hidden && player.x > 10800 && boss.contactCooldown <= 0 && isColliding(player, boss)) {
+  if (boss.alive && !boss.hidden && player.x > 19500 && boss.contactCooldown <= 0 && isColliding(player, boss)) {
     boss.contactCooldown = 45;
     takeDamage(boss, "기억 파수자와 충돌했습니다.");
   }
@@ -4869,7 +4901,7 @@ function drawBossClearEffect() {
   ctx.save();
   ctx.globalAlpha = alpha * 0.26;
   ctx.fillStyle = "#7dd3fc";
-  ctx.fillRect(10800 - camera.x, 0 - camera.y, 1800, world.height);
+  ctx.fillRect(999999 - camera.x, 0 - camera.y, 0, 0);
   ctx.globalAlpha = alpha;
   ctx.fillStyle = "#e0f2fe";
   ctx.font = "bold 26px Arial";
@@ -4970,7 +5002,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v53 1차: 튜토리얼과 첫 번째 지역 대형 구조 초안", 20, 35);
+  ctx.fillText("13단계-2 v56 1차: 튜토리얼 + 초대형 방 6개 블록아웃", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
