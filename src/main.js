@@ -43,10 +43,10 @@ const camera = {
   bossFocusTimer: 0,
 
   // v44: 캐릭터 중앙 고정 카메라. 방향 전환용 look-ahead를 제거해 카메라 튐을 줄임
-  smoothnessX: 0.18,
-  smoothnessY: 0.12,
-  snapDistanceX: 260,
-  snapDistanceY: 180,
+  smoothnessX: 0.14,
+  smoothnessY: 0.10,
+  snapDistanceX: 9999,
+  snapDistanceY: 9999,
   currentLookAheadX: 0,
   currentLookDownY: 0
 };
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v56 렉/슬로우모션 수정본: 원래 무빙을 유지하고 렌더링을 더 줄였습니다.",
+  message: "13단계-2 v56 부드러움 수정본: 원래 무빙을 유지하고 끊김을 줄였습니다.",
   hiddenRewards: 0
 };
 
@@ -775,13 +775,14 @@ function isColliding(rectA, rectB) {
 
 // v56 opt: 초대형 맵에서는 카메라 근처와 플레이어 근처만 적극적으로 처리한다.
 const optimizationSettings = {
-  renderMarginX: 520,
-  renderMarginY: 420,
-  collisionRangeX: 1350,
-  collisionRangeY: 1050,
-  enemyActiveRangeX: 2200,
-  enemyActiveRangeY: 1600,
-  roomBackgroundMargin: 900
+  renderMarginX: 320,
+  renderMarginY: 260,
+  collisionRangeX: 1150,
+  collisionRangeY: 900,
+  enemyActiveRangeX: 1800,
+  enemyActiveRangeY: 1300,
+  roomBackgroundMargin: 420,
+  lightRenderMode: true
 };
 
 // v56 reviewed: 충돌 오브젝트 목록은 한 프레임 안에서 여러 번 쓰이므로 캐시한다.
@@ -3669,27 +3670,22 @@ function drawRoundedRect(x, y, width, height, radius) {
 
 function drawTutorialRoomFrames() {
   for (const room of tutorialRoomFrames) {
-    if (!isObjectNearCamera(room, 260, 260)) {
+    if (!isObjectNearCamera(room, 120, 120)) {
       continue;
     }
-    const screenX = room.x - camera.x;
-    const screenY = room.y - camera.y;
+    const screenX = Math.round(room.x - camera.x);
+    const screenY = Math.round(room.y - camera.y);
 
     ctx.save();
-    ctx.globalAlpha = 0.44;
-    ctx.strokeStyle = room.mode === "fixed" ? "#93c5fd" : "#a78bfa";
-    ctx.lineWidth = 3;
+    ctx.strokeStyle = room.mode === "fixed" ? "rgba(147, 197, 253, 0.8)" : "rgba(167, 139, 250, 0.75)";
+    ctx.lineWidth = 2;
     ctx.strokeRect(screenX, screenY, room.width, room.height);
-    ctx.globalAlpha = 0.12;
-    ctx.fillStyle = room.mode === "fixed" ? "#1d4ed8" : "#6d28d9";
-    ctx.fillRect(screenX, screenY, room.width, room.height);
-    ctx.globalAlpha = 0.9;
     ctx.fillStyle = "#dbeafe";
-    ctx.font = "bold 17px Arial";
-    ctx.fillText(room.title, screenX + 28, screenY + 34);
+    ctx.font = "bold 16px Arial";
+    ctx.fillText(room.title, screenX + 24, screenY + 32);
     ctx.fillStyle = "#cbd5e1";
-    ctx.font = "13px Arial";
-    ctx.fillText(room.mode === "fixed" ? "고정 카메라 방" : "추적 카메라 방", screenX + 28, screenY + 56);
+    ctx.font = "12px Arial";
+    ctx.fillText(room.mode === "fixed" ? "고정 카메라" : "추적 카메라", screenX + 24, screenY + 52);
     ctx.restore();
   }
 }
@@ -3813,35 +3809,20 @@ function drawRoomBackgrounds() {
 }
 
 function drawBackgroundDecorations() {
-  // v56 lag-fix: 배경 기둥과 격자선도 화면 안쪽만 그린다.
-  const screenTop = -40;
-  const screenBottom = canvas.height + 40;
-  const visibleWorldTop = camera.y - 80;
-  const visibleWorldBottom = camera.y + canvas.height + 80;
+  // v56 smooth-fix: 초대형 방에서는 반복 배경선이 끊김의 원인이 되기 쉽다.
+  // 따라서 현재는 아주 적은 수의 큰 배경 기둥만 그려서 화면 부하를 줄인다.
+  const startColumn = Math.max(0, Math.floor((camera.x - 260) / 720) * 720);
+  const endColumn = Math.min(world.width, camera.x + canvas.width + 260);
 
-  const startColumn = Math.max(0, Math.floor((camera.x - 520) / 360) * 360);
-  const endColumn = Math.min(world.width, camera.x + canvas.width + 520);
+  ctx.save();
+  ctx.fillStyle = "rgba(148, 163, 184, 0.055)";
 
-  for (let x = startColumn + 180; x < endColumn; x += 360) {
-    const top = 120;
-    const height = 300;
-    const bottom = top + height;
-
-    if (bottom < visibleWorldTop || top > visibleWorldBottom) {
-      continue;
-    }
-
-    ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
-    ctx.fillRect(x - camera.x, top - camera.y, 70, height);
+  for (let x = startColumn + 260; x < endColumn; x += 720) {
+    const screenX = Math.round(x - camera.x);
+    ctx.fillRect(screenX, 60, 70, canvas.height - 120);
   }
 
-  const startGrid = Math.max(0, Math.floor((camera.x - 260) / 120) * 120);
-  const endGrid = Math.min(world.width, camera.x + canvas.width + 260);
-
-  for (let x = startGrid; x < endGrid; x += 120) {
-    ctx.fillStyle = "rgba(255, 255, 255, 0.025)";
-    ctx.fillRect(x - camera.x, screenTop, 2, screenBottom - screenTop);
-  }
+  ctx.restore();
 }
 
 function drawBossRoomDecorations() {
@@ -5200,29 +5181,59 @@ function drawPlayer() {
   ctx.restore();
 }
 
-function drawMiniMap() {
-  const mapX = canvas.width - 270;
-  const mapY = 25;
+let miniMapCacheCanvas = null;
+let miniMapCacheContext = null;
+let miniMapCacheFrame = -999;
+let miniMapPlayerX = 0;
+
+function rebuildMiniMapCache() {
+  if (!miniMapCacheCanvas) {
+    miniMapCacheCanvas = document.createElement("canvas");
+    miniMapCacheCanvas.width = 250;
+    miniMapCacheCanvas.height = 62;
+    miniMapCacheContext = miniMapCacheCanvas.getContext("2d");
+  }
+
+  const mctx = miniMapCacheContext;
+  mctx.clearRect(0, 0, miniMapCacheCanvas.width, miniMapCacheCanvas.height);
+  const mapX = 10;
+  const mapY = 24;
   const mapWidth = 230;
-  const mapHeight = 34;
-  ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
-  ctx.fillRect(mapX - 10, mapY - 10, mapWidth + 20, mapHeight + 38);
-  ctx.fillStyle = "#cbd5e1";
-  ctx.font = "13px Arial";
-  ctx.fillText("방 구조", mapX, mapY - 16);
+  const mapHeight = 28;
+
+  mctx.fillStyle = "rgba(15, 23, 42, 0.82)";
+  mctx.fillRect(0, 0, miniMapCacheCanvas.width, miniMapCacheCanvas.height);
+  mctx.fillStyle = "#cbd5e1";
+  mctx.font = "12px Arial";
+  mctx.fillText("방 구조", mapX, 14);
 
   for (const room of rooms) {
     const roomX = mapX + (room.x / world.width) * mapWidth;
-    const roomW = (room.width / world.width) * mapWidth;
-    ctx.fillStyle = "rgba(148, 163, 184, 0.28)";
-    ctx.fillRect(roomX, mapY, roomW - 2, mapHeight);
-    ctx.strokeStyle = "rgba(226, 232, 240, 0.5)";
-    ctx.strokeRect(roomX, mapY, roomW - 2, mapHeight);
+    const roomW = Math.max(2, (room.width / world.width) * mapWidth);
+    mctx.fillStyle = "rgba(148, 163, 184, 0.26)";
+    mctx.fillRect(roomX, mapY, roomW - 1, mapHeight);
   }
 
-  const playerMarkerX = mapX + (player.x / world.width) * mapWidth;
+  miniMapCacheFrame = frameCount;
+}
+
+function drawMiniMap() {
+  // v56 smooth-fix: 미니맵 배경은 매 프레임 다시 만들지 않고, 일정 간격으로만 갱신한다.
+  if (!miniMapCacheCanvas || frameCount - miniMapCacheFrame > 20) {
+    rebuildMiniMapCache();
+  }
+
+  const drawX = canvas.width - 270;
+  const drawY = 20;
+  ctx.drawImage(miniMapCacheCanvas, drawX, drawY);
+
+  const mapX = drawX + 10;
+  const mapY = drawY + 24;
+  const mapWidth = 230;
+  const mapHeight = 28;
+  miniMapPlayerX += ((player.x / world.width) * mapWidth - miniMapPlayerX) * 0.35;
   ctx.fillStyle = "#7dd3fc";
-  ctx.fillRect(playerMarkerX - 2, mapY - 4, 4, mapHeight + 8);
+  ctx.fillRect(mapX + miniMapPlayerX - 2, mapY - 3, 4, mapHeight + 6);
 }
 
 function drawHealthUI() {
@@ -5410,7 +5421,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v56 렉 수정: 원래 무빙 + 슬로우모션 방지", 20, 35);
+  ctx.fillText("13단계-2 v56 부드러움 수정: 원래 무빙 + 끊김 완화", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -5499,35 +5510,35 @@ function draw() {
   drawEndingPanel();
 }
 
-// v56 lag-fix: 렉이 생기면 화면뿐 아니라 착지/낙하 모션까지 느려 보이는 문제가 생긴다.
-// requestAnimationFrame이 느려질 때 update를 보정해서, 캐릭터 자체가 슬로우모션처럼 보이는 현상을 줄인다.
+// v56 smooth-fix: 렉이 있을 때 여러 번 update를 몰아서 실행하면 화면이 순간적으로 튀어 보인다.
+// 그래서 이번 버전은 "밀린 프레임 따라잡기"를 하지 않고, 한 화면 갱신마다 update를 한 번만 수행한다.
+// 속도 수치는 건드리지 않고, 끊김이 눈에 띄는 현상을 줄이는 것이 목적이다.
 let lastLoopTime = 0;
-let loopAccumulator = 0;
-const fixedLoopStep = 1000 / 60;
-const maxLoopSubSteps = 2;
+let smoothedFrameDelay = 1000 / 60;
+let frameSkipGuard = 0;
 
 function gameLoop(timestamp) {
   if (!lastLoopTime) {
     lastLoopTime = timestamp;
   }
 
-  const elapsed = Math.min(timestamp - lastLoopTime, fixedLoopStep * maxLoopSubSteps);
+  const elapsed = Math.min(timestamp - lastLoopTime, 80);
   lastLoopTime = timestamp;
-  loopAccumulator += elapsed;
+  smoothedFrameDelay = smoothedFrameDelay * 0.9 + elapsed * 0.1;
 
-  let subSteps = 0;
+  // 비정상적으로 긴 프레임이 끼어도 update를 몰아서 여러 번 실행하지 않는다.
+  // 이렇게 해야 캐릭터와 카메라가 한순간에 툭 이동하는 느낌이 줄어든다.
+  update();
 
-  while (loopAccumulator >= fixedLoopStep && subSteps < maxLoopSubSteps) {
-    update();
-    loopAccumulator -= fixedLoopStep;
-    subSteps += 1;
+  // 너무 느린 프레임이 계속되면 장식성 요소는 이미 줄였으므로 draw는 그대로 유지한다.
+  // 단, 브라우저가 탭 전환 등으로 멈췄다가 돌아온 경우에는 첫 프레임을 안정화한다.
+  if (elapsed > 70 && frameSkipGuard < 1) {
+    frameSkipGuard += 1;
+  } else {
+    frameSkipGuard = 0;
+    draw();
   }
 
-  if (subSteps >= maxLoopSubSteps) {
-    loopAccumulator = 0;
-  }
-
-  draw();
   requestAnimationFrame(gameLoop);
 }
 
