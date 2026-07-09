@@ -1,5 +1,18 @@
 const canvas = document.getElementById("gameCanvas");
+
+if (!canvas) {
+  throw new Error("gameCanvas 요소를 찾을 수 없습니다.");
+}
+
 const ctx = canvas.getContext("2d");
+
+if (canvas.width < 800) {
+  canvas.width = 900;
+}
+
+if (canvas.height < 500) {
+  canvas.height = 520;
+}
 
 const keys = {};
 let frameCount = 0;
@@ -8,7 +21,6 @@ let hitStopTimer = 0;
 let screenShakeTimer = 0;
 let screenShakeMaxTimer = 0;
 let screenShakePower = 0;
-let lastPlayerAttackWallSparkId = -1;
 
 const particles = [];
 const projectiles = [];
@@ -27,9 +39,16 @@ const camera = {
   shakeY: 0
 };
 
-const player = {
+const gravity = 0.65;
+
+const startPosition = {
   x: 70,
-  y: 300,
+  y: 300
+};
+
+const player = {
+  x: startPosition.x,
+  y: startPosition.y,
   width: 32,
   height: 48,
 
@@ -80,107 +99,6 @@ const playerAnimation = {
   stateFrame: 0
 };
 
-const characterVisuals = {
-  idle: {
-    name: "정지",
-    bobSpeed: 0.08,
-    bobAmount: 0.7,
-    bodyTop: 18,
-    leftBottom: 1,
-    rightBottom: 31,
-    centerBottom: 16,
-    headY: 0,
-    coreRadius: 4,
-    coreColor: "#7dd3fc",
-    shadowWidth: 16
-  },
-  walk: {
-    name: "걷기",
-    bobSpeed: 0.25,
-    bobAmount: 1.7,
-    bodyTop: 18,
-    leftBottom: 1,
-    rightBottom: 31,
-    centerBottom: 16,
-    headY: 0,
-    coreRadius: 4,
-    coreColor: "#7dd3fc",
-    shadowWidth: 17
-  },
-  jump: {
-    name: "점프",
-    bobSpeed: 0,
-    bobAmount: 0,
-    bodyTop: 19,
-    leftBottom: 4,
-    rightBottom: 28,
-    centerBottom: 16,
-    headY: -2,
-    coreRadius: 4,
-    coreColor: "#7dd3fc",
-    shadowWidth: 12
-  },
-  fall: {
-    name: "낙하",
-    bobSpeed: 0,
-    bobAmount: 0,
-    bodyTop: 17,
-    leftBottom: -1,
-    rightBottom: 33,
-    centerBottom: 16,
-    headY: 2,
-    coreRadius: 4,
-    coreColor: "#7dd3fc",
-    shadowWidth: 20
-  },
-  dash: {
-    name: "대시",
-    bobSpeed: 0,
-    bobAmount: 0,
-    bodyTop: 17,
-    leftBottom: 1,
-    rightBottom: 31,
-    centerBottom: 16,
-    headY: 0,
-    coreRadius: 5,
-    coreColor: "#fef08a",
-    shadowWidth: 24
-  },
-  attack: {
-    name: "공격",
-    bobSpeed: 0,
-    bobAmount: 0,
-    bodyTop: 18,
-    leftBottom: 2,
-    rightBottom: 30,
-    centerBottom: 16,
-    headY: 0,
-    coreRadius: 5,
-    coreColor: "#e0f2fe",
-    shadowWidth: 19
-  },
-  heal: {
-    name: "회복",
-    bobSpeed: 0.12,
-    bobAmount: 0.5,
-    bodyTop: 18,
-    leftBottom: 2,
-    rightBottom: 30,
-    centerBottom: 16,
-    headY: -1,
-    coreRadius: 6,
-    coreColor: "#86efac",
-    shadowWidth: 18
-  }
-};
-
-const startPosition = {
-  x: 70,
-  y: 300
-};
-
-const gravity = 0.65;
-
 const gameState = {
   hasKey: false,
   memoryFragments: 0,
@@ -193,10 +111,20 @@ const gameState = {
   bossClearEffectTimer: 0,
 
   endingReached: false,
-  endingTimer: 0,
+  endingFrame: 0,
+  endingInputUnlocked: false,
 
   message: "최종 기억실의 보스를 쓰러뜨리세요."
 };
+
+const endingLines = [
+  "나는 비어 있던 코어의 흔적을 따라 이곳까지 왔다.",
+  "기억 조각은 흩어진 나의 기록이었고,",
+  "기억 핵은 잃어버린 중심으로 향하는 열쇠였다.",
+  "원점 코어가 깨어나며 멈춰 있던 세계가 다시 움직이기 시작한다.",
+  "Coreless.",
+  "중심을 잃은 존재가 다시 자신의 원점을 찾는 이야기."
+];
 
 const rooms = [
   { name: "방 1: 시작 구역", guide: "기본 이동과 점프", x: 0, width: 900, color: "#111827" },
@@ -205,7 +133,7 @@ const rooms = [
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
   { name: "방 5: 기억의 문 구역", guide: "기억 조각으로 특수 문 열기", x: 3600, width: 900, color: "#10251f" },
   { name: "방 6: 기억 핵 구역", guide: "기억 핵 획득", x: 4500, width: 900, color: "#1a1328" },
-  { name: "방 7: 최종 보스방", guide: "보스방 입장 후 문이 닫히고, 보스 격파 후 다시 열림", x: 5400, width: 900, color: "#061520" }
+  { name: "방 7: 최종 보스방", guide: "보스를 쓰러뜨리고 원점 코어를 획득하기", x: 5400, width: 900, color: "#061520" }
 ];
 
 const platforms = [
@@ -237,7 +165,6 @@ const platforms = [
   { x: 3740, y: 340, width: 180, height: 24 },
   { x: 4000, y: 290, width: 180, height: 24 },
   { x: 4260, y: 340, width: 160, height: 24 },
-
   { x: 3860, y: 245, width: 130, height: 24 },
   { x: 4100, y: 215, width: 140, height: 24 },
   { x: 4350, y: 265, width: 110, height: 24 },
@@ -247,12 +174,6 @@ const platforms = [
   { x: 4860, y: 305, width: 160, height: 24 },
   { x: 5100, y: 350, width: 160, height: 24 },
 
-  /*
-    8단계-3 수정 부분:
-    기존 보스방에는 y=350 근처의 구조물이 있어 보스 몸체와 겹칠 수 있었습니다.
-    보스는 y=348, height=72이므로 y=350 구조물과 거의 바로 충돌하듯 겹쳐 보입니다.
-    따라서 보스방 구조물은 위쪽으로 올리고, 바닥 전투 공간을 넓게 비웠습니다.
-  */
   { x: 5400, y: 420, width: 900, height: 80 },
   { x: 5480, y: 245, width: 120, height: 24 },
   { x: 5760, y: 225, width: 170, height: 24 },
@@ -273,13 +194,7 @@ const doors = [
 ];
 
 const bossArenaGates = [
-  {
-    x: 5408,
-    y: 80,
-    width: 34,
-    height: 340,
-    text: "보스전 봉인"
-  }
+  { x: 5408, y: 80, width: 34, height: 340, text: "보스전 봉인" }
 ];
 
 const keyItem = {
@@ -325,7 +240,7 @@ const rewardItems = [
     type: "originCore",
     name: "원점 코어",
     x: 6040,
-    y: 305,
+    y: 340,
     width: 30,
     height: 30,
     collected: false,
@@ -349,7 +264,6 @@ const enemies = [
     targetDirection: 1,
     chaseRange: 360,
     aiDecisionTimer: 0,
-
     attackRange: 72,
     attackCooldown: 0,
     attackCooldownMax: 95,
@@ -358,7 +272,6 @@ const enemies = [
     attackDirection: 1,
     attackHitPlayer: false,
     attackWallSparked: false,
-
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -381,7 +294,6 @@ const enemies = [
     targetDirection: -1,
     chaseRange: 420,
     aiDecisionTimer: 0,
-
     attackRange: 78,
     attackCooldown: 0,
     attackCooldownMax: 105,
@@ -390,7 +302,6 @@ const enemies = [
     attackDirection: -1,
     attackHitPlayer: false,
     attackWallSparked: false,
-
     maxHealth: 4,
     health: 4,
     alive: true,
@@ -418,7 +329,6 @@ const enemies = [
     chaseRange: 520,
     floatAngle: 0,
     aiDecisionTimer: 0,
-
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -441,7 +351,6 @@ const enemies = [
     targetDirection: -1,
     chaseRange: 480,
     aiDecisionTimer: 0,
-
     shootRange: 520,
     shootVerticalRange: 130,
     shootCooldown: 50,
@@ -450,7 +359,6 @@ const enemies = [
     shootDuration: 40,
     shootDirection: -1,
     shootFired: false,
-
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -468,12 +376,6 @@ const boss = {
   baseY: 348,
   width: 72,
   height: 72,
-
-  /*
-    8단계-3 수정 부분:
-    보스가 좌우로 충분히 움직일 수 있도록 활동 범위를 넓혔습니다.
-    또한 보스방 바닥 구조물을 비워서 보스가 구조물에 끼지 않게 했습니다.
-  */
   minX: 5475,
   maxX: 6210,
 
@@ -498,12 +400,20 @@ const boss = {
   startX: 5770,
   targetX: 5770,
   slamHitDone: false,
-
   contactCooldown: 0
 };
 
 document.addEventListener("keydown", function(event) {
   keys[event.code] = true;
+
+  if (gameState.endingReached && gameState.endingInputUnlocked && event.code === "KeyR") {
+    location.reload();
+    return;
+  }
+
+  if (gameState.endingReached) {
+    return;
+  }
 
   if (event.code === "Space") {
     if (!event.repeat) {
@@ -616,9 +526,24 @@ function updateGameStateTimers() {
   if (gameState.bossClearEffectTimer > 0) {
     gameState.bossClearEffectTimer -= 1;
   }
+}
 
-  if (gameState.endingTimer > 0) {
-    gameState.endingTimer -= 1;
+function updateEndingSequence() {
+  if (!gameState.endingReached) {
+    return;
+  }
+
+  gameState.endingFrame += 1;
+
+  player.vx = 0;
+  player.vy = 0;
+  player.isDashing = false;
+  player.attackTimer = 0;
+  player.healTimer = 0;
+  player.healingWillRestore = false;
+
+  if (gameState.endingFrame >= 760) {
+    gameState.endingInputUnlocked = true;
   }
 }
 
@@ -663,11 +588,17 @@ function getPlayerState() {
 }
 
 function getStateName(state) {
-  if (characterVisuals[state]) {
-    return characterVisuals[state].name;
-  }
+  const names = {
+    idle: "정지",
+    walk: "걷기",
+    jump: "점프",
+    fall: "낙하",
+    dash: "대시",
+    attack: "공격",
+    heal: "회복"
+  };
 
-  return "알 수 없음";
+  return names[state] || "알 수 없음";
 }
 
 function updatePlayerAnimation() {
@@ -680,34 +611,6 @@ function updatePlayerAnimation() {
   } else {
     playerAnimation.stateFrame += 1;
   }
-}
-
-function getCharacterVisual(state) {
-  const visual = Object.assign({}, characterVisuals[state] || characterVisuals.idle);
-
-  if (state === "dash") {
-    visual.lean = player.facing * 4;
-    visual.leftBottom = player.facing === 1 ? -2 : 3;
-    visual.rightBottom = player.facing === 1 ? 29 : 34;
-    visual.centerBottom = player.facing === 1 ? 18 : 14;
-  } else if (state === "attack") {
-    visual.lean = player.facing * 3;
-    visual.leftBottom = player.facing === 1 ? 0 : 4;
-    visual.rightBottom = player.facing === 1 ? 28 : 32;
-    visual.centerBottom = player.facing === 1 ? 18 : 14;
-  } else {
-    visual.lean = 0;
-  }
-
-  return visual;
-}
-
-function getCharacterBob(visual) {
-  if (visual.bobSpeed === 0 || visual.bobAmount === 0) {
-    return 0;
-  }
-
-  return Math.sin(frameCount * visual.bobSpeed) * visual.bobAmount;
 }
 
 function getSolidObjects() {
@@ -750,17 +653,14 @@ function getClippedHitboxByWalls(hitbox, owner, direction) {
     }
 
     if (direction === 1) {
-      const wallIsInFront = object.x >= owner.x + owner.width - 2;
-
-      if (wallIsInFront) {
+      if (object.x >= owner.x + owner.width - 2) {
         const newRight = Math.min(clipped.x + clipped.width, object.x);
         clipped.width = Math.max(0, newRight - clipped.x);
       }
     } else {
       const wallRight = object.x + object.width;
-      const wallIsInFront = wallRight <= owner.x + 2;
 
-      if (wallIsInFront) {
+      if (wallRight <= owner.x + 2) {
         const oldRight = clipped.x + clipped.width;
         clipped.x = Math.max(clipped.x, wallRight);
         clipped.width = Math.max(0, oldRight - clipped.x);
@@ -790,65 +690,6 @@ function getWallSparkPoint(clipped, direction) {
     x: clipped.x,
     y: clipped.y + clipped.height / 2
   };
-}
-
-function spawnWallSparkParticles(x, y, direction) {
-  for (let i = 0; i < 12; i++) {
-    addDashStreak(
-      x,
-      y + (Math.random() - 0.5) * 22,
-      direction * (1.0 + Math.random() * 2.8),
-      (Math.random() - 0.5) * 2.0,
-      8 + Math.random() * 14,
-      2 + Math.random() * 3,
-      12 + Math.random() * 8,
-      "rgba(251, 191, 36, 1)",
-      (Math.random() - 0.5) * 0.6
-    );
-  }
-}
-
-function checkPlayerAttackWallSpark(originalHitbox, clippedHitbox) {
-  if (!isHitboxClipped(originalHitbox, clippedHitbox)) {
-    return;
-  }
-
-  if (lastPlayerAttackWallSparkId === player.attackId) {
-    return;
-  }
-
-  lastPlayerAttackWallSparkId = player.attackId;
-
-  const point = getWallSparkPoint(clippedHitbox, player.facing);
-
-  spawnWallSparkParticles(point.x, point.y, -player.facing);
-  startScreenShake(4, 2);
-  gameState.message = "공격이 벽에 막혔습니다.";
-}
-
-function getBlockedEnemyAttackHitbox(enemy) {
-  const rawHitbox = getEnemyAttackHitbox(enemy);
-  return getClippedHitboxByWalls(rawHitbox, enemy, enemy.attackDirection);
-}
-
-function checkEnemyAttackWallSpark(enemy) {
-  const rawHitbox = getEnemyAttackHitbox(enemy);
-  const clippedHitbox = getBlockedEnemyAttackHitbox(enemy);
-
-  if (!isHitboxClipped(rawHitbox, clippedHitbox)) {
-    return;
-  }
-
-  if (enemy.attackWallSparked) {
-    return;
-  }
-
-  enemy.attackWallSparked = true;
-
-  const point = getWallSparkPoint(clippedHitbox, enemy.attackDirection);
-
-  spawnWallSparkParticles(point.x, point.y, -enemy.attackDirection);
-  startScreenShake(4, 2);
 }
 
 function addDustParticle(x, y, vx, vy, width, height, life, color, rotation) {
@@ -889,6 +730,22 @@ function addDashStreak(x, y, vx, vy, width, height, life, color, rotation) {
   });
 }
 
+function spawnWallSparkParticles(x, y, direction) {
+  for (let i = 0; i < 12; i++) {
+    addDashStreak(
+      x,
+      y + (Math.random() - 0.5) * 22,
+      direction * (1.0 + Math.random() * 2.8),
+      (Math.random() - 0.5) * 2.0,
+      8 + Math.random() * 14,
+      2 + Math.random() * 3,
+      12 + Math.random() * 8,
+      "rgba(251, 191, 36, 1)",
+      (Math.random() - 0.5) * 0.6
+    );
+  }
+}
+
 function spawnJumpParticles() {
   for (let i = 0; i < 10; i++) {
     const direction = Math.random() < 0.5 ? -1 : 1;
@@ -921,20 +778,6 @@ function spawnDoubleJumpParticles() {
       16 + Math.random() * 8,
       "rgba(196, 181, 253, 1)",
       angle
-    );
-  }
-
-  for (let i = 0; i < 8; i++) {
-    addDustParticle(
-      player.x + player.width / 2 + (Math.random() - 0.5) * 16,
-      player.y + player.height + 2,
-      (Math.random() - 0.5) * 2.2,
-      0.4 + Math.random() * 1.2,
-      10 + Math.random() * 16,
-      3 + Math.random() * 3,
-      18 + Math.random() * 8,
-      "rgba(196, 181, 253, 1)",
-      (Math.random() - 0.5) * 0.5
     );
   }
 
@@ -1027,24 +870,20 @@ function spawnHealCompleteParticles() {
   }
 }
 
-function spawnEnemyAttackParticles(enemy) {
-  const hitbox = getBlockedEnemyAttackHitbox(enemy);
+function spawnRewardBurst(item, color) {
+  for (let i = 0; i < 32; i++) {
+    const angle = (Math.PI * 2 * i) / 32;
 
-  if (hitbox.width <= 2) {
-    return;
-  }
-
-  for (let i = 0; i < 5; i++) {
     addDashStreak(
-      hitbox.x + hitbox.width / 2,
-      hitbox.y + Math.random() * hitbox.height,
-      enemy.attackDirection * (1.2 + Math.random() * 2.2),
-      (Math.random() - 0.5) * 1.0,
-      12 + Math.random() * 18,
+      item.x + item.width / 2,
+      item.y + item.height / 2,
+      Math.cos(angle) * (1.2 + Math.random() * 2.2),
+      Math.sin(angle) * (1.2 + Math.random() * 2.2),
+      10 + Math.random() * 16,
       2 + Math.random() * 3,
-      12 + Math.random() * 6,
-      "rgba(248, 113, 113, 1)",
-      (Math.random() - 0.5) * 0.35
+      22 + Math.random() * 10,
+      color,
+      angle
     );
   }
 }
@@ -1063,6 +902,24 @@ function spawnBossSlamParticles() {
       18 + Math.random() * 10,
       "rgba(251, 113, 133, 1)",
       (Math.random() - 0.5) * 0.7
+    );
+  }
+}
+
+function spawnBossDefeatBurst() {
+  for (let i = 0; i < 64; i++) {
+    const angle = (Math.PI * 2 * i) / 64;
+
+    addDashStreak(
+      boss.x + boss.width / 2,
+      boss.y + boss.height / 2,
+      Math.cos(angle) * (1.5 + Math.random() * 3.4),
+      Math.sin(angle) * (1.5 + Math.random() * 3.4),
+      16 + Math.random() * 24,
+      3 + Math.random() * 5,
+      30 + Math.random() * 16,
+      "rgba(125, 211, 252, 1)",
+      angle
     );
   }
 }
@@ -1286,6 +1143,11 @@ function tryJump() {
 }
 
 function updatePlayerHorizontalMove() {
+  if (gameState.endingReached) {
+    player.vx = 0;
+    return;
+  }
+
   if (player.healTimer > 0) {
     player.vx *= 0.6;
 
@@ -1432,6 +1294,23 @@ function moveVertically(previousOnGround, previousVy) {
   }
 }
 
+function updatePlayer() {
+  const previousOnGround = player.onGround;
+  const previousVy = player.vy;
+
+  updateDash();
+  updatePlayerHorizontalMove();
+  updateGravity();
+
+  moveHorizontally();
+  moveVertically(previousOnGround, previousVy);
+
+  checkKeyCollection();
+  checkAbilityCollection();
+  checkRewardCollection();
+  checkFall();
+}
+
 function updateEnemies() {
   for (const enemy of enemies) {
     if (!enemy.alive) {
@@ -1492,19 +1371,6 @@ function updateMeleeEnemyAI(enemy) {
   }
 
   if (playerIsClose) {
-    const playerIsAboveEnemy = playerCenterY < enemyCenterY - 38;
-    const playerIsAlmostSameX = Math.abs(distanceX) < 42;
-
-    if (playerIsAboveEnemy && playerIsAlmostSameX) {
-      enemy.vx *= 0.82;
-
-      if (Math.abs(enemy.vx) < 0.08) {
-        enemy.vx = 0;
-      }
-
-      return;
-    }
-
     if (enemy.aiDecisionTimer <= 0) {
       if (distanceX > 8) {
         enemy.targetDirection = 1;
@@ -1553,17 +1419,8 @@ function updateFlyingEnemy(enemy) {
       enemy.aiDecisionTimer = 10;
     }
 
-    if (Math.abs(distanceX) > 10) {
-      enemy.vx = enemy.targetDirection * enemy.speed;
-    } else {
-      enemy.vx *= 0.82;
-    }
-
-    if (Math.abs(distanceY) > 10) {
-      enemy.vy = distanceY > 0 ? enemy.verticalSpeed : -enemy.verticalSpeed;
-    } else {
-      enemy.vy *= 0.72;
-    }
+    enemy.vx = Math.abs(distanceX) > 10 ? enemy.targetDirection * enemy.speed : enemy.vx * 0.82;
+    enemy.vy = Math.abs(distanceY) > 10 ? (distanceY > 0 ? enemy.verticalSpeed : -enemy.verticalSpeed) : enemy.vy * 0.72;
   } else {
     enemy.vx = enemy.patrolDirection * enemy.speed * 0.75;
     enemy.vy = Math.sin(enemy.floatAngle) * 0.7;
@@ -1716,14 +1573,6 @@ function updateEnemyCombat(enemy) {
     const previousAttackTimer = enemy.attackTimer;
     enemy.attackTimer -= 1;
 
-    if (isEnemyAttackActive(enemy)) {
-      checkEnemyAttackWallSpark(enemy);
-
-      if (frameCount % 5 === 0) {
-        spawnEnemyAttackParticles(enemy);
-      }
-    }
-
     if (previousAttackTimer > 0 && enemy.attackTimer <= 0) {
       enemy.attackHitPlayer = false;
       enemy.attackWallSparked = false;
@@ -1751,6 +1600,11 @@ function getEnemyAttackHitbox(enemy) {
     width: attackWidth,
     height: attackHeight
   };
+}
+
+function getBlockedEnemyAttackHitbox(enemy) {
+  const rawHitbox = getEnemyAttackHitbox(enemy);
+  return getClippedHitboxByWalls(rawHitbox, enemy, enemy.attackDirection);
 }
 
 function getEnemyContactHitbox(enemy) {
@@ -2064,14 +1918,7 @@ function damageBoss(direction) {
   boss.hitTimer = 18;
 
   boss.x += direction * 8;
-
-  if (boss.x < boss.minX) {
-    boss.x = boss.minX;
-  }
-
-  if (boss.x + boss.width > boss.maxX) {
-    boss.x = boss.maxX - boss.width;
-  }
+  boss.x = clamp(boss.x, boss.minX, boss.maxX - boss.width);
 
   gainCoreEnergy(1);
   startHitStop(6);
@@ -2095,24 +1942,6 @@ function damageBoss(direction) {
     gameState.message = "기억 파수자가 2페이즈에 돌입했습니다. 패턴이 빨라집니다.";
   } else {
     gameState.message = "기억 파수자에게 공격이 맞았습니다.";
-  }
-}
-
-function spawnBossDefeatBurst() {
-  for (let i = 0; i < 64; i++) {
-    const angle = (Math.PI * 2 * i) / 64;
-
-    addDashStreak(
-      boss.x + boss.width / 2,
-      boss.y + boss.height / 2,
-      Math.cos(angle) * (1.5 + Math.random() * 3.4),
-      Math.sin(angle) * (1.5 + Math.random() * 3.4),
-      16 + Math.random() * 24,
-      3 + Math.random() * 5,
-      30 + Math.random() * 16,
-      "rgba(125, 211, 252, 1)",
-      angle
-    );
   }
 }
 
@@ -2163,12 +1992,10 @@ function updateProjectiles() {
 
     if (removeProjectile) {
       if (hitWall) {
-        const direction = projectile.vx > 0 ? -1 : 1;
-
         spawnWallSparkParticles(
           projectile.vx > 0 ? projectile.x + projectile.width : projectile.x,
           projectile.y + projectile.height / 2,
-          direction
+          projectile.vx > 0 ? -1 : 1
         );
 
         startScreenShake(3, 1.8);
@@ -2187,7 +2014,11 @@ function checkAttackHits() {
   const rawHitbox = getAttackHitbox();
   const hitbox = getClippedHitboxByWalls(rawHitbox, player, player.facing);
 
-  checkPlayerAttackWallSpark(rawHitbox, hitbox);
+  if (isHitboxClipped(rawHitbox, hitbox)) {
+    const point = getWallSparkPoint(hitbox, player.facing);
+    spawnWallSparkParticles(point.x, point.y, -player.facing);
+    gameState.message = "공격이 벽에 막혔습니다.";
+  }
 
   if (hitbox.width <= 2) {
     return;
@@ -2378,13 +2209,7 @@ function respawnPlayer() {
   player.canDoubleJump = player.hasDoubleJump;
   player.doubleJumpUsed = false;
 
-  /*
-    보스전 도중 죽었을 때 봉인벽이 계속 남아 있으면,
-    다시 보스방에 진입하지 못할 수 있으므로 봉인을 풀어줍니다.
-    다시 보스방에 들어가면 자동으로 봉인됩니다.
-  */
   gameState.bossRoomLocked = false;
-
   gameState.message = "체력이 모두 줄어 시작 지점에서 다시 시작합니다.";
 }
 
@@ -2464,30 +2289,13 @@ function checkRewardCollection() {
       if (item.type === "originCore") {
         gameState.originCores += 1;
         gameState.endingReached = true;
-        gameState.endingTimer = 360;
-        gameState.message = "원점 코어를 획득했습니다. 현재 버전의 최종 목표를 달성했습니다.";
+        gameState.endingFrame = 0;
+        gameState.endingInputUnlocked = false;
+        gameState.message = "원점 코어를 획득했습니다. Coreless의 엔딩이 시작됩니다.";
         spawnRewardBurst(item, "rgba(125, 211, 252, 1)");
         startScreenShake(20, 6);
       }
     }
-  }
-}
-
-function spawnRewardBurst(item, color) {
-  for (let i = 0; i < 32; i++) {
-    const angle = (Math.PI * 2 * i) / 32;
-
-    addDashStreak(
-      item.x + item.width / 2,
-      item.y + item.height / 2,
-      Math.cos(angle) * (1.2 + Math.random() * 2.2),
-      Math.sin(angle) * (1.2 + Math.random() * 2.2),
-      10 + Math.random() * 16,
-      2 + Math.random() * 3,
-      22 + Math.random() * 10,
-      color,
-      angle
-    );
   }
 }
 
@@ -2512,23 +2320,6 @@ function resetPlayer() {
   gameState.bossRoomLocked = false;
 
   gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
-}
-
-function updatePlayer() {
-  const previousOnGround = player.onGround;
-  const previousVy = player.vy;
-
-  updateDash();
-  updatePlayerHorizontalMove();
-  updateGravity();
-
-  moveHorizontally();
-  moveVertically(previousOnGround, previousVy);
-
-  checkKeyCollection();
-  checkAbilityCollection();
-  checkRewardCollection();
-  checkFall();
 }
 
 function updateCamera() {
@@ -2783,13 +2574,7 @@ function drawAbilityItems() {
     ctx.globalAlpha = 0.25;
     ctx.fillStyle = "#c4b5fd";
     ctx.beginPath();
-    ctx.arc(
-      screenX + item.width / 2,
-      screenY + item.height / 2,
-      22 + pulse,
-      0,
-      Math.PI * 2
-    );
+    ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 22 + pulse, 0, Math.PI * 2);
     ctx.fill();
 
     ctx.globalAlpha = 1;
@@ -2945,6 +2730,7 @@ function drawMeleeEnemy(enemy) {
   ctx.stroke();
 
   ctx.fillStyle = enemy.attackTimer > 0 ? "#fecaca" : "#38bdf8";
+
   if (facing === 1) {
     ctx.fillRect(screenX + 20, screenY + 12, 4, 6);
     ctx.fillRect(screenX + 27, screenY + 12, 4, 6);
@@ -2970,13 +2756,8 @@ function drawFlyingEnemy(enemy) {
     ctx.globalAlpha = 0.65;
   }
 
-  ctx.fillStyle = "rgba(0, 0, 0, 0.25)";
-  ctx.beginPath();
-  ctx.ellipse(screenX + enemy.width / 2, screenY + enemy.height + 12, enemy.width / 2, 4, 0, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.fillStyle = enemy.hitTimer > 0 ? "#3f1f2a" : "#111827";
-  ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#a78bfa";
+  ctx.fillStyle = enemy.hitTimer > 0 ? "#4c1d2d" : "#1e1b4b";
+  ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#c4b5fd";
   ctx.lineWidth = 2;
 
   ctx.beginPath();
@@ -2993,8 +2774,6 @@ function drawFlyingEnemy(enemy) {
   ctx.fill();
   ctx.stroke();
 
-  ctx.fillStyle = enemy.hitTimer > 0 ? "#4c1d2d" : "#1e1b4b";
-  ctx.strokeStyle = enemy.hitTimer > 0 ? "#fecaca" : "#c4b5fd";
   ctx.beginPath();
   ctx.ellipse(screenX + enemy.width / 2, screenY + enemy.height / 2, enemy.width / 2, enemy.height / 2, 0, 0, Math.PI * 2);
   ctx.fill();
@@ -3123,49 +2902,6 @@ function drawBoss() {
   ctx.restore();
 }
 
-function drawBossHealthBar() {
-  if (!boss.alive) {
-    return;
-  }
-
-  if (player.x < 5300) {
-    return;
-  }
-
-  const barX = canvas.width / 2 - 190;
-  const barY = 82;
-  const barWidth = 380;
-  const barHeight = 18;
-  const ratio = boss.health / boss.maxHealth;
-
-  ctx.save();
-
-  ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
-  drawRoundedRect(barX - 12, barY - 28, barWidth + 24, 58, 12);
-  ctx.fill();
-
-  ctx.fillStyle = isBossPhaseTwo() ? "#fecdd3" : "#e9d5ff";
-  ctx.font = "bold 16px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText(isBossPhaseTwo() ? "기억 파수자 - 2페이즈" : "기억 파수자", canvas.width / 2, barY - 8);
-  ctx.textAlign = "left";
-
-  ctx.fillStyle = "rgba(71, 85, 105, 0.9)";
-  drawRoundedRect(barX, barY, barWidth, barHeight, 8);
-  ctx.fill();
-
-  ctx.fillStyle = isBossPhaseTwo() ? "#f43f5e" : "#fb7185";
-  drawRoundedRect(barX, barY, barWidth * ratio, barHeight, 8);
-  ctx.fill();
-
-  ctx.strokeStyle = "#fecdd3";
-  ctx.lineWidth = 2;
-  drawRoundedRect(barX, barY, barWidth, barHeight, 8);
-  ctx.stroke();
-
-  ctx.restore();
-}
-
 function drawEnemyAttacks() {
   for (const enemy of enemies) {
     if (!enemy.alive) {
@@ -3182,6 +2918,85 @@ function drawEnemyAttacks() {
   }
 
   drawBossAttackWarning();
+}
+
+function drawMeleeEnemyAttack(enemy) {
+  if (enemy.attackTimer <= 0) {
+    return;
+  }
+
+  const hitbox = getBlockedEnemyAttackHitbox(enemy);
+
+  if (hitbox.width <= 2) {
+    return;
+  }
+
+  const screenX = hitbox.x - camera.x;
+  const screenY = hitbox.y - camera.y;
+  const active = isEnemyAttackActive(enemy);
+
+  ctx.save();
+
+  if (!active) {
+    ctx.globalAlpha = 0.24 + Math.sin(frameCount * 0.35) * 0.08;
+    ctx.fillStyle = "#ef4444";
+    drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 12);
+    ctx.fill();
+
+    ctx.globalAlpha = 0.85;
+    ctx.strokeStyle = "#fca5a5";
+    ctx.lineWidth = 2;
+    drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 12);
+    ctx.stroke();
+
+    ctx.fillStyle = "#fecaca";
+    ctx.font = "18px Arial";
+    ctx.fillText("!", screenX + hitbox.width / 2 - 4, screenY - 6);
+  } else {
+    ctx.globalAlpha = 0.42;
+    ctx.fillStyle = "#ef4444";
+    drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 14);
+    ctx.fill();
+  }
+
+  ctx.restore();
+}
+
+function drawShooterCharge(enemy) {
+  if (enemy.shootTimer <= 0) {
+    return;
+  }
+
+  const startX = enemy.shootDirection === 1 ? enemy.x + enemy.width : enemy.x;
+  const startY = enemy.y + enemy.height / 2;
+
+  const screenX = startX - camera.x;
+  const screenY = startY - camera.y;
+
+  ctx.save();
+
+  ctx.globalAlpha = 0.25 + Math.sin(frameCount * 0.35) * 0.08;
+  ctx.strokeStyle = "#ef4444";
+  ctx.lineWidth = 12;
+  ctx.lineCap = "round";
+  ctx.beginPath();
+  ctx.moveTo(screenX, screenY);
+  ctx.lineTo(screenX + enemy.shootDirection * 180, screenY);
+  ctx.stroke();
+
+  ctx.globalAlpha = 0.8;
+  ctx.strokeStyle = "#fecaca";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(screenX, screenY);
+  ctx.lineTo(screenX + enemy.shootDirection * 180, screenY);
+  ctx.stroke();
+
+  ctx.fillStyle = "#fecaca";
+  ctx.font = "18px Arial";
+  ctx.fillText("!", screenX - 4, screenY - 18);
+
+  ctx.restore();
 }
 
 function drawBossAttackWarning() {
@@ -3235,146 +3050,6 @@ function drawBossAttackWarning() {
     ctx.font = "22px Arial";
     ctx.fillText("!", screenX + boss.width / 2 - 5, screenY - 18);
   }
-
-  ctx.restore();
-}
-
-function drawMeleeEnemyAttack(enemy) {
-  if (enemy.attackTimer <= 0) {
-    return;
-  }
-
-  const hitbox = getBlockedEnemyAttackHitbox(enemy);
-
-  if (hitbox.width <= 2) {
-    return;
-  }
-
-  const screenX = hitbox.x - camera.x;
-  const screenY = hitbox.y - camera.y;
-  const active = isEnemyAttackActive(enemy);
-
-  ctx.save();
-
-  if (!active) {
-    const warningAlpha = 0.18 + Math.sin(frameCount * 0.35) * 0.08;
-
-    ctx.globalAlpha = warningAlpha;
-    ctx.fillStyle = "#ef4444";
-    drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 12);
-    ctx.fill();
-
-    ctx.globalAlpha = 0.85;
-    ctx.strokeStyle = "#fca5a5";
-    ctx.lineWidth = 2;
-    drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 12);
-    ctx.stroke();
-
-    ctx.fillStyle = "#fecaca";
-    ctx.font = "18px Arial";
-    ctx.fillText("!", screenX + hitbox.width / 2 - 4, screenY - 6);
-  } else {
-    ctx.globalAlpha = 0.42;
-    ctx.fillStyle = "#ef4444";
-    drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 14);
-    ctx.fill();
-
-    ctx.globalAlpha = 0.9;
-    ctx.strokeStyle = "#fecaca";
-    ctx.lineWidth = 5;
-    ctx.lineCap = "round";
-    ctx.beginPath();
-
-    if (enemy.attackDirection === 1) {
-      ctx.moveTo(screenX + 4, screenY + 28);
-      ctx.quadraticCurveTo(screenX + 26, screenY - 8, screenX + hitbox.width - 2, screenY + 16);
-    } else {
-      ctx.moveTo(screenX + hitbox.width - 4, screenY + 28);
-      ctx.quadraticCurveTo(screenX + 28, screenY - 8, screenX + 2, screenY + 16);
-    }
-
-    ctx.stroke();
-  }
-
-  ctx.restore();
-}
-
-function getShooterChargeLength(enemy, maxLength) {
-  const startX = enemy.shootDirection === 1 ? enemy.x + enemy.width : enemy.x;
-  const startY = enemy.y + enemy.height / 2;
-
-  let length = maxLength;
-
-  for (const object of getSolidObjects()) {
-    if (!isAttackBlockingObject(object)) {
-      continue;
-    }
-
-    if (startY < object.y || startY > object.y + object.height) {
-      continue;
-    }
-
-    if (enemy.shootDirection === 1) {
-      if (object.x >= startX) {
-        const distance = object.x - startX;
-
-        if (distance < length) {
-          length = distance;
-        }
-      }
-    } else {
-      const wallRight = object.x + object.width;
-
-      if (wallRight <= startX) {
-        const distance = startX - wallRight;
-
-        if (distance < length) {
-          length = distance;
-        }
-      }
-    }
-  }
-
-  return Math.max(0, length);
-}
-
-function drawShooterCharge(enemy) {
-  if (enemy.shootTimer <= 0) {
-    return;
-  }
-
-  const startX = enemy.shootDirection === 1 ? enemy.x + enemy.width : enemy.x;
-  const startY = enemy.y + enemy.height / 2;
-
-  const screenX = startX - camera.x;
-  const screenY = startY - camera.y;
-
-  const length = getShooterChargeLength(enemy, 180);
-
-  ctx.save();
-
-  const alpha = 0.2 + Math.sin(frameCount * 0.35) * 0.08;
-
-  ctx.globalAlpha = alpha;
-  ctx.strokeStyle = "#ef4444";
-  ctx.lineWidth = 12;
-  ctx.lineCap = "round";
-  ctx.beginPath();
-  ctx.moveTo(screenX, screenY);
-  ctx.lineTo(screenX + enemy.shootDirection * length, screenY);
-  ctx.stroke();
-
-  ctx.globalAlpha = 0.8;
-  ctx.strokeStyle = "#fecaca";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.moveTo(screenX, screenY);
-  ctx.lineTo(screenX + enemy.shootDirection * length, screenY);
-  ctx.stroke();
-
-  ctx.fillStyle = "#fecaca";
-  ctx.font = "18px Arial";
-  ctx.fillText("!", screenX - 4, screenY - 18);
 
   ctx.restore();
 }
@@ -3507,7 +3182,6 @@ function drawWarnings() {
     { text: "기억 핵", x: 5085, y: 290 },
     { text: "기억 핵 1개 필요", x: 5300, y: 70 },
     { text: "보스방 입장 시 봉인", x: 5448, y: 325 },
-    { text: "보스 이동 공간 넓힘", x: 5630, y: 392 },
     { text: "보스 체력 절반 이하: 2페이즈", x: 5730, y: 255 },
     { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 5850, y: 270 }
   ];
@@ -3592,264 +3266,16 @@ function drawAttack() {
   ctx.restore();
 }
 
-function drawStateEffects(screenX, screenY, state) {
-  ctx.save();
-
-  if (state === "jump") {
-    ctx.strokeStyle = "rgba(125, 211, 252, 0.35)";
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    ctx.moveTo(screenX + 6, screenY + 52);
-    ctx.lineTo(screenX + 2, screenY + 62);
-
-    ctx.moveTo(screenX + 16, screenY + 54);
-    ctx.lineTo(screenX + 16, screenY + 65);
-
-    ctx.moveTo(screenX + 26, screenY + 52);
-    ctx.lineTo(screenX + 31, screenY + 62);
-    ctx.stroke();
-  }
-
-  if (state === "fall") {
-    ctx.strokeStyle = "rgba(203, 213, 225, 0.25)";
-    ctx.lineWidth = 2;
-
-    ctx.beginPath();
-    ctx.moveTo(screenX + 2, screenY - 8);
-    ctx.lineTo(screenX + 2, screenY + 5);
-
-    ctx.moveTo(screenX + 30, screenY - 6);
-    ctx.lineTo(screenX + 30, screenY + 8);
-    ctx.stroke();
-  }
-
-  ctx.restore();
-}
-
-function drawPlayerShadow(screenX, screenY, visual) {
-  ctx.save();
-
-  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
-  ctx.beginPath();
-  ctx.ellipse(
-    screenX + player.width / 2,
-    screenY + player.height + 3,
-    visual.shadowWidth,
-    5,
-    0,
-    0,
-    Math.PI * 2
-  );
-  ctx.fill();
-
-  ctx.restore();
-}
-
-function drawHealAura(screenX, screenY) {
-  if (player.healTimer <= 0) {
-    return;
-  }
-
-  const progress = 1 - player.healTimer / player.healDuration;
-  const radius = 18 + progress * 12;
-  const pulse = Math.sin(frameCount * 0.25) * 4;
-
-  ctx.save();
-
-  ctx.globalAlpha = 0.25;
-  ctx.strokeStyle = "#86efac";
-  ctx.lineWidth = 3;
-  ctx.beginPath();
-  ctx.arc(screenX + player.width / 2, screenY + player.height / 2, radius + pulse, 0, Math.PI * 2);
-  ctx.stroke();
-
-  ctx.globalAlpha = 0.12;
-  ctx.fillStyle = "#86efac";
-  ctx.beginPath();
-  ctx.arc(screenX + player.width / 2, screenY + player.height / 2, radius, 0, Math.PI * 2);
-  ctx.fill();
-
-  ctx.restore();
-}
-
-function drawCharacterBody(state, visual, bob) {
-  const walkCycle = state === "walk" ? Math.sin(playerAnimation.stateFrame * 0.35) : 0;
-
-  ctx.save();
-  ctx.translate(visual.lean, bob);
-
-  ctx.fillStyle = "#0f172a";
-  ctx.strokeStyle = state === "heal" ? "#86efac" : "#38bdf8";
-  ctx.lineWidth = 2;
-
-  ctx.beginPath();
-  ctx.moveTo(7, visual.bodyTop);
-  ctx.lineTo(25, visual.bodyTop);
-  ctx.lineTo(visual.rightBottom, 44);
-  ctx.lineTo(22, 48);
-  ctx.lineTo(visual.centerBottom, 43);
-  ctx.lineTo(10, 48);
-  ctx.lineTo(visual.leftBottom, 44);
-  ctx.closePath();
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = "#1e293b";
-  ctx.beginPath();
-  ctx.moveTo(10, 24);
-  ctx.lineTo(22, 24);
-  ctx.lineTo(24, 42);
-  ctx.lineTo(16, 38);
-  ctx.lineTo(8, 42);
-  ctx.closePath();
-  ctx.fill();
-
-  if (state === "attack") {
-    ctx.strokeStyle = "#e0f2fe";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-
-    if (player.facing === 1) {
-      ctx.moveTo(23, 25);
-      ctx.lineTo(34, 20);
-    } else {
-      ctx.moveTo(9, 25);
-      ctx.lineTo(-2, 20);
-    }
-
-    ctx.stroke();
-  }
-
-  ctx.fillStyle = "#020617";
-
-  if (state === "walk") {
-    ctx.fillRect(8, 43 + walkCycle, 7, 5);
-    ctx.fillRect(18, 43 - walkCycle, 7, 5);
-  } else if (state === "jump") {
-    ctx.fillRect(8, 42, 7, 5);
-    ctx.fillRect(18, 42, 7, 5);
-  } else if (state === "fall") {
-    ctx.fillRect(7, 44, 8, 5);
-    ctx.fillRect(18, 44, 8, 5);
-  } else if (state === "dash") {
-    ctx.fillRect(7 - player.facing * 2, 43, 8, 5);
-    ctx.fillRect(18 - player.facing * 2, 43, 8, 5);
-  } else if (state === "attack") {
-    ctx.fillRect(7 - player.facing, 43, 8, 5);
-    ctx.fillRect(18 - player.facing, 43, 8, 5);
-  } else {
-    ctx.fillRect(8, 43, 7, 5);
-    ctx.fillRect(18, 43, 7, 5);
-  }
-
-  ctx.strokeStyle = visual.coreColor;
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.arc(16, 29, visual.coreRadius, 0, Math.PI * 2);
-  ctx.stroke();
-
-  if (state === "heal") {
-    ctx.globalAlpha = 0.25;
-    ctx.fillStyle = "#86efac";
-    ctx.beginPath();
-    ctx.arc(16, 29, 10 + Math.sin(frameCount * 0.25) * 2, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha = 1;
-  }
-
-  ctx.restore();
-}
-
-function drawCharacterHead(state, visual, bob) {
-  ctx.save();
-  ctx.translate(visual.lean, bob + visual.headY);
-
-  ctx.strokeStyle = "#dbeafe";
-  ctx.lineWidth = 3;
-
-  if (state === "dash") {
-    ctx.beginPath();
-    ctx.moveTo(9, 8);
-    ctx.quadraticCurveTo(3 - player.facing * 4, 0, 2 - player.facing * 7, -5);
-    ctx.moveTo(23, 8);
-    ctx.quadraticCurveTo(29 - player.facing * 4, 0, 30 - player.facing * 7, -5);
-    ctx.stroke();
-  } else if (state === "attack") {
-    ctx.beginPath();
-    ctx.moveTo(9, 8);
-    ctx.quadraticCurveTo(4 - player.facing * 2, 0, 2 - player.facing * 3, -5);
-    ctx.moveTo(23, 8);
-    ctx.quadraticCurveTo(28 - player.facing * 2, 0, 30 - player.facing * 3, -5);
-    ctx.stroke();
-  } else {
-    ctx.beginPath();
-    ctx.moveTo(9, 8);
-    ctx.quadraticCurveTo(4, 0, 2, -5);
-    ctx.moveTo(23, 8);
-    ctx.quadraticCurveTo(28, 0, 30, -5);
-    ctx.stroke();
-  }
-
-  ctx.fillStyle = "#dbeafe";
-  ctx.strokeStyle = state === "heal" ? "#86efac" : "#f8fafc";
-  ctx.lineWidth = 2;
-  drawRoundedRect(5, 4, 22, 18, 7);
-  ctx.fill();
-  ctx.stroke();
-
-  ctx.fillStyle = state === "heal" ? "#bbf7d0" : "#bfdbfe";
-  drawRoundedRect(7, 13, 18, 7, 4);
-  ctx.fill();
-
-  ctx.fillStyle = "#020617";
-
-  let eyeOffset = 0;
-
-  if (state === "dash") {
-    eyeOffset = player.facing * 2;
-  }
-
-  if (state === "attack") {
-    eyeOffset = player.facing * 1;
-  }
-
-  if (player.facing === 1) {
-    ctx.fillRect(14 + eyeOffset, 11, 3, 5);
-    ctx.fillRect(21 + eyeOffset, 11, 3, 5);
-  } else {
-    ctx.fillRect(8 + eyeOffset, 11, 3, 5);
-    ctx.fillRect(15 + eyeOffset, 11, 3, 5);
-  }
-
-  ctx.restore();
-}
-
-function drawVectorCharacter(screenX, screenY, state, visual, bob) {
-  ctx.save();
-  ctx.translate(screenX, screenY);
-
-  drawCharacterBody(state, visual, bob);
-  drawCharacterHead(state, visual, bob);
-
-  ctx.restore();
-}
-
 function drawPlayer() {
   const screenX = player.x - camera.x;
   const screenY = player.y - camera.y;
 
   const state = playerAnimation.state;
-  const visual = getCharacterVisual(state);
-  const bob = getCharacterBob(visual);
+  const bob = state === "walk" ? Math.sin(frameCount * 0.25) * 1.5 : 0;
 
   if (state === "dash") {
     drawDashAfterImages(screenX, screenY, bob);
   }
-
-  drawStateEffects(screenX, screenY, state);
-  drawPlayerShadow(screenX, screenY, visual);
-  drawHealAura(screenX, screenY);
 
   ctx.save();
 
@@ -3857,7 +3283,56 @@ function drawPlayer() {
     ctx.globalAlpha = 0.45;
   }
 
-  drawVectorCharacter(screenX, screenY, state, visual, bob);
+  ctx.fillStyle = "rgba(0, 0, 0, 0.35)";
+  ctx.beginPath();
+  ctx.ellipse(screenX + player.width / 2, screenY + player.height + 3, 17, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (state === "heal") {
+    ctx.globalAlpha = 0.18;
+    ctx.fillStyle = "#86efac";
+    ctx.beginPath();
+    ctx.arc(screenX + player.width / 2, screenY + player.height / 2, 28 + Math.sin(frameCount * 0.2) * 3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  }
+
+  ctx.fillStyle = state === "dash" ? "#164e63" : "#0f172a";
+  ctx.strokeStyle = state === "heal" ? "#86efac" : state === "attack" ? "#e0f2fe" : "#38bdf8";
+  ctx.lineWidth = 2;
+
+  ctx.beginPath();
+  ctx.moveTo(screenX + 7, screenY + 18 + bob);
+  ctx.lineTo(screenX + 25, screenY + 18 + bob);
+  ctx.lineTo(screenX + 31, screenY + 44 + bob);
+  ctx.lineTo(screenX + 22, screenY + 48 + bob);
+  ctx.lineTo(screenX + 16, screenY + 43 + bob);
+  ctx.lineTo(screenX + 10, screenY + 48 + bob);
+  ctx.lineTo(screenX + 1, screenY + 44 + bob);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#dbeafe";
+  ctx.strokeStyle = "#f8fafc";
+  drawRoundedRect(screenX + 5, screenY + 4 + bob, 22, 18, 7);
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.fillStyle = "#020617";
+  if (player.facing === 1) {
+    ctx.fillRect(screenX + 14, screenY + 11 + bob, 3, 5);
+    ctx.fillRect(screenX + 21, screenY + 11 + bob, 3, 5);
+  } else {
+    ctx.fillRect(screenX + 8, screenY + 11 + bob, 3, 5);
+    ctx.fillRect(screenX + 15, screenY + 11 + bob, 3, 5);
+  }
+
+  ctx.strokeStyle = state === "dash" ? "#fef08a" : "#7dd3fc";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(screenX + 16, screenY + 29 + bob, state === "heal" ? 6 : 4, 0, Math.PI * 2);
+  ctx.stroke();
 
   ctx.restore();
 }
@@ -3941,6 +3416,49 @@ function drawCoreEnergyUI() {
   ctx.fillText("L 회복: 에너지 3칸 소모", startX, startY + 22);
 }
 
+function drawBossHealthBar() {
+  if (!boss.alive) {
+    return;
+  }
+
+  if (player.x < 5300) {
+    return;
+  }
+
+  const barX = canvas.width / 2 - 190;
+  const barY = 82;
+  const barWidth = 380;
+  const barHeight = 18;
+  const ratio = boss.health / boss.maxHealth;
+
+  ctx.save();
+
+  ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+  drawRoundedRect(barX - 12, barY - 28, barWidth + 24, 58, 12);
+  ctx.fill();
+
+  ctx.fillStyle = isBossPhaseTwo() ? "#fecdd3" : "#e9d5ff";
+  ctx.font = "bold 16px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(isBossPhaseTwo() ? "기억 파수자 - 2페이즈" : "기억 파수자", canvas.width / 2, barY - 8);
+  ctx.textAlign = "left";
+
+  ctx.fillStyle = "rgba(71, 85, 105, 0.9)";
+  drawRoundedRect(barX, barY, barWidth, barHeight, 8);
+  ctx.fill();
+
+  ctx.fillStyle = isBossPhaseTwo() ? "#f43f5e" : "#fb7185";
+  drawRoundedRect(barX, barY, barWidth * ratio, barHeight, 8);
+  ctx.fill();
+
+  ctx.strokeStyle = "#fecdd3";
+  ctx.lineWidth = 2;
+  drawRoundedRect(barX, barY, barWidth, barHeight, 8);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
 function drawBossClearEffect() {
   if (gameState.bossClearEffectTimer <= 0) {
     return;
@@ -3966,23 +3484,52 @@ function drawEndingPanel() {
     return;
   }
 
+  const frame = gameState.endingFrame;
+  const lineCount = clamp(Math.floor((frame - 60) / 95) + 1, 0, endingLines.length);
+
   ctx.save();
 
-  ctx.fillStyle = "rgba(2, 6, 23, 0.78)";
+  ctx.fillStyle = "rgba(2, 6, 23, 0.86)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  ctx.fillStyle = "#e0f2fe";
-  ctx.font = "bold 32px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText("원점 코어 획득", canvas.width / 2, canvas.height / 2 - 60);
+  const glow = 0.18 + Math.sin(frameCount * 0.04) * 0.05;
 
-  ctx.fillStyle = "#cbd5e1";
-  ctx.font = "18px Arial";
-  ctx.fillText("현재 버전의 최종 목표를 달성했습니다.", canvas.width / 2, canvas.height / 2 - 20);
-  ctx.fillText("이제 다음 단계에서 엔딩 연출과 스토리를 붙일 수 있습니다.", canvas.width / 2, canvas.height / 2 + 15);
+  ctx.globalAlpha = glow;
+  ctx.fillStyle = "#7dd3fc";
+  ctx.beginPath();
+  ctx.arc(canvas.width / 2, canvas.height / 2 - 110, 95, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.globalAlpha = 1;
+
+  ctx.fillStyle = "#e0f2fe";
+  ctx.font = "bold 36px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("Coreless", canvas.width / 2, 105);
+
+  ctx.fillStyle = "#bae6fd";
+  ctx.font = "17px Arial";
+  ctx.fillText("원점 코어가 반응합니다.", canvas.width / 2, 142);
+
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "20px Arial";
+
+  for (let i = 0; i < lineCount; i++) {
+    ctx.fillText(endingLines[i], canvas.width / 2, 210 + i * 42);
+  }
+
+  if (gameState.endingInputUnlocked) {
+    ctx.fillStyle = "#fef3c7";
+    ctx.font = "18px Arial";
+    ctx.fillText("R 키를 누르면 다시 시작합니다.", canvas.width / 2, canvas.height - 65);
+  } else {
+    const dots = ".".repeat(Math.floor(frameCount / 25) % 4);
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "16px Arial";
+    ctx.fillText("엔딩 진행 중" + dots, canvas.width / 2, canvas.height - 65);
+  }
 
   ctx.textAlign = "left";
-
   ctx.restore();
 }
 
@@ -3992,7 +3539,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("8단계-3: 보스방 봉인과 클리어 연출", 20, 35);
+  ctx.fillText("9단계-1: 엔딩 연출과 스토리 추가", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프/이중 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -4009,13 +3556,8 @@ function drawUI() {
   ctx.fillStyle = "#cbd5e1";
   ctx.fillText("상태 프레임: " + playerAnimation.stateFrame, 20, 180);
 
-  if (gameState.hasKey) {
-    ctx.fillStyle = "#fef08a";
-    ctx.fillText("열쇠: 보유 중", 20, 210);
-  } else {
-    ctx.fillStyle = "#fecaca";
-    ctx.fillText("열쇠: 없음", 20, 210);
-  }
+  ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
+  ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
   if (player.dashCooldown <= 0) {
     ctx.fillStyle = "#bbf7d0";
@@ -4026,13 +3568,8 @@ function drawUI() {
     ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 240);
   }
 
-  if (player.hasDoubleJump) {
-    ctx.fillStyle = "#c4b5fd";
-    ctx.fillText("능력: 이중 점프 획득", 20, 265);
-  } else {
-    ctx.fillStyle = "#cbd5e1";
-    ctx.fillText("능력: 없음", 20, 265);
-  }
+  ctx.fillStyle = player.hasDoubleJump ? "#c4b5fd" : "#cbd5e1";
+  ctx.fillText(player.hasDoubleJump ? "능력: 이중 점프 획득" : "능력: 없음", 20, 265);
 
   ctx.fillStyle = "#fef3c7";
   ctx.fillText("기억 조각: " + gameState.memoryFragments + "개", 20, 290);
@@ -4065,6 +3602,14 @@ function update() {
   }
 
   updateGameStateTimers();
+
+  if (gameState.endingReached) {
+    updateEndingSequence();
+    updateParticles();
+    updateCamera();
+    return;
+  }
+
   updatePlayer();
   startBossFightIfNeeded();
   updatePlayerAnimation();
