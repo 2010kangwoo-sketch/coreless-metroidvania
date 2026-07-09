@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v49: 12단계-2 능력 활용 구간 추가
+// v50: 12단계-2 대시 장벽 판정 완화
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -108,7 +108,7 @@ const player = {
   dashCooldown: 0,
   dashCooldownMax: 110,
   dashInvincibleTimer: 0,
-  dashInvincibleMax: 8,
+  dashInvincibleMax: 14,
   dashEndLagTimer: 0,
   dashEndLagMax: 4,
 
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "12단계-2 v49: 이중 점프, 대시, 벽 점프, 아래 공격 튕김 활용 구간이 추가되었습니다."
+  message: "12단계-2 v50: 대시 장벽 통과 판정이 더 널널해졌습니다."
 };
 
 const endingLines = [
@@ -1744,14 +1744,29 @@ function checkRewardCollection() {
   }
 }
 
+function getDashHazardDamageBox(hazard) {
+  return {
+    x: hazard.x + hazard.width * 0.28,
+    y: hazard.y + 12,
+    width: hazard.width * 0.44,
+    height: hazard.height - 24
+  };
+}
+
+function canPassDashHazard() {
+  return player.isDashing || player.dashInvincibleTimer > 0 || player.dashEndLagTimer > 0;
+}
+
 function checkDashHazardDamage() {
   for (const hazard of dashHazards) {
-    if (!isColliding(player, hazard)) {
+    const damageBox = getDashHazardDamageBox(hazard);
+
+    if (!isColliding(player, damageBox)) {
       continue;
     }
 
-    if (player.dashInvincibleTimer > 0) {
-      gameState.message = hazard.name + "을 대시 무적으로 통과했습니다.";
+    if (canPassDashHazard()) {
+      gameState.message = hazard.name + "을 대시로 통과했습니다.";
       continue;
     }
 
@@ -1759,7 +1774,7 @@ function checkDashHazardDamage() {
       continue;
     }
 
-    takeDamage(hazard, hazard.name + "에 닿았습니다. 대시 초반 무적으로 통과해 보세요.");
+    takeDamage(hazard, hazard.name + "에 닿았습니다. Shift/K 대시로 통과해 보세요.");
   }
 }
 
@@ -3342,10 +3357,14 @@ function drawDashHazards() {
     drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 10);
     ctx.stroke();
 
+    ctx.globalAlpha = 0.24;
+    ctx.fillStyle = "#fed7aa";
+    ctx.fillRect(screenX + hazard.width * 0.28, screenY + 12, hazard.width * 0.44, hazard.height - 24);
+
     ctx.globalAlpha = 0.38;
     ctx.fillStyle = "#facc15";
     for (let y = 12; y < hazard.height; y += 38) {
-      ctx.fillRect(screenX + 7, screenY + y, hazard.width - 14, 8);
+      ctx.fillRect(screenX + 9, screenY + y, hazard.width - 18, 8);
     }
 
     ctx.globalAlpha = 1;
@@ -4207,7 +4226,7 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "12-2 v49: 대형 방 안에 능력 활용 구간을 추가함", x: 80, y: 300 },
+    { text: "12-2 v50: 대시 장벽 판정을 완화함", x: 80, y: 300 },
     { text: "대형 방 1: 상층 기억 조각은 나중에 이중 점프 후 회수", x: 1050, y: 185 },
     { text: "하층 통로: 떨어져도 바로 리셋되지 않고 다른 경로로 이어짐", x: 860, y: 790 },
     { text: "대형 방 2: 중층 전투 / 상층 경로 / 하층 우회가 한 공간에 공존", x: 1980, y: 330 },
@@ -4228,7 +4247,7 @@ function drawWarnings() {
     { text: "대형 최종 보스방: 화면 하나보다 훨씬 넓은 공동", x: 11060, y: 390 },
     { text: "보스방 입장 시 봉인", x: 10880, y: 575 },
     { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 11940, y: 550 },
-    { text: "12-2: 대시 장벽은 Shift/K 대시 초반 무적으로 통과", x: 2620, y: 735 },
+    { text: "12-2: 대시 중이면 장벽을 더 널널하게 통과", x: 2620, y: 735 },
     { text: "이중 점프 연속 발판", x: 3950, y: 225 },
     { text: "벽 점프 수직 시험: 좌우 벽을 번갈아 타고 상승", x: 7560, y: 240 },
     { text: "아래 공격 튕김 구간: 공중 S+J로 적중하면 위로 튕김", x: 9200, y: 1210 },
@@ -4807,7 +4826,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("12단계-2 v49: 능력 활용 구간 추가", 20, 35);
+  ctx.fillText("12단계-2 v50: 대시 장벽 판정 완화", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
