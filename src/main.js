@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v56: 13단계-2 1차 제작. 튜토리얼 구역과 초대형 방 6개의 전체 블록아웃
+// v56: 13단계-2 1차 제작 보강. 튜토리얼 소형 방, 카메라 기믹, 초대형 방 체크포인트 추가
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -167,9 +167,22 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v56 1차 제작: 튜토리얼 구역과 초대형 방 6개의 전체 블록아웃입니다.",
+  message: "13단계-2 v56 1차 제작 보강: 소형 튜토리얼 방, 카메라 고정/추적 기믹, 초대형 방 체크포인트를 추가했습니다.",
   hiddenRewards: 0
 };
+
+
+const checkpoints = [
+  { id: "tutorial_start", name: "튜토리얼 시작점", x: 110, y: 620, width: 34, height: 58, spawnX: 90, spawnY: 540, activated: true, roomId: "tutorial_zone_blockout" },
+  { id: "entry_cliff_cp", name: "진입 절벽 체크포인트", x: 8720, y: 1018, width: 36, height: 62, spawnX: 8660, spawnY: 990, activated: false, roomId: "entry_cliff_blockout" },
+  { id: "central_cavern_cp", name: "중앙 대공동 체크포인트", x: 13680, y: 1236, width: 36, height: 62, spawnX: 13620, spawnY: 1210, activated: false, roomId: "central_cavern_blockout" },
+  { id: "lower_ruins_cp", name: "하층 폐허 체크포인트", x: 21680, y: 2436, width: 36, height: 62, spawnX: 21620, spawnY: 2410, activated: false, roomId: "lower_ruins_blockout" },
+  { id: "long_corridor_cp", name: "긴 폐허 회랑 체크포인트", x: 27680, y: 1116, width: 36, height: 62, spawnX: 27620, spawnY: 1090, activated: false, roomId: "long_ruin_corridor_blockout" },
+  { id: "vertical_ascent_cp", name: "세로 상승 폐허 체크포인트", x: 34200, y: 4036, width: 36, height: 62, spawnX: 34140, spawnY: 4010, activated: false, roomId: "vertical_ascent_blockout" },
+  { id: "sealed_gate_cp", name: "봉인 관문 체크포인트", x: 39180, y: 1116, width: 36, height: 62, spawnX: 39120, spawnY: 1090, activated: false, roomId: "sealed_gate_blockout" }
+];
+
+let activeCheckpoint = checkpoints[0];
 
 const endingLines = [
   "나는 비어 있던 코어의 흔적을 따라 이곳까지 왔다.",
@@ -290,6 +303,25 @@ const rooms = roomBlueprints.map(function(room) {
     connections: room.connections,
     tags: room.tags
   };
+});
+
+
+const tutorialRooms = [
+  { id: "tutorial_move_room", title: "튜토리얼 1: 이동", x: 0, y: 240, width: 900, height: 560, cameraMode: "fixed", cameraX: 0, cameraY: 260, signTitle: "A / D : 이동", signLines: ["왼쪽과 오른쪽으로 움직입니다.", "첫 방은 화면을 고정해 조작에만 집중합니다."] },
+  { id: "tutorial_jump_room", title: "튜토리얼 2: 점프", x: 900, y: 240, width: 900, height: 560, cameraMode: "fixed", cameraX: 900, cameraY: 260, signTitle: "Space : 점프", signLines: ["짧게 누르면 낮게, 길게 누르면 높게 뜁니다.", "낮은 발판을 밟으며 감각을 익힙니다."] },
+  { id: "tutorial_attack_room", title: "튜토리얼 3: 공격", x: 1800, y: 240, width: 900, height: 560, cameraMode: "fixed", cameraX: 1800, cameraY: 260, signTitle: "J : 공격", signLines: ["앞의 약한 적을 공격합니다.", "W+J는 위 공격입니다."] },
+  { id: "tutorial_dash_room", title: "튜토리얼 4: 대시", x: 2700, y: 220, width: 1800, height: 600, cameraMode: "follow", cameraY: 250, signTitle: "Shift / K : 대시", signLines: ["화면 두 개 길이의 방입니다.", "카메라가 따라오며 긴 공간 이동을 익힙니다."] },
+  { id: "tutorial_wall_room", title: "튜토리얼 5: 벽 점프", x: 4500, y: 160, width: 1800, height: 860, cameraMode: "follow", cameraY: 120, signTitle: "벽 + Space : 벽 점프", signLines: ["벽에 붙은 뒤 Space를 누르면 반대 방향으로 튑니다.", "기둥 난사가 아니라 짧은 세로 훈련 방으로 제한합니다."] },
+  { id: "tutorial_pogo_room", title: "튜토리얼 6: 아래 공격 튕김", x: 6300, y: 220, width: 1600, height: 640, cameraMode: "follow", cameraY: 240, signTitle: "공중 S + J : 아래 공격", signLines: ["아래 대상을 공격하면 위로 튕겨 오릅니다.", "첫 지역의 상층 탐험 전에 필요한 감각입니다."] },
+  { id: "tutorial_exit_room", title: "튜토리얼 7: 첫 지역 진입", x: 7900, y: 240, width: 600, height: 560, cameraMode: "fixed", cameraX: 7600, cameraY: 260, signTitle: "튜토리얼 종료", signLines: ["이후부터는 초대형 방 6개로 이루어진 첫 번째 지역입니다.", "각 초대형 방에는 체크포인트가 있습니다."] }
+];
+
+const tutorialRoomFrames = tutorialRooms.map(function(room) {
+  return { x: room.x, y: room.y, width: room.width, height: room.height, mode: room.cameraMode, title: room.title };
+});
+
+const tutorialSigns = tutorialRooms.map(function(room) {
+  return { x: room.x + 80, y: room.y + 70, width: Math.min(520, room.width - 140), height: 112, title: room.signTitle, lines: room.signLines, roomId: room.id };
 });
 
 const platforms = [
@@ -514,7 +546,8 @@ function buildRoomObjectIndex() {
       hazards: [],
       keyItems: [],
       abilityItems: [],
-      bossObjects: []
+      bossObjects: [],
+      checkpoints: []
     };
   }
 
@@ -526,6 +559,7 @@ function buildRoomObjectIndex() {
   addObjectsToRoomIndex(index, [keyItem], "keyItems");
   addObjectsToRoomIndex(index, abilityItems, "abilityItems");
   addObjectsToRoomIndex(index, [boss], "bossObjects");
+  addObjectsToRoomIndex(index, checkpoints, "checkpoints");
 
   return index;
 }
@@ -533,7 +567,7 @@ function buildRoomObjectIndex() {
 const mapData = {
   version: "v56",
   stage: "13-2-1",
-  purpose: "튜토리얼 구역과 초대형 방 6개의 전체 블록아웃을 만든다. 세부 장식보다 첫 지역의 크기, 위치, 연결 방향을 먼저 확정한다.",
+  purpose: "튜토리얼 소형 방, 카메라 고정/추적 기믹, 초대형 방 6개의 체크포인트를 포함한 v56 블록아웃을 만든다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -1791,6 +1825,7 @@ function updatePlayer() {
   checkAbilityCollection();
   checkRewardCollection();
   checkDashHazardDamage();
+  checkCheckpointActivation();
   checkFall();
 }
 
@@ -1931,18 +1966,26 @@ function checkDashHazardDamage() {
   }
 }
 
+function getFallLimitForCurrentRoom() {
+  const currentRoom = getCurrentRoom();
+  const bounds = currentRoom.cameraBounds;
+
+  if (bounds) {
+    return bounds.y + bounds.height + 620;
+  }
+
+  return world.height + 200;
+}
+
 function checkFall() {
-  if (player.y > world.height) {
-    resetPlayer();
+  if (player.y > getFallLimitForCurrentRoom()) {
+    respawnAtCheckpoint("낙하했습니다. 마지막 체크포인트에서 다시 시작합니다.");
   }
 }
 
-function resetPlayer() {
-  player.x = startPosition.x;
-  player.y = startPosition.y;
+function restorePlayerStateAfterRespawn() {
   player.vx = 0;
   player.vy = 0;
-  player.health = player.maxHealth;
   player.invincibleTimer = 90;
   player.dashInvincibleTimer = 0;
   player.dashEndLagTimer = 0;
@@ -1956,12 +1999,42 @@ function resetPlayer() {
   player.coyoteTimer = 0;
   player.attackFloatTimer = 0;
   gameState.bossRoomLocked = false;
+}
+
+function resetPlayer() {
+  player.x = startPosition.x;
+  player.y = startPosition.y;
+  player.health = player.maxHealth;
+  activeCheckpoint = checkpoints[0];
+  restorePlayerStateAfterRespawn();
   gameState.message = "시작 지점에서 다시 시작합니다.";
 }
 
+function respawnAtCheckpoint(message) {
+  const checkpoint = activeCheckpoint || checkpoints[0];
+  player.x = checkpoint.spawnX;
+  player.y = checkpoint.spawnY;
+  restorePlayerStateAfterRespawn();
+  gameState.message = message || checkpoint.name + "에서 다시 시작합니다.";
+}
+
 function respawnPlayer() {
-  resetPlayer();
-  gameState.message = "체력이 모두 줄어 시작 지점에서 다시 시작합니다.";
+  player.health = player.maxHealth;
+  respawnAtCheckpoint("체력이 모두 줄어 마지막 체크포인트에서 다시 시작합니다.");
+}
+
+function checkCheckpointActivation() {
+  for (const checkpoint of checkpoints) {
+    if (isColliding(player, checkpoint)) {
+      if (activeCheckpoint !== checkpoint) {
+        activeCheckpoint = checkpoint;
+        checkpoint.activated = true;
+        gameState.message = checkpoint.name + "를 활성화했습니다.";
+        addFloatingText("CHECK", checkpoint.x + checkpoint.width / 2, checkpoint.y - 10, "#bae6fd");
+      }
+      return;
+    }
+  }
 }
 
 function updateEnemies() {
@@ -3340,23 +3413,70 @@ function updatePlayerAnimation() {
   }
 }
 
+function getCurrentTutorialRoom() {
+  const px = centerX(player);
+
+  for (const room of tutorialRooms) {
+    if (px >= room.x && px < room.x + room.width) {
+      return room;
+    }
+  }
+
+  return null;
+}
+
+function clampCameraToBounds(targetX, targetY, bounds) {
+  const minX = bounds.x;
+  const maxX = Math.max(bounds.x, bounds.x + bounds.width - camera.width);
+  const minY = bounds.y;
+  const maxY = Math.max(bounds.y, bounds.y + bounds.height - camera.height);
+
+  return {
+    x: clamp(targetX, minX, maxX),
+    y: clamp(targetY, minY, maxY)
+  };
+}
+
 function updateCamera() {
-  // v44: 방향 전환 때 화면이 튀는 원인이었던 look-ahead 카메라를 제거한다.
-  // 기본 상태에서는 캐릭터의 중심이 화면 중앙에 오도록 목표 지점을 잡는다.
+  // v56 보강: 튜토리얼 1화면 방은 카메라를 고정하고, 2화면 방은 같은 방 안에서만 따라오도록 제한한다.
   let targetX = centerX(player) - camera.width / 2;
   let targetY = centerY(player) - camera.height / 2;
 
-  if (gameState.bossFightStarted && player.x > 10800 && boss.alive) {
+  const tutorialRoom = getCurrentTutorialRoom();
+
+  if (tutorialRoom) {
+    if (tutorialRoom.cameraMode === "fixed") {
+      targetX = tutorialRoom.cameraX;
+      targetY = tutorialRoom.cameraY;
+    } else {
+      const bounds = {
+        x: tutorialRoom.x,
+        y: tutorialRoom.cameraY,
+        width: tutorialRoom.width,
+        height: Math.max(camera.height, tutorialRoom.height)
+      };
+      const clamped = clampCameraToBounds(targetX, targetY, bounds);
+      targetX = clamped.x;
+      targetY = clamped.y;
+    }
+  } else if (gameState.bossFightStarted && player.x > 10800 && boss.alive) {
     const midpointX = (centerX(player) + centerX(boss)) / 2;
     const midpointY = (centerY(player) + centerY(boss)) / 2;
 
     targetX = midpointX - camera.width / 2;
     targetY = midpointY - camera.height / 2 + 35;
-
     targetX = clamp(targetX, 10800, 12600 - camera.width);
 
     if (camera.bossFocusTimer > 0) {
       camera.bossFocusTimer -= 1;
+    }
+  } else {
+    const currentRoom = getCurrentRoom();
+
+    if (currentRoom && currentRoom.cameraBounds) {
+      const clamped = clampCameraToBounds(targetX, targetY, currentRoom.cameraBounds);
+      targetX = clamped.x;
+      targetY = clamped.y;
     }
   }
 
@@ -3365,15 +3485,17 @@ function updateCamera() {
 
   const distanceX = targetX - camera.x;
   const distanceY = targetY - camera.y;
-
-  // 너무 멀리 벌어졌을 때는 늦게 따라오지 않도록 조금 더 빠르게 보정한다.
   const smoothX = Math.abs(distanceX) > camera.snapDistanceX ? 0.32 : camera.smoothnessX;
   const smoothY = Math.abs(distanceY) > camera.snapDistanceY ? 0.24 : camera.smoothnessY;
 
   camera.x += distanceX * smoothX;
   camera.y += distanceY * smoothY;
 
-  // 소수점 카메라 좌표가 픽셀 떨림을 만들 수 있어 최종 좌표를 정리한다.
+  if (tutorialRoom && tutorialRoom.cameraMode === "fixed") {
+    camera.x = targetX;
+    camera.y = targetY;
+  }
+
   camera.x = Math.round(clamp(camera.x, 0, world.width - camera.width) * 100) / 100;
   camera.y = Math.round(clamp(camera.y, 0, world.height - camera.height) * 100) / 100;
 
@@ -3435,6 +3557,82 @@ function drawRoundedRect(x, y, width, height, radius) {
   ctx.lineTo(x, y + radius);
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
+}
+
+function drawTutorialRoomFrames() {
+  for (const room of tutorialRoomFrames) {
+    const screenX = room.x - camera.x;
+    const screenY = room.y - camera.y;
+
+    ctx.save();
+    ctx.globalAlpha = 0.44;
+    ctx.strokeStyle = room.mode === "fixed" ? "#93c5fd" : "#a78bfa";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(screenX, screenY, room.width, room.height);
+    ctx.globalAlpha = 0.12;
+    ctx.fillStyle = room.mode === "fixed" ? "#1d4ed8" : "#6d28d9";
+    ctx.fillRect(screenX, screenY, room.width, room.height);
+    ctx.globalAlpha = 0.9;
+    ctx.fillStyle = "#dbeafe";
+    ctx.font = "bold 17px Arial";
+    ctx.fillText(room.title, screenX + 28, screenY + 34);
+    ctx.fillStyle = "#cbd5e1";
+    ctx.font = "13px Arial";
+    ctx.fillText(room.mode === "fixed" ? "고정 카메라 방" : "추적 카메라 방", screenX + 28, screenY + 56);
+    ctx.restore();
+  }
+}
+
+function drawTutorialSigns() {
+  for (const sign of tutorialSigns) {
+    const screenX = sign.x - camera.x;
+    const screenY = sign.y - camera.y;
+
+    ctx.save();
+    ctx.fillStyle = "rgba(15, 23, 42, 0.92)";
+    drawRoundedRect(screenX, screenY, sign.width, sign.height, 10);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(250, 204, 21, 0.88)";
+    ctx.lineWidth = 2;
+    drawRoundedRect(screenX, screenY, sign.width, sign.height, 10);
+    ctx.stroke();
+    ctx.fillStyle = "#fef3c7";
+    ctx.font = "bold 17px Arial";
+    ctx.fillText(sign.title, screenX + 18, screenY + 30);
+    ctx.fillStyle = "#e2e8f0";
+    ctx.font = "14px Arial";
+
+    for (let i = 0; i < sign.lines.length; i++) {
+      ctx.fillText(sign.lines[i], screenX + 18, screenY + 56 + i * 22);
+    }
+
+    ctx.restore();
+  }
+}
+
+function drawCheckpoints() {
+  for (const checkpoint of checkpoints) {
+    const screenX = checkpoint.x - camera.x;
+    const screenY = checkpoint.y - camera.y;
+    const isActive = activeCheckpoint === checkpoint;
+    const pulse = 0.5 + Math.sin(frameCount * 0.08) * 0.15;
+
+    ctx.save();
+    ctx.globalAlpha = 0.92;
+    ctx.fillStyle = isActive ? "#38bdf8" : "#475569";
+    ctx.fillRect(screenX + 11, screenY + 12, 14, checkpoint.height - 12);
+    ctx.fillStyle = isActive ? "rgba(125, 211, 252, 0.55)" : "rgba(148, 163, 184, 0.35)";
+    ctx.beginPath();
+    ctx.arc(screenX + checkpoint.width / 2, screenY + 12, 15 + pulse * 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = isActive ? "#e0f2fe" : "#94a3b8";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(screenX, screenY, checkpoint.width, checkpoint.height);
+    ctx.fillStyle = isActive ? "#e0f2fe" : "#cbd5e1";
+    ctx.font = "12px Arial";
+    ctx.fillText(isActive ? "활성" : "저장", screenX - 2, screenY - 8);
+    ctx.restore();
+  }
 }
 
 function drawRoomBackgrounds() {
@@ -4397,37 +4595,11 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "12-3 v51: 숨겨진 방, 보상, 되돌아가기 루트 추가", x: 80, y: 300 },
-    { text: "대형 방 1: 상층 기억 조각은 나중에 이중 점프 후 회수", x: 1050, y: 185 },
-    { text: "하층 통로: 떨어져도 바로 리셋되지 않고 다른 경로로 이어짐", x: 860, y: 790 },
-    { text: "대형 방 2: 중층 전투 / 상층 경로 / 하층 우회가 한 공간에 공존", x: 1980, y: 330 },
-    { text: "근접 적", x: 2110, y: 570 },
-    { text: "상층 발판 경로", x: 2820, y: 300 },
-    { text: "대형 방 3: 이중 점프 능력", x: 4200, y: 365 },
-    { text: "벽 미끄러짐 / 벽 점프 수직 통로", x: 4880, y: 465 },
-    { text: "벽에 붙은 상태에서 Space: 반대 방향 벽 점프", x: 4870, y: 490 },
-    { text: "대형 방 4: 열쇠를 얻고 잠긴 문까지 이동", x: 6100, y: 340 },
-    { text: "열쇠", x: 6500, y: 255 },
-    { text: "잠긴 문: 열쇠 필요", x: 7040, y: 245 },
-    { text: "대형 방 5: 기억의 문으로 이어지는 높은 탑 구조", x: 7520, y: 365 },
-    { text: "원거리 적", x: 7880, y: 560 },
-    { text: "기억 조각 1개 필요", x: 8810, y: 205 },
-    { text: "대형 방 6: 기억 핵을 얻는 심연 구조", x: 9600, y: 360 },
-    { text: "기억 핵", x: 10340, y: 200 },
-    { text: "기억 핵 1개 필요", x: 10620, y: 205 },
-    { text: "대형 최종 보스방: 화면 하나보다 훨씬 넓은 공동", x: 11060, y: 390 },
-    { text: "보스방 입장 시 봉인", x: 10880, y: 575 },
-    { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 11940, y: 550 },
-    { text: "12-2: 대시 중이면 장벽을 더 널널하게 통과", x: 2620, y: 735 },
-    { text: "이중 점프 연속 발판", x: 3950, y: 225 },
-    { text: "벽 점프 수직 시험: 좌우 벽을 번갈아 타고 상승", x: 7560, y: 240 },
-    { text: "아래 공격 튕김 구간: 공중 S+J로 적중하면 위로 튕김", x: 9200, y: 1210 },
-    { text: "능력 조합 목표: 벽 점프 → 대시 → 이중 점프 → 아래 공격 튕김", x: 9410, y: 1370 },
-    { text: "12-3 숨겨진 방: 이중 점프로 입구 상층을 다시 방문", x: 1330, y: 132 },
-    { text: "숨겨진 보상방: 하층 우회로 끝에서 코어 용량 획득", x: 3180, y: 880 },
-    { text: "되돌아가기 보상: 용광로 상층의 체력 코어", x: 5940, y: 230 },
-    { text: "탑 꼭대기 숨겨진 코어 용량", x: 8460, y: 140 },
-    { text: "심연 하층 보상방: 아래 공격 튕김으로 진입", x: 10040, y: 1285 }
+    { text: "v56 1차 보강: 튜토리얼은 소형 방, 첫 지역은 초대형 방 6개", x: 120, y: 210 },
+    { text: "각 초대형 방에는 체크포인트가 있어 낙하 시 마지막 저장점으로 복귀", x: 8700, y: 960 },
+    { text: "현재 단계는 전체 골격과 카메라 기믹 확인용", x: 13600, y: 1180 },
+    { text: "하층은 강제 구멍 낙하가 아니라 선택 진입 구조로 유지", x: 21600, y: 2380 },
+    { text: "세로 상승 구역은 이후 큰 벽 안의 파인 공간으로 보강 예정", x: 34200, y: 3950 }
   ];
 
   for (const warning of warnings) {
@@ -5002,7 +5174,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v56 1차: 튜토리얼 + 초대형 방 6개 블록아웃", 20, 35);
+  ctx.fillText("13단계-2 v56 1차 보강: 튜토리얼 카메라 + 체크포인트", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -5012,7 +5184,7 @@ function drawUI() {
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("맵 구조: 튜토리얼 + 첫 번째 지역 초대형 허브 / 하층 / 상층 / 다음 지역 입구", 20, 180);
+  ctx.fillText("맵 구조: 소형 튜토리얼 방 + 초대형 방 6개 / 체크포인트: " + activeCheckpoint.name, 20, 180);
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
@@ -5055,6 +5227,7 @@ function drawWorld() {
   ctx.save();
   ctx.translate(camera.shakeX, camera.shakeY);
   drawRoomBackgrounds();
+  drawTutorialRoomFrames();
   drawBackgroundDecorations();
   drawBossRoomDecorations();
   drawRoomLabels();
@@ -5062,6 +5235,8 @@ function drawWorld() {
   drawBossArenaGates();
   drawDashHazards();
   drawPlatforms();
+  drawCheckpoints();
+  drawTutorialSigns();
   drawKeyItem();
   drawAbilityItems();
   drawRewardItems();
