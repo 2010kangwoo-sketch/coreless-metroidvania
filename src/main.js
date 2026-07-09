@@ -186,7 +186,15 @@ const gameState = {
   memoryFragments: 0,
   memoryCores: 0,
   originCores: 0,
+
+  bossFightStarted: false,
+  bossRoomLocked: false,
   bossDefeated: false,
+  bossClearEffectTimer: 0,
+
+  endingReached: false,
+  endingTimer: 0,
+
   message: "최종 기억실의 보스를 쓰러뜨리세요."
 };
 
@@ -197,7 +205,7 @@ const rooms = [
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
   { name: "방 5: 기억의 문 구역", guide: "기억 조각으로 특수 문 열기", x: 3600, width: 900, color: "#10251f" },
   { name: "방 6: 기억 핵 구역", guide: "기억 핵 획득", x: 4500, width: 900, color: "#1a1328" },
-  { name: "방 7: 최종 보스방", guide: "보스의 충격파와 내려찍기를 피하기", x: 5400, width: 900, color: "#061520" }
+  { name: "방 7: 최종 보스방", guide: "보스방 입장 후 문이 닫히고, 보스 격파 후 다시 열림", x: 5400, width: 900, color: "#061520" }
 ];
 
 const platforms = [
@@ -239,10 +247,16 @@ const platforms = [
   { x: 4860, y: 305, width: 160, height: 24 },
   { x: 5100, y: 350, width: 160, height: 24 },
 
+  /*
+    8단계-3 수정 부분:
+    기존 보스방에는 y=350 근처의 구조물이 있어 보스 몸체와 겹칠 수 있었습니다.
+    보스는 y=348, height=72이므로 y=350 구조물과 거의 바로 충돌하듯 겹쳐 보입니다.
+    따라서 보스방 구조물은 위쪽으로 올리고, 바닥 전투 공간을 넓게 비웠습니다.
+  */
   { x: 5400, y: 420, width: 900, height: 80 },
-  { x: 5530, y: 350, width: 170, height: 24 },
-  { x: 5770, y: 300, width: 170, height: 24 },
-  { x: 6020, y: 350, width: 160, height: 24 },
+  { x: 5480, y: 245, width: 120, height: 24 },
+  { x: 5760, y: 225, width: 170, height: 24 },
+  { x: 6110, y: 245, width: 120, height: 24 },
 
   { x: 760, y: 260, width: 40, height: 80 },
   { x: 1660, y: 300, width: 40, height: 120 },
@@ -256,6 +270,16 @@ const doors = [
   { x: 3560, y: 80, width: 40, height: 340, text: "잠긴 문", locked: true, open: false },
   { x: 4460, y: 80, width: 40, height: 340, text: "기억의 문", locked: true, open: false, requiresMemoryFragments: 1 },
   { x: 5360, y: 80, width: 40, height: 340, text: "최종 문", locked: true, open: false, requiresMemoryCores: 1 }
+];
+
+const bossArenaGates = [
+  {
+    x: 5408,
+    y: 80,
+    width: 34,
+    height: 340,
+    text: "보스전 봉인"
+  }
 ];
 
 const keyItem = {
@@ -444,8 +468,15 @@ const boss = {
   baseY: 348,
   width: 72,
   height: 72,
-  minX: 5520,
-  maxX: 6150,
+
+  /*
+    8단계-3 수정 부분:
+    보스가 좌우로 충분히 움직일 수 있도록 활동 범위를 넓혔습니다.
+    또한 보스방 바닥 구조물을 비워서 보스가 구조물에 끼지 않게 했습니다.
+  */
+  minX: 5475,
+  maxX: 6210,
+
   vx: 0,
   speed: 1.25,
   facing: -1,
@@ -528,6 +559,66 @@ function updateScreenShake() {
   } else {
     camera.shakeX = 0;
     camera.shakeY = 0;
+  }
+}
+
+function isBossGateActive() {
+  return gameState.bossRoomLocked && boss.alive && !gameState.bossDefeated;
+}
+
+function startBossFightIfNeeded() {
+  const playerEnteredBossRoom = player.x > 5460;
+
+  if (!playerEnteredBossRoom) {
+    return;
+  }
+
+  if (!boss.alive || gameState.bossDefeated) {
+    gameState.bossRoomLocked = false;
+    return;
+  }
+
+  if (!gameState.bossFightStarted) {
+    gameState.bossFightStarted = true;
+    gameState.bossRoomLocked = true;
+    gameState.message = "보스방이 봉인되었습니다. 기억 파수자를 쓰러뜨리세요.";
+    startScreenShake(18, 5);
+    spawnBossIntroParticles();
+    return;
+  }
+
+  if (!gameState.bossRoomLocked) {
+    gameState.bossRoomLocked = true;
+    gameState.message = "보스방이 다시 봉인되었습니다.";
+    startScreenShake(10, 3);
+  }
+}
+
+function spawnBossIntroParticles() {
+  for (let i = 0; i < 40; i++) {
+    const angle = (Math.PI * 2 * i) / 40;
+
+    addDashStreak(
+      boss.x + boss.width / 2,
+      boss.y + boss.height / 2,
+      Math.cos(angle) * (1.3 + Math.random() * 2.5),
+      Math.sin(angle) * (1.3 + Math.random() * 2.5),
+      12 + Math.random() * 20,
+      2 + Math.random() * 4,
+      24 + Math.random() * 16,
+      "rgba(251, 113, 133, 1)",
+      angle
+    );
+  }
+}
+
+function updateGameStateTimers() {
+  if (gameState.bossClearEffectTimer > 0) {
+    gameState.bossClearEffectTimer -= 1;
+  }
+
+  if (gameState.endingTimer > 0) {
+    gameState.endingTimer -= 1;
   }
 }
 
@@ -625,6 +716,12 @@ function getSolidObjects() {
   for (const door of doors) {
     if (door.locked && !door.open) {
       solidObjects.push(door);
+    }
+  }
+
+  if (isBossGateActive()) {
+    for (const gate of bossArenaGates) {
+      solidObjects.push(gate);
     }
   }
 
@@ -1280,6 +1377,10 @@ function moveHorizontally() {
         } else {
           gameState.message = "잠긴 문입니다. 열쇠가 필요합니다.";
         }
+      }
+
+      if (isBossGateActive() && object.text === "보스전 봉인") {
+        gameState.message = "보스를 쓰러뜨리기 전에는 보스방을 나갈 수 없습니다.";
       }
 
       if (player.vx > 0) {
@@ -1985,9 +2086,11 @@ function damageBoss(direction) {
   if (boss.health <= 0) {
     boss.alive = false;
     gameState.bossDefeated = true;
-    gameState.message = "기억 파수자를 쓰러뜨렸습니다. 원점 코어가 드러났습니다.";
+    gameState.bossRoomLocked = false;
+    gameState.bossClearEffectTimer = 130;
+    gameState.message = "기억 파수자를 쓰러뜨렸습니다. 보스방 봉인이 풀리고 원점 코어가 드러났습니다.";
     spawnBossDefeatBurst();
-    startScreenShake(22, 7);
+    startScreenShake(24, 8);
   } else if (isBossPhaseTwo()) {
     gameState.message = "기억 파수자가 2페이즈에 돌입했습니다. 패턴이 빨라집니다.";
   } else {
@@ -1996,17 +2099,17 @@ function damageBoss(direction) {
 }
 
 function spawnBossDefeatBurst() {
-  for (let i = 0; i < 56; i++) {
-    const angle = (Math.PI * 2 * i) / 56;
+  for (let i = 0; i < 64; i++) {
+    const angle = (Math.PI * 2 * i) / 64;
 
     addDashStreak(
       boss.x + boss.width / 2,
       boss.y + boss.height / 2,
-      Math.cos(angle) * (1.5 + Math.random() * 3.2),
-      Math.sin(angle) * (1.5 + Math.random() * 3.2),
-      16 + Math.random() * 22,
+      Math.cos(angle) * (1.5 + Math.random() * 3.4),
+      Math.sin(angle) * (1.5 + Math.random() * 3.4),
+      16 + Math.random() * 24,
       3 + Math.random() * 5,
-      28 + Math.random() * 14,
+      30 + Math.random() * 16,
       "rgba(125, 211, 252, 1)",
       angle
     );
@@ -2275,6 +2378,13 @@ function respawnPlayer() {
   player.canDoubleJump = player.hasDoubleJump;
   player.doubleJumpUsed = false;
 
+  /*
+    보스전 도중 죽었을 때 봉인벽이 계속 남아 있으면,
+    다시 보스방에 진입하지 못할 수 있으므로 봉인을 풀어줍니다.
+    다시 보스방에 들어가면 자동으로 봉인됩니다.
+  */
+  gameState.bossRoomLocked = false;
+
   gameState.message = "체력이 모두 줄어 시작 지점에서 다시 시작합니다.";
 }
 
@@ -2353,9 +2463,11 @@ function checkRewardCollection() {
 
       if (item.type === "originCore") {
         gameState.originCores += 1;
+        gameState.endingReached = true;
+        gameState.endingTimer = 360;
         gameState.message = "원점 코어를 획득했습니다. 현재 버전의 최종 목표를 달성했습니다.";
         spawnRewardBurst(item, "rgba(125, 211, 252, 1)");
-        startScreenShake(18, 5);
+        startScreenShake(20, 6);
       }
     }
   }
@@ -2397,6 +2509,7 @@ function resetPlayer() {
   player.healingWillRestore = false;
   player.canDoubleJump = player.hasDoubleJump;
   player.doubleJumpUsed = false;
+  gameState.bossRoomLocked = false;
 
   gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
 }
@@ -2605,6 +2718,35 @@ function drawDoors() {
       ctx.font = "13px Arial";
       ctx.fillText(door.text, screenX - 3, screenY - 8);
     }
+  }
+}
+
+function drawBossArenaGates() {
+  if (!isBossGateActive()) {
+    return;
+  }
+
+  for (const gate of bossArenaGates) {
+    const screenX = gate.x - camera.x;
+    const screenY = gate.y - camera.y;
+    const pulse = Math.sin(frameCount * 0.15) * 0.12 + 0.58;
+
+    ctx.save();
+
+    ctx.globalAlpha = pulse;
+    ctx.fillStyle = "#7f1d1d";
+    ctx.fillRect(screenX, screenY, gate.width, gate.height);
+
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = "#fecdd3";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(screenX, screenY, gate.width, gate.height);
+
+    ctx.fillStyle = "#fecdd3";
+    ctx.font = "13px Arial";
+    ctx.fillText("봉인", screenX - 2, screenY - 8);
+
+    ctx.restore();
   }
 }
 
@@ -3364,7 +3506,8 @@ function drawWarnings() {
     { text: "기억 조각 1개 필요", x: 4390, y: 70 },
     { text: "기억 핵", x: 5085, y: 290 },
     { text: "기억 핵 1개 필요", x: 5300, y: 70 },
-    { text: "보스방", x: 5520, y: 325 },
+    { text: "보스방 입장 시 봉인", x: 5448, y: 325 },
+    { text: "보스 이동 공간 넓힘", x: 5630, y: 392 },
     { text: "보스 체력 절반 이하: 2페이즈", x: 5730, y: 255 },
     { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 5850, y: 270 }
   ];
@@ -3798,13 +3941,58 @@ function drawCoreEnergyUI() {
   ctx.fillText("L 회복: 에너지 3칸 소모", startX, startY + 22);
 }
 
+function drawBossClearEffect() {
+  if (gameState.bossClearEffectTimer <= 0) {
+    return;
+  }
+
+  const alpha = gameState.bossClearEffectTimer / 130;
+
+  ctx.save();
+  ctx.globalAlpha = alpha * 0.26;
+  ctx.fillStyle = "#7dd3fc";
+  ctx.fillRect(5400 - camera.x, 0 - camera.y, 900, world.height);
+
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = "#e0f2fe";
+  ctx.font = "bold 26px Arial";
+  ctx.fillText("보스방 봉인이 해제되었습니다", 5600 - camera.x, 190 - camera.y);
+
+  ctx.restore();
+}
+
+function drawEndingPanel() {
+  if (!gameState.endingReached) {
+    return;
+  }
+
+  ctx.save();
+
+  ctx.fillStyle = "rgba(2, 6, 23, 0.78)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#e0f2fe";
+  ctx.font = "bold 32px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("원점 코어 획득", canvas.width / 2, canvas.height / 2 - 60);
+
+  ctx.fillStyle = "#cbd5e1";
+  ctx.font = "18px Arial";
+  ctx.fillText("현재 버전의 최종 목표를 달성했습니다.", canvas.width / 2, canvas.height / 2 - 20);
+  ctx.fillText("이제 다음 단계에서 엔딩 연출과 스토리를 붙일 수 있습니다.", canvas.width / 2, canvas.height / 2 + 15);
+
+  ctx.textAlign = "left";
+
+  ctx.restore();
+}
+
 function drawUI() {
   const currentRoom = getCurrentRoom();
   const playerState = playerAnimation.state;
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("8단계-2: 보스 패턴 추가", 20, 35);
+  ctx.fillText("8단계-3: 보스방 봉인과 클리어 연출", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프/이중 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -3876,7 +4064,9 @@ function update() {
     return;
   }
 
+  updateGameStateTimers();
   updatePlayer();
+  startBossFightIfNeeded();
   updatePlayerAnimation();
   updatePlayerCombat();
   updateEnemies();
@@ -3897,6 +4087,7 @@ function drawWorld() {
   drawBackgroundDecorations();
   drawRoomLabels();
   drawDoors();
+  drawBossArenaGates();
   drawPlatforms();
   drawKeyItem();
   drawAbilityItems();
@@ -3909,6 +4100,7 @@ function drawWorld() {
   drawParticles();
   drawPlayer();
   drawAttack();
+  drawBossClearEffect();
 
   ctx.restore();
 }
@@ -3918,6 +4110,7 @@ function draw() {
 
   drawWorld();
   drawUI();
+  drawEndingPanel();
 }
 
 function gameLoop() {
