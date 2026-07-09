@@ -6,6 +6,8 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
+// v43: 카메라 추적과 플레이어 가감속을 더 부드럽게 조정한 통합본
+
 if (canvas.width < 900) {
   canvas.width = 900;
 }
@@ -39,9 +41,14 @@ const camera = {
   shakeX: 0,
   shakeY: 0,
   bossFocusTimer: 0,
-  smoothness: 0.12,
-  lookAheadX: 90,
-  lookDownY: 45
+
+  // v43: 카메라가 캐릭터를 더 중앙에 두고, 방향 전환 때 뚝 끊기지 않도록 조정
+  smoothness: 0.085,
+  lookAheadX: 34,
+  lookDownY: 24,
+  currentLookAheadX: 0,
+  currentLookDownY: 0,
+  lookAheadSmoothness: 0.045
 };
 
 const gravity = 0.65;
@@ -55,12 +62,16 @@ const player = {
   vx: 0,
   vy: 0,
 
-  groundAcceleration: 0.72,
-  airAcceleration: 0.42,
-  groundFriction: 0.76,
-  airFriction: 0.93,
-  maxSpeed: 5.8,
-  maxAirSpeed: 5.2,
+  // v43: 즉각적인 방향 반전 대신 자연스러운 가속/감속이 생기도록 조정
+  groundAcceleration: 0.48,
+  airAcceleration: 0.26,
+  groundDeceleration: 0.42,
+  airDeceleration: 0.16,
+  turnAccelerationMultiplier: 1.22,
+  groundFriction: 0.84,
+  airFriction: 0.96,
+  maxSpeed: 5.5,
+  maxAirSpeed: 4.9,
 
   jumpPower: -13.1,
   onGround: false,
@@ -155,7 +166,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "11단계-2+3: 대시, 공격, 벽 점프, 카메라가 개선되었습니다."
+  message: "v43: 카메라 추적과 방향 전환 감속을 더 부드럽게 조정했습니다."
 };
 
 const endingLines = [
@@ -432,6 +443,18 @@ document.addEventListener("keyup", function(event) {
 
 function clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
+}
+
+function approach(current, target, amount) {
+  if (current < target) {
+    return Math.min(current + amount, target);
+  }
+
+  if (current > target) {
+    return Math.max(current - amount, target);
+  }
+
+  return target;
 }
 
 function centerX(rect) {
@@ -1327,17 +1350,12 @@ function updatePlayerCombat() {
 
 function updatePlayerHorizontalMove() {
   if (gameState.endingReached) {
-    player.vx = 0;
+    player.vx = approach(player.vx, 0, 0.45);
     return;
   }
 
   if (player.healTimer > 0) {
-    player.vx *= 0.6;
-
-    if (Math.abs(player.vx) < 0.05) {
-      player.vx = 0;
-    }
-
+    player.vx = approach(player.vx, 0, 0.34);
     return;
   }
 
@@ -1346,48 +1364,36 @@ function updatePlayerHorizontalMove() {
   }
 
   if (player.dashEndLagTimer > 0) {
-    player.vx *= 0.92;
+    player.vx = approach(player.vx, 0, 0.18);
     return;
   }
 
-  const acceleration = player.onGround ? player.groundAcceleration : player.airAcceleration;
-  const friction = player.onGround ? player.groundFriction : player.airFriction;
-  const currentMaxSpeed = player.onGround ? player.maxSpeed : player.maxAirSpeed;
-  let moving = false;
+  let inputDirection = 0;
 
   if (keys["KeyA"]) {
-    if (player.vx > 0 && player.onGround) {
-      player.vx *= 0.58;
-    }
-
-    player.vx -= acceleration;
-    player.facing = -1;
-    moving = true;
+    inputDirection -= 1;
   }
 
   if (keys["KeyD"]) {
-    if (player.vx < 0 && player.onGround) {
-      player.vx *= 0.58;
-    }
-
-    player.vx += acceleration;
-    player.facing = 1;
-    moving = true;
+    inputDirection += 1;
   }
 
-  if (!moving) {
-    player.vx *= friction;
+  const currentMaxSpeed = player.onGround ? player.maxSpeed : player.maxAirSpeed;
+  const acceleration = player.onGround ? player.groundAcceleration : player.airAcceleration;
+  const deceleration = player.onGround ? player.groundDeceleration : player.airDeceleration;
+
+  if (inputDirection !== 0) {
+    const targetVelocity = inputDirection * currentMaxSpeed;
+    const isTurning = Math.abs(player.vx) > 0.25 && Math.sign(player.vx) !== inputDirection;
+    const accelerationToUse = isTurning ? acceleration * player.turnAccelerationMultiplier : acceleration;
+
+    player.vx = approach(player.vx, targetVelocity, accelerationToUse);
+    player.facing = inputDirection;
+  } else {
+    player.vx = approach(player.vx, 0, deceleration);
   }
 
-  if (player.vx > currentMaxSpeed) {
-    player.vx = currentMaxSpeed;
-  }
-
-  if (player.vx < -currentMaxSpeed) {
-    player.vx = -currentMaxSpeed;
-  }
-
-  if (Math.abs(player.vx) < 0.05) {
+  if (Math.abs(player.vx) < 0.03) {
     player.vx = 0;
   }
 }
@@ -2964,21 +2970,32 @@ function updatePlayerAnimation() {
 }
 
 function updateCamera() {
-  let targetX = centerX(player) - camera.width / 2;
-  let targetY = centerY(player) - camera.height / 2;
+  const maxCameraSpeedReference = player.onGround ? player.maxSpeed : player.maxAirSpeed;
+  const velocityRatio = clamp(player.vx / maxCameraSpeedReference, -1, 1);
 
-  if (Math.abs(player.vx) > 0.5) {
-    targetX += player.facing * camera.lookAheadX;
+  let targetLookAheadX = 0;
+  let targetLookDownY = 0;
+
+  if (Math.abs(player.vx) > 0.35) {
+    targetLookAheadX = velocityRatio * camera.lookAheadX;
   }
 
-  if (player.vy > 5 && !player.onGround) {
-    targetY += camera.lookDownY;
+  if (player.vy > 6 && !player.onGround) {
+    targetLookDownY = camera.lookDownY;
   }
+
+  camera.currentLookAheadX += (targetLookAheadX - camera.currentLookAheadX) * camera.lookAheadSmoothness;
+  camera.currentLookDownY += (targetLookDownY - camera.currentLookDownY) * camera.lookAheadSmoothness;
+
+  let targetX = centerX(player) - camera.width / 2 + camera.currentLookAheadX;
+  let targetY = centerY(player) - camera.height / 2 + camera.currentLookDownY;
 
   if (gameState.bossFightStarted && player.x > 5400 && boss.alive) {
     const bossRoomCenterX = 5850;
     targetX = bossRoomCenterX - camera.width / 2;
     targetY = 0;
+    camera.currentLookAheadX *= 0.85;
+    camera.currentLookDownY *= 0.85;
 
     if (camera.bossFocusTimer > 0) {
       camera.bossFocusTimer -= 1;
@@ -2990,14 +3007,6 @@ function updateCamera() {
 
   camera.x += (targetX - camera.x) * camera.smoothness;
   camera.y += (targetY - camera.y) * camera.smoothness;
-
-  if (Math.abs(targetX - camera.x) < 0.05) {
-    camera.x = targetX;
-  }
-
-  if (Math.abs(targetY - camera.y) < 0.05) {
-    camera.y = targetY;
-  }
 
   camera.x = clamp(camera.x, 0, world.width - camera.width);
   camera.y = clamp(camera.y, 0, world.height - camera.height);
@@ -4546,7 +4555,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("11단계-2+3: 대시/공격/벽 점프/카메라 통합", 20, 35);
+  ctx.fillText("11단계-2+3 v43: 카메라와 조작감 보정", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -4556,7 +4565,7 @@ function drawUI() {
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("대시 무적 + 방향 공격 + 벽 미끄러짐/벽 점프 + 부드러운 카메라", 20, 180);
+  ctx.fillText("카메라 중앙 보정 + 부드러운 방향 전환 + 안정적인 점프 중 조작", 20, 180);
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
