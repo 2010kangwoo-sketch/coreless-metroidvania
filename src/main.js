@@ -2062,6 +2062,10 @@ function checkProjectileDamage() {
 }
 
 function checkPlayerEnemyDamage() {
+  if (player.isDashing) {
+    return;
+  }
+
   if (player.invincibleTimer > 0) {
     return;
   }
