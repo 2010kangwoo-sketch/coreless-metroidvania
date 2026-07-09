@@ -25,6 +25,7 @@ let screenShakePower = 0;
 const particles = [];
 const projectiles = [];
 const shardWarnings = [];
+const floatingTexts = [];
 
 const world = {
   width: 6300,
@@ -37,7 +38,8 @@ const camera = {
   width: canvas.width,
   height: canvas.height,
   shakeX: 0,
-  shakeY: 0
+  shakeY: 0,
+  bossFocusTimer: 0
 };
 
 const gravity = 0.65;
@@ -74,7 +76,7 @@ const player = {
   dashDuration: 10,
   dashSpeed: 12,
   dashCooldown: 0,
-  dashCooldownMax: 120,
+  dashCooldownMax: 110,
 
   maxHealth: 5,
   health: 5,
@@ -90,7 +92,7 @@ const player = {
   attackTimer: 0,
   attackDuration: 13,
   attackCooldown: 0,
-  attackCooldownMax: 24,
+  attackCooldownMax: 22,
   attackId: 0,
 
   lastWallSparkAttackId: -1
@@ -215,6 +217,7 @@ const gameState = {
 
   bossClearEffectTimer: 0,
   bossPhaseBannerTimer: 0,
+  bossStartBannerTimer: 0,
 
   endingReached: false,
   endingFrame: 0,
@@ -277,7 +280,7 @@ const rooms = [
   },
   {
     name: "방 7: 최종 보스방",
-    guide: "경고 표식을 보고 기억 파편 낙하를 피하기",
+    guide: "기억 파편, 충격파, 내려찍기, 순간이동, 레이저 회피",
     x: 5400,
     width: 900,
     color: "#061520"
@@ -605,14 +608,14 @@ const boss = {
   speed: 1.25,
   facing: -1,
 
-  maxHealth: 22,
-  health: 22,
+  maxHealth: 26,
+  health: 26,
   alive: true,
   hitTimer: 0,
   hitByAttackId: -1,
 
   attackCooldown: 20,
-  attackCooldownMax: 92,
+  attackCooldownMax: 88,
   attackTimer: 0,
   attackDuration: 0,
   attackType: "none",
@@ -622,11 +625,20 @@ const boss = {
 
   startX: 5770,
   targetX: 5770,
+  targetY: 348,
 
   slamHitDone: false,
+  laserHitDone: false,
+  laserY: 0,
+  laserDirection: -1,
+
+  hidden: false,
+  alpha: 1,
+
   contactCooldown: 0,
 
-  phaseTwoAnnounced: false
+  phaseTwoAnnounced: false,
+  defeatStarted: false
 };
 
 document.addEventListener("keydown", function(event) {
@@ -729,7 +741,7 @@ function isBossGateActive() {
 }
 
 function getCurrentRoom() {
-  const playerCenterX = player.x + player.width / 2;
+  const playerCenterX = centerX(player);
 
   for (const room of rooms) {
     if (playerCenterX >= room.x && playerCenterX < room.x + room.width) {
@@ -821,6 +833,31 @@ function getWallSparkPoint(clipped, direction) {
     x: clipped.x,
     y: clipped.y + clipped.height / 2
   };
+}
+
+function addFloatingText(text, x, y, color) {
+  floatingTexts.push({
+    text,
+    x,
+    y,
+    vy: -0.45,
+    life: 50,
+    maxLife: 50,
+    color
+  });
+}
+
+function updateFloatingTexts() {
+  for (let i = floatingTexts.length - 1; i >= 0; i--) {
+    const text = floatingTexts[i];
+
+    text.y += text.vy;
+    text.life -= 1;
+
+    if (text.life <= 0) {
+      floatingTexts.splice(i, 1);
+    }
+  }
 }
 
 function addDustParticle(x, y, vx, vy, width, height, life, color, rotation) {
@@ -952,7 +989,7 @@ function spawnDashParticles() {
 }
 
 function spawnHitParticles(x, y, direction) {
-  for (let i = 0; i < 12; i++) {
+  for (let i = 0; i < 16; i++) {
     addDashStreak(
       x,
       y + (Math.random() - 0.5) * 18,
@@ -963,6 +1000,24 @@ function spawnHitParticles(x, y, direction) {
       14 + Math.random() * 8,
       "rgba(248, 113, 113, 1)",
       (Math.random() - 0.5) * 0.4
+    );
+  }
+}
+
+function spawnPlayerDamageParticles() {
+  for (let i = 0; i < 22; i++) {
+    const angle = (Math.PI * 2 * i) / 22;
+
+    addDashStreak(
+      centerX(player),
+      centerY(player),
+      Math.cos(angle) * (1.5 + Math.random() * 2.2),
+      Math.sin(angle) * (1.5 + Math.random() * 2.2),
+      10 + Math.random() * 16,
+      2 + Math.random() * 4,
+      16 + Math.random() * 10,
+      "rgba(248, 113, 113, 1)",
+      angle
     );
   }
 }
@@ -1020,7 +1075,7 @@ function spawnRewardBurst(item, color) {
 }
 
 function spawnBossSlamParticles() {
-  for (let i = 0; i < 32; i++) {
+  for (let i = 0; i < 34; i++) {
     const direction = i % 2 === 0 ? -1 : 1;
 
     addDashStreak(
@@ -1037,19 +1092,58 @@ function spawnBossSlamParticles() {
   }
 }
 
+function spawnBossTeleportParticles(x, y) {
+  for (let i = 0; i < 34; i++) {
+    const angle = (Math.PI * 2 * i) / 34;
+
+    addDashStreak(
+      x,
+      y,
+      Math.cos(angle) * (1.2 + Math.random() * 2.7),
+      Math.sin(angle) * (1.2 + Math.random() * 2.7),
+      12 + Math.random() * 18,
+      2 + Math.random() * 4,
+      18 + Math.random() * 10,
+      "rgba(216, 180, 254, 1)",
+      angle
+    );
+  }
+}
+
+function spawnBossLaserParticles() {
+  const hitbox = getBossLaserHitbox();
+
+  for (let i = 0; i < 24; i++) {
+    const x = hitbox.x + Math.random() * hitbox.width;
+    const y = hitbox.y + Math.random() * hitbox.height;
+
+    addDashStreak(
+      x,
+      y,
+      (Math.random() - 0.5) * 2.2,
+      (Math.random() - 0.5) * 0.8,
+      12 + Math.random() * 18,
+      2 + Math.random() * 3,
+      12 + Math.random() * 8,
+      "rgba(248, 113, 113, 1)",
+      (Math.random() - 0.5) * 0.2
+    );
+  }
+}
+
 function spawnBossDefeatBurst() {
-  for (let i = 0; i < 64; i++) {
-    const angle = (Math.PI * 2 * i) / 64;
+  for (let i = 0; i < 80; i++) {
+    const angle = (Math.PI * 2 * i) / 80;
 
     addDashStreak(
       boss.x + boss.width / 2,
       boss.y + boss.height / 2,
-      Math.cos(angle) * (1.5 + Math.random() * 3.4),
-      Math.sin(angle) * (1.5 + Math.random() * 3.4),
-      16 + Math.random() * 24,
+      Math.cos(angle) * (1.5 + Math.random() * 4.0),
+      Math.sin(angle) * (1.5 + Math.random() * 4.0),
+      16 + Math.random() * 26,
       3 + Math.random() * 5,
-      30 + Math.random() * 16,
-      "rgba(125, 211, 252, 1)",
+      32 + Math.random() * 18,
+      i % 2 === 0 ? "rgba(125, 211, 252, 1)" : "rgba(216, 180, 254, 1)",
       angle
     );
   }
@@ -1233,7 +1327,7 @@ function updatePlayerCombat() {
 }
 
 function getAttackHitbox() {
-  const attackWidth = 52;
+  const attackWidth = 54;
   const attackHeight = 38;
 
   return {
@@ -1541,6 +1635,11 @@ function resetPlayer() {
   gameState.message = "시작 지점에서 다시 시작합니다.";
 }
 
+function respawnPlayer() {
+  resetPlayer();
+  gameState.message = "체력이 모두 줄어 시작 지점에서 다시 시작합니다.";
+}
+
 function updateEnemies() {
   for (const enemy of enemies) {
     if (!enemy.alive) {
@@ -1572,11 +1671,11 @@ function updateMeleeEnemy(enemy) {
 }
 
 function updateMeleeEnemyAI(enemy) {
-  const enemyCenterX = enemy.x + enemy.width / 2;
-  const enemyCenterY = enemy.y + enemy.height / 2;
+  const enemyCenterX = centerX(enemy);
+  const enemyCenterY = centerY(enemy);
 
-  const playerCenterX = player.x + player.width / 2;
-  const playerCenterY = player.y + player.height / 2;
+  const playerCenterX = centerX(player);
+  const playerCenterY = centerY(player);
 
   const distanceX = playerCenterX - enemyCenterX;
   const distanceY = playerCenterY - enemyCenterY;
@@ -1619,11 +1718,11 @@ function updateMeleeEnemyAI(enemy) {
 }
 
 function updateFlyingEnemy(enemy) {
-  const enemyCenterX = enemy.x + enemy.width / 2;
-  const enemyCenterY = enemy.y + enemy.height / 2;
+  const enemyCenterX = centerX(enemy);
+  const enemyCenterY = centerY(enemy);
 
-  const playerCenterX = player.x + player.width / 2;
-  const playerCenterY = player.y + player.height / 2;
+  const playerCenterX = centerX(player);
+  const playerCenterY = centerY(player);
 
   const distanceX = playerCenterX - enemyCenterX;
   const distanceY = playerCenterY - enemyCenterY;
@@ -1692,11 +1791,11 @@ function updateFlyingEnemy(enemy) {
 }
 
 function updateShooterEnemy(enemy) {
-  const enemyCenterX = enemy.x + enemy.width / 2;
-  const enemyCenterY = enemy.y + enemy.height / 2;
+  const enemyCenterX = centerX(enemy);
+  const enemyCenterY = centerY(enemy);
 
-  const playerCenterX = player.x + player.width / 2;
-  const playerCenterY = player.y + player.height / 2;
+  const playerCenterX = centerX(player);
+  const playerCenterY = centerY(player);
 
   const distanceX = playerCenterX - enemyCenterX;
   const distanceY = playerCenterY - enemyCenterY;
@@ -1941,14 +2040,17 @@ function startBossFightIfNeeded() {
   if (!gameState.bossFightStarted) {
     gameState.bossFightStarted = true;
     gameState.bossRoomLocked = true;
+    gameState.bossStartBannerTimer = 120;
 
     boss.patternIndex = 0;
     boss.attackCooldown = 18;
 
-    gameState.message = "보스방이 봉인되었습니다. 곧 기억 파편이 떨어집니다.";
+    camera.bossFocusTimer = 100;
+
+    gameState.message = "보스방이 봉인되었습니다. 기억 파수자와의 전투가 시작됩니다.";
 
     spawnBossIntroParticles();
-    startScreenShake(18, 5);
+    startScreenShake(22, 7);
 
     return;
   }
@@ -1961,18 +2063,18 @@ function startBossFightIfNeeded() {
 }
 
 function spawnBossIntroParticles() {
-  for (let i = 0; i < 40; i++) {
-    const angle = (Math.PI * 2 * i) / 40;
+  for (let i = 0; i < 50; i++) {
+    const angle = (Math.PI * 2 * i) / 50;
 
     addDashStreak(
       boss.x + boss.width / 2,
       boss.y + boss.height / 2,
-      Math.cos(angle) * (1.3 + Math.random() * 2.5),
-      Math.sin(angle) * (1.3 + Math.random() * 2.5),
-      12 + Math.random() * 20,
+      Math.cos(angle) * (1.3 + Math.random() * 3.0),
+      Math.sin(angle) * (1.3 + Math.random() * 3.0),
+      12 + Math.random() * 22,
       2 + Math.random() * 4,
-      24 + Math.random() * 16,
-      "rgba(251, 113, 133, 1)",
+      24 + Math.random() * 18,
+      i % 2 === 0 ? "rgba(251, 113, 133, 1)" : "rgba(125, 211, 252, 1)",
       angle
     );
   }
@@ -1995,9 +2097,10 @@ function updateBoss() {
 
   if (isBossPhaseTwo() && !boss.phaseTwoAnnounced) {
     boss.phaseTwoAnnounced = true;
-    gameState.bossPhaseBannerTimer = 120;
-    gameState.message = "기억 파수자가 2페이즈에 돌입했습니다. 기억 파편이 더 자주 떨어집니다.";
-    startScreenShake(24, 8);
+    gameState.bossPhaseBannerTimer = 130;
+    gameState.message = "기억 파수자가 2페이즈에 돌입했습니다. 패턴이 더 빠르고 촘촘해집니다.";
+    startScreenShake(28, 9);
+    spawnBossIntroParticles();
   }
 
   if (boss.hitTimer > 0) {
@@ -2012,30 +2115,25 @@ function updateBoss() {
     boss.attackCooldown -= 1;
   }
 
-  boss.speed = isBossPhaseTwo() ? 1.75 : 1.25;
-  boss.attackCooldownMax = isBossPhaseTwo() ? 66 : 90;
+  boss.speed = isBossPhaseTwo() ? 1.85 : 1.25;
+  boss.attackCooldownMax = isBossPhaseTwo() ? 58 : 78;
 
-  const playerCenterX = player.x + player.width / 2;
-  const bossCenterX = boss.x + boss.width / 2;
+  const playerCenterX = centerX(player);
+  const bossCenterX = centerX(boss);
   const distanceX = playerCenterX - bossCenterX;
 
   boss.facing = distanceX >= 0 ? 1 : -1;
 
   if (boss.attackTimer > 0) {
-    if (boss.attackType === "shardRain") {
-      updateBossShardRainAttack();
-    } else if (boss.attackType === "shockwave") {
-      updateBossShockwaveAttack();
-    } else if (boss.attackType === "jumpSlam") {
-      updateBossJumpSlamAttack();
-    }
-
+    updateBossCurrentAttack();
     return;
   }
 
+  boss.hidden = false;
+  boss.alpha = 1;
   boss.y = boss.baseY;
 
-  if (Math.abs(distanceX) < 700 && boss.attackCooldown <= 0) {
+  if (Math.abs(distanceX) < 740 && boss.attackCooldown <= 0) {
     chooseBossPattern();
     boss.patternIndex += 1;
     return;
@@ -2048,8 +2146,34 @@ function updateBoss() {
   }
 
   boss.x += boss.vx;
-
   boss.x = clamp(boss.x, boss.minX, boss.maxX - boss.width);
+}
+
+function updateBossCurrentAttack() {
+  if (boss.attackType === "shardRain") {
+    updateBossShardRainAttack();
+    return;
+  }
+
+  if (boss.attackType === "shockwave") {
+    updateBossShockwaveAttack();
+    return;
+  }
+
+  if (boss.attackType === "jumpSlam") {
+    updateBossJumpSlamAttack();
+    return;
+  }
+
+  if (boss.attackType === "teleportSlam") {
+    updateBossTeleportSlamAttack();
+    return;
+  }
+
+  if (boss.attackType === "laser") {
+    updateBossLaserAttack();
+    return;
+  }
 }
 
 function chooseBossPattern() {
@@ -2064,7 +2188,9 @@ function chooseBossPhaseOnePattern() {
   const patternOrder = [
     "shardRain",
     "shockwave",
+    "teleportSlam",
     "jumpSlam",
+    "laser",
     "shardRain",
     "shockwave"
   ];
@@ -2077,10 +2203,13 @@ function chooseBossPhaseOnePattern() {
 function chooseBossPhaseTwoPattern() {
   const patternOrder = [
     "shardRain",
+    "teleportSlam",
+    "laser",
     "jumpSlam",
     "shardRain",
     "shockwave",
-    "shardRain"
+    "teleportSlam",
+    "laser"
   ];
 
   const pattern = patternOrder[boss.patternIndex % patternOrder.length];
@@ -2103,15 +2232,27 @@ function startBossPattern(patternType) {
     startBossJumpSlamAttack();
     return;
   }
+
+  if (patternType === "teleportSlam") {
+    startBossTeleportSlamAttack();
+    return;
+  }
+
+  if (patternType === "laser") {
+    startBossLaserAttack();
+    return;
+  }
 }
 
 function startBossShardRainAttack() {
   boss.attackType = "shardRain";
-  boss.attackDuration = isBossPhaseTwo() ? 108 : 128;
+  boss.attackDuration = isBossPhaseTwo() ? 104 : 122;
   boss.attackTimer = boss.attackDuration;
   boss.attackFired = false;
   boss.vx = 0;
   boss.y = boss.baseY;
+  boss.hidden = false;
+  boss.alpha = 1;
 
   gameState.message = isBossPhaseTwo()
     ? "2페이즈: 기억 파편이 빠르게 쏟아집니다. 파란 표식을 피하세요."
@@ -2119,8 +2260,8 @@ function startBossShardRainAttack() {
 
   startScreenShake(8, 3);
 
-  spawnMemoryShardWarningNearPlayer(44);
-  spawnMemoryShardWarningRandom(54);
+  spawnMemoryShardWarningNearPlayer(42);
+  spawnMemoryShardWarningRandom(52);
 }
 
 function updateBossShardRainAttack() {
@@ -2132,10 +2273,10 @@ function updateBossShardRainAttack() {
   boss.y = boss.baseY;
 
   if (elapsed > 10 && elapsed < boss.attackDuration - 12 && elapsed % interval === 0) {
-    if (Math.random() < 0.7) {
-      spawnMemoryShardWarningNearPlayer(isBossPhaseTwo() ? 34 : 42);
+    if (Math.random() < 0.72) {
+      spawnMemoryShardWarningNearPlayer(isBossPhaseTwo() ? 32 : 40);
     } else {
-      spawnMemoryShardWarningRandom(isBossPhaseTwo() ? 34 : 42);
+      spawnMemoryShardWarningRandom(isBossPhaseTwo() ? 32 : 40);
     }
   }
 
@@ -2147,7 +2288,7 @@ function updateBossShardRainAttack() {
 }
 
 function spawnMemoryShardWarningNearPlayer(delay) {
-  const warningX = player.x + player.width / 2 + (Math.random() - 0.5) * 190;
+  const warningX = centerX(player) + (Math.random() - 0.5) * 190;
 
   spawnMemoryShardWarning(warningX, delay);
 }
@@ -2190,7 +2331,7 @@ function spawnMemoryShardFromWarning(warning) {
     width: 20,
     height: 28,
     vx: 0,
-    vy: isBossPhaseTwo() ? 6.2 : 5.0,
+    vy: isBossPhaseTwo() ? 6.3 : 5.1,
     life: 95,
     sourceName: boss.name
   };
@@ -2214,11 +2355,13 @@ function spawnMemoryShardFromWarning(warning) {
 
 function startBossShockwaveAttack() {
   boss.attackType = "shockwave";
-  boss.attackDuration = isBossPhaseTwo() ? 44 : 54;
+  boss.attackDuration = isBossPhaseTwo() ? 42 : 52;
   boss.attackTimer = boss.attackDuration;
   boss.attackFired = false;
   boss.vx = 0;
   boss.y = boss.baseY;
+  boss.hidden = false;
+  boss.alpha = 1;
 
   gameState.message = isBossPhaseTwo()
     ? "2페이즈: 기억 파수자가 빠르게 충격파를 준비합니다."
@@ -2227,7 +2370,7 @@ function startBossShockwaveAttack() {
 
 function updateBossShockwaveAttack() {
   const elapsed = boss.attackDuration - boss.attackTimer;
-  const fireFrame = isBossPhaseTwo() ? 22 : 28;
+  const fireFrame = isBossPhaseTwo() ? 21 : 27;
 
   boss.vx = 0;
   boss.y = boss.baseY;
@@ -2251,16 +2394,18 @@ function updateBossShockwaveAttack() {
 }
 
 function startBossJumpSlamAttack() {
-  const playerCenterX = player.x + player.width / 2;
+  const playerCenterX = centerX(player);
 
   boss.attackType = "jumpSlam";
-  boss.attackDuration = isBossPhaseTwo() ? 74 : 86;
+  boss.attackDuration = isBossPhaseTwo() ? 70 : 82;
   boss.attackTimer = boss.attackDuration;
   boss.attackFired = false;
   boss.slamHitDone = false;
   boss.startX = boss.x;
   boss.targetX = clamp(playerCenterX - boss.width / 2, boss.minX, boss.maxX - boss.width);
   boss.vx = 0;
+  boss.hidden = false;
+  boss.alpha = 1;
 
   gameState.message = isBossPhaseTwo()
     ? "2페이즈: 기억 파수자가 더 빠르게 내려찍기를 준비합니다."
@@ -2270,8 +2415,8 @@ function startBossJumpSlamAttack() {
 function updateBossJumpSlamAttack() {
   const elapsed = boss.attackDuration - boss.attackTimer;
 
-  const prepEnd = isBossPhaseTwo() ? 14 : 18;
-  const flightEnd = isBossPhaseTwo() ? 52 : 62;
+  const prepEnd = isBossPhaseTwo() ? 13 : 17;
+  const flightEnd = isBossPhaseTwo() ? 49 : 59;
 
   if (elapsed < prepEnd) {
     boss.x = boss.startX;
@@ -2280,7 +2425,7 @@ function updateBossJumpSlamAttack() {
     const t = (elapsed - prepEnd) / (flightEnd - prepEnd);
 
     boss.x = boss.startX + (boss.targetX - boss.startX) * t;
-    boss.y = boss.baseY - Math.sin(t * Math.PI) * 160;
+    boss.y = boss.baseY - Math.sin(t * Math.PI) * 165;
   } else {
     boss.x = boss.targetX;
     boss.y = boss.baseY;
@@ -2308,10 +2453,143 @@ function updateBossJumpSlamAttack() {
   }
 }
 
+function startBossTeleportSlamAttack() {
+  const playerCenterX = centerX(player);
+
+  boss.attackType = "teleportSlam";
+  boss.attackDuration = isBossPhaseTwo() ? 66 : 78;
+  boss.attackTimer = boss.attackDuration;
+  boss.attackFired = false;
+  boss.slamHitDone = false;
+
+  boss.startX = boss.x;
+  boss.targetX = clamp(playerCenterX - boss.width / 2, boss.minX, boss.maxX - boss.width);
+  boss.targetY = boss.baseY;
+
+  boss.vx = 0;
+  boss.hidden = false;
+  boss.alpha = 1;
+
+  gameState.message = isBossPhaseTwo()
+    ? "2페이즈: 기억 파수자가 순간이동 내려찍기를 준비합니다."
+    : "기억 파수자가 순간이동하려 합니다. 붉은 표식을 피하세요.";
+
+  spawnBossTeleportParticles(centerX(boss), centerY(boss));
+  startScreenShake(8, 3);
+}
+
+function updateBossTeleportSlamAttack() {
+  const elapsed = boss.attackDuration - boss.attackTimer;
+
+  const vanishFrame = 12;
+  const appearFrame = isBossPhaseTwo() ? 32 : 38;
+  const impactFrame = isBossPhaseTwo() ? 40 : 48;
+
+  if (elapsed < vanishFrame) {
+    boss.alpha = 1 - elapsed / vanishFrame;
+    boss.hidden = false;
+  } else if (elapsed < appearFrame) {
+    boss.alpha = 0.12;
+    boss.hidden = true;
+    boss.x = boss.startX;
+    boss.y = boss.baseY;
+  } else if (elapsed < impactFrame) {
+    boss.hidden = false;
+    boss.alpha = (elapsed - appearFrame) / (impactFrame - appearFrame);
+    boss.x = boss.targetX;
+    boss.y = boss.baseY - 160 + (elapsed - appearFrame) * 5;
+  } else {
+    boss.hidden = false;
+    boss.alpha = 1;
+    boss.x = boss.targetX;
+    boss.y = boss.baseY;
+
+    if (!boss.slamHitDone) {
+      boss.slamHitDone = true;
+
+      spawnBossTeleportParticles(centerX(boss), centerY(boss));
+      spawnBossShockwaves();
+      spawnBossSlamParticles();
+
+      startScreenShake(isBossPhaseTwo() ? 20 : 17, isBossPhaseTwo() ? 8 : 6);
+
+      gameState.message = "기억 파수자가 순간이동 후 내려찍었습니다.";
+
+      if (!player.isDashing && player.invincibleTimer <= 0 && isColliding(player, getBossTeleportSlamHitbox())) {
+        takeDamage(boss, "순간이동 내려찍기에 맞았습니다.");
+      }
+    }
+  }
+
+  boss.attackTimer -= 1;
+
+  if (boss.attackTimer <= 0) {
+    finishBossAttack();
+  }
+}
+
+function startBossLaserAttack() {
+  boss.attackType = "laser";
+  boss.attackDuration = isBossPhaseTwo() ? 70 : 82;
+  boss.attackTimer = boss.attackDuration;
+  boss.attackFired = false;
+  boss.laserHitDone = false;
+  boss.vx = 0;
+  boss.hidden = false;
+  boss.alpha = 1;
+
+  boss.laserDirection = centerX(player) >= centerX(boss) ? 1 : -1;
+  boss.facing = boss.laserDirection;
+  boss.laserY = clamp(player.y + 16, 245, 392);
+
+  gameState.message = isBossPhaseTwo()
+    ? "2페이즈: 보스가 빠르게 가로 레이저를 충전합니다."
+    : "기억 파수자가 가로 레이저를 충전합니다. 높이를 보고 피하세요.";
+
+  startScreenShake(6, 2.5);
+}
+
+function updateBossLaserAttack() {
+  const elapsed = boss.attackDuration - boss.attackTimer;
+
+  const chargeEnd = isBossPhaseTwo() ? 32 : 40;
+  const activeEnd = isBossPhaseTwo() ? 48 : 58;
+
+  boss.vx = 0;
+  boss.y = boss.baseY;
+
+  if (elapsed === chargeEnd) {
+    boss.attackFired = true;
+    spawnBossLaserParticles();
+    startScreenShake(isBossPhaseTwo() ? 18 : 15, isBossPhaseTwo() ? 7 : 6);
+    gameState.message = "기억 파수자가 레이저를 발사했습니다.";
+  }
+
+  if (elapsed >= chargeEnd && elapsed <= activeEnd) {
+    if (frameCount % 3 === 0) {
+      spawnBossLaserParticles();
+    }
+
+    if (!boss.laserHitDone && player.invincibleTimer <= 0 && isColliding(player, getBossLaserHitbox())) {
+      boss.laserHitDone = true;
+      takeDamage(boss, "가로 레이저에 맞았습니다.");
+    }
+  }
+
+  boss.attackTimer -= 1;
+
+  if (boss.attackTimer <= 0) {
+    finishBossAttack();
+  }
+}
+
 function finishBossAttack() {
   boss.attackType = "none";
   boss.attackFired = false;
   boss.slamHitDone = false;
+  boss.laserHitDone = false;
+  boss.hidden = false;
+  boss.alpha = 1;
   boss.attackCooldown = boss.attackCooldownMax;
   boss.y = boss.baseY;
 }
@@ -2325,9 +2603,36 @@ function getBossSlamHitbox() {
   };
 }
 
+function getBossTeleportSlamHitbox() {
+  return {
+    x: boss.targetX - 48,
+    y: boss.baseY + boss.height - 45,
+    width: boss.width + 96,
+    height: 52
+  };
+}
+
+function getBossLaserHitbox() {
+  if (boss.laserDirection === 1) {
+    return {
+      x: boss.x + boss.width - 4,
+      y: boss.laserY,
+      width: boss.maxX - boss.x,
+      height: isBossPhaseTwo() ? 30 : 26
+    };
+  }
+
+  return {
+    x: boss.minX,
+    y: boss.laserY,
+    width: boss.x - boss.minX + 4,
+    height: isBossPhaseTwo() ? 30 : 26
+  };
+}
+
 function spawnBossShockwaves() {
   const waveY = boss.baseY + boss.height - 18;
-  const waveSpeed = isBossPhaseTwo() ? 5.1 : 4.1;
+  const waveSpeed = isBossPhaseTwo() ? 5.2 : 4.2;
   const waveLife = isBossPhaseTwo() ? 120 : 110;
 
   projectiles.push({
@@ -2375,26 +2680,43 @@ function damageBoss(direction) {
   startHitStop(6);
   startScreenShake(9, 5);
 
+  addFloatingText("-1", centerX(boss), boss.y - 10, "#fecdd3");
+
   spawnHitParticles(
-    boss.x + boss.width / 2,
-    boss.y + boss.height / 2,
+    centerX(boss),
+    centerY(boss),
     direction
   );
 
   if (boss.health <= 0) {
-    boss.alive = false;
-    gameState.bossDefeated = true;
-    gameState.bossRoomLocked = false;
-    gameState.bossClearEffectTimer = 130;
-    gameState.message = "기억 파수자를 쓰러뜨렸습니다. 보스방 봉인이 풀리고 원점 코어가 드러났습니다.";
-
-    spawnBossDefeatBurst();
-    startScreenShake(24, 8);
+    defeatBoss();
   } else if (isBossPhaseTwo()) {
-    gameState.message = "2페이즈입니다. 기억 파편이 더 자주 떨어집니다.";
+    gameState.message = "2페이즈입니다. 패턴이 더 빠르게 이어집니다.";
   } else {
     gameState.message = "기억 파수자에게 공격이 맞았습니다.";
   }
+}
+
+function defeatBoss() {
+  boss.alive = false;
+  boss.defeatStarted = true;
+
+  gameState.bossDefeated = true;
+  gameState.bossRoomLocked = false;
+  gameState.bossClearEffectTimer = 150;
+  gameState.message = "기억 파수자를 쓰러뜨렸습니다. 보스방 봉인이 풀리고 원점 코어가 드러났습니다.";
+
+  shardWarnings.length = 0;
+
+  for (let i = projectiles.length - 1; i >= 0; i--) {
+    if (projectiles[i].type === "bossWave" || projectiles[i].type === "memoryShard") {
+      projectiles.splice(i, 1);
+    }
+  }
+
+  spawnBossDefeatBurst();
+  startScreenShake(28, 10);
+  addFloatingText("BOSS CLEAR", centerX(boss), boss.y - 28, "#e0f2fe");
 }
 
 function spawnEnemyProjectile(enemy) {
@@ -2467,7 +2789,7 @@ function updateProjectiles() {
 }
 
 function spawnMemoryShardImpact(projectile) {
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 10; i++) {
     addDashStreak(
       projectile.x + projectile.width / 2,
       420,
@@ -2558,9 +2880,11 @@ function checkAttackHits() {
       startHitStop(5);
       startScreenShake(8, 5);
 
+      addFloatingText("-1", centerX(enemy), enemy.y - 8, "#fecaca");
+
       spawnHitParticles(
-        enemy.x + enemy.width / 2,
-        enemy.y + enemy.height / 2,
+        centerX(enemy),
+        centerY(enemy),
         player.facing
       );
 
@@ -2573,7 +2897,7 @@ function checkAttackHits() {
     }
   }
 
-  if (boss.alive && isColliding(hitbox, boss)) {
+  if (boss.alive && !boss.hidden && isColliding(hitbox, boss)) {
     damageBoss(player.facing);
   }
 }
@@ -2636,7 +2960,7 @@ function checkPlayerEnemyDamage() {
     }
   }
 
-  if (boss.alive && player.x > 5400 && boss.contactCooldown <= 0 && isColliding(player, boss)) {
+  if (boss.alive && !boss.hidden && player.x > 5400 && boss.contactCooldown <= 0 && isColliding(player, boss)) {
     boss.contactCooldown = 45;
     takeDamage(boss, "기억 파수자와 충돌했습니다.");
   }
@@ -2651,7 +2975,7 @@ function takeDamage(source, message) {
   player.health -= 1;
   player.invincibleTimer = 75;
 
-  const playerCenterX = player.x + player.width / 2;
+  const playerCenterX = centerX(player);
   const sourceCenterX = source.x + source.width / 2;
 
   if (playerCenterX < sourceCenterX) {
@@ -2666,13 +2990,10 @@ function takeDamage(source, message) {
   player.isDashing = false;
 
   startHitStop(4);
-  startScreenShake(10, 6);
+  startScreenShake(12, 7);
 
-  spawnHitParticles(
-    player.x + player.width / 2,
-    player.y + player.height / 2,
-    playerCenterX < sourceCenterX ? -1 : 1
-  );
+  spawnPlayerDamageParticles();
+  addFloatingText("-1", centerX(player), player.y - 10, "#fca5a5");
 
   if (player.health <= 0) {
     respawnPlayer();
@@ -2688,6 +3009,10 @@ function updateGameStateTimers() {
 
   if (gameState.bossPhaseBannerTimer > 0) {
     gameState.bossPhaseBannerTimer -= 1;
+  }
+
+  if (gameState.bossStartBannerTimer > 0) {
+    gameState.bossStartBannerTimer -= 1;
   }
 }
 
@@ -2759,8 +3084,20 @@ function updatePlayerAnimation() {
 }
 
 function updateCamera() {
-  camera.x = player.x + player.width / 2 - camera.width / 2;
-  camera.y = player.y + player.height / 2 - camera.height / 2;
+  let targetX = centerX(player) - camera.width / 2;
+  let targetY = centerY(player) - camera.height / 2;
+
+  if (gameState.bossFightStarted && player.x > 5400 && boss.alive) {
+    const bossRoomCenterX = 5850;
+    targetX = bossRoomCenterX - camera.width / 2;
+
+    if (camera.bossFocusTimer > 0) {
+      camera.bossFocusTimer -= 1;
+    }
+  }
+
+  camera.x = targetX;
+  camera.y = targetY;
 
   if (camera.x < 0) {
     camera.x = 0;
@@ -2793,6 +3130,7 @@ function update() {
     hitStopTimer -= 1;
 
     updateParticles();
+    updateFloatingTexts();
     updateCamera();
 
     return;
@@ -2804,6 +3142,7 @@ function update() {
     updateEndingSequence();
     updatePlayerAnimation();
     updateParticles();
+    updateFloatingTexts();
     updateCamera();
 
     return;
@@ -2821,6 +3160,7 @@ function update() {
   checkEnemyAttackDamage();
   checkPlayerEnemyDamage();
   updateParticles();
+  updateFloatingTexts();
   updateCamera();
 }
 
@@ -2885,6 +3225,12 @@ function drawBossRoomDecorations() {
     ctx.arc(x - camera.x, 155 - camera.y, 22 + Math.sin(frameCount * 0.04 + x) * 4, 0, Math.PI * 2);
     ctx.fill();
   }
+
+  ctx.globalAlpha = 0.12;
+  ctx.fillStyle = "#f43f5e";
+  ctx.beginPath();
+  ctx.arc(5850 - camera.x, 250 - camera.y, 120 + Math.sin(frameCount * 0.035) * 8, 0, Math.PI * 2);
+  ctx.fill();
 
   ctx.restore();
 }
@@ -3353,9 +3699,11 @@ function drawBoss() {
 
   ctx.save();
 
+  ctx.globalAlpha = boss.alpha;
+
   if (boss.hitTimer > 0) {
     ctx.translate(Math.sin(boss.hitTimer * 2.5) * 3, 0);
-    ctx.globalAlpha = 0.75;
+    ctx.globalAlpha = Math.min(ctx.globalAlpha, 0.75);
   }
 
   ctx.fillStyle = "rgba(0, 0, 0, 0.42)";
@@ -3364,12 +3712,16 @@ function drawBoss() {
   ctx.fill();
 
   if (boss.attackTimer > 0) {
-    ctx.globalAlpha = 0.25;
+    ctx.globalAlpha = Math.min(0.35, boss.alpha);
 
     if (boss.attackType === "shardRain") {
       ctx.fillStyle = "#7dd3fc";
     } else if (boss.attackType === "jumpSlam") {
       ctx.fillStyle = "#facc15";
+    } else if (boss.attackType === "teleportSlam") {
+      ctx.fillStyle = "#c4b5fd";
+    } else if (boss.attackType === "laser") {
+      ctx.fillStyle = "#fb7185";
     } else {
       ctx.fillStyle = "#fb7185";
     }
@@ -3378,7 +3730,7 @@ function drawBoss() {
     ctx.arc(screenX + boss.width / 2, screenY + boss.height / 2, 58 + pulse, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.globalAlpha = 1;
+    ctx.globalAlpha = boss.alpha;
   }
 
   ctx.fillStyle = boss.hitTimer > 0 ? "#7f1d1d" : phaseTwo ? "#4c0519" : "#1e1b4b";
@@ -3407,7 +3759,7 @@ function drawBoss() {
   ctx.quadraticCurveTo(screenX + 64, screenY - 12, screenX + 68, screenY - 24);
   ctx.stroke();
 
-  ctx.fillStyle = "#fef3c7";
+  ctx.fillStyle = boss.attackType === "laser" ? "#fecaca" : "#fef3c7";
 
   if (boss.facing === 1) {
     ctx.fillRect(screenX + 35, screenY + 16, 5, 8);
@@ -3542,6 +3894,14 @@ function drawBossAttackWarning() {
     drawBossJumpSlamWarning();
   }
 
+  if (boss.attackType === "teleportSlam") {
+    drawBossTeleportSlamWarning();
+  }
+
+  if (boss.attackType === "laser") {
+    drawBossLaserWarning();
+  }
+
   ctx.restore();
 }
 
@@ -3561,7 +3921,7 @@ function drawBossShardRainWarning() {
 
 function drawBossShockwaveWarning() {
   const elapsed = boss.attackDuration - boss.attackTimer;
-  const fireFrame = isBossPhaseTwo() ? 22 : 28;
+  const fireFrame = isBossPhaseTwo() ? 21 : 27;
   const screenX = boss.x - camera.x;
   const screenY = boss.baseY - camera.y;
 
@@ -3579,7 +3939,7 @@ function drawBossShockwaveWarning() {
 
 function drawBossJumpSlamWarning() {
   const elapsed = boss.attackDuration - boss.attackTimer;
-  const prepEnd = isBossPhaseTwo() ? 14 : 18;
+  const prepEnd = isBossPhaseTwo() ? 13 : 17;
 
   const screenX = boss.targetX - camera.x;
   const screenY = boss.baseY - camera.y;
@@ -3603,6 +3963,74 @@ function drawBossJumpSlamWarning() {
   ctx.fillStyle = "#fef3c7";
   ctx.font = "22px Arial";
   ctx.fillText("!", screenX + boss.width / 2 - 5, screenY - 18);
+}
+
+function drawBossTeleportSlamWarning() {
+  const elapsed = boss.attackDuration - boss.attackTimer;
+  const appearFrame = isBossPhaseTwo() ? 32 : 38;
+
+  const screenX = boss.targetX + boss.width / 2 - camera.x;
+  const groundY = boss.baseY + boss.height - camera.y;
+
+  const progress = Math.min(1, elapsed / appearFrame);
+
+  ctx.globalAlpha = 0.25 + progress * 0.45;
+  ctx.fillStyle = "#fb7185";
+  ctx.beginPath();
+  ctx.ellipse(screenX, groundY - 10, 42 + progress * 18, 12 + progress * 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.globalAlpha = 0.9;
+  ctx.strokeStyle = "#fecdd3";
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  ctx.arc(screenX, groundY - 10, 30 + progress * 20, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.fillStyle = "#fecdd3";
+  ctx.font = "bold 20px Arial";
+  ctx.fillText("순간이동", screenX - 38, groundY - 44);
+}
+
+function drawBossLaserWarning() {
+  const elapsed = boss.attackDuration - boss.attackTimer;
+  const chargeEnd = isBossPhaseTwo() ? 32 : 40;
+  const activeEnd = isBossPhaseTwo() ? 48 : 58;
+
+  const hitbox = getBossLaserHitbox();
+
+  const screenX = hitbox.x - camera.x;
+  const screenY = hitbox.y - camera.y;
+
+  if (elapsed < chargeEnd) {
+    const progress = elapsed / chargeEnd;
+
+    ctx.globalAlpha = 0.22 + progress * 0.35;
+    ctx.fillStyle = "#ef4444";
+    ctx.fillRect(screenX, screenY + hitbox.height / 2 - 3, hitbox.width, 6);
+
+    ctx.globalAlpha = 0.9;
+    ctx.strokeStyle = "#fecaca";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(screenX, screenY + hitbox.height / 2);
+    ctx.lineTo(screenX + hitbox.width, screenY + hitbox.height / 2);
+    ctx.stroke();
+
+    ctx.fillStyle = "#fecaca";
+    ctx.font = "bold 18px Arial";
+    ctx.fillText("레이저 충전", boss.x - camera.x - 30, boss.y - camera.y - 18);
+  } else if (elapsed <= activeEnd) {
+    ctx.globalAlpha = 0.48 + Math.sin(frameCount * 0.6) * 0.12;
+    ctx.fillStyle = "#ef4444";
+    drawRoundedRect(screenX, screenY, hitbox.width, hitbox.height, 12);
+    ctx.fill();
+
+    ctx.globalAlpha = 0.85;
+    ctx.fillStyle = "#fecaca";
+    drawRoundedRect(screenX, screenY + hitbox.height / 2 - 4, hitbox.width, 8, 4);
+    ctx.fill();
+  }
 }
 
 function drawShardWarnings() {
@@ -3766,6 +4194,23 @@ function drawParticles() {
   ctx.restore();
 }
 
+function drawFloatingTexts() {
+  ctx.save();
+
+  for (const text of floatingTexts) {
+    const alpha = text.life / text.maxLife;
+
+    ctx.globalAlpha = alpha;
+    ctx.fillStyle = text.color;
+    ctx.font = "bold 18px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText(text.text, text.x - camera.x, text.y - camera.y);
+  }
+
+  ctx.textAlign = "left";
+  ctx.restore();
+}
+
 function drawRoomLabels() {
   for (const room of rooms) {
     const screenX = room.x + 35 - camera.x;
@@ -3800,7 +4245,7 @@ function drawWarnings() {
     { text: "기억 핵", x: 5085, y: 290 },
     { text: "기억 핵 1개 필요", x: 5300, y: 70 },
     { text: "보스방 입장 시 봉인", x: 5448, y: 325 },
-    { text: "파란 표식 후 기억 파편 낙하", x: 5680, y: 255 },
+    { text: "최종 보스: 파편 / 충격파 / 내려찍기 / 순간이동 / 레이저", x: 5580, y: 255 },
     { text: "보스를 쓰러뜨리면 원점 코어 출현", x: 5850, y: 270 }
   ];
 
@@ -4309,7 +4754,7 @@ function drawBossClearEffect() {
     return;
   }
 
-  const alpha = gameState.bossClearEffectTimer / 130;
+  const alpha = gameState.bossClearEffectTimer / 150;
 
   ctx.save();
 
@@ -4330,7 +4775,7 @@ function drawBossPhaseBanner() {
     return;
   }
 
-  const alpha = Math.min(1, gameState.bossPhaseBannerTimer / 40);
+  const alpha = Math.min(1, gameState.bossPhaseBannerTimer / 45);
 
   ctx.save();
 
@@ -4345,7 +4790,34 @@ function drawBossPhaseBanner() {
 
   ctx.fillStyle = "#e0f2fe";
   ctx.font = "18px Arial";
-  ctx.fillText("기억 파편 낙하 빈도 증가", canvas.width / 2, canvas.height / 2 + 28);
+  ctx.fillText("순간이동, 레이저, 기억 파편 빈도 증가", canvas.width / 2, canvas.height / 2 + 28);
+
+  ctx.textAlign = "left";
+
+  ctx.restore();
+}
+
+function drawBossStartBanner() {
+  if (gameState.bossStartBannerTimer <= 0) {
+    return;
+  }
+
+  const alpha = Math.min(1, gameState.bossStartBannerTimer / 45);
+
+  ctx.save();
+
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = "rgba(2, 6, 23, 0.58)";
+  ctx.fillRect(0, canvas.height / 2 - 55, canvas.width, 110);
+
+  ctx.fillStyle = "#e0f2fe";
+  ctx.font = "bold 34px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("기억 파수자", canvas.width / 2, canvas.height / 2 - 8);
+
+  ctx.fillStyle = "#fecdd3";
+  ctx.font = "18px Arial";
+  ctx.fillText("최종 보스전 시작", canvas.width / 2, canvas.height / 2 + 28);
 
   ctx.textAlign = "left";
 
@@ -4414,7 +4886,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("10단계-1 재작성: 보스 패턴 고급화", 20, 35);
+  ctx.fillText("10단계 통합본: 최종 보스전 완성", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프/이중 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -4488,6 +4960,7 @@ function drawWorld() {
   drawShardWarnings();
   drawProjectiles();
   drawParticles();
+  drawFloatingTexts();
   drawPlayer();
   drawAttack();
   drawBossClearEffect();
@@ -4500,6 +4973,7 @@ function draw() {
 
   drawWorld();
   drawUI();
+  drawBossStartBanner();
   drawBossPhaseBanner();
   drawEndingPanel();
 }
