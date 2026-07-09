@@ -183,6 +183,7 @@ const gravity = 0.65;
 
 const gameState = {
   hasKey: false,
+  memoryFragments: 0,
   message: "이중 점프 능력을 찾아 획득하세요."
 };
 
@@ -198,6 +199,10 @@ const platforms = [
   { x: 0, y: 420, width: 840, height: 80 },
   { x: 150, y: 350, width: 180, height: 24 },
   { x: 450, y: 315, width: 180, height: 24 },
+
+  { x: 630, y: 135, width: 110, height: 24, requiresDoubleJump: true },
+  { x: 790, y: 105, width: 100, height: 24, requiresDoubleJump: true },
+  { x: 930, y: 135, width: 110, height: 24, requiresDoubleJump: true },
 
   { x: 920, y: 420, width: 820, height: 80 },
   { x: 1030, y: 350, width: 170, height: 24 },
@@ -252,6 +257,18 @@ const abilityItems = [
     y: 320,
     width: 28,
     height: 28,
+    collected: false
+  }
+];
+
+const rewardItems = [
+  {
+    type: "memoryFragment",
+    name: "기억 조각",
+    x: 955,
+    y: 95,
+    width: 24,
+    height: 24,
     collected: false
   }
 ];
@@ -1893,6 +1910,41 @@ function checkAbilityCollection() {
   }
 }
 
+function checkRewardCollection() {
+  for (const item of rewardItems) {
+    if (item.collected) {
+      continue;
+    }
+
+    if (isColliding(player, item)) {
+      item.collected = true;
+
+      if (item.type === "memoryFragment") {
+        gameState.memoryFragments += 1;
+        gameState.message = "기억 조각을 획득했습니다. 이중 점프로 열린 숨겨진 보상입니다.";
+
+        for (let i = 0; i < 24; i++) {
+          const angle = (Math.PI * 2 * i) / 24;
+
+          addDashStreak(
+            item.x + item.width / 2,
+            item.y + item.height / 2,
+            Math.cos(angle) * (1.2 + Math.random() * 1.7),
+            Math.sin(angle) * (1.2 + Math.random() * 1.7),
+            10 + Math.random() * 14,
+            2 + Math.random() * 3,
+            20 + Math.random() * 8,
+            "rgba(251, 191, 36, 1)",
+            angle
+          );
+        }
+
+        startScreenShake(6, 2.5);
+      }
+    }
+  }
+}
+
 function checkFall() {
   if (player.y > world.height) {
     resetPlayer();
@@ -1928,6 +1980,7 @@ function updatePlayer() {
 
   checkKeyCollection();
   checkAbilityCollection();
+  checkRewardCollection();
   checkFall();
 }
 
@@ -2003,11 +2056,23 @@ function drawPlatforms() {
     const screenX = platform.x - camera.x;
     const screenY = platform.y - camera.y;
 
-    ctx.fillStyle = "#475569";
-    ctx.fillRect(screenX, screenY, platform.width, platform.height);
+    if (platform.requiresDoubleJump) {
+      ctx.fillStyle = player.hasDoubleJump ? "#4c1d95" : "rgba(76, 29, 149, 0.42)";
+      ctx.fillRect(screenX, screenY, platform.width, platform.height);
 
-    ctx.fillStyle = "#64748b";
-    ctx.fillRect(screenX, screenY, platform.width, 5);
+      ctx.fillStyle = player.hasDoubleJump ? "#a78bfa" : "rgba(167, 139, 250, 0.45)";
+      ctx.fillRect(screenX, screenY, platform.width, 5);
+
+      ctx.strokeStyle = "rgba(216, 180, 254, 0.75)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(screenX, screenY, platform.width, platform.height);
+    } else {
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(screenX, screenY, platform.width, platform.height);
+
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(screenX, screenY, platform.width, 5);
+    }
   }
 }
 
@@ -2113,6 +2178,60 @@ function drawAbilityItems() {
     ctx.fillStyle = "#ede9fe";
     ctx.font = "13px Arial";
     ctx.fillText(item.name, screenX - 12, screenY - 10);
+
+    ctx.restore();
+  }
+}
+
+function drawRewardItems() {
+  for (const item of rewardItems) {
+    if (item.collected) {
+      continue;
+    }
+
+    const screenX = item.x - camera.x;
+    const screenY = item.y - camera.y;
+    const pulse = Math.sin(frameCount * 0.14) * 3;
+
+    ctx.save();
+
+    ctx.globalAlpha = 0.28;
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(
+      screenX + item.width / 2,
+      screenY + item.height / 2,
+      20 + pulse,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#78350f";
+    ctx.strokeStyle = "#fde68a";
+    ctx.lineWidth = 2;
+    drawRoundedRect(screenX, screenY, item.width, item.height, 7);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = "#fef3c7";
+    ctx.beginPath();
+    ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "#fde68a";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(screenX + 12, screenY + 3);
+    ctx.lineTo(screenX + 12, screenY + 21);
+    ctx.moveTo(screenX + 3, screenY + 12);
+    ctx.lineTo(screenX + 21, screenY + 12);
+    ctx.stroke();
+
+    ctx.fillStyle = "#fef3c7";
+    ctx.font = "13px Arial";
+    ctx.fillText(item.name, screenX - 14, screenY - 10);
 
     ctx.restore();
   }
@@ -2532,6 +2651,8 @@ function drawRoomLabels() {
 function drawWarnings() {
   const warnings = [
     { text: "낭떠러지", x: 845, y: 455 },
+    { text: "이중 점프 후 돌아오면 진입 가능", x: 610, y: 115 },
+    { text: "숨겨진 기억 조각", x: 910, y: 82 },
     { text: "근접 적", x: 1090, y: 370 },
     { text: "J 공격 / L 회복", x: 1270, y: 270 },
     { text: "비행 적", x: 2010, y: 215 },
@@ -2926,7 +3047,7 @@ function drawMiniMap() {
 
 function drawHealthUI() {
   const startX = 20;
-  const startY = 285;
+  const startY = 315;
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
@@ -2949,7 +3070,7 @@ function drawHealthUI() {
 
 function drawCoreEnergyUI() {
   const startX = 20;
-  const startY = 315;
+  const startY = 345;
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
@@ -2979,7 +3100,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("7단계-1: 능력 해금 시스템 - 이중 점프", 20, 35);
+  ctx.fillText("7단계-2: 이중 점프 전용 길막 구조", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프/이중 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -3021,12 +3142,15 @@ function drawUI() {
     ctx.fillText("능력: 없음", 20, 265);
   }
 
+  ctx.fillStyle = "#fef3c7";
+  ctx.fillText("기억 조각: " + gameState.memoryFragments + "개", 20, 290);
+
   drawHealthUI();
   drawCoreEnergyUI();
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
-  ctx.fillText(gameState.message, 20, 360);
+  ctx.fillText(gameState.message, 20, 390);
 
   drawMiniMap();
 }
@@ -3064,6 +3188,7 @@ function drawWorld() {
   drawPlatforms();
   drawKeyItem();
   drawAbilityItems();
+  drawRewardItems();
   drawWarnings();
   drawEnemies();
   drawEnemyAttacks();
