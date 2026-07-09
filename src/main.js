@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v50: 12단계-2 대시 장벽 판정 완화
+// v51: 12단계-3 숨겨진 방, 보상, 되돌아가기 구조 추가
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -167,7 +167,8 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "12단계-2 v50: 대시 장벽 통과 판정이 더 널널해졌습니다."
+  message: "12단계-3 v51: 숨겨진 방과 보상, 되돌아가기 구조가 추가되었습니다.",
+  hiddenRewards: 0
 };
 
 const endingLines = [
@@ -329,6 +330,19 @@ const platforms = [
   { x: 9950, y: 1240, width: 150, height: 26, abilityChallenge: "pogo" },
   { x: 10300, y: 1240, width: 150, height: 26, abilityChallenge: "pogo" },
 
+  // 12-3: 숨겨진 방과 되돌아가기 루트. 기존 능력을 얻은 뒤 예전 방을 다시 방문하도록 설계
+  { x: 1380, y: 150, width: 120, height: 22, requiresDoubleJump: true, secretRoute: "입구 상층 숨겨진 방" },
+  { x: 1580, y: 118, width: 150, height: 22, requiresDoubleJump: true, secretRoute: "입구 상층 숨겨진 방" },
+  { x: 3220, y: 910, width: 140, height: 24, secretRoute: "회랑 하층 보상방" },
+  { x: 3420, y: 850, width: 140, height: 24, secretRoute: "회랑 하층 보상방" },
+  { x: 3650, y: 790, width: 120, height: 24, secretRoute: "회랑 하층 보상방" },
+  { x: 5960, y: 245, width: 150, height: 24, requiresDoubleJump: true, secretRoute: "용광로 상층 보상방" },
+  { x: 6240, y: 210, width: 150, height: 24, requiresDoubleJump: true, secretRoute: "용광로 상층 보상방" },
+  { x: 8520, y: 155, width: 160, height: 24, requiresDoubleJump: true, secretRoute: "기억의 탑 꼭대기" },
+  { x: 8820, y: 125, width: 130, height: 24, requiresDoubleJump: true, secretRoute: "기억의 탑 꼭대기" },
+  { x: 10080, y: 1300, width: 160, height: 26, abilityChallenge: "pogo", secretRoute: "심연 하층 튕김 보상방" },
+  { x: 10420, y: 1360, width: 190, height: 26, abilityChallenge: "pogo", secretRoute: "심연 하층 튕김 보상방" },
+
   // 대형 방 7: 최종 공동. 보스전도 화면 하나보다 넓은 공간으로 확장
   { x: 10800, y: 620, width: 1800, height: 80 },
   { x: 10980, y: 420, width: 160, height: 24 },
@@ -357,6 +371,11 @@ const abilityItems = [
 ];
 const rewardItems = [
   { type: "memoryFragment", name: "기억 조각", x: 1490, y: 175, width: 24, height: 24, collected: false },
+  { type: "memoryFragment", name: "숨은 기억 조각", x: 1620, y: 82, width: 24, height: 24, collected: false, hiddenReward: true },
+  { type: "coreCapacity", name: "코어 용량", x: 3490, y: 810, width: 26, height: 26, collected: false, hiddenReward: true },
+  { type: "healthCore", name: "체력 코어", x: 6285, y: 172, width: 26, height: 26, collected: false, hiddenReward: true },
+  { type: "coreCapacity", name: "숨은 코어 용량", x: 8870, y: 88, width: 26, height: 26, collected: false, hiddenReward: true },
+  { type: "memoryFragment", name: "심연 기억 조각", x: 10470, y: 1322, width: 24, height: 24, collected: false, hiddenReward: true },
   { type: "memoryCore", name: "기억 핵", x: 10385, y: 210, width: 28, height: 28, collected: false },
   { type: "originCore", name: "원점 코어", x: 12140, y: 572, width: 30, height: 30, collected: false, requiresBossDefeated: true }
 ];
@@ -1720,9 +1739,34 @@ function checkRewardCollection() {
 
     if (item.type === "memoryFragment") {
       gameState.memoryFragments += 1;
-      gameState.message = "기억 조각을 획득했습니다. 이제 기억의 문을 열 수 있습니다.";
+
+      if (item.hiddenReward) {
+        gameState.hiddenRewards += 1;
+        gameState.message = "숨겨진 기억 조각을 획득했습니다. 되돌아가기 탐험이 보상으로 이어졌습니다.";
+      } else {
+        gameState.message = "기억 조각을 획득했습니다. 이제 기억의 문을 열 수 있습니다.";
+      }
+
       spawnRewardBurst(item, "rgba(251, 191, 36, 1)");
       startScreenShake(6, 2.5);
+    }
+
+    if (item.type === "healthCore") {
+      player.maxHealth += 1;
+      player.health = player.maxHealth;
+      gameState.hiddenRewards += 1;
+      gameState.message = "숨겨진 체력 코어를 획득했습니다. 최대 체력이 1 증가했습니다.";
+      spawnRewardBurst(item, "rgba(248, 113, 113, 1)");
+      startScreenShake(10, 4);
+    }
+
+    if (item.type === "coreCapacity") {
+      player.maxCoreEnergy += 1;
+      player.coreEnergy = player.maxCoreEnergy;
+      gameState.hiddenRewards += 1;
+      gameState.message = "숨겨진 코어 용량을 획득했습니다. 최대 코어 에너지가 1 증가했습니다.";
+      spawnRewardBurst(item, "rgba(134, 239, 172, 1)");
+      startScreenShake(10, 4);
     }
 
     if (item.type === "memoryCore") {
@@ -3624,6 +3668,24 @@ function drawRewardItems() {
       ctx.globalAlpha = 1;
       ctx.fillStyle = "#581c87";
       ctx.strokeStyle = "#e9d5ff";
+    } else if (item.type === "healthCore") {
+      ctx.globalAlpha = 0.3;
+      ctx.fillStyle = "#fb7185";
+      ctx.beginPath();
+      ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 22 + pulse, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#7f1d1d";
+      ctx.strokeStyle = "#fecdd3";
+    } else if (item.type === "coreCapacity") {
+      ctx.globalAlpha = 0.3;
+      ctx.fillStyle = "#86efac";
+      ctx.beginPath();
+      ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 22 + pulse, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#14532d";
+      ctx.strokeStyle = "#bbf7d0";
     } else {
       ctx.globalAlpha = 0.28;
       ctx.fillStyle = "#facc15";
@@ -3639,7 +3701,7 @@ function drawRewardItems() {
     drawRoundedRect(screenX, screenY, item.width, item.height, 7);
     ctx.fill();
     ctx.stroke();
-    ctx.fillStyle = item.type === "originCore" ? "#e0f2fe" : item.type === "memoryCore" ? "#f5d0fe" : "#fef3c7";
+    ctx.fillStyle = item.type === "originCore" ? "#e0f2fe" : item.type === "memoryCore" ? "#f5d0fe" : item.type === "healthCore" ? "#fecdd3" : item.type === "coreCapacity" ? "#bbf7d0" : "#fef3c7";
     ctx.beginPath();
     ctx.arc(screenX + item.width / 2, screenY + item.height / 2, item.type === "originCore" ? 6 : 5, 0, Math.PI * 2);
     ctx.fill();
@@ -4226,7 +4288,7 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "12-2 v50: 대시 장벽 판정을 완화함", x: 80, y: 300 },
+    { text: "12-3 v51: 숨겨진 방, 보상, 되돌아가기 루트 추가", x: 80, y: 300 },
     { text: "대형 방 1: 상층 기억 조각은 나중에 이중 점프 후 회수", x: 1050, y: 185 },
     { text: "하층 통로: 떨어져도 바로 리셋되지 않고 다른 경로로 이어짐", x: 860, y: 790 },
     { text: "대형 방 2: 중층 전투 / 상층 경로 / 하층 우회가 한 공간에 공존", x: 1980, y: 330 },
@@ -4251,7 +4313,12 @@ function drawWarnings() {
     { text: "이중 점프 연속 발판", x: 3950, y: 225 },
     { text: "벽 점프 수직 시험: 좌우 벽을 번갈아 타고 상승", x: 7560, y: 240 },
     { text: "아래 공격 튕김 구간: 공중 S+J로 적중하면 위로 튕김", x: 9200, y: 1210 },
-    { text: "능력 조합 목표: 벽 점프 → 대시 → 이중 점프 → 아래 공격 튕김", x: 9410, y: 1370 }
+    { text: "능력 조합 목표: 벽 점프 → 대시 → 이중 점프 → 아래 공격 튕김", x: 9410, y: 1370 },
+    { text: "12-3 숨겨진 방: 이중 점프로 입구 상층을 다시 방문", x: 1330, y: 132 },
+    { text: "숨겨진 보상방: 하층 우회로 끝에서 코어 용량 획득", x: 3180, y: 880 },
+    { text: "되돌아가기 보상: 용광로 상층의 체력 코어", x: 5940, y: 230 },
+    { text: "탑 꼭대기 숨겨진 코어 용량", x: 8460, y: 140 },
+    { text: "심연 하층 보상방: 아래 공격 튕김으로 진입", x: 10040, y: 1285 }
   ];
 
   for (const warning of warnings) {
@@ -4826,7 +4893,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("12단계-2 v50: 대시 장벽 판정 완화", 20, 35);
+  ctx.fillText("12단계-3 v51: 숨겨진 방과 보상 루트", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -4864,11 +4931,13 @@ function drawUI() {
   ctx.fillText("기억 핵: " + gameState.memoryCores + "개", 20, 315);
   ctx.fillStyle = "#bae6fd";
   ctx.fillText("원점 코어: " + gameState.originCores + "개", 20, 340);
+  ctx.fillStyle = "#bbf7d0";
+  ctx.fillText("숨겨진 보상: " + gameState.hiddenRewards + "개", 20, 365);
   drawHealthUI();
   drawCoreEnergyUI();
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
-  ctx.fillText(gameState.message, 20, 435);
+  ctx.fillText(gameState.message, 20, 472);
   drawBossHealthBar();
   drawMiniMap();
 }
