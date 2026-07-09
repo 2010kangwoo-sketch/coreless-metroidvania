@@ -63,16 +63,16 @@ const player = {
   vy: 0,
 
   // v44: 방향 전환 시 먼저 감속한 뒤 반대 방향으로 가속되도록 조정
-  groundAcceleration: 0.42,
-  airAcceleration: 0.24,
-  groundDeceleration: 0.50,
-  airDeceleration: 0.22,
-  turnDeceleration: 0.68,
+  groundAcceleration: 0.54,
+  airAcceleration: 0.30,
+  groundDeceleration: 0.56,
+  airDeceleration: 0.26,
+  turnDeceleration: 0.78,
   turnThreshold: 0.72,
-  groundFriction: 0.86,
+  groundFriction: 0.89,
   airFriction: 0.965,
-  maxSpeed: 5.35,
-  maxAirSpeed: 4.8,
+  maxSpeed: 6.05,
+  maxAirSpeed: 5.35,
 
   jumpPower: -13.1,
   onGround: false,
@@ -94,7 +94,7 @@ const player = {
   isWallSliding: false,
   wallDirection: 0,
   wallSlideSpeed: 2.2,
-  wallJumpPowerX: 7.6,
+  wallJumpPowerX: 8.0,
   wallJumpPowerY: -12.6,
   wallJumpLockTimer: 0,
   wallJumpLockMax: 12,
@@ -104,7 +104,7 @@ const player = {
   isDashing: false,
   dashTimer: 0,
   dashDuration: 10,
-  dashSpeed: 12,
+  dashSpeed: 12.8,
   dashCooldown: 0,
   dashCooldownMax: 110,
   dashInvincibleTimer: 0,
@@ -167,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v56 1차 제작 보강: 소형 튜토리얼 방, 카메라 고정/추적 기믹, 초대형 방 체크포인트를 추가했습니다.",
+  message: "13단계-2 v56 1차 보강 수정: 무빙 속도 회복, 바닥형 표지판 가시성 개선, 체크포인트를 유지했습니다.",
   hiddenRewards: 0
 };
 
@@ -321,7 +321,17 @@ const tutorialRoomFrames = tutorialRooms.map(function(room) {
 });
 
 const tutorialSigns = tutorialRooms.map(function(room) {
-  return { x: room.x + 80, y: room.y + 70, width: Math.min(520, room.width - 140), height: 112, title: room.signTitle, lines: room.signLines, roomId: room.id };
+  const signWidth = Math.min(540, room.width - 150);
+  const signHeight = 128;
+  return {
+    x: room.x + 80,
+    y: room.y + room.height - 230,
+    width: signWidth,
+    height: signHeight,
+    title: room.signTitle,
+    lines: room.signLines,
+    roomId: room.id
+  };
 });
 
 const platforms = [
@@ -3588,22 +3598,31 @@ function drawTutorialSigns() {
     const screenX = sign.x - camera.x;
     const screenY = sign.y - camera.y;
 
+    // 표지판은 공중 안내문이 아니라 바닥에 세워진 오브젝트처럼 보이게 그린다.
     ctx.save();
-    ctx.fillStyle = "rgba(15, 23, 42, 0.92)";
+    ctx.fillStyle = "rgba(30, 41, 59, 0.92)";
+    ctx.fillRect(screenX + 22, screenY + sign.height - 6, 12, 52);
+    ctx.fillRect(screenX + sign.width - 34, screenY + sign.height - 6, 12, 52);
+
+    ctx.fillStyle = "rgba(15, 23, 42, 0.96)";
     drawRoundedRect(screenX, screenY, sign.width, sign.height, 10);
     ctx.fill();
-    ctx.strokeStyle = "rgba(250, 204, 21, 0.88)";
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = "rgba(250, 204, 21, 0.95)";
+    ctx.lineWidth = 2.5;
     drawRoundedRect(screenX, screenY, sign.width, sign.height, 10);
     ctx.stroke();
+
+    ctx.fillStyle = "rgba(250, 204, 21, 0.18)";
+    ctx.fillRect(screenX + 12, screenY + 40, sign.width - 24, 2);
+
     ctx.fillStyle = "#fef3c7";
-    ctx.font = "bold 17px Arial";
-    ctx.fillText(sign.title, screenX + 18, screenY + 30);
+    ctx.font = "bold 18px Arial";
+    ctx.fillText(sign.title, screenX + 18, screenY + 29);
     ctx.fillStyle = "#e2e8f0";
     ctx.font = "14px Arial";
 
     for (let i = 0; i < sign.lines.length; i++) {
-      ctx.fillText(sign.lines[i], screenX + 18, screenY + 56 + i * 22);
+      ctx.fillText(sign.lines[i], screenX + 18, screenY + 61 + i * 23);
     }
 
     ctx.restore();
@@ -5174,7 +5193,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v56 1차 보강: 튜토리얼 카메라 + 체크포인트", 20, 35);
+  ctx.fillText("13단계-2 v56 1차 보강 수정: 무빙 회복 + 바닥 표지판", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
