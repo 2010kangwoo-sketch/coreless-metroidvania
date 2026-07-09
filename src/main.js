@@ -43,6 +43,10 @@ const player = {
   jumpPower: -13,
   onGround: false,
 
+  hasDoubleJump: false,
+  canDoubleJump: false,
+  doubleJumpUsed: false,
+
   facing: 1,
 
   isDashing: false,
@@ -179,15 +183,15 @@ const gravity = 0.65;
 
 const gameState = {
   hasKey: false,
-  message: "캐릭터 뿔과 흔들림이 복구되었습니다."
+  message: "이중 점프 능력을 찾아 획득하세요."
 };
 
 const rooms = [
   { name: "방 1: 시작 구역", guide: "기본 이동과 점프", x: 0, width: 900, color: "#111827" },
   { name: "방 2: 근접 전투 구역", guide: "붉은 예고 공격을 보고 피하기", x: 900, width: 900, color: "#172033" },
-  { name: "방 3: 복합 전투 구역", guide: "근접 적과 비행 적 상대", x: 1800, width: 900, color: "#1f1b2e" },
+  { name: "방 3: 능력 해금 구역", guide: "이중 점프 능력 획득", x: 1800, width: 900, color: "#1f1b2e" },
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
-  { name: "방 5: 원거리 적 구역", guide: "투사체를 피하며 접근하기", x: 3600, width: 900, color: "#10251f" }
+  { name: "방 5: 이중 점프 활용 구역", guide: "투사체를 피하며 높은 발판 오르기", x: 3600, width: 900, color: "#10251f" }
 ];
 
 const platforms = [
@@ -216,6 +220,10 @@ const platforms = [
   { x: 4000, y: 290, width: 180, height: 24 },
   { x: 4260, y: 340, width: 160, height: 24 },
 
+  { x: 3860, y: 245, width: 130, height: 24 },
+  { x: 4100, y: 215, width: 140, height: 24 },
+  { x: 4350, y: 265, width: 110, height: 24 },
+
   { x: 760, y: 260, width: 40, height: 80 },
   { x: 1660, y: 300, width: 40, height: 120 },
   { x: 2500, y: 300, width: 40, height: 120 }
@@ -235,6 +243,18 @@ const keyItem = {
   height: 24,
   collected: false
 };
+
+const abilityItems = [
+  {
+    type: "doubleJump",
+    name: "이중 점프",
+    x: 2160,
+    y: 320,
+    width: 28,
+    height: 28,
+    collected: false
+  }
+];
 
 const enemies = [
   {
@@ -367,7 +387,10 @@ document.addEventListener("keydown", function(event) {
   keys[event.code] = true;
 
   if (event.code === "Space") {
-    tryJump();
+    if (!event.repeat) {
+      tryJump();
+    }
+
     event.preventDefault();
   }
 
@@ -695,6 +718,40 @@ function spawnJumpParticles() {
   }
 }
 
+function spawnDoubleJumpParticles() {
+  for (let i = 0; i < 18; i++) {
+    const angle = (Math.PI * 2 * i) / 18;
+
+    addDashStreak(
+      player.x + player.width / 2,
+      player.y + player.height / 2,
+      Math.cos(angle) * (1.4 + Math.random() * 1.3),
+      Math.sin(angle) * (1.0 + Math.random() * 1.1),
+      10 + Math.random() * 14,
+      2 + Math.random() * 3,
+      16 + Math.random() * 8,
+      "rgba(196, 181, 253, 1)",
+      angle
+    );
+  }
+
+  for (let i = 0; i < 8; i++) {
+    addDustParticle(
+      player.x + player.width / 2 + (Math.random() - 0.5) * 16,
+      player.y + player.height + 2,
+      (Math.random() - 0.5) * 2.2,
+      0.4 + Math.random() * 1.2,
+      10 + Math.random() * 16,
+      3 + Math.random() * 3,
+      18 + Math.random() * 8,
+      "rgba(196, 181, 253, 1)",
+      (Math.random() - 0.5) * 0.5
+    );
+  }
+
+  startScreenShake(4, 2);
+}
+
 function spawnLandingParticles(power) {
   const count = Math.min(24, 10 + Math.floor(power * 1.5));
 
@@ -1001,6 +1058,23 @@ function tryJump() {
 
     player.vy = player.jumpPower;
     player.onGround = false;
+
+    if (player.hasDoubleJump) {
+      player.canDoubleJump = true;
+      player.doubleJumpUsed = false;
+    }
+
+    return;
+  }
+
+  if (player.hasDoubleJump && player.canDoubleJump && !player.doubleJumpUsed) {
+    spawnDoubleJumpParticles();
+
+    player.vy = player.jumpPower * 0.92;
+    player.canDoubleJump = false;
+    player.doubleJumpUsed = true;
+
+    gameState.message = "이중 점프를 사용했습니다.";
   }
 }
 
@@ -1112,6 +1186,11 @@ function moveVertically(previousOnGround, previousVy) {
         player.y = object.y - player.height;
         player.vy = 0;
         player.onGround = true;
+
+        if (player.hasDoubleJump) {
+          player.canDoubleJump = true;
+          player.doubleJumpUsed = false;
+        }
 
         if (!previousOnGround && previousVy > 4) {
           spawnLandingParticles(previousVy);
@@ -1762,6 +1841,8 @@ function respawnPlayer() {
   player.attackTimer = 0;
   player.healTimer = 0;
   player.healingWillRestore = false;
+  player.canDoubleJump = player.hasDoubleJump;
+  player.doubleJumpUsed = false;
 
   gameState.message = "체력이 모두 줄어 시작 지점에서 다시 시작합니다.";
 }
@@ -1771,6 +1852,44 @@ function checkKeyCollection() {
     keyItem.collected = true;
     gameState.hasKey = true;
     gameState.message = "열쇠를 획득했습니다. 이제 잠긴 문을 열 수 있습니다.";
+  }
+}
+
+function checkAbilityCollection() {
+  for (const item of abilityItems) {
+    if (item.collected) {
+      continue;
+    }
+
+    if (isColliding(player, item)) {
+      item.collected = true;
+
+      if (item.type === "doubleJump") {
+        player.hasDoubleJump = true;
+        player.canDoubleJump = true;
+        player.doubleJumpUsed = false;
+
+        gameState.message = "능력 획득: 이중 점프. 공중에서 Space를 한 번 더 누를 수 있습니다.";
+
+        for (let i = 0; i < 26; i++) {
+          const angle = (Math.PI * 2 * i) / 26;
+
+          addDashStreak(
+            item.x + item.width / 2,
+            item.y + item.height / 2,
+            Math.cos(angle) * (1.5 + Math.random() * 1.8),
+            Math.sin(angle) * (1.5 + Math.random() * 1.8),
+            12 + Math.random() * 16,
+            2 + Math.random() * 3,
+            22 + Math.random() * 10,
+            "rgba(196, 181, 253, 1)",
+            angle
+          );
+        }
+
+        startScreenShake(8, 3);
+      }
+    }
   }
 }
 
@@ -1790,6 +1909,9 @@ function resetPlayer() {
   player.invincibleTimer = 75;
   player.healTimer = 0;
   player.healingWillRestore = false;
+  player.canDoubleJump = player.hasDoubleJump;
+  player.doubleJumpUsed = false;
+
   gameState.message = "낭떠러지에서 떨어져 시작 지점으로 돌아왔습니다.";
 }
 
@@ -1805,6 +1927,7 @@ function updatePlayer() {
   moveVertically(previousOnGround, previousVy);
 
   checkKeyCollection();
+  checkAbilityCollection();
   checkFall();
 }
 
@@ -1946,6 +2069,53 @@ function drawKeyItem() {
   ctx.fillStyle = "#fef08a";
   ctx.font = "13px Arial";
   ctx.fillText("열쇠", screenX - 4, screenY - 8);
+}
+
+function drawAbilityItems() {
+  for (const item of abilityItems) {
+    if (item.collected) {
+      continue;
+    }
+
+    const screenX = item.x - camera.x;
+    const screenY = item.y - camera.y;
+    const pulse = Math.sin(frameCount * 0.12) * 3;
+
+    ctx.save();
+
+    ctx.globalAlpha = 0.25;
+    ctx.fillStyle = "#c4b5fd";
+    ctx.beginPath();
+    ctx.arc(
+      screenX + item.width / 2,
+      screenY + item.height / 2,
+      22 + pulse,
+      0,
+      Math.PI * 2
+    );
+    ctx.fill();
+
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = "#312e81";
+    ctx.strokeStyle = "#c4b5fd";
+    ctx.lineWidth = 2;
+    drawRoundedRect(screenX, screenY, item.width, item.height, 8);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.strokeStyle = "#e9d5ff";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(screenX + 8, screenY + 18);
+    ctx.quadraticCurveTo(screenX + 14, screenY + 7, screenX + 20, screenY + 18);
+    ctx.stroke();
+
+    ctx.fillStyle = "#ede9fe";
+    ctx.font = "13px Arial";
+    ctx.fillText(item.name, screenX - 12, screenY - 10);
+
+    ctx.restore();
+  }
 }
 
 function drawEnemies() {
@@ -2365,10 +2535,12 @@ function drawWarnings() {
     { text: "근접 적", x: 1090, y: 370 },
     { text: "J 공격 / L 회복", x: 1270, y: 270 },
     { text: "비행 적", x: 2010, y: 215 },
+    { text: "이중 점프 능력", x: 2125, y: 305 },
     { text: "대시 필요", x: 2070, y: 455 },
     { text: "두 번째 근접 적", x: 2300, y: 370 },
     { text: "열쇠 획득 구간", x: 3040, y: 250 },
     { text: "열쇠 없이는 통과 불가", x: 3450, y: 280 },
+    { text: "이중 점프 구간", x: 3860, y: 225 },
     { text: "원거리 적", x: 3890, y: 360 }
   ];
 
@@ -2807,10 +2979,10 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("6단계-5 수정판3: 캐릭터 외형 복구", 20, 35);
+  ctx.fillText("7단계-1: 능력 해금 시스템 - 이중 점프", 20, 35);
 
   ctx.font = "16px Arial";
-  ctx.fillText("A/D: 이동 | Space: 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
+  ctx.fillText("A/D: 이동 | Space: 점프/이중 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
 
   ctx.fillStyle = "#bfdbfe";
   ctx.fillText("현재 방: " + currentRoom.name, 20, 95);
@@ -2839,6 +3011,14 @@ function drawUI() {
     const cooldownPercent = Math.ceil((player.dashCooldown / player.dashCooldownMax) * 100);
     ctx.fillStyle = "#fde68a";
     ctx.fillText("대시 쿨타임: " + cooldownPercent + "%", 20, 240);
+  }
+
+  if (player.hasDoubleJump) {
+    ctx.fillStyle = "#c4b5fd";
+    ctx.fillText("능력: 이중 점프 획득", 20, 265);
+  } else {
+    ctx.fillStyle = "#cbd5e1";
+    ctx.fillText("능력: 없음", 20, 265);
   }
 
   drawHealthUI();
@@ -2883,6 +3063,7 @@ function drawWorld() {
   drawDoors();
   drawPlatforms();
   drawKeyItem();
+  drawAbilityItems();
   drawWarnings();
   drawEnemies();
   drawEnemyAttacks();
