@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v56: 13단계-2 1차 제작 보강 수정. 초대형 맵용 빠른 무빙 프로필 적용
+// v56 reviewed: 13단계-2 1차 제작 보강 안정화. 원래 무빙, 튜토리얼 표지판, 체크포인트, 최적화 안전 점검본
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -63,17 +63,16 @@ const player = {
   vy: 0,
 
   // v44: 방향 전환 시 먼저 감속한 뒤 반대 방향으로 가속되도록 조정
-  // v56 speed fix: 방 크기가 매우 커졌기 때문에 이동감을 대형 맵 기준으로 다시 조정
-  groundAcceleration: 0.82,
-  airAcceleration: 0.44,
-  groundDeceleration: 0.74,
-  airDeceleration: 0.34,
-  turnDeceleration: 1.05,
-  turnThreshold: 0.64,
-  groundFriction: 0.93,
-  airFriction: 0.972,
-  maxSpeed: 8.15,
-  maxAirSpeed: 7.05,
+  groundAcceleration: 0.42,
+  airAcceleration: 0.24,
+  groundDeceleration: 0.50,
+  airDeceleration: 0.22,
+  turnDeceleration: 0.68,
+  turnThreshold: 0.72,
+  groundFriction: 0.86,
+  airFriction: 0.965,
+  maxSpeed: 5.35,
+  maxAirSpeed: 4.8,
 
   jumpPower: -13.1,
   onGround: false,
@@ -95,7 +94,7 @@ const player = {
   isWallSliding: false,
   wallDirection: 0,
   wallSlideSpeed: 2.2,
-  wallJumpPowerX: 8.0,
+  wallJumpPowerX: 7.6,
   wallJumpPowerY: -12.6,
   wallJumpLockTimer: 0,
   wallJumpLockMax: 12,
@@ -104,14 +103,14 @@ const player = {
 
   isDashing: false,
   dashTimer: 0,
-  dashDuration: 11,
-  dashSpeed: 16.2,
+  dashDuration: 10,
+  dashSpeed: 12,
   dashCooldown: 0,
   dashCooldownMax: 110,
   dashInvincibleTimer: 0,
   dashInvincibleMax: 14,
   dashEndLagTimer: 0,
-  dashEndLagMax: 3,
+  dashEndLagMax: 4,
 
   attackDirection: "side",
   attackRecoilX: 1.8,
@@ -168,7 +167,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v56 1차 보강 수정: 초대형 맵용 빠른 무빙, 바닥형 표지판, 체크포인트를 적용했습니다.",
+  message: "13단계-2 v56 안정화 재검토본: 원래 무빙, 표지판, 체크포인트, 최적화 구조를 점검했습니다.",
   hiddenRewards: 0
 };
 
@@ -578,7 +577,7 @@ function buildRoomObjectIndex() {
 const mapData = {
   version: "v56",
   stage: "13-2-1",
-  purpose: "튜토리얼 소형 방, 카메라 고정/추적 기믹, 초대형 방 6개의 체크포인트를 포함한 v56 블록아웃을 만든다.",
+  purpose: "튜토리얼 소형 방, 카메라 기믹, 체크포인트를 유지하면서 화면 밖 렌더링과 충돌 검사를 줄이고, 충돌 캐시를 추가한 v56 안정화 재검토본이다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -587,6 +586,9 @@ const mapData = {
 
 function getCurrentRoomData() {
   const currentRoom = getCurrentRoom();
+  if (!currentRoom || !currentRoom.id) {
+    return null;
+  }
   return mapData.roomObjectIndex[currentRoom.id] || null;
 }
 
@@ -771,6 +773,72 @@ function isColliding(rectA, rectB) {
   );
 }
 
+// v56 opt: 초대형 맵에서는 카메라 근처와 플레이어 근처만 적극적으로 처리한다.
+const optimizationSettings = {
+  renderMarginX: 520,
+  renderMarginY: 420,
+  collisionRangeX: 1350,
+  collisionRangeY: 1050,
+  enemyActiveRangeX: 2200,
+  enemyActiveRangeY: 1600,
+  roomBackgroundMargin: 900
+};
+
+// v56 reviewed: 충돌 오브젝트 목록은 한 프레임 안에서 여러 번 쓰이므로 캐시한다.
+// 이렇게 해야 moveHorizontally, moveVertically, 공격 판정에서 매번 전체 배열을 다시 훑는 비용을 줄일 수 있다.
+let cachedSolidObjectsFrame = -1;
+let cachedSolidObjects = null;
+
+function invalidateSolidObjectCache() {
+  cachedSolidObjectsFrame = -1;
+  cachedSolidObjects = null;
+}
+
+function getCameraRect(marginX = optimizationSettings.renderMarginX, marginY = optimizationSettings.renderMarginY) {
+  return {
+    x: camera.x - marginX,
+    y: camera.y - marginY,
+    width: canvas.width + marginX * 2,
+    height: canvas.height + marginY * 2
+  };
+}
+
+function getObjectRect(object) {
+  return {
+    x: object.x,
+    y: object.y,
+    width: object.width || 1,
+    height: object.height || 1
+  };
+}
+
+function isObjectNearCamera(object, marginX = optimizationSettings.renderMarginX, marginY = optimizationSettings.renderMarginY) {
+  return isColliding(getCameraRect(marginX, marginY), getObjectRect(object));
+}
+
+function isObjectNearPlayer(object, rangeX = optimizationSettings.collisionRangeX, rangeY = optimizationSettings.collisionRangeY) {
+  const rect = {
+    x: player.x - rangeX,
+    y: player.y - rangeY,
+    width: player.width + rangeX * 2,
+    height: player.height + rangeY * 2
+  };
+
+  return isColliding(rect, getObjectRect(object));
+}
+
+function getVisibleObjects(objects, marginX = optimizationSettings.renderMarginX, marginY = optimizationSettings.renderMarginY) {
+  return objects.filter(function(object) {
+    return isObjectNearCamera(object, marginX, marginY);
+  });
+}
+
+function getNearbyObjects(objects, rangeX = optimizationSettings.collisionRangeX, rangeY = optimizationSettings.collisionRangeY) {
+  return objects.filter(function(object) {
+    return isObjectNearPlayer(object, rangeX, rangeY);
+  });
+}
+
 function isPlayerDamageInvincible() {
   return player.invincibleTimer > 0 || player.dashInvincibleTimer > 0;
 }
@@ -815,26 +883,38 @@ function getCurrentRoom() {
   return rooms[0];
 }
 
-function getSolidObjects() {
+function buildSolidObjectsForCurrentFrame() {
   const solidObjects = [];
 
-  for (const platform of platforms) {
+  // v56 reviewed: 플레이어 주변의 충돌 구조물만 검사한다.
+  // 초대형 방 전체를 매 프레임 검사하지 않되, 현재 속도와 대시를 고려해 여유 범위를 유지한다.
+  for (const platform of getNearbyObjects(platforms)) {
     solidObjects.push(platform);
   }
 
-  for (const door of doors) {
+  for (const door of getNearbyObjects(doors)) {
     if (door.locked && !door.open) {
       solidObjects.push(door);
     }
   }
 
   if (isBossGateActive()) {
-    for (const gate of bossArenaGates) {
+    for (const gate of getNearbyObjects(bossArenaGates, 1800, 1400)) {
       solidObjects.push(gate);
     }
   }
 
   return solidObjects;
+}
+
+function getSolidObjects() {
+  if (cachedSolidObjectsFrame === frameCount && cachedSolidObjects) {
+    return cachedSolidObjects;
+  }
+
+  cachedSolidObjects = buildSolidObjectsForCurrentFrame();
+  cachedSolidObjectsFrame = frameCount;
+  return cachedSolidObjects;
 }
 
 function isAttackBlockingObject(object) {
@@ -1732,6 +1812,7 @@ function moveHorizontally() {
       if (object.requiresMemoryCores) {
         if (gameState.memoryCores >= object.requiresMemoryCores) {
           object.open = true;
+          invalidateSolidObjectCache();
           gameState.message = "기억 핵이 반응하여 최종 문이 열렸습니다.";
           startScreenShake(14, 4);
           continue;
@@ -1741,6 +1822,7 @@ function moveHorizontally() {
       } else if (object.requiresMemoryFragments) {
         if (gameState.memoryFragments >= object.requiresMemoryFragments) {
           object.open = true;
+          invalidateSolidObjectCache();
           gameState.message = "기억 조각이 반응하여 기억의 문이 열렸습니다.";
           startScreenShake(10, 3);
           continue;
@@ -1749,6 +1831,7 @@ function moveHorizontally() {
         gameState.message = "기억의 문입니다. 기억 조각 1개가 필요합니다.";
       } else if (gameState.hasKey) {
         object.open = true;
+        invalidateSolidObjectCache();
         gameState.message = "잠긴 문이 열렸습니다.";
         continue;
       } else {
@@ -2051,6 +2134,19 @@ function checkCheckpointActivation() {
 function updateEnemies() {
   for (const enemy of enemies) {
     if (!enemy.alive) {
+      continue;
+    }
+
+    // v56 opt: 아주 멀리 있는 적은 AI와 이동 계산을 멈춘다. 가까워지면 다시 활성화된다.
+    if (!isObjectNearPlayer(enemy, optimizationSettings.enemyActiveRangeX, optimizationSettings.enemyActiveRangeY)) {
+      if (enemy.hitTimer > 0) {
+        enemy.hitTimer -= 1;
+      }
+
+      if (enemy.invincibleTimer > 0) {
+        enemy.invincibleTimer -= 1;
+      }
+
       continue;
     }
 
@@ -3520,6 +3616,7 @@ function updateProjectilesAndDamage() {
 
 function update() {
   frameCount += 1;
+  invalidateSolidObjectCache();
 
   if (hitStopTimer > 0) {
     hitStopTimer -= 1;
@@ -3572,6 +3669,9 @@ function drawRoundedRect(x, y, width, height, radius) {
 
 function drawTutorialRoomFrames() {
   for (const room of tutorialRoomFrames) {
+    if (!isObjectNearCamera(room, 260, 260)) {
+      continue;
+    }
     const screenX = room.x - camera.x;
     const screenY = room.y - camera.y;
 
@@ -3596,6 +3696,9 @@ function drawTutorialRoomFrames() {
 
 function drawTutorialSigns() {
   for (const sign of tutorialSigns) {
+    if (!isObjectNearCamera(sign, 240, 220)) {
+      continue;
+    }
     const screenX = sign.x - camera.x;
     const screenY = sign.y - camera.y;
 
@@ -3632,6 +3735,9 @@ function drawTutorialSigns() {
 
 function drawCheckpoints() {
   for (const checkpoint of checkpoints) {
+    if (!isObjectNearCamera(checkpoint, 260, 260)) {
+      continue;
+    }
     const screenX = checkpoint.x - camera.x;
     const screenY = checkpoint.y - camera.y;
     const isActive = activeCheckpoint === checkpoint;
@@ -3656,12 +3762,21 @@ function drawCheckpoints() {
 }
 
 function drawRoomBackgrounds() {
+  // v56 opt: 카메라 근처의 방 배경만 그린다.
   for (const room of rooms) {
+    if (!isObjectNearCamera(room, optimizationSettings.roomBackgroundMargin, world.height)) {
+      continue;
+    }
+
     ctx.fillStyle = room.color;
     ctx.fillRect(room.x - camera.x, 0 - camera.y, room.width, world.height);
   }
 
   for (const room of rooms) {
+    if (!isObjectNearCamera(room, optimizationSettings.roomBackgroundMargin, world.height)) {
+      continue;
+    }
+
     ctx.strokeStyle = "rgba(255, 255, 255, 0.18)";
     ctx.lineWidth = 2;
     ctx.strokeRect(room.x - camera.x, 0 - camera.y, room.width, world.height);
@@ -3669,12 +3784,19 @@ function drawRoomBackgrounds() {
 }
 
 function drawBackgroundDecorations() {
-  for (let x = 180; x < world.width; x += 360) {
+  // v56 opt: 배경 장식도 카메라 주변 구간만 반복한다.
+  const startColumn = Math.max(0, Math.floor((camera.x - 520) / 360) * 360);
+  const endColumn = Math.min(world.width, camera.x + canvas.width + 520);
+
+  for (let x = startColumn + 180; x < endColumn; x += 360) {
     ctx.fillStyle = "rgba(148, 163, 184, 0.08)";
     ctx.fillRect(x - camera.x, 120 - camera.y, 70, 300);
   }
 
-  for (let x = 0; x < world.width; x += 120) {
+  const startGrid = Math.max(0, Math.floor((camera.x - 260) / 120) * 120);
+  const endGrid = Math.min(world.width, camera.x + canvas.width + 260);
+
+  for (let x = startGrid; x < endGrid; x += 120) {
     ctx.fillStyle = "rgba(255, 255, 255, 0.03)";
     ctx.fillRect(x - camera.x, 0 - camera.y, 2, world.height);
   }
@@ -3712,6 +3834,9 @@ function drawBossRoomDecorations() {
 
 function drawDashHazards() {
   for (const hazard of dashHazards) {
+    if (!isObjectNearCamera(hazard)) {
+      continue;
+    }
     const screenX = hazard.x - camera.x;
     const screenY = hazard.y - camera.y;
     const pulse = 0.42 + Math.sin(frameCount * 0.12) * 0.12;
@@ -3748,6 +3873,9 @@ function drawDashHazards() {
 
 function drawPlatforms() {
   for (const platform of platforms) {
+    if (!isObjectNearCamera(platform)) {
+      continue;
+    }
     const screenX = platform.x - camera.x;
     const screenY = platform.y - camera.y;
 
@@ -3795,6 +3923,9 @@ function drawPlatforms() {
 
 function drawDoors() {
   for (const door of doors) {
+    if (!isObjectNearCamera(door)) {
+      continue;
+    }
     const screenX = door.x - camera.x;
     const screenY = door.y - camera.y;
 
@@ -3893,6 +4024,10 @@ function drawBossArenaGates() {
   }
 
   for (const gate of bossArenaGates) {
+    if (!isObjectNearCamera(gate)) {
+      continue;
+    }
+
     const screenX = gate.x - camera.x;
     const screenY = gate.y - camera.y;
     const pulse = Math.sin(frameCount * 0.15) * 0.12 + 0.58;
@@ -3916,6 +4051,10 @@ function drawKeyItem() {
     return;
   }
 
+  if (!isObjectNearCamera(keyItem)) {
+    return;
+  }
+
   const screenX = keyItem.x - camera.x;
   const screenY = keyItem.y - camera.y;
   ctx.fillStyle = "#facc15";
@@ -3929,6 +4068,9 @@ function drawKeyItem() {
 
 function drawAbilityItems() {
   for (const item of abilityItems) {
+    if (!isObjectNearCamera(item)) {
+      continue;
+    }
     if (item.collected) {
       continue;
     }
@@ -3964,6 +4106,9 @@ function drawAbilityItems() {
 
 function drawRewardItems() {
   for (const item of rewardItems) {
+    if (!isObjectNearCamera(item)) {
+      continue;
+    }
     if (item.collected) {
       continue;
     }
@@ -4040,6 +4185,9 @@ function drawRewardItems() {
 
 function drawEnemies() {
   for (const enemy of enemies) {
+    if (!isObjectNearCamera(enemy, 700, 520)) {
+      continue;
+    }
     if (!enemy.alive) {
       continue;
     }
@@ -4460,6 +4608,9 @@ function drawBossLaserWarning() {
 
 function drawShardWarnings() {
   for (const warning of shardWarnings) {
+    if (!isObjectNearCamera({ x: warning.x - 30, y: warning.y - 650, width: 60, height: 700 }, 300, 300)) {
+      continue;
+    }
     const screenX = warning.x - camera.x;
     const groundY = warning.y - camera.y;
     const warningTopY = warning.y - 620 - camera.y;
@@ -4488,6 +4639,9 @@ function drawShardWarnings() {
 
 function drawProjectiles() {
   for (const projectile of projectiles) {
+    if (!isObjectNearCamera(projectile, 340, 300)) {
+      continue;
+    }
     const screenX = projectile.x - camera.x;
     const screenY = projectile.y - camera.y;
     ctx.save();
@@ -4553,6 +4707,9 @@ function drawParticles() {
   ctx.save();
 
   for (const particle of particles) {
+    if (!isObjectNearCamera(particle, 260, 240)) {
+      continue;
+    }
     const alpha = particle.life / particle.maxLife;
     const screenX = particle.x - camera.x;
     const screenY = particle.y - camera.y;
@@ -4588,6 +4745,9 @@ function drawFloatingTexts() {
   ctx.save();
 
   for (const text of floatingTexts) {
+    if (!isObjectNearCamera({ x: text.x - 80, y: text.y - 30, width: 160, height: 60 }, 260, 240)) {
+      continue;
+    }
     const alpha = text.life / text.maxLife;
     ctx.globalAlpha = alpha;
     ctx.fillStyle = text.color;
@@ -4602,6 +4762,9 @@ function drawFloatingTexts() {
 
 function drawRoomLabels() {
   for (const room of rooms) {
+    if (!isObjectNearCamera(room, optimizationSettings.roomBackgroundMargin, optimizationSettings.roomBackgroundMargin)) {
+      continue;
+    }
     const screenX = room.x + 35 - camera.x;
     const screenY = 90 - camera.y;
     ctx.fillStyle = "rgba(255, 255, 255, 0.85)";
@@ -5194,7 +5357,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v56 1차 보강 수정: 초대형 맵용 빠른 무빙", 20, 35);
+  ctx.fillText("13단계-2 v56 안정화 재검토: 원래 무빙 + 최적화 점검", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -5204,7 +5367,7 @@ function drawUI() {
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("맵 구조: 소형 튜토리얼 방 + 초대형 방 6개 / 체크포인트: " + activeCheckpoint.name, 20, 180);
+  ctx.fillText("맵 구조: 소형 튜토리얼 방 + 초대형 방 6개 / 최적화: 화면 근처만 처리 / 체크포인트: " + activeCheckpoint.name, 20, 180);
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
