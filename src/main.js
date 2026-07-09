@@ -58,12 +58,26 @@ const player = {
   vx: 0,
   vy: 0,
 
-  acceleration: 0.6,
-  friction: 0.82,
-  maxSpeed: 5.5,
+  // 11단계-1: 땅과 공중의 이동감을 분리했습니다.
+  groundAcceleration: 0.72,
+  airAcceleration: 0.42,
+  groundFriction: 0.76,
+  airFriction: 0.93,
+  maxSpeed: 5.8,
+  maxAirSpeed: 5.2,
 
-  jumpPower: -13,
+  jumpPower: -13.1,
   onGround: false,
+  wasOnGround: false,
+  maxFallSpeed: 16,
+  fallGravityMultiplier: 1.15,
+  jumpCutMultiplier: 0.45,
+
+  // 11단계-1: 점프 입력 예약과 코요테 타임입니다.
+  jumpBufferTimer: 0,
+  jumpBufferMax: 8,
+  coyoteTimer: 0,
+  coyoteMax: 8,
 
   hasDoubleJump: false,
   canDoubleJump: false,
@@ -94,7 +108,6 @@ const player = {
   attackCooldown: 0,
   attackCooldownMax: 22,
   attackId: 0,
-
   lastWallSparkAttackId: -1
 };
 
@@ -206,7 +219,6 @@ const characterVisuals = {
 
 const gameState = {
   hasKey: false,
-
   memoryFragments: 0,
   memoryCores: 0,
   originCores: 0,
@@ -223,7 +235,7 @@ const gameState = {
   endingFrame: 0,
   endingInputUnlocked: false,
 
-  message: "최종 기억실의 보스를 쓰러뜨리세요."
+  message: "11단계-1: 이동감과 점프감이 개선되었습니다."
 };
 
 const endingLines = [
@@ -236,55 +248,13 @@ const endingLines = [
 ];
 
 const rooms = [
-  {
-    name: "방 1: 시작 구역",
-    guide: "기본 이동과 점프",
-    x: 0,
-    width: 900,
-    color: "#111827"
-  },
-  {
-    name: "방 2: 근접 전투 구역",
-    guide: "붉은 예고 공격을 보고 피하기",
-    x: 900,
-    width: 900,
-    color: "#172033"
-  },
-  {
-    name: "방 3: 능력 해금 구역",
-    guide: "이중 점프 능력 획득",
-    x: 1800,
-    width: 900,
-    color: "#1f1b2e"
-  },
-  {
-    name: "방 4: 잠긴 통로 구역",
-    guide: "열쇠가 있어야 문 통과 가능",
-    x: 2700,
-    width: 900,
-    color: "#201a1a"
-  },
-  {
-    name: "방 5: 기억의 문 구역",
-    guide: "기억 조각으로 특수 문 열기",
-    x: 3600,
-    width: 900,
-    color: "#10251f"
-  },
-  {
-    name: "방 6: 기억 핵 구역",
-    guide: "기억 핵 획득",
-    x: 4500,
-    width: 900,
-    color: "#1a1328"
-  },
-  {
-    name: "방 7: 최종 보스방",
-    guide: "기억 파편, 충격파, 내려찍기, 순간이동, 레이저 회피",
-    x: 5400,
-    width: 900,
-    color: "#061520"
-  }
+  { name: "방 1: 시작 구역", guide: "기본 이동과 점프", x: 0, width: 900, color: "#111827" },
+  { name: "방 2: 근접 전투 구역", guide: "붉은 예고 공격을 보고 피하기", x: 900, width: 900, color: "#172033" },
+  { name: "방 3: 능력 해금 구역", guide: "이중 점프 능력 획득", x: 1800, width: 900, color: "#1f1b2e" },
+  { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
+  { name: "방 5: 기억의 문 구역", guide: "기억 조각으로 특수 문 열기", x: 3600, width: 900, color: "#10251f" },
+  { name: "방 6: 기억 핵 구역", guide: "기억 핵 획득", x: 4500, width: 900, color: "#1a1328" },
+  { name: "방 7: 최종 보스방", guide: "기억 파편, 충격파, 내려찍기, 순간이동, 레이저 회피", x: 5400, width: 900, color: "#061520" }
 ];
 
 const platforms = [
@@ -336,72 +306,16 @@ const platforms = [
 ];
 
 const doors = [
-  {
-    x: 860,
-    y: 330,
-    width: 40,
-    height: 90,
-    text: "문 1",
-    locked: false,
-    open: true
-  },
-  {
-    x: 1760,
-    y: 330,
-    width: 40,
-    height: 90,
-    text: "문 2",
-    locked: false,
-    open: true
-  },
-  {
-    x: 2660,
-    y: 330,
-    width: 40,
-    height: 90,
-    text: "문 3",
-    locked: false,
-    open: true
-  },
-  {
-    x: 3560,
-    y: 80,
-    width: 40,
-    height: 340,
-    text: "잠긴 문",
-    locked: true,
-    open: false
-  },
-  {
-    x: 4460,
-    y: 80,
-    width: 40,
-    height: 340,
-    text: "기억의 문",
-    locked: true,
-    open: false,
-    requiresMemoryFragments: 1
-  },
-  {
-    x: 5360,
-    y: 80,
-    width: 40,
-    height: 340,
-    text: "최종 문",
-    locked: true,
-    open: false,
-    requiresMemoryCores: 1
-  }
+  { x: 860, y: 330, width: 40, height: 90, text: "문 1", locked: false, open: true },
+  { x: 1760, y: 330, width: 40, height: 90, text: "문 2", locked: false, open: true },
+  { x: 2660, y: 330, width: 40, height: 90, text: "문 3", locked: false, open: true },
+  { x: 3560, y: 80, width: 40, height: 340, text: "잠긴 문", locked: true, open: false },
+  { x: 4460, y: 80, width: 40, height: 340, text: "기억의 문", locked: true, open: false, requiresMemoryFragments: 1 },
+  { x: 5360, y: 80, width: 40, height: 340, text: "최종 문", locked: true, open: false, requiresMemoryCores: 1 }
 ];
 
 const bossArenaGates = [
-  {
-    x: 5408,
-    y: 80,
-    width: 34,
-    height: 340,
-    text: "보스전 봉인"
-  }
+  { x: 5408, y: 80, width: 34, height: 340, text: "보스전 봉인" }
 ];
 
 const keyItem = {
@@ -413,46 +327,13 @@ const keyItem = {
 };
 
 const abilityItems = [
-  {
-    type: "doubleJump",
-    name: "이중 점프",
-    x: 2160,
-    y: 320,
-    width: 28,
-    height: 28,
-    collected: false
-  }
+  { type: "doubleJump", name: "이중 점프", x: 2160, y: 320, width: 28, height: 28, collected: false }
 ];
 
 const rewardItems = [
-  {
-    type: "memoryFragment",
-    name: "기억 조각",
-    x: 955,
-    y: 95,
-    width: 24,
-    height: 24,
-    collected: false
-  },
-  {
-    type: "memoryCore",
-    name: "기억 핵",
-    x: 5120,
-    y: 305,
-    width: 28,
-    height: 28,
-    collected: false
-  },
-  {
-    type: "originCore",
-    name: "원점 코어",
-    x: 6040,
-    y: 372,
-    width: 30,
-    height: 30,
-    collected: false,
-    requiresBossDefeated: true
-  }
+  { type: "memoryFragment", name: "기억 조각", x: 955, y: 95, width: 24, height: 24, collected: false },
+  { type: "memoryCore", name: "기억 핵", x: 5120, y: 305, width: 28, height: 28, collected: false },
+  { type: "originCore", name: "원점 코어", x: 6040, y: 372, width: 30, height: 30, collected: false, requiresBossDefeated: true }
 ];
 
 const enemies = [
@@ -465,16 +346,13 @@ const enemies = [
     height: 36,
     minX: 990,
     maxX: 1600,
-
     vx: 1.1,
     vy: 0,
     speed: 1.35,
-
     patrolDirection: 1,
     targetDirection: 1,
     chaseRange: 360,
     aiDecisionTimer: 0,
-
     attackRange: 72,
     attackCooldown: 0,
     attackCooldownMax: 95,
@@ -482,7 +360,6 @@ const enemies = [
     attackDuration: 42,
     attackDirection: 1,
     attackHitPlayer: false,
-
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -499,16 +376,13 @@ const enemies = [
     height: 36,
     minX: 2220,
     maxX: 2620,
-
     vx: -1.25,
     vy: 0,
     speed: 1.45,
-
     patrolDirection: -1,
     targetDirection: -1,
     chaseRange: 420,
     aiDecisionTimer: 0,
-
     attackRange: 78,
     attackCooldown: 0,
     attackCooldownMax: 105,
@@ -516,7 +390,6 @@ const enemies = [
     attackDuration: 44,
     attackDirection: -1,
     attackHitPlayer: false,
-
     maxHealth: 4,
     health: 4,
     alive: true,
@@ -535,18 +408,15 @@ const enemies = [
     maxX: 2630,
     minY: 205,
     maxY: 420,
-
     vx: 1.1,
     vy: 0,
     speed: 1.65,
     verticalSpeed: 1.45,
-
     patrolDirection: 1,
     targetDirection: 1,
     chaseRange: 520,
     floatAngle: 0,
     aiDecisionTimer: 0,
-
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -563,16 +433,13 @@ const enemies = [
     height: 42,
     minX: 3740,
     maxX: 4140,
-
     vx: 0,
     vy: 0,
     speed: 0.65,
-
     patrolDirection: -1,
     targetDirection: -1,
     chaseRange: 480,
     aiDecisionTimer: 0,
-
     shootRange: 520,
     shootVerticalRange: 130,
     shootCooldown: 50,
@@ -581,7 +448,6 @@ const enemies = [
     shootDuration: 40,
     shootDirection: -1,
     shootFired: false,
-
     maxHealth: 3,
     health: 3,
     alive: true,
@@ -594,52 +460,43 @@ const enemies = [
 const boss = {
   type: "boss",
   name: "기억 파수자",
-
   x: 5770,
   y: 348,
   baseY: 348,
   width: 72,
   height: 72,
-
   minX: 5475,
   maxX: 6210,
-
   vx: 0,
   speed: 1.25,
   facing: -1,
-
   maxHealth: 26,
   health: 26,
   alive: true,
   hitTimer: 0,
   hitByAttackId: -1,
-
   attackCooldown: 20,
   attackCooldownMax: 88,
   attackTimer: 0,
   attackDuration: 0,
   attackType: "none",
   attackFired: false,
-
   patternIndex: 0,
-
   startX: 5770,
   targetX: 5770,
   targetY: 348,
-
   slamHitDone: false,
   laserHitDone: false,
   laserY: 0,
   laserDirection: -1,
-
   hidden: false,
   alpha: 1,
-
   contactCooldown: 0,
-
   phaseTwoAnnounced: false,
   defeatStarted: false
 };
+
+// 입력 처리
 
 document.addEventListener("keydown", function(event) {
   keys[event.code] = true;
@@ -655,7 +512,7 @@ document.addEventListener("keydown", function(event) {
 
   if (event.code === "Space") {
     if (!event.repeat) {
-      tryJump();
+      requestJump();
     }
 
     event.preventDefault();
@@ -679,6 +536,10 @@ document.addEventListener("keydown", function(event) {
 
 document.addEventListener("keyup", function(event) {
   keys[event.code] = false;
+
+  if (event.code === "Space") {
+    cutJumpHeight();
+  }
 });
 
 function clamp(value, min, max) {
@@ -720,11 +581,7 @@ function updateScreenShake() {
 }
 
 function isColliding(rectA, rectB) {
-  if (rectA.width <= 0 || rectA.height <= 0) {
-    return false;
-  }
-
-  if (rectB.width <= 0 || rectB.height <= 0) {
+  if (rectA.width <= 0 || rectA.height <= 0 || rectB.width <= 0 || rectB.height <= 0) {
     return false;
   }
 
@@ -815,10 +672,7 @@ function getClippedHitboxByWalls(hitbox, owner, direction) {
 }
 
 function isHitboxClipped(original, clipped) {
-  return (
-    Math.abs(original.x - clipped.x) > 0.1 ||
-    Math.abs(original.width - clipped.width) > 0.1
-  );
+  return Math.abs(original.x - clipped.x) > 0.1 || Math.abs(original.width - clipped.width) > 0.1;
 }
 
 function getWallSparkPoint(clipped, direction) {
@@ -919,7 +773,7 @@ function spawnJumpParticles() {
     const direction = Math.random() < 0.5 ? -1 : 1;
 
     addDustParticle(
-      player.x + player.width / 2 + (Math.random() - 0.5) * 10,
+      centerX(player) + (Math.random() - 0.5) * 10,
       player.y + player.height + 2,
       direction * (0.7 + Math.random() * 1.8),
       -0.15 + Math.random() * 0.45,
@@ -937,8 +791,8 @@ function spawnDoubleJumpParticles() {
     const angle = (Math.PI * 2 * i) / 18;
 
     addDashStreak(
-      player.x + player.width / 2,
-      player.y + player.height / 2,
+      centerX(player),
+      centerY(player),
       Math.cos(angle) * (1.4 + Math.random() * 1.3),
       Math.sin(angle) * (1.0 + Math.random() * 1.1),
       10 + Math.random() * 14,
@@ -959,7 +813,7 @@ function spawnLandingParticles(power) {
     const direction = i % 2 === 0 ? -1 : 1;
 
     addDustParticle(
-      player.x + player.width / 2 + (Math.random() - 0.5) * 8,
+      centerX(player) + (Math.random() - 0.5) * 8,
       player.y + player.height + 2,
       direction * (1.0 + Math.random() * 3.0),
       -0.3 - Math.random() * 0.9,
@@ -975,7 +829,7 @@ function spawnLandingParticles(power) {
 function spawnDashParticles() {
   for (let i = 0; i < 14; i++) {
     addDashStreak(
-      player.x + player.width / 2 - player.facing * (8 + Math.random() * 20),
+      centerX(player) - player.facing * (8 + Math.random() * 20),
       player.y + 12 + Math.random() * 28,
       -player.facing * (1.5 + Math.random() * 3.0),
       (Math.random() - 0.5) * 0.8,
@@ -1025,7 +879,7 @@ function spawnPlayerDamageParticles() {
 function spawnHealParticles() {
   for (let i = 0; i < 3; i++) {
     addDashStreak(
-      player.x + player.width / 2 + (Math.random() - 0.5) * 18,
+      centerX(player) + (Math.random() - 0.5) * 18,
       player.y + player.height - 4,
       (Math.random() - 0.5) * 0.6,
       -1.2 - Math.random() * 1.2,
@@ -1043,8 +897,8 @@ function spawnHealCompleteParticles() {
     const angle = (Math.PI * 2 * i) / 20;
 
     addDashStreak(
-      player.x + player.width / 2,
-      player.y + player.height / 2,
+      centerX(player),
+      centerY(player),
       Math.cos(angle) * (1.2 + Math.random()),
       Math.sin(angle) * (1.2 + Math.random()),
       10 + Math.random() * 12,
@@ -1061,8 +915,8 @@ function spawnRewardBurst(item, color) {
     const angle = (Math.PI * 2 * i) / 32;
 
     addDashStreak(
-      item.x + item.width / 2,
-      item.y + item.height / 2,
+      centerX(item),
+      centerY(item),
       Math.cos(angle) * (1.2 + Math.random() * 2.2),
       Math.sin(angle) * (1.2 + Math.random() * 2.2),
       10 + Math.random() * 16,
@@ -1073,7 +927,6 @@ function spawnRewardBurst(item, color) {
     );
   }
 }
-
 function spawnBossSlamParticles() {
   for (let i = 0; i < 34; i++) {
     const direction = i % 2 === 0 ? -1 : 1;
@@ -1176,6 +1029,79 @@ function updateParticles() {
   }
 }
 
+// 11단계-1: 점프 입력을 즉시 실행하지 않고 잠시 저장합니다.
+function requestJump() {
+  if (player.healTimer > 0) {
+    return;
+  }
+
+  player.jumpBufferTimer = player.jumpBufferMax;
+}
+
+function updateJumpAssistTimers() {
+  if (player.jumpBufferTimer > 0) {
+    player.jumpBufferTimer -= 1;
+  }
+
+  if (player.onGround) {
+    player.coyoteTimer = player.coyoteMax;
+  } else if (player.coyoteTimer > 0) {
+    player.coyoteTimer -= 1;
+  }
+}
+
+function tryBufferedJump() {
+  if (player.jumpBufferTimer <= 0) {
+    return;
+  }
+
+  if (player.healTimer > 0) {
+    player.jumpBufferTimer = 0;
+    return;
+  }
+
+  if (player.onGround || player.coyoteTimer > 0) {
+    performGroundJump();
+    player.jumpBufferTimer = 0;
+    return;
+  }
+
+  if (player.hasDoubleJump && player.canDoubleJump && !player.doubleJumpUsed) {
+    performDoubleJump();
+    player.jumpBufferTimer = 0;
+  }
+}
+
+function performGroundJump() {
+  spawnJumpParticles();
+
+  player.vy = player.jumpPower;
+  player.onGround = false;
+  player.coyoteTimer = 0;
+
+  if (player.hasDoubleJump) {
+    player.canDoubleJump = true;
+    player.doubleJumpUsed = false;
+  }
+}
+
+function performDoubleJump() {
+  spawnDoubleJumpParticles();
+
+  player.vy = player.jumpPower * 0.92;
+  player.canDoubleJump = false;
+  player.doubleJumpUsed = true;
+
+  gameState.message = "이중 점프를 사용했습니다.";
+}
+
+// 11단계-1: Space를 짧게 떼면 점프 높이가 낮아집니다.
+function cutJumpHeight() {
+  if (player.vy < -2.5) {
+    player.vy *= player.jumpCutMultiplier;
+  }
+}
+
 function startDash() {
   if (player.healTimer > 0) {
     return;
@@ -1208,7 +1134,7 @@ function updateDash() {
 
     if (frameCount % 2 === 0) {
       addDashStreak(
-        player.x + player.width / 2 - player.facing * 18,
+        centerX(player) - player.facing * 18,
         player.y + 12 + Math.random() * 28,
         -player.facing * (1.0 + Math.random() * 2.0),
         (Math.random() - 0.5) * 0.5,
@@ -1338,36 +1264,7 @@ function getAttackHitbox() {
   };
 }
 
-function tryJump() {
-  if (player.healTimer > 0) {
-    return;
-  }
-
-  if (player.onGround) {
-    spawnJumpParticles();
-
-    player.vy = player.jumpPower;
-    player.onGround = false;
-
-    if (player.hasDoubleJump) {
-      player.canDoubleJump = true;
-      player.doubleJumpUsed = false;
-    }
-
-    return;
-  }
-
-  if (player.hasDoubleJump && player.canDoubleJump && !player.doubleJumpUsed) {
-    spawnDoubleJumpParticles();
-
-    player.vy = player.jumpPower * 0.92;
-    player.canDoubleJump = false;
-    player.doubleJumpUsed = true;
-
-    gameState.message = "이중 점프를 사용했습니다.";
-  }
-}
-
+// 11단계-1: 땅 위 이동과 공중 이동을 분리했습니다.
 function updatePlayerHorizontalMove() {
   if (gameState.endingReached) {
     player.vx = 0;
@@ -1384,30 +1281,46 @@ function updatePlayerHorizontalMove() {
     return;
   }
 
+  if (player.isDashing) {
+    return;
+  }
+
+  const acceleration = player.onGround ? player.groundAcceleration : player.airAcceleration;
+  const friction = player.onGround ? player.groundFriction : player.airFriction;
+  const currentMaxSpeed = player.onGround ? player.maxSpeed : player.maxAirSpeed;
+
   let moving = false;
 
   if (keys["KeyA"]) {
-    player.vx -= player.acceleration;
+    if (player.vx > 0 && player.onGround) {
+      player.vx *= 0.58;
+    }
+
+    player.vx -= acceleration;
     player.facing = -1;
     moving = true;
   }
 
   if (keys["KeyD"]) {
-    player.vx += player.acceleration;
+    if (player.vx < 0 && player.onGround) {
+      player.vx *= 0.58;
+    }
+
+    player.vx += acceleration;
     player.facing = 1;
     moving = true;
   }
 
-  if (!moving && !player.isDashing) {
-    player.vx *= player.friction;
+  if (!moving) {
+    player.vx *= friction;
   }
 
-  if (player.vx > player.maxSpeed && !player.isDashing) {
-    player.vx = player.maxSpeed;
+  if (player.vx > currentMaxSpeed) {
+    player.vx = currentMaxSpeed;
   }
 
-  if (player.vx < -player.maxSpeed && !player.isDashing) {
-    player.vx = -player.maxSpeed;
+  if (player.vx < -currentMaxSpeed) {
+    player.vx = -currentMaxSpeed;
   }
 
   if (Math.abs(player.vx) < 0.05) {
@@ -1416,8 +1329,20 @@ function updatePlayerHorizontalMove() {
 }
 
 function updateGravity() {
-  if (!player.isDashing) {
-    player.vy += gravity;
+  if (player.isDashing) {
+    return;
+  }
+
+  let gravityToApply = gravity;
+
+  if (player.vy > 0) {
+    gravityToApply *= player.fallGravityMultiplier;
+  }
+
+  player.vy += gravityToApply;
+
+  if (player.vy > player.maxFallSpeed) {
+    player.vy = player.maxFallSpeed;
   }
 }
 
@@ -1515,12 +1440,21 @@ function updatePlayer() {
   const previousOnGround = player.onGround;
   const previousVy = player.vy;
 
+  player.wasOnGround = player.onGround;
+
+  updateJumpAssistTimers();
+  tryBufferedJump();
+
   updateDash();
   updatePlayerHorizontalMove();
   updateGravity();
 
   moveHorizontally();
   moveVertically(previousOnGround, previousVy);
+
+  if (player.onGround) {
+    player.coyoteTimer = player.coyoteMax;
+  }
 
   checkKeyCollection();
   checkAbilityCollection();
@@ -1630,6 +1564,8 @@ function resetPlayer() {
   player.healingWillRestore = false;
   player.canDoubleJump = player.hasDoubleJump;
   player.doubleJumpUsed = false;
+  player.jumpBufferTimer = 0;
+  player.coyoteTimer = 0;
 
   gameState.bossRoomLocked = false;
   gameState.message = "시작 지점에서 다시 시작합니다.";
@@ -3163,7 +3099,6 @@ function update() {
   updateFloatingTexts();
   updateCamera();
 }
-
 function drawRoundedRect(x, y, width, height, radius) {
   ctx.beginPath();
   ctx.moveTo(x + radius, y);
@@ -4886,7 +4821,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("10단계 통합본: 최종 보스전 완성", 20, 35);
+  ctx.fillText("11단계-1: 이동감과 점프감 개선", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프/이중 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -4901,7 +4836,7 @@ function drawUI() {
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
 
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("상태 프레임: " + playerAnimation.stateFrame, 20, 180);
+  ctx.fillText("이동감: 지상/공중 분리 | 점프 보정: 버퍼 + 코요테 타임", 20, 180);
 
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
