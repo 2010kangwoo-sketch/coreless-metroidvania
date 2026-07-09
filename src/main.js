@@ -14,7 +14,7 @@ const particles = [];
 const projectiles = [];
 
 const world = {
-  width: 4500,
+  width: 5400,
   height: 900
 };
 
@@ -184,7 +184,8 @@ const gravity = 0.65;
 const gameState = {
   hasKey: false,
   memoryFragments: 0,
-  message: "이중 점프 능력을 찾아 획득하세요."
+  memoryCores: 0,
+  message: "기억 조각을 모아 기억의 문을 여세요."
 };
 
 const rooms = [
@@ -192,7 +193,8 @@ const rooms = [
   { name: "방 2: 근접 전투 구역", guide: "붉은 예고 공격을 보고 피하기", x: 900, width: 900, color: "#172033" },
   { name: "방 3: 능력 해금 구역", guide: "이중 점프 능력 획득", x: 1800, width: 900, color: "#1f1b2e" },
   { name: "방 4: 잠긴 통로 구역", guide: "열쇠가 있어야 문 통과 가능", x: 2700, width: 900, color: "#201a1a" },
-  { name: "방 5: 이중 점프 활용 구역", guide: "투사체를 피하며 높은 발판 오르기", x: 3600, width: 900, color: "#10251f" }
+  { name: "방 5: 기억의 문 구역", guide: "기억 조각으로 특수 문 열기", x: 3600, width: 900, color: "#10251f" },
+  { name: "방 6: 기억의 문 너머", guide: "숨겨진 핵심 보상 획득", x: 4500, width: 900, color: "#1a1328" }
 ];
 
 const platforms = [
@@ -229,6 +231,11 @@ const platforms = [
   { x: 4100, y: 215, width: 140, height: 24 },
   { x: 4350, y: 265, width: 110, height: 24 },
 
+  { x: 4500, y: 420, width: 850, height: 80 },
+  { x: 4620, y: 350, width: 160, height: 24 },
+  { x: 4860, y: 305, width: 160, height: 24 },
+  { x: 5100, y: 350, width: 160, height: 24 },
+
   { x: 760, y: 260, width: 40, height: 80 },
   { x: 1660, y: 300, width: 40, height: 120 },
   { x: 2500, y: 300, width: 40, height: 120 }
@@ -238,7 +245,8 @@ const doors = [
   { x: 860, y: 330, width: 40, height: 90, text: "문 1", locked: false, open: true },
   { x: 1760, y: 330, width: 40, height: 90, text: "문 2", locked: false, open: true },
   { x: 2660, y: 330, width: 40, height: 90, text: "문 3", locked: false, open: true },
-  { x: 3560, y: 80, width: 40, height: 340, text: "잠긴 문", locked: true, open: false }
+  { x: 3560, y: 80, width: 40, height: 340, text: "잠긴 문", locked: true, open: false },
+  { x: 4460, y: 80, width: 40, height: 340, text: "기억의 문", locked: true, open: false, requiresMemoryFragments: 1 }
 ];
 
 const keyItem = {
@@ -269,6 +277,15 @@ const rewardItems = [
     y: 95,
     width: 24,
     height: 24,
+    collected: false
+  },
+  {
+    type: "memoryCore",
+    name: "기억 핵",
+    x: 5120,
+    y: 305,
+    width: 28,
+    height: 28,
     collected: false
   }
 ];
@@ -682,16 +699,16 @@ function checkEnemyAttackWallSpark(enemy) {
 function addDustParticle(x, y, vx, vy, width, height, life, color, rotation) {
   particles.push({
     type: "dust",
-    x: x,
-    y: y,
-    vx: vx,
-    vy: vy,
-    width: width,
-    height: height,
-    life: life,
+    x,
+    y,
+    vx,
+    vy,
+    width,
+    height,
+    life,
     maxLife: life,
-    color: color,
-    rotation: rotation,
+    color,
+    rotation,
     gravity: 0.025,
     growX: 0.35,
     growY: 0.015
@@ -701,16 +718,16 @@ function addDustParticle(x, y, vx, vy, width, height, life, color, rotation) {
 function addDashStreak(x, y, vx, vy, width, height, life, color, rotation) {
   particles.push({
     type: "dash",
-    x: x,
-    y: y,
-    vx: vx,
-    vy: vy,
-    width: width,
-    height: height,
-    life: life,
+    x,
+    y,
+    vx,
+    vy,
+    width,
+    height,
+    life,
     maxLife: life,
-    color: color,
-    rotation: rotation,
+    color,
+    rotation,
     gravity: 0,
     growX: -0.15,
     growY: -0.01
@@ -1162,7 +1179,16 @@ function moveHorizontally() {
   for (const object of getSolidObjects()) {
     if (isColliding(player, object)) {
       if (object.locked && !object.open) {
-        if (gameState.hasKey) {
+        if (object.requiresMemoryFragments) {
+          if (gameState.memoryFragments >= object.requiresMemoryFragments) {
+            object.open = true;
+            gameState.message = "기억 조각이 반응하여 기억의 문이 열렸습니다.";
+            startScreenShake(10, 3);
+            continue;
+          } else {
+            gameState.message = "기억의 문입니다. 기억 조각 1개가 필요합니다.";
+          }
+        } else if (gameState.hasKey) {
           object.open = true;
           gameState.message = "잠긴 문이 열렸습니다.";
           continue;
@@ -1921,27 +1947,36 @@ function checkRewardCollection() {
 
       if (item.type === "memoryFragment") {
         gameState.memoryFragments += 1;
-        gameState.message = "기억 조각을 획득했습니다. 이중 점프로 열린 숨겨진 보상입니다.";
-
-        for (let i = 0; i < 24; i++) {
-          const angle = (Math.PI * 2 * i) / 24;
-
-          addDashStreak(
-            item.x + item.width / 2,
-            item.y + item.height / 2,
-            Math.cos(angle) * (1.2 + Math.random() * 1.7),
-            Math.sin(angle) * (1.2 + Math.random() * 1.7),
-            10 + Math.random() * 14,
-            2 + Math.random() * 3,
-            20 + Math.random() * 8,
-            "rgba(251, 191, 36, 1)",
-            angle
-          );
-        }
-
+        gameState.message = "기억 조각을 획득했습니다. 이제 기억의 문을 열 수 있습니다.";
+        spawnRewardBurst(item, "rgba(251, 191, 36, 1)");
         startScreenShake(6, 2.5);
       }
+
+      if (item.type === "memoryCore") {
+        gameState.memoryCores += 1;
+        gameState.message = "기억 핵을 획득했습니다. 숨겨진 문 너머의 핵심 보상입니다.";
+        spawnRewardBurst(item, "rgba(216, 180, 254, 1)");
+        startScreenShake(12, 4);
+      }
     }
+  }
+}
+
+function spawnRewardBurst(item, color) {
+  for (let i = 0; i < 28; i++) {
+    const angle = (Math.PI * 2 * i) / 28;
+
+    addDashStreak(
+      item.x + item.width / 2,
+      item.y + item.height / 2,
+      Math.cos(angle) * (1.2 + Math.random() * 2.0),
+      Math.sin(angle) * (1.2 + Math.random() * 2.0),
+      10 + Math.random() * 16,
+      2 + Math.random() * 3,
+      20 + Math.random() * 10,
+      color,
+      angle
+    );
   }
 }
 
@@ -2081,6 +2116,34 @@ function drawDoors() {
     const screenX = door.x - camera.x;
     const screenY = door.y - camera.y;
 
+    if (door.requiresMemoryFragments) {
+      if (door.open) {
+        ctx.fillStyle = "rgba(168, 85, 247, 0.22)";
+        ctx.fillRect(screenX, screenY, door.width, door.height);
+
+        ctx.strokeStyle = "#c4b5fd";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(screenX, screenY, door.width, door.height);
+
+        ctx.fillStyle = "#ddd6fe";
+        ctx.font = "13px Arial";
+        ctx.fillText("열린 기억의 문", screenX - 28, screenY - 8);
+      } else {
+        ctx.fillStyle = "rgba(126, 34, 206, 0.58)";
+        ctx.fillRect(screenX, screenY, door.width, door.height);
+
+        ctx.strokeStyle = "#fef3c7";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(screenX, screenY, door.width, door.height);
+
+        ctx.fillStyle = "#fef3c7";
+        ctx.font = "13px Arial";
+        ctx.fillText("기억 조각 1개 필요", screenX - 44, screenY - 8);
+      }
+
+      continue;
+    }
+
     if (door.locked && !door.open) {
       ctx.fillStyle = "rgba(248, 113, 113, 0.55)";
       ctx.fillRect(screenX, screenY, door.width, door.height);
@@ -2195,41 +2258,48 @@ function drawRewardItems() {
 
     ctx.save();
 
-    ctx.globalAlpha = 0.28;
-    ctx.fillStyle = "#facc15";
-    ctx.beginPath();
-    ctx.arc(
-      screenX + item.width / 2,
-      screenY + item.height / 2,
-      20 + pulse,
-      0,
-      Math.PI * 2
-    );
-    ctx.fill();
+    if (item.type === "memoryCore") {
+      ctx.globalAlpha = 0.3;
+      ctx.fillStyle = "#c4b5fd";
+      ctx.beginPath();
+      ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 24 + pulse, 0, Math.PI * 2);
+      ctx.fill();
 
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = "#78350f";
-    ctx.strokeStyle = "#fde68a";
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#581c87";
+      ctx.strokeStyle = "#e9d5ff";
+    } else {
+      ctx.globalAlpha = 0.28;
+      ctx.fillStyle = "#facc15";
+      ctx.beginPath();
+      ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 20 + pulse, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = "#78350f";
+      ctx.strokeStyle = "#fde68a";
+    }
+
     ctx.lineWidth = 2;
     drawRoundedRect(screenX, screenY, item.width, item.height, 7);
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = "#fef3c7";
+    ctx.fillStyle = item.type === "memoryCore" ? "#f5d0fe" : "#fef3c7";
     ctx.beginPath();
     ctx.arc(screenX + item.width / 2, screenY + item.height / 2, 5, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.strokeStyle = "#fde68a";
+    ctx.strokeStyle = item.type === "memoryCore" ? "#e9d5ff" : "#fde68a";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(screenX + 12, screenY + 3);
-    ctx.lineTo(screenX + 12, screenY + 21);
-    ctx.moveTo(screenX + 3, screenY + 12);
-    ctx.lineTo(screenX + 21, screenY + 12);
+    ctx.moveTo(screenX + item.width / 2, screenY + 4);
+    ctx.lineTo(screenX + item.width / 2, screenY + item.height - 4);
+    ctx.moveTo(screenX + 4, screenY + item.height / 2);
+    ctx.lineTo(screenX + item.width - 4, screenY + item.height / 2);
     ctx.stroke();
 
-    ctx.fillStyle = "#fef3c7";
+    ctx.fillStyle = item.type === "memoryCore" ? "#f5d0fe" : "#fef3c7";
     ctx.font = "13px Arial";
     ctx.fillText(item.name, screenX - 14, screenY - 10);
 
@@ -2662,7 +2732,10 @@ function drawWarnings() {
     { text: "열쇠 획득 구간", x: 3040, y: 250 },
     { text: "열쇠 없이는 통과 불가", x: 3450, y: 280 },
     { text: "이중 점프 구간", x: 3860, y: 225 },
-    { text: "원거리 적", x: 3890, y: 360 }
+    { text: "원거리 적", x: 3890, y: 360 },
+    { text: "기억 조각 1개 필요", x: 4390, y: 70 },
+    { text: "기억의 문 너머", x: 4620, y: 325 },
+    { text: "기억 핵", x: 5085, y: 290 }
   ];
 
   for (const warning of warnings) {
@@ -3047,7 +3120,7 @@ function drawMiniMap() {
 
 function drawHealthUI() {
   const startX = 20;
-  const startY = 315;
+  const startY = 335;
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
@@ -3070,7 +3143,7 @@ function drawHealthUI() {
 
 function drawCoreEnergyUI() {
   const startX = 20;
-  const startY = 345;
+  const startY = 365;
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
@@ -3100,7 +3173,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("7단계-2: 이중 점프 전용 길막 구조", 20, 35);
+  ctx.fillText("7단계-3: 기억 조각으로 특수 문 열기", 20, 35);
 
   ctx.font = "16px Arial";
   ctx.fillText("A/D: 이동 | Space: 점프/이중 점프 | Shift 또는 K: 대시 | J: 공격 | L: 회복", 20, 65);
@@ -3145,12 +3218,15 @@ function drawUI() {
   ctx.fillStyle = "#fef3c7";
   ctx.fillText("기억 조각: " + gameState.memoryFragments + "개", 20, 290);
 
+  ctx.fillStyle = "#e9d5ff";
+  ctx.fillText("기억 핵: " + gameState.memoryCores + "개", 20, 315);
+
   drawHealthUI();
   drawCoreEnergyUI();
 
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
-  ctx.fillText(gameState.message, 20, 390);
+  ctx.fillText(gameState.message, 20, 410);
 
   drawMiniMap();
 }
