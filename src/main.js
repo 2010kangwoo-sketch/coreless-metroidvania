@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v58-1: 첫 번째 초대형 스테이지를 16개의 고정 카메라 단락과 3개 지형 층으로 나눈 1차 블록아웃
+// v58-1 수정: 초대형 스테이지 진입구를 개방하고 튜토리얼 하강 유도벽과 가시 함정을 추가
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -168,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v58-1: 첫 번째 초대형 스테이지의 고정 화면·단일 루트 블록아웃을 적용했습니다.",
+  message: "13단계-2 v58-1 수정: 초대형 스테이지 진입구·하강 유도벽·가시 함정을 적용했습니다.",
   hiddenRewards: 0
 };
 
@@ -516,6 +516,10 @@ const platforms = [
   { x: 5750, y: 360, width: 300, height: 32, area: "tutorial_wall_exit_step" },
   { x: 5980, y: 510, width: 270, height: 32, area: "tutorial_wall_exit_step" },
 
+  // 오른쪽 장벽이 상층 이동을 완전히 막는다.
+  // 아래쪽 90px만 비워 두어 바닥까지 내려온 뒤에만 다음 튜토리얼로 진행할 수 있다.
+  { x: 6250, y: 150, width: 64, height: 440, area: "tutorial_forced_descent_wall" },
+
   // 아래 공격 튕김 학습용 발판. 표적을 공격하고 위쪽으로 튕기는 감각을 확인한다.
   { x: 6540, y: 555, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
   { x: 7040, y: 500, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
@@ -526,10 +530,13 @@ const platforms = [
 
   // 외곽 천장과 좌우 경계
   { x: 8500, y: 180, width: 5000, height: 54, area: "mega_stage_outer_ceiling" },
-  { x: 8500, y: 180, width: 54, height: 1600, area: "mega_stage_outer_left" },
+  // 튜토리얼 바닥과 초대형 스테이지 1층 사이에 170px 높이의 출입구를 남긴다.
+  { x: 8500, y: 180, width: 54, height: 420, area: "mega_stage_outer_left_upper" },
+  { x: 8500, y: 770, width: 54, height: 1010, area: "mega_stage_outer_left_lower" },
   { x: 13446, y: 180, width: 54, height: 1120, area: "mega_stage_outer_right_upper" },
 
   // 1층 바닥: 왼쪽에서 오른쪽으로 진행
+  { x: 8420, y: 680, width: 180, height: 80, area: "mega_stage_entry_threshold" },
   { x: 8500, y: 680, width: 3950, height: 80, area: "mega_stage_layer1_floor" },
 
   // 1층 경사면 블록아웃: 실제 경사 충돌은 다음 제작에서 교체한다.
@@ -710,6 +717,16 @@ const dashHazards = [
   }
 ];
 
+// 가시 함정은 충돌 지형이 아니라 피해 지형이다.
+// 닿으면 접근하던 방향의 반대로 튕기고 체력이 1 감소한다.
+const spikeTraps = [
+  { id: "spike_mega_01", name: "폐허 바닥 가시", x: 9270, y: 642, width: 135, height: 38, direction: "up" },
+  { id: "spike_mega_02", name: "경사 통로 가시", x: 10770, y: 512, width: 105, height: 38, direction: "up" },
+  { id: "spike_mega_03", name: "클로 구간 가시", x: 11070, y: 1162, width: 125, height: 38, direction: "up" },
+  { id: "spike_mega_04", name: "추격 통로 가시", x: 11060, y: 1682, width: 125, height: 38, direction: "up" },
+  { id: "spike_mega_05", name: "출구 전 가시", x: 12320, y: 1682, width: 145, height: 38, direction: "up" }
+];
+
 const enemies = [
   createMeleeEnemy("튜토리얼 그림자", 2380, 644, 32, 34, 2180, 2600, 1.0, 2, 68, 100),
   createMeleeEnemy("아래 공격 표적", 6780, 644, 34, 34, 6660, 7040, 0.45, 3, 62, 120),
@@ -835,7 +852,7 @@ function buildRoomObjectIndex() {
 const mapData = {
   version: "v58-1",
   stage: "13-2-3-1",
-  purpose: "첫 번째 초대형 방을 3개 지형 층과 16개의 고정 카메라 단락으로 재구성하고, 경사면·기억포·스프링·코어 클로·붕괴석의 예정 위치와 단일 진행 경로를 검증하는 1차 블록아웃이다. 실제 기믹 동작은 후속 제작에서 구현한다.",
+  purpose: "첫 번째 초대형 방의 3개 지형 층과 16개 고정 카메라 단락을 유지하면서, 막혀 있던 튜토리얼 출입구를 개방하고 상층에서 바닥까지 내려가게 하는 장벽과 피해·반동이 적용되는 가시 함정을 추가한 수정본이다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -2194,6 +2211,7 @@ function updatePlayer() {
   checkAbilityCollection();
   checkRewardCollection();
   checkDashHazardDamage();
+  checkSpikeTrapDamage();
   checkCheckpointActivation();
   checkFall();
 }
@@ -2332,6 +2350,52 @@ function checkDashHazardDamage() {
     }
 
     takeDamage(hazard, hazard.name + "에 닿았습니다. Shift/K 대시로 통과해 보세요.");
+  }
+}
+
+function getSpikeDamageBox(spike) {
+  // 삼각형의 뾰족한 끝 전체를 판정으로 쓰면 억울할 수 있으므로
+  // 실제 피해 판정은 아래쪽 중심부를 약간 좁게 사용한다.
+  return {
+    x: spike.x + 6,
+    y: spike.y + 8,
+    width: Math.max(8, spike.width - 12),
+    height: Math.max(12, spike.height - 8)
+  };
+}
+
+function checkSpikeTrapDamage() {
+  if (isPlayerDamageInvincible()) {
+    return;
+  }
+
+  for (const spike of spikeTraps) {
+    if (!isObjectNearCamera(spike, 220, 180)) {
+      continue;
+    }
+
+    const damageBox = getSpikeDamageBox(spike);
+    if (!isColliding(player, damageBox)) {
+      continue;
+    }
+
+    // 가시에 닿기 직전의 이동 방향 반대로 튕긴다.
+    // 거의 멈춰 있었다면 캐릭터가 바라보는 방향의 반대로 밀어낸다.
+    const approachDirection =
+      player.vx > 0.25 ? 1 :
+      player.vx < -0.25 ? -1 :
+      (player.facing || 1);
+
+    takeDamage(spike, spike.name + "에 찔렸습니다. 뒤로 튕겨났습니다.");
+
+    if (player.health > 0) {
+      player.vx = -approachDirection * 8.6;
+      player.vy = -8.4;
+      player.onGround = false;
+      player.isWallSliding = false;
+    }
+
+    return;
   }
 }
 
@@ -4335,6 +4399,52 @@ function drawBossRoomDecorations() {
   ctx.restore();
 }
 
+function drawSpikeTraps() {
+  for (const spike of spikeTraps) {
+    if (!isObjectNearCamera(spike, 160, 120)) {
+      continue;
+    }
+
+    const screenX = Math.round(spike.x - camera.x);
+    const screenY = Math.round(spike.y - camera.y);
+    const spikeWidth = 22;
+    const count = Math.max(1, Math.floor(spike.width / spikeWidth));
+    const actualWidth = spike.width / count;
+
+    ctx.save();
+
+    // 바닥 받침판
+    ctx.fillStyle = "rgba(71, 85, 105, 0.95)";
+    ctx.fillRect(screenX, screenY + spike.height - 7, spike.width, 7);
+
+    // 금속 가시
+    for (let i = 0; i < count; i++) {
+      const left = screenX + i * actualWidth;
+      const right = left + actualWidth;
+      const center = (left + right) / 2;
+
+      ctx.beginPath();
+      ctx.moveTo(left + 2, screenY + spike.height - 7);
+      ctx.lineTo(center, screenY);
+      ctx.lineTo(right - 2, screenY + spike.height - 7);
+      ctx.closePath();
+
+      const gradient = ctx.createLinearGradient(left, screenY, right, screenY + spike.height);
+      gradient.addColorStop(0, "#cbd5e1");
+      gradient.addColorStop(0.55, "#64748b");
+      gradient.addColorStop(1, "#334155");
+      ctx.fillStyle = gradient;
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(248, 250, 252, 0.72)";
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    }
+
+    ctx.restore();
+  }
+}
+
 function drawDashHazards() {
   for (const hazard of dashHazards) {
     if (!isObjectNearCamera(hazard)) {
@@ -5291,7 +5401,7 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "v58-1: 실제 기믹이 아니라 고정 화면·층·단일 진행 경로를 검증하는 블록아웃", x: 8580, y: 590, width: 680, height: 24 },
+    { text: "v58-1 수정: 튜토리얼 끝 출입구가 열렸으며, 금속 가시는 피해와 반동을 준다.", x: 8580, y: 590, width: 720, height: 24 },
     { text: "파란/보라/주황 테두리는 각각 1층·2층·3층의 고정 카메라 단락", x: 9480, y: 590, width: 620, height: 24 },
     { text: "CLAW·CANNON·SPRING·BOULDER 표시는 다음 제작에서 실제 기믹으로 교체", x: 10400, y: 590, width: 680, height: 24 },
     { text: "임시 다리는 클로가 구현되면 제거된다.", x: 10500, y: 1140, width: 420, height: 24 },
@@ -5904,7 +6014,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v58-1: 첫 초대형 스테이지 고정 화면 블록아웃", 20, 35);
+  ctx.fillText("13단계-2 v58-1 수정: 스테이지 진입 + 하강벽 + 가시", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -5971,6 +6081,7 @@ function drawWorld() {
   drawBossArenaGates();
   drawDashHazards();
   drawPlatforms();
+  drawSpikeTraps();
   drawCheckpoints();
   drawKeyItem();
   drawAbilityItems();
