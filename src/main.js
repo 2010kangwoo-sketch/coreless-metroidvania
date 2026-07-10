@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v57: 튜토리얼 방 6개 완성. 바닥형 표지판, 방별 카메라 고정/추적, v56 델타 최적화 유지
+// v57 수정: 바닥형 표지판을 배경 레이어로 이동해 캐릭터·적·발판·체크포인트를 가리지 않도록 보정
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -168,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v57 재검증본: 튜토리얼 방 6개 + 바닥형 표지판을 정리했습니다.",
+  message: "13단계-2 v57 표지판 레이어 수정: 표지판이 플레이 오브젝트를 가리지 않도록 보정했습니다.",
   hiddenRewards: 0
 };
 
@@ -410,13 +410,15 @@ const tutorialRoomFrames = tutorialRooms.map(function(room) {
 });
 
 const tutorialSigns = tutorialRooms.map(function(room) {
-  const signWidth = Math.min(room.cameraMode === "fixed" ? 430 : 560, room.width - 120);
-  const signHeight = room.signLines.length >= 2 ? 112 : 96;
+  // 표지판은 조작 공간을 덮지 않도록 이전보다 작게 만들고 방의 왼쪽 벽 가까이에 둔다.
+  const preferredWidth = room.cameraMode === "fixed" ? 350 : 410;
+  const signWidth = Math.min(preferredWidth, room.width - 170);
+  const signHeight = 94;
   const floorY = room.floorY || room.y + room.height - 120;
 
   return {
-    x: room.x + 64,
-    y: floorY - signHeight - 46,
+    x: room.x + 34,
+    y: floorY - signHeight - 34,
     floorY,
     width: signWidth,
     height: signHeight,
@@ -3808,53 +3810,60 @@ function drawTutorialRoomFrames() {
 
 function drawTutorialSigns() {
   for (const sign of tutorialSigns) {
-    if (!isObjectNearCamera(sign, 260, 240)) {
+    if (!isObjectNearCamera(sign, 220, 180)) {
       continue;
     }
-    const screenX = sign.x - camera.x;
-    const screenY = sign.y - camera.y;
-    const floorScreenY = (sign.floorY || sign.y + sign.height + 46) - camera.y;
-    const leftPostX = screenX + 30;
-    const rightPostX = screenX + sign.width - 42;
-    const postTopY = screenY + sign.height - 8;
-    const postHeight = Math.max(12, floorScreenY - postTopY);
 
-    // v57: 표지판은 UI 텍스트가 아니라 바닥에 박힌 물체처럼 보이도록 몸체, 다리, 발판을 분리해서 그린다.
+    const screenX = Math.round(sign.x - camera.x);
+    const screenY = Math.round(sign.y - camera.y);
+    const floorScreenY = Math.round((sign.floorY || sign.y + sign.height + 34) - camera.y);
+    const leftPostX = screenX + 26;
+    const rightPostX = screenX + sign.width - 37;
+    const postTopY = screenY + sign.height - 7;
+    const postHeight = Math.max(10, floorScreenY - postTopY);
+
+    // 표지판은 배경 안내물이다. 실제 플레이 오브젝트보다 먼저 그려져
+    // 캐릭터, 적, 발판, 체크포인트, 아이템을 절대로 가리지 않는다.
     ctx.save();
+    ctx.globalAlpha = 0.82;
 
-    ctx.fillStyle = "rgba(15, 23, 42, 0.36)";
+    ctx.fillStyle = "rgba(15, 23, 42, 0.28)";
     ctx.beginPath();
-    ctx.ellipse(screenX + sign.width / 2, floorScreenY + 4, sign.width * 0.34, 12, 0, 0, Math.PI * 2);
+    ctx.ellipse(screenX + sign.width / 2, floorScreenY + 3, sign.width * 0.30, 9, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    ctx.fillStyle = "rgba(51, 65, 85, 0.98)";
-    ctx.fillRect(leftPostX, postTopY, 13, postHeight);
-    ctx.fillRect(rightPostX, postTopY, 13, postHeight);
+    ctx.fillStyle = "rgba(51, 65, 85, 0.90)";
+    ctx.fillRect(leftPostX, postTopY, 11, postHeight);
+    ctx.fillRect(rightPostX, postTopY, 11, postHeight);
 
-    ctx.fillStyle = "rgba(71, 85, 105, 0.95)";
-    ctx.fillRect(leftPostX - 14, floorScreenY - 5, 42, 10);
-    ctx.fillRect(rightPostX - 14, floorScreenY - 5, 42, 10);
+    ctx.fillStyle = "rgba(71, 85, 105, 0.88)";
+    ctx.fillRect(leftPostX - 11, floorScreenY - 4, 34, 8);
+    ctx.fillRect(rightPostX - 11, floorScreenY - 4, 34, 8);
 
-    ctx.fillStyle = "rgba(15, 23, 42, 0.97)";
-    drawRoundedRect(screenX, screenY, sign.width, sign.height, 10);
+    ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+    drawRoundedRect(screenX, screenY, sign.width, sign.height, 9);
     ctx.fill();
 
-    ctx.strokeStyle = sign.cameraMode === "fixed" ? "rgba(147, 197, 253, 0.96)" : "rgba(196, 181, 253, 0.96)";
-    ctx.lineWidth = 3;
-    drawRoundedRect(screenX, screenY, sign.width, sign.height, 10);
+    ctx.strokeStyle = sign.cameraMode === "fixed"
+      ? "rgba(147, 197, 253, 0.88)"
+      : "rgba(196, 181, 253, 0.88)";
+    ctx.lineWidth = 2;
+    drawRoundedRect(screenX, screenY, sign.width, sign.height, 9);
     ctx.stroke();
 
-    ctx.fillStyle = sign.cameraMode === "fixed" ? "rgba(59, 130, 246, 0.2)" : "rgba(124, 58, 237, 0.2)";
-    ctx.fillRect(screenX + 12, screenY + 39, sign.width - 24, 3);
+    ctx.fillStyle = sign.cameraMode === "fixed"
+      ? "rgba(59, 130, 246, 0.17)"
+      : "rgba(124, 58, 237, 0.17)";
+    ctx.fillRect(screenX + 10, screenY + 34, sign.width - 20, 2);
 
     ctx.fillStyle = "#fef3c7";
-    ctx.font = "bold 18px Arial";
-    ctx.fillText(sign.title, screenX + 18, screenY + 28);
-    ctx.fillStyle = "#e2e8f0";
-    ctx.font = "14px Arial";
+    ctx.font = "bold 16px Arial";
+    ctx.fillText(sign.title, screenX + 14, screenY + 24);
 
+    ctx.fillStyle = "#e2e8f0";
+    ctx.font = "12px Arial";
     for (let i = 0; i < sign.lines.length; i++) {
-      ctx.fillText(sign.lines[i], screenX + 18, screenY + 61 + i * 22);
+      ctx.fillText(sign.lines[i], screenX + 14, screenY + 52 + i * 18);
     }
 
     ctx.restore();
@@ -4940,7 +4949,7 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "v57: 조작법별 튜토리얼 방 6개와 바닥형 표지판을 정리", x: 120, y: 210, width: 560, height: 24 },
+    { text: "v57 수정: 표지판을 배경 레이어로 이동해 플레이 오브젝트 가림 방지", x: 120, y: 210, width: 620, height: 24 },
     { text: "각 초대형 방에는 체크포인트가 있어 낙하 시 마지막 저장점으로 복귀", x: 8700, y: 960, width: 560, height: 24 },
     { text: "현재 단계는 튜토리얼 완성 + 첫 지역 골격 유지 확인용", x: 13600, y: 1180, width: 500, height: 24 },
     { text: "하층은 강제 구멍 낙하가 아니라 선택 진입 구조로 유지", x: 21600, y: 2380, width: 520, height: 24 },
@@ -5553,7 +5562,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v57 재검증본: 튜토리얼 방 6개 + 바닥형 표지판", 20, 35);
+  ctx.fillText("13단계-2 v57 수정: 바닥형 표지판 레이어 보정", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -5608,6 +5617,10 @@ function drawWorld() {
   drawRoomBackgrounds();
   drawTutorialRoomFrames();
   drawBackgroundDecorations();
+
+  // 표지판은 배경 레이어: 이후에 그리는 모든 실제 오브젝트가 표지판보다 앞에 보인다.
+  drawTutorialSigns();
+
   drawBossRoomDecorations();
   drawRoomLabels();
   drawDoors();
@@ -5615,7 +5628,6 @@ function drawWorld() {
   drawDashHazards();
   drawPlatforms();
   drawCheckpoints();
-  drawTutorialSigns();
   drawKeyItem();
   drawAbilityItems();
   drawRewardItems();
