@@ -168,8 +168,15 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v58-2: 단일 경로·카메라 전환·체크포인트 안정화를 적용했습니다.",
-  hiddenRewards: 0
+  message: "13단계-2 v58-4: 2차 검토본 - 시각 정리·튜토리얼 동선·첫 스테이지 표현을 재보완했습니다.",
+  hiddenRewards: 0,
+  currentRoomId: null,
+  transitionOverlayActive: false,
+  transitionOverlayTimer: 0,
+  transitionOverlayDuration: 52,
+  transitionOverlayTargetRoom: "",
+  transitionOverlayProgress: 0,
+  transitionOverlayTargetProgress: 0.86
 };
 
 
@@ -186,6 +193,7 @@ const checkpoints = [
 ];
 
 let activeCheckpoint = checkpoints[0];
+gameState.currentRoomId = checkpoints[0].roomId;
 
 const endingLines = [
   "나는 비어 있던 코어의 흔적을 따라 이곳까지 왔다.",
@@ -515,16 +523,18 @@ const megaStageRouteGates = [
 
 
 const tutorialSigns = tutorialRooms.map(function(room) {
-  // 표지판은 조작 공간을 덮지 않도록 이전보다 작게 만들고 방의 왼쪽 벽 가까이에 둔다.
-  const preferredWidth = room.cameraMode === "fixed" ? 350 : 410;
-  const signWidth = Math.min(preferredWidth, room.width - 170);
-  const signHeight = 94;
-  const floorY = room.floorY || room.y + room.height - 120;
+  const preferredWidth = room.cameraMode === "fixed" ? 350 : 390;
+  const signWidth = Math.min(preferredWidth, room.width - 220);
+  const signHeight = 86;
+  const anchorCenterX = room.cameraMode === "fixed"
+    ? room.x + room.width / 2
+    : room.x + 450;
+  const signX = Math.round(anchorCenterX - signWidth / 2);
+  const signY = room.y + 92;
 
   return {
-    x: room.x + 34,
-    y: floorY - signHeight - 34,
-    floorY,
+    x: signX,
+    y: signY,
     width: signWidth,
     height: signHeight,
     title: room.signTitle,
@@ -535,8 +545,7 @@ const tutorialSigns = tutorialRooms.map(function(room) {
 });
 
 const platforms = [
-  // 13-2-2 v57: 튜토리얼 방 6개를 조작법별로 분리한다.
-  // 1화면 방은 고정 카메라, 2화면 방은 방 안에서만 추적 카메라가 작동한다.
+  // 기본 바닥
   { x: 0, y: 680, width: 900, height: 110, area: "tutorial_move_room" },
   { x: 900, y: 680, width: 900, height: 110, area: "tutorial_jump_room" },
   { x: 1800, y: 680, width: 900, height: 110, area: "tutorial_attack_room" },
@@ -545,133 +554,138 @@ const platforms = [
   { x: 6300, y: 680, width: 1600, height: 110, area: "tutorial_pogo_room" },
   { x: 7900, y: 680, width: 600, height: 110, area: "tutorial_exit_room" },
 
-  // 점프 학습용 낮은 발판. 한 화면 안에서만 쓰이도록 크기를 작게 유지한다.
-  { x: 1190, y: 600, width: 220, height: 30, area: "tutorial_jump_step" },
-  { x: 1490, y: 540, width: 230, height: 30, area: "tutorial_jump_step" },
+  // 튜토리얼 천장과 경계 벽: 통로만 남기고 나머지는 막아 몰입감을 높인다.
+  { x: 0, y: 240, width: 900, height: 22, area: "tutorial_move_ceiling" },
+  { x: 900, y: 240, width: 900, height: 22, area: "tutorial_jump_ceiling" },
+  { x: 1800, y: 240, width: 900, height: 22, area: "tutorial_attack_ceiling" },
+  { x: 2700, y: 220, width: 1800, height: 22, area: "tutorial_dash_ceiling" },
+  { x: 4500, y: 150, width: 1800, height: 22, area: "tutorial_wall_ceiling" },
+  { x: 6300, y: 220, width: 1600, height: 22, area: "tutorial_pogo_ceiling" },
+  { x: 7900, y: 240, width: 600, height: 22, area: "tutorial_exit_ceiling" },
 
-  // 대시 방은 바닥이 끊기지 않는 일자형 구조다.
-  // 공중 발판 아래로 우회하는 통로를 없애고, 특수 기억벽을 대시로 직접 통과하게 한다.
-  { x: 3200, y: 650, width: 280, height: 30, area: "tutorial_dash_runup", abilityChallenge: "dash" },
-  { x: 3920, y: 650, width: 300, height: 30, area: "tutorial_dash_landing", abilityChallenge: "dash" },
+  { x: 0, y: 240, width: 28, height: 440, area: "tutorial_left_wall" },
+  { x: 872, y: 240, width: 28, height: 300, area: "tutorial_01_exit_wall" },
+  { x: 1772, y: 240, width: 28, height: 250, area: "tutorial_02_exit_wall" },
+  { x: 2672, y: 240, width: 28, height: 300, area: "tutorial_03_exit_wall" },
+  { x: 4472, y: 220, width: 28, height: 260, area: "tutorial_04_exit_wall" },
+  { x: 6272, y: 150, width: 28, height: 250, area: "tutorial_05_exit_wall" },
+  { x: 7872, y: 220, width: 28, height: 260, area: "tutorial_06_exit_wall" },
 
-  // 벽 점프 학습용 가까운 두 벽 수직 통로.
-  // 내부 받침대를 모두 없애고, 두 벽의 안쪽 간격을 130px로 좁혀
-  // 한쪽 벽에서 튕긴 뒤 반대편 벽에 자연스럽게 붙도록 만든다.
-  //
-  // 왼쪽 벽 아래에는 70px 높이의 진입구를 남겨 바닥에서 통로 안으로 걸어 들어갈 수 있다.
-  // 오른쪽 벽은 바닥까지 이어져 옆으로 빠지는 것을 막는다.
-  { x: 5200, y: 240, width: 58, height: 370, area: "tutorial_wall_left", wallJumpTest: true, abilityChallenge: "wallJump" },
-  { x: 5388, y: 240, width: 58, height: 440, area: "tutorial_wall_right", wallJumpTest: true, abilityChallenge: "wallJump" },
+  // 점프 구역: 떠 있는 발판 대신, 아래까지 닿는 벽 2개를 순서대로 넘는다.
+  { x: 1235, y: 540, width: 90, height: 140, area: "tutorial_jump_wall" },
+  { x: 1485, y: 480, width: 90, height: 200, area: "tutorial_jump_wall" },
 
-  // 벽 정상 바깥쪽에만 착지 발판을 둔다.
-  // 통로 내부에는 발판이 없으므로 두 벽을 계속 번갈아 타야 한다.
-  { x: 5388, y: 205, width: 690, height: 38, area: "tutorial_wall_exit", abilityChallenge: "wallJump" },
+  // 공격 구역: 적과 전면으로 맞붙는 간단한 훈련실
+  { x: 2140, y: 648, width: 80, height: 32, area: "tutorial_attack_bumper" },
 
-  // 정상에 도착한 뒤 다음 튜토리얼로 내려가는 넓은 계단형 연결 발판.
-  { x: 5750, y: 360, width: 300, height: 32, area: "tutorial_wall_exit_step" },
-  { x: 5980, y: 510, width: 270, height: 32, area: "tutorial_wall_exit_step" },
+  // 대시 구역: 노란 바닥 구조물을 없애고, 긴 직선로 + 연속 기억벽 구성
+  { x: 3010, y: 680, width: 260, height: 110, area: "tutorial_dash_lane" },
+  { x: 4080, y: 680, width: 220, height: 110, area: "tutorial_dash_lane" },
 
-  // 오른쪽 장벽이 상층 이동을 완전히 막는다.
-  // 아래쪽 90px만 비워 두어 바닥까지 내려온 뒤에만 다음 튜토리얼로 진행할 수 있다.
+  // 벽 점프 구역: 일반 거대 벽 2개 사이를 튕겨서 올라간다.
+  { x: 5195, y: 200, width: 86, height: 480, area: "tutorial_wall_left" },
+  { x: 5407, y: 170, width: 86, height: 510, area: "tutorial_wall_right" },
+  { x: 5155, y: 168, width: 140, height: 28, area: "tutorial_wall_left_cap" },
+  { x: 5488, y: 205, width: 620, height: 38, area: "tutorial_wall_exit" },
+  { x: 5760, y: 360, width: 300, height: 32, area: "tutorial_wall_exit_step" },
+  { x: 5990, y: 510, width: 250, height: 32, area: "tutorial_wall_exit_step" },
   { x: 6250, y: 150, width: 64, height: 440, area: "tutorial_forced_descent_wall" },
 
-  // 아래 공격 튕김 학습용 발판. 표적을 공격하고 위쪽으로 튕기는 감각을 확인한다.
-  { x: 6540, y: 555, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
-  { x: 7040, y: 500, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
+  // 아래 공격 구역: 아래로 빠질 수 없는 벽과 쉬운 표적 배치
+  { x: 6835, y: 470, width: 90, height: 210, area: "tutorial_pogo_wall" },
+  { x: 7000, y: 600, width: 100, height: 80, area: "tutorial_pogo_enemy_pedestal" },
+  { x: 7180, y: 470, width: 290, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
+  { x: 7515, y: 410, width: 90, height: 270, area: "tutorial_pogo_wall" },
 
-  // v58-1 첫 번째 초대형 스테이지 블록아웃
-  // 전체 경로는 1층 오른쪽 진행 → 우측 하강 → 2층 왼쪽 진행 → 좌측 하강 → 3층 오른쪽 진행이다.
-  // 선택 갈림길과 강제 낙하 구멍은 없으며, 층 전환은 넓은 계단형 경사로만 이루어진다.
+  // 튜토리얼 종료 구역: 단순 평지가 아니라 관문형 구조
+  { x: 8000, y: 610, width: 220, height: 70, area: "tutorial_exit_dais" },
+  { x: 8090, y: 430, width: 36, height: 250, area: "tutorial_exit_gate_frame" },
+  { x: 8334, y: 430, width: 36, height: 250, area: "tutorial_exit_gate_frame" },
+  { x: 8090, y: 430, width: 280, height: 26, area: "tutorial_exit_gate_frame" },
 
-  // 외곽 천장과 좌우 경계
+  // --- 초대형 스테이지 1: 외곽 ---
   { x: 8500, y: 180, width: 5000, height: 54, area: "mega_stage_outer_ceiling" },
-  // 튜토리얼 바닥과 초대형 스테이지 1층 사이에 170px 높이의 출입구를 남긴다.
   { x: 8500, y: 180, width: 54, height: 420, area: "mega_stage_outer_left_upper" },
   { x: 8500, y: 770, width: 54, height: 1010, area: "mega_stage_outer_left_lower" },
   { x: 13446, y: 180, width: 54, height: 1120, area: "mega_stage_outer_right_upper" },
 
-  // 1층 바닥: 왼쪽에서 오른쪽으로 진행
+  // 1층 기본 바닥
   { x: 8420, y: 680, width: 180, height: 80, area: "mega_stage_entry_threshold" },
   { x: 8500, y: 680, width: 3950, height: 80, area: "mega_stage_layer1_floor" },
 
-  // 1층 경사면 블록아웃: 실제 경사 충돌은 다음 제작에서 교체한다.
+  // 1층 스네이크형 루트 보강: 위아래를 번갈아 거치는 곡선 루트
   { x: 8720, y: 640, width: 120, height: 40, area: "mega_stage_slope_step" },
   { x: 8840, y: 610, width: 120, height: 70, area: "mega_stage_slope_step" },
   { x: 8960, y: 580, width: 120, height: 100, area: "mega_stage_slope_step" },
   { x: 9080, y: 610, width: 120, height: 70, area: "mega_stage_slope_step" },
-
-  // 기억포·포탄 화면의 높이차
-  { x: 9650, y: 575, width: 250, height: 36, area: "mega_stage_cannon_ledge" },
-  { x: 10020, y: 515, width: 250, height: 36, area: "mega_stage_cannon_bounce_target" },
-
-  // 구불구불한 경사 화면의 계단형 임시 지형
+  { x: 9520, y: 520, width: 170, height: 160, area: "mega_stage_snake_wall" },
+  { x: 9710, y: 500, width: 250, height: 34, area: "mega_stage_snake_ledge" },
+  { x: 10020, y: 565, width: 220, height: 34, area: "mega_stage_snake_ledge" },
   { x: 10420, y: 630, width: 130, height: 50, area: "mega_stage_curve_step" },
   { x: 10550, y: 590, width: 130, height: 90, area: "mega_stage_curve_step" },
   { x: 10680, y: 550, width: 130, height: 130, area: "mega_stage_curve_step" },
   { x: 10810, y: 585, width: 130, height: 95, area: "mega_stage_curve_step" },
   { x: 10940, y: 620, width: 130, height: 60, area: "mega_stage_curve_step" },
-
-  // 스프링 예정 화면의 임시 착지대
+  { x: 10700, y: 460, width: 240, height: 32, area: "mega_stage_snake_ledge" },
+  { x: 11110, y: 530, width: 80, height: 150, area: "mega_stage_snake_wall" },
   { x: 11420, y: 555, width: 340, height: 38, area: "mega_stage_spring_preview_ledge" },
   { x: 11840, y: 495, width: 220, height: 38, area: "mega_stage_spring_preview_ledge" },
+  { x: 11770, y: 420, width: 220, height: 32, area: "mega_stage_snake_ledge" },
 
-  // 우측 층 전환: 1층에서 2층으로 안전하게 내려가는 넓은 계단
+  // 우측 층 전환
   { x: 12450, y: 720, width: 140, height: 480, area: "mega_stage_right_descent" },
   { x: 12590, y: 800, width: 140, height: 400, area: "mega_stage_right_descent" },
   { x: 12730, y: 880, width: 140, height: 320, area: "mega_stage_right_descent" },
   { x: 12870, y: 960, width: 140, height: 240, area: "mega_stage_right_descent" },
   { x: 13010, y: 1040, width: 490, height: 160, area: "mega_stage_right_descent" },
 
-  // 2층 바닥: 오른쪽에서 왼쪽으로 진행
+  // 2층 바닥
   { x: 9000, y: 1200, width: 4500, height: 80, area: "mega_stage_layer2_floor" },
 
-  // 스프링 착지 제어 예정 구간
+  // 2층 루트 개성화
   { x: 12520, y: 1090, width: 300, height: 36, area: "mega_stage_spring_landing" },
   { x: 12140, y: 1030, width: 260, height: 36, area: "mega_stage_spring_landing" },
-
-  // 클로 예정 구간: 실제 클로 대신 임시 안전 다리로 경로만 검증
+  { x: 11840, y: 980, width: 230, height: 34, area: "mega_stage_snake_ledge" },
   { x: 11330, y: 1040, width: 620, height: 34, area: "mega_stage_temp_claw_bridge", temporaryBridge: true },
+  { x: 10980, y: 940, width: 160, height: 34, area: "mega_stage_snake_ledge" },
   { x: 10420, y: 1010, width: 690, height: 34, area: "mega_stage_temp_claw_bridge", temporaryBridge: true },
   { x: 10110, y: 1090, width: 220, height: 34, area: "mega_stage_claw_exit_ledge" },
-
-  // 상층 기억포 구간의 높이 변화
   { x: 9650, y: 1060, width: 280, height: 34, area: "mega_stage_upper_cannon_ledge" },
   { x: 9300, y: 1120, width: 250, height: 34, area: "mega_stage_upper_cannon_ledge" },
+  { x: 9050, y: 1030, width: 170, height: 170, area: "mega_stage_snake_wall" },
 
-  // 좌측 층 전환: 2층에서 3층으로 내려가는 넓은 계단
+  // 좌측 층 전환
   { x: 8860, y: 1280, width: 140, height: 440, area: "mega_stage_left_descent" },
   { x: 8720, y: 1360, width: 140, height: 360, area: "mega_stage_left_descent" },
   { x: 8580, y: 1440, width: 140, height: 280, area: "mega_stage_left_descent" },
   { x: 8500, y: 1520, width: 80, height: 200, area: "mega_stage_left_descent" },
 
-  // 3층 바닥: 붕괴석 추격 예정 구간. 현재는 단일 루트 검증용
+  // 3층 바닥
   { x: 8500, y: 1720, width: 4500, height: 100, area: "mega_stage_layer3_floor" },
 
-  // 추격 경사 I
+  // 3층 추격용 곡선 계단
   { x: 9250, y: 1660, width: 150, height: 60, area: "mega_stage_chase_step" },
   { x: 9400, y: 1610, width: 150, height: 110, area: "mega_stage_chase_step" },
   { x: 9550, y: 1570, width: 150, height: 150, area: "mega_stage_chase_step" },
   { x: 9700, y: 1610, width: 150, height: 110, area: "mega_stage_chase_step" },
-
-  // 추격 경사 II와 낮은 장애물
+  { x: 10060, y: 1540, width: 230, height: 34, area: "mega_stage_snake_ledge" },
   { x: 10350, y: 1645, width: 160, height: 75, area: "mega_stage_chase_step" },
   { x: 10510, y: 1595, width: 160, height: 125, area: "mega_stage_chase_step" },
   { x: 10940, y: 1615, width: 100, height: 105, area: "mega_stage_chase_obstacle" },
-
-  // 추격 경사 III
   { x: 11300, y: 1660, width: 150, height: 60, area: "mega_stage_chase_step" },
   { x: 11450, y: 1605, width: 150, height: 115, area: "mega_stage_chase_step" },
   { x: 11600, y: 1555, width: 150, height: 165, area: "mega_stage_chase_step" },
   { x: 11750, y: 1605, width: 150, height: 115, area: "mega_stage_chase_step" },
+  { x: 12040, y: 1520, width: 220, height: 32, area: "mega_stage_snake_ledge" },
 
-  // 출구 상승: 중앙 대공동의 기존 바닥 높이인 y=1300으로 자연스럽게 연결
+  // 출구 상승
   { x: 13000, y: 1640, width: 100, height: 180, area: "mega_stage_exit_rise" },
   { x: 13100, y: 1560, width: 100, height: 260, area: "mega_stage_exit_rise" },
   { x: 13200, y: 1480, width: 100, height: 340, area: "mega_stage_exit_rise" },
   { x: 13300, y: 1400, width: 100, height: 420, area: "mega_stage_exit_rise" },
   { x: 13400, y: 1320, width: 100, height: 500, area: "mega_stage_exit_rise" },
 
-  // 초대형 방 2: 중앙 대공동. 첫 지역의 허브가 될 가장 큰 공간의 기본 골격
+  // 이후 초대형 방들은 기존 블록아웃 유지
   { x: 13500, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
   { x: 14800, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
   { x: 16100, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
@@ -688,7 +702,6 @@ const platforms = [
   { x: 16050, y: 2100, width: 1100, height: 110, area: "central_cavern_lower_preview" },
   { x: 17850, y: 1950, width: 1250, height: 110, area: "central_cavern_lower_preview" },
 
-  // 초대형 방 3: 하층 폐허. 강제 낙하가 아니라 선택적으로 내려가는 넓은 하층 골격
   { x: 21500, y: 2500, width: 1200, height: 130, area: "lower_ruins_floor" },
   { x: 22700, y: 2500, width: 1200, height: 130, area: "lower_ruins_floor" },
   { x: 23900, y: 2500, width: 1200, height: 130, area: "lower_ruins_floor" },
@@ -699,7 +712,6 @@ const platforms = [
   { x: 24200, y: 2220, width: 560, height: 54, area: "lower_ruins_shelf" },
   { x: 25550, y: 2060, width: 600, height: 54, area: "lower_ruins_shelf", secretRoute: "하층 폐허 보상 후보" },
 
-  // 초대형 방 4: 긴 폐허 회랑. 가로로 길지만 높낮이 변화가 들어갈 기본 골격
   { x: 27500, y: 1180, width: 1300, height: 120, area: "long_corridor_floor" },
   { x: 28800, y: 1240, width: 1300, height: 120, area: "long_corridor_floor" },
   { x: 30100, y: 1100, width: 1300, height: 120, area: "long_corridor_floor" },
@@ -710,7 +722,6 @@ const platforms = [
   { x: 30500, y: 760, width: 580, height: 50, area: "long_corridor_upper_bypass" },
   { x: 31850, y: 900, width: 600, height: 50, area: "long_corridor_upper_bypass", secretRoute: "긴 회랑 상층 보상 후보" },
 
-  // 초대형 방 5: 세로 상승 폐허. 이후 복잡한 상승 구조를 만들기 위한 큰 벽과 쉼터 골격
   { x: 34000, y: 4100, width: 1000, height: 140, area: "vertical_ascent_base" },
   { x: 35000, y: 4100, width: 950, height: 140, area: "vertical_ascent_base" },
   { x: 35950, y: 4100, width: 1050, height: 140, area: "vertical_ascent_base" },
@@ -724,7 +735,6 @@ const platforms = [
   { x: 34600, y: 1500, width: 620, height: 58, area: "vertical_ascent_shelf", requiresDoubleJump: true, secretRoute: "세로 상승 상층 보상 후보" },
   { x: 38100, y: 1120, width: 620, height: 58, area: "vertical_ascent_top_exit", requiresDoubleJump: true },
 
-  // 초대형 방 6: 봉인 관문. 두 번째 지역을 예고하는 마무리 공간
   { x: 39000, y: 1180, width: 1200, height: 130, area: "sealed_gate_floor" },
   { x: 40200, y: 1180, width: 1200, height: 130, area: "sealed_gate_floor" },
   { x: 41400, y: 1180, width: 1200, height: 130, area: "sealed_gate_floor" },
@@ -761,11 +771,41 @@ const rewardItems = [
 
 const dashHazards = [
   {
-    name: "튜토리얼 황금 기억벽",
-    x: 3710,
-    y: 285,
-    width: 68,
-    height: 395,
+    name: "튜토리얼 황금 기억벽 1",
+    x: 3510,
+    y: 300,
+    width: 44,
+    height: 380,
+    blocksWithoutDash: true,
+    isDashBarrier: true,
+    tutorialBarrier: true
+  },
+  {
+    name: "튜토리얼 황금 기억벽 2",
+    x: 3640,
+    y: 280,
+    width: 44,
+    height: 400,
+    blocksWithoutDash: true,
+    isDashBarrier: true,
+    tutorialBarrier: true
+  },
+  {
+    name: "튜토리얼 황금 기억벽 3",
+    x: 3770,
+    y: 260,
+    width: 44,
+    height: 420,
+    blocksWithoutDash: true,
+    isDashBarrier: true,
+    tutorialBarrier: true
+  },
+  {
+    name: "튜토리얼 황금 기억벽 4",
+    x: 3900,
+    y: 240,
+    width: 44,
+    height: 440,
     blocksWithoutDash: true,
     isDashBarrier: true,
     tutorialBarrier: true
@@ -779,12 +819,14 @@ const spikeTraps = [
   { id: "spike_mega_02", name: "경사 통로 가시", x: 10770, y: 512, width: 105, height: 38, direction: "up" },
   { id: "spike_mega_03", name: "클로 구간 가시", x: 11070, y: 1162, width: 125, height: 38, direction: "up" },
   { id: "spike_mega_04", name: "추격 통로 가시", x: 11060, y: 1682, width: 125, height: 38, direction: "up" },
-  { id: "spike_mega_05", name: "출구 전 가시", x: 12320, y: 1682, width: 145, height: 38, direction: "up" }
+  { id: "spike_mega_05", name: "출구 전 가시", x: 12320, y: 1682, width: 145, height: 38, direction: "up" },
+  { id: "spike_mega_06", name: "경사면 상단 가시", x: 9860, y: 496, width: 88, height: 38, direction: "up" },
+  { id: "spike_mega_07", name: "스프링 예비 가시", x: 11610, y: 457, width: 92, height: 38, direction: "up" }
 ];
 
 const enemies = [
   createMeleeEnemy("튜토리얼 그림자", 2380, 644, 32, 34, 2180, 2600, 1.0, 2, 68, 100),
-  createMeleeEnemy("아래 공격 표적", 6780, 644, 34, 34, 6660, 7040, 0.45, 3, 62, 120),
+  createMeleeEnemy("아래 공격 표적", 7035, 564, 34, 34, 7005, 7065, 0.0, 3, 62, 120),
   createMeleeEnemy("중앙 폐허 파수꾼", 16750, 1264, 38, 36, 14000, 21000, 1.15, 4, 78, 112),
   createMeleeEnemy("하층 폐허 벌레", 24100, 2464, 38, 36, 21800, 27200, 1.15, 4, 78, 112),
   createMeleeEnemy("회랑 파수꾼", 30600, 1064, 38, 36, 27800, 33500, 1.15, 4, 78, 112),
@@ -2565,6 +2607,7 @@ function respawnAtCheckpoint(message) {
   }
 
   invalidateSolidObjectCache();
+  gameState.currentRoomId = getCurrentRoom().id;
   gameState.message = message || checkpoint.name + "에서 다시 시작합니다.";
 }
 
@@ -3920,6 +3963,8 @@ function updateGameStateTimers() {
   if (gameState.bossStartBannerTimer > 0) {
     gameState.bossStartBannerTimer -= 1;
   }
+
+  updateRoomTransitionOverlay();
 }
 
 function updateEndingSequence() {
@@ -4292,6 +4337,7 @@ function update() {
     updateParticles();
     updateFloatingTexts();
     updateCamera();
+    detectRoomTransition();
     return;
   }
 
@@ -4300,6 +4346,17 @@ function update() {
   if (gameState.endingReached) {
     updateEndingSequence();
     updatePlayerAnimation();
+    updateParticles();
+    updateFloatingTexts();
+    updateCamera();
+    detectRoomTransition();
+    return;
+  }
+
+  if (gameState.transitionOverlayActive) {
+    player.vx = 0;
+    player.attackTimer = 0;
+    player.isDashing = false;
     updateParticles();
     updateFloatingTexts();
     updateCamera();
@@ -4320,6 +4377,7 @@ function update() {
   updateParticles();
   updateFloatingTexts();
   updateCamera();
+  detectRoomTransition();
 }
 
 function drawRoundedRect(x, y, width, height, radius) {
@@ -4489,80 +4547,48 @@ function drawTutorialRoomFrames() {
     const isFixed = room.mode === "fixed";
 
     ctx.save();
-
-    // v57: 튜토리얼 방은 "훈련실"처럼 보이도록 얇은 틀과 바닥 기준선을 분명히 둔다.
-    ctx.fillStyle = isFixed ? "rgba(15, 23, 42, 0.18)" : "rgba(30, 27, 75, 0.16)";
-    ctx.fillRect(screenX, screenY, room.width, room.height);
-
-    ctx.strokeStyle = isFixed ? "rgba(147, 197, 253, 0.82)" : "rgba(167, 139, 250, 0.78)";
+    ctx.strokeStyle = isFixed ? "rgba(147, 197, 253, 0.28)" : "rgba(167, 139, 250, 0.26)";
     ctx.lineWidth = 2;
     ctx.strokeRect(screenX, screenY, room.width, room.height);
 
-    ctx.fillStyle = isFixed ? "rgba(59, 130, 246, 0.22)" : "rgba(124, 58, 237, 0.2)";
-    ctx.fillRect(screenX, screenY, room.width, 5);
-    ctx.fillRect(screenX, screenY + room.height - 5, room.width, 5);
-
-    ctx.fillStyle = "#dbeafe";
-    ctx.font = "bold 16px Arial";
-    ctx.fillText(room.title, screenX + 24, screenY + 32);
-    ctx.fillStyle = "#cbd5e1";
-    ctx.font = "12px Arial";
-    ctx.fillText(isFixed ? "고정 카메라 학습실" : "추적 카메라 학습실", screenX + 24, screenY + 52);
+    ctx.fillStyle = isFixed ? "rgba(56, 189, 248, 0.10)" : "rgba(124, 58, 237, 0.10)";
+    ctx.fillRect(screenX, screenY, room.width, 3);
+    ctx.fillRect(screenX, screenY + room.height - 3, room.width, 3);
     ctx.restore();
   }
 }
 
 function drawTutorialSigns() {
   for (const sign of tutorialSigns) {
-    if (!isObjectNearCamera(sign, 220, 180)) {
+    if (!isObjectNearCamera(sign, 220, 160)) {
       continue;
     }
 
     const screenX = Math.round(sign.x - camera.x);
     const screenY = Math.round(sign.y - camera.y);
-    const floorScreenY = Math.round((sign.floorY || sign.y + sign.height + 34) - camera.y);
-    const leftPostX = screenX + 26;
-    const rightPostX = screenX + sign.width - 37;
-    const postTopY = screenY + sign.height - 7;
-    const postHeight = Math.max(10, floorScreenY - postTopY);
 
-    // 표지판은 배경 안내물이다. 실제 플레이 오브젝트보다 먼저 그려져
-    // 캐릭터, 적, 발판, 체크포인트, 아이템을 절대로 가리지 않는다.
     ctx.save();
-    ctx.globalAlpha = 0.82;
+    ctx.globalAlpha = 0.94;
 
-    ctx.fillStyle = "rgba(15, 23, 42, 0.28)";
-    ctx.beginPath();
-    ctx.ellipse(screenX + sign.width / 2, floorScreenY + 3, sign.width * 0.30, 9, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = "rgba(51, 65, 85, 0.90)";
-    ctx.fillRect(leftPostX, postTopY, 11, postHeight);
-    ctx.fillRect(rightPostX, postTopY, 11, postHeight);
-
-    ctx.fillStyle = "rgba(71, 85, 105, 0.88)";
-    ctx.fillRect(leftPostX - 11, floorScreenY - 4, 34, 8);
-    ctx.fillRect(rightPostX - 11, floorScreenY - 4, 34, 8);
-
-    ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
-    drawRoundedRect(screenX, screenY, sign.width, sign.height, 9);
+    ctx.fillStyle = "rgba(5, 14, 32, 0.86)";
+    drawRoundedRect(screenX, screenY, sign.width, sign.height, 12);
     ctx.fill();
 
     ctx.strokeStyle = sign.cameraMode === "fixed"
-      ? "rgba(147, 197, 253, 0.88)"
-      : "rgba(196, 181, 253, 0.88)";
+      ? "rgba(147, 197, 253, 0.80)"
+      : "rgba(196, 181, 253, 0.80)";
     ctx.lineWidth = 2;
-    drawRoundedRect(screenX, screenY, sign.width, sign.height, 9);
+    drawRoundedRect(screenX, screenY, sign.width, sign.height, 12);
     ctx.stroke();
 
     ctx.fillStyle = sign.cameraMode === "fixed"
-      ? "rgba(59, 130, 246, 0.17)"
-      : "rgba(124, 58, 237, 0.17)";
-    ctx.fillRect(screenX + 10, screenY + 34, sign.width - 20, 2);
+      ? "rgba(56, 189, 248, 0.16)"
+      : "rgba(167, 139, 250, 0.16)";
+    ctx.fillRect(screenX + 12, screenY + 34, sign.width - 24, 2);
 
     ctx.fillStyle = "#fef3c7";
     ctx.font = "bold 16px Arial";
-    ctx.fillText(sign.title, screenX + 14, screenY + 24);
+    ctx.fillText(sign.title, screenX + 14, screenY + 23);
 
     ctx.fillStyle = "#e2e8f0";
     ctx.font = "12px Arial";
@@ -4638,18 +4664,20 @@ function drawRoomBackgrounds() {
 }
 
 function drawBackgroundDecorations() {
-  // 초대형 고정 화면 안에서는 배경 기둥을 한 화면당 최대 1개만 그린다.
   const activeMegaScreen = getCurrentMegaStageScreen();
 
   ctx.save();
-  ctx.fillStyle = "rgba(148, 163, 184, 0.045)";
+  ctx.fillStyle = "rgba(148, 163, 184, 0.040)";
 
   if (activeMegaScreen) {
-    const screenX = Math.round(activeMegaScreen.x + activeMegaScreen.width * 0.72 - camera.x);
-    ctx.fillRect(screenX, 70, 62, canvas.height - 140);
+    const baseX = activeMegaScreen.x - camera.x;
+    ctx.fillRect(Math.round(baseX + activeMegaScreen.width * 0.18), 82, 44, canvas.height - 164);
+    ctx.fillRect(Math.round(baseX + activeMegaScreen.width * 0.48), 128, 62, canvas.height - 236);
+    ctx.fillRect(Math.round(baseX + activeMegaScreen.width * 0.76), 96, 52, canvas.height - 192);
   } else {
     const columnX = Math.floor((camera.x + canvas.width * 0.55) / 900) * 900;
     ctx.fillRect(Math.round(columnX - camera.x), 70, 62, canvas.height - 140);
+    ctx.fillRect(Math.round(columnX + 250 - camera.x), 120, 44, canvas.height - 210);
   }
 
   ctx.restore();
@@ -4784,44 +4812,36 @@ function drawDashHazards() {
     }
     const screenX = hazard.x - camera.x;
     const screenY = hazard.y - camera.y;
-    const pulse = 0.42 + Math.sin(frameCount * 0.12) * 0.12;
+    const pulse = 0.52 + Math.sin(frameCount * 0.12 + hazard.x * 0.01) * 0.10;
 
     ctx.save();
-    ctx.globalAlpha = pulse;
-    ctx.fillStyle = "#7c2d12";
-    drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 10);
+    ctx.globalAlpha = 0.92;
+    ctx.fillStyle = "rgba(92, 45, 12, 0.94)";
+    drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 8);
     ctx.fill();
 
-    ctx.globalAlpha = 0.92;
-    ctx.strokeStyle = "#fef3c7";
+    ctx.globalAlpha = 0.50 * pulse;
+    ctx.fillStyle = "rgba(245, 158, 11, 0.95)";
+    ctx.fillRect(screenX + 7, screenY + 8, hazard.width - 14, hazard.height - 16);
+
+    ctx.globalAlpha = 0.95;
+    ctx.strokeStyle = "#fde68a";
     ctx.lineWidth = 2;
-    drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 10);
+    drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 8);
     ctx.stroke();
 
-    ctx.globalAlpha = 0.24;
-    ctx.fillStyle = "#fed7aa";
-    ctx.fillRect(screenX + hazard.width * 0.28, screenY + 12, hazard.width * 0.44, hazard.height - 24);
-
-    ctx.globalAlpha = 0.38;
-    ctx.fillStyle = "#facc15";
-    for (let y = 12; y < hazard.height; y += 38) {
-      ctx.fillRect(screenX + 9, screenY + y, hazard.width - 18, 8);
-    }
-
-    ctx.globalAlpha = 0.72;
-    ctx.strokeStyle = "#fde68a";
+    ctx.strokeStyle = "rgba(254, 240, 138, 0.95)";
     ctx.lineWidth = 3;
-    for (let y = 18; y < hazard.height - 12; y += 42) {
+    for (let offset = -hazard.height; offset < hazard.width; offset += 18) {
       ctx.beginPath();
-      ctx.moveTo(screenX + 10, screenY + y);
-      ctx.lineTo(screenX + hazard.width - 10, screenY + y + 18);
+      ctx.moveTo(screenX + Math.max(0, offset), screenY + Math.max(0, -offset));
+      ctx.lineTo(
+        screenX + Math.min(hazard.width, offset + hazard.height),
+        screenY + Math.min(hazard.height, hazard.height - offset)
+      );
       ctx.stroke();
     }
 
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = "#fef3c7";
-    ctx.font = "bold 12px Arial";
-    ctx.fillText("대시 통과벽", screenX - 8, screenY - 10);
     ctx.restore();
   }
 }
@@ -4844,15 +4864,18 @@ function drawPlatforms() {
 
     const screenX = platform.x - camera.x;
     const screenY = platform.y - camera.y;
+    const area = platform.area || "";
+    const isSlopePiece = area.includes("slope") || area.includes("curve_step") || area.includes("chase_step") || area.includes("descent") || area.includes("exit_rise");
+    const isSnakePiece = area.includes("snake") || area.includes("spring_preview") || area.includes("claw") || area.includes("cannon");
+    const isTutorialWall = area.includes("tutorial_") && area.includes("wall");
 
     if (platform.wallJumpTest) {
-      ctx.fillStyle = platform.abilityChallenge === "wallJump" ? "#1e3a5f" : "#1e293b";
+      ctx.fillStyle = "#334155";
       ctx.fillRect(screenX, screenY, platform.width, platform.height);
-      ctx.fillStyle = platform.abilityChallenge === "wallJump" ? "#7dd3fc" : "rgba(125, 211, 252, 0.55)";
-      ctx.fillRect(screenX, screenY, 5, platform.height);
-      ctx.fillRect(screenX + platform.width - 5, screenY, 5, platform.height);
-      ctx.strokeStyle = "rgba(125, 211, 252, 0.85)";
-      ctx.lineWidth = 2;
+      ctx.fillStyle = "#475569";
+      ctx.fillRect(screenX, screenY, platform.width, 6);
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.55)";
+      ctx.lineWidth = 1;
       ctx.strokeRect(screenX, screenY, platform.width, platform.height);
     } else if (platform.abilityChallenge === "dash") {
       ctx.fillStyle = "#3f2a16";
@@ -4876,6 +4899,30 @@ function drawPlatforms() {
       ctx.fillStyle = player.hasDoubleJump ? "#a78bfa" : "rgba(167, 139, 250, 0.45)";
       ctx.fillRect(screenX, screenY, platform.width, 5);
       ctx.strokeStyle = "rgba(216, 180, 254, 0.75)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(screenX, screenY, platform.width, platform.height);
+    } else if (isTutorialWall) {
+      ctx.fillStyle = "#334155";
+      ctx.fillRect(screenX, screenY, platform.width, platform.height);
+      ctx.fillStyle = "#64748b";
+      ctx.fillRect(screenX, screenY, platform.width, 5);
+      ctx.strokeStyle = "rgba(203, 213, 225, 0.24)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(screenX, screenY, platform.width, platform.height);
+    } else if (isSlopePiece) {
+      ctx.fillStyle = "#4b5f77";
+      ctx.fillRect(screenX, screenY, platform.width, platform.height);
+      ctx.fillStyle = "#8aa0bd";
+      ctx.fillRect(screenX, screenY, platform.width, 5);
+      ctx.strokeStyle = "rgba(191, 219, 254, 0.18)";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(screenX, screenY, platform.width, platform.height);
+    } else if (isSnakePiece) {
+      ctx.fillStyle = "#42536a";
+      ctx.fillRect(screenX, screenY, platform.width, platform.height);
+      ctx.fillStyle = "#7b8ea8";
+      ctx.fillRect(screenX, screenY, platform.width, 5);
+      ctx.strokeStyle = "rgba(226, 232, 240, 0.14)";
       ctx.lineWidth = 1;
       ctx.strokeRect(screenX, screenY, platform.width, platform.height);
     } else {
@@ -6163,8 +6210,8 @@ function drawMiniMap() {
     rebuildMiniMapCache();
   }
 
-  const drawX = canvas.width - 270;
-  const drawY = 20;
+  const drawX = canvas.width - 264;
+  const drawY = 18;
   ctx.drawImage(miniMapCacheCanvas, drawX, drawY);
 
   const mapX = drawX + 10;
@@ -6176,9 +6223,72 @@ function drawMiniMap() {
   ctx.fillRect(mapX + miniMapPlayerX - 2, mapY - 3, 4, mapHeight + 6);
 }
 
-function drawHealthUI() {
-  const startX = 20;
-  const startY = 360;
+
+function drawCooldownDisc(x, y, radius, ratio, color, label, subLabel) {
+  const clamped = clamp(ratio, 0, 1);
+  const startAngle = -Math.PI / 2;
+
+  ctx.save();
+  ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+  ctx.beginPath();
+  ctx.arc(x, y, radius + 4, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "rgba(226, 232, 240, 0.18)";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.fillStyle = color;
+  ctx.globalAlpha = 0.26;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, 0, Math.PI * 2);
+  ctx.fill();
+
+  if (clamped < 1) {
+    ctx.fillStyle = "rgba(2, 6, 23, 0.78)";
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.arc(x, y, radius + 1, startAngle, startAngle + Math.PI * 2 * (1 - clamped), false);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  ctx.arc(x, y, radius, startAngle, startAngle + Math.PI * 2 * clamped, false);
+  ctx.stroke();
+
+  ctx.fillStyle = "#f8fafc";
+  ctx.font = "bold 12px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(label, x, y + 4);
+
+  ctx.font = "11px Arial";
+  ctx.fillStyle = "#cbd5e1";
+  ctx.fillText(subLabel, x, y + radius + 16);
+
+  ctx.textAlign = "left";
+  ctx.restore();
+}
+
+function drawAbilityCooldownUI(panelX, panelY) {
+  const dashRatio = player.dashCooldown <= 0
+    ? 1
+    : 1 - player.dashCooldown / player.dashCooldownMax;
+  const attackRatio = player.attackCooldown <= 0
+    ? 1
+    : 1 - player.attackCooldown / player.attackCooldownMax;
+  const healRatio = clamp(player.coreEnergy / player.healCost, 0, 1);
+
+  drawCooldownDisc(panelX + 26, panelY + 24, 16, dashRatio, "#facc15", "D", "대시");
+  drawCooldownDisc(panelX + 76, panelY + 24, 16, attackRatio, "#7dd3fc", "J", "공격");
+  drawCooldownDisc(panelX + 126, panelY + 24, 16, healRatio, "#86efac", "L", "회복");
+}
+
+function drawHealthUI(startX = 20, startY = 360) {
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
   ctx.fillText("체력", startX, startY);
@@ -6196,9 +6306,7 @@ function drawHealthUI() {
   }
 }
 
-function drawCoreEnergyUI() {
-  const startX = 20;
-  const startY = 390;
+function drawCoreEnergyUI(startX = 20, startY = 390) {
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "15px Arial";
   ctx.fillText("코어 에너지", startX, startY);
@@ -6360,44 +6468,153 @@ function drawUI() {
   const currentRoom = getCurrentRoom();
   const activeMegaScreen = getCurrentMegaStageScreen();
 
+  ctx.save();
+
+  // 좌상단 HUD 패널
+  ctx.fillStyle = "rgba(2, 6, 23, 0.74)";
+  drawRoundedRect(16, 16, 350, 188, 14);
+  ctx.fill();
+  ctx.strokeStyle = "rgba(148, 163, 184, 0.28)";
+  ctx.lineWidth = 1.5;
+  drawRoundedRect(16, 16, 350, 188, 14);
+  ctx.stroke();
+
   ctx.fillStyle = "white";
-  ctx.font = "18px Arial";
-  ctx.fillText("13단계-2 v58-2: 단일 경로·카메라·체크포인트 안정화", 20, 30);
+  ctx.font = "bold 20px Arial";
+  ctx.fillText("13단계-2 v58-4", 30, 42);
 
   ctx.font = "14px Arial";
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("A/D 이동 | Space 점프 | Shift/K 대시 | J 공격 | L 회복 | F1 개발표시", 20, 55);
+  ctx.fillText("A/D 이동 | Space 점프 | Shift/K 대시 | J 공격 | L 회복 | F1 개발표시", 30, 68);
 
   ctx.fillStyle = "#bfdbfe";
   ctx.fillText(
     activeMegaScreen
       ? "현재 단락: " + activeMegaScreen.order + ". " + activeMegaScreen.title
       : "현재 방: " + currentRoom.name,
-    20,
-    82
+    30,
+    94
   );
 
   ctx.fillStyle = "#fef08a";
-  ctx.fillText("체크포인트: " + activeCheckpoint.name, 20, 106);
+  ctx.fillText("체크포인트: " + activeCheckpoint.name, 30, 118);
 
-  if (player.dashCooldown <= 0) {
-    ctx.fillStyle = "#bbf7d0";
-    ctx.fillText("대시 사용 가능", 20, 130);
-  } else {
-    const cooldownPercent = Math.ceil((player.dashCooldown / player.dashCooldownMax) * 100);
-    ctx.fillStyle = "#fde68a";
-    ctx.fillText("대시 쿨타임 " + cooldownPercent + "%", 20, 130);
+  if (activeMegaScreen) {
+    ctx.fillStyle = "#c4b5fd";
+    ctx.fillText("현재 기믹: " + activeMegaScreen.plannedGimmick, 30, 140);
   }
 
-  drawHealthUI();
-  drawCoreEnergyUI();
+  drawAbilityCooldownUI(184, 130);
+  drawHealthUI(30, 154);
+  drawCoreEnergyUI(30, 184);
 
+  // 하단 메시지 패널
+  ctx.fillStyle = "rgba(2, 6, 23, 0.62)";
+  drawRoundedRect(16, canvas.height - 62, 470, 42, 10);
+  ctx.fill();
   ctx.fillStyle = "#e2e8f0";
   ctx.font = "14px Arial";
-  ctx.fillText(gameState.message, 20, 472);
+  ctx.fillText(gameState.message, 28, canvas.height - 35);
 
   drawBossHealthBar();
   drawMiniMap();
+  ctx.restore();
+}
+
+
+function startRoomTransition(nextRoom) {
+  gameState.transitionOverlayActive = true;
+  gameState.transitionOverlayTimer = gameState.transitionOverlayDuration;
+  gameState.transitionOverlayTargetRoom = nextRoom ? nextRoom.name : "";
+  gameState.transitionOverlayProgress = 0;
+  gameState.transitionOverlayTargetProgress = 0.55 + Math.random() * 0.35;
+}
+
+function updateRoomTransitionOverlay() {
+  if (!gameState.transitionOverlayActive) {
+    return;
+  }
+
+  gameState.transitionOverlayTimer -= frameTimeScale;
+  gameState.transitionOverlayProgress +=
+    (gameState.transitionOverlayTargetProgress - gameState.transitionOverlayProgress) * 0.14;
+
+  if (gameState.transitionOverlayTimer < gameState.transitionOverlayDuration * 0.45) {
+    gameState.transitionOverlayTargetProgress = 1;
+  }
+
+  if (gameState.transitionOverlayTimer <= 0) {
+    gameState.transitionOverlayActive = false;
+    gameState.transitionOverlayProgress = 1;
+  }
+}
+
+function detectRoomTransition() {
+  const room = getCurrentRoom();
+
+  if (!gameState.currentRoomId) {
+    gameState.currentRoomId = room.id;
+    return;
+  }
+
+  if (room.id !== gameState.currentRoomId) {
+    const previousId = gameState.currentRoomId;
+    gameState.currentRoomId = room.id;
+
+    if (previousId !== "tutorial_zone_blockout" || room.id !== "tutorial_zone_blockout") {
+      startRoomTransition(room);
+    }
+  }
+}
+
+function drawRoomTransitionOverlay() {
+  if (!gameState.transitionOverlayActive) {
+    return;
+  }
+
+  const alpha = Math.min(1, gameState.transitionOverlayTimer / gameState.transitionOverlayDuration + 0.18);
+  const barWidth = 360;
+  const barHeight = 18;
+  const barX = canvas.width / 2 - barWidth / 2;
+  const barY = canvas.height / 2 + 26;
+  const percent = Math.round(clamp(gameState.transitionOverlayProgress, 0, 1) * 100);
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = "rgba(0, 0, 0, 0.82)";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  ctx.fillStyle = "#e2e8f0";
+  ctx.font = "bold 28px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText("구역 이동 중", canvas.width / 2, canvas.height / 2 - 28);
+
+  ctx.fillStyle = "#93c5fd";
+  ctx.font = "16px Arial";
+  ctx.fillText(gameState.transitionOverlayTargetRoom, canvas.width / 2, canvas.height / 2 + 2);
+
+  ctx.fillStyle = "rgba(71, 85, 105, 0.9)";
+  drawRoundedRect(barX, barY, barWidth, barHeight, 8);
+  ctx.fill();
+
+  ctx.fillStyle = "#38bdf8";
+  drawRoundedRect(barX, barY, barWidth * clamp(gameState.transitionOverlayProgress, 0, 1), barHeight, 8);
+  ctx.fill();
+
+  ctx.strokeStyle = "#e0f2fe";
+  ctx.lineWidth = 2;
+  drawRoundedRect(barX, barY, barWidth, barHeight, 8);
+  ctx.stroke();
+
+  ctx.fillStyle = "#cbd5e1";
+  ctx.font = "15px Arial";
+  ctx.fillText(percent + "%", canvas.width / 2, barY + 40);
+  ctx.font = "13px Arial";
+  ctx.fillStyle = "#94a3b8";
+  ctx.fillText("기억 좌표를 정렬하는 중...", canvas.width / 2, barY + 60);
+
+  ctx.textAlign = "left";
+  ctx.restore();
 }
 
 function drawWorld() {
@@ -6445,6 +6662,7 @@ function draw() {
   drawBossStartBanner();
   drawBossPhaseBanner();
   drawEndingPanel();
+  drawRoomTransitionOverlay();
 }
 
 // v57은 v56 delta-fix를 유지한다.
