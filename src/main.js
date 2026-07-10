@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v57 수정: 바닥형 표지판을 배경 레이어로 이동해 캐릭터·적·발판·체크포인트를 가리지 않도록 보정
+// v57 수정: 벽 점프 튜토리얼을 두 벽 사이를 번갈아 오르는 넓고 안정적인 수직 통로로 재설계
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -168,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v57 표지판 레이어 수정: 표지판이 플레이 오브젝트를 가리지 않도록 보정했습니다.",
+  message: "13단계-2 v57 벽 점프 수정: 두 벽 사이를 번갈아 오르는 튜토리얼로 바꿨습니다.",
   hiddenRewards: 0
 };
 
@@ -367,14 +367,14 @@ const tutorialRooms = [
     id: "tutorial_wall_room",
     title: "튜토리얼 5: 벽 점프",
     x: 4500,
-    y: 160,
+    y: 120,
     width: 1800,
-    height: 860,
+    height: 900,
     cameraMode: "follow",
-    cameraY: 120,
+    cameraY: 90,
     floorY: 680,
-    signTitle: "벽 + Space : 벽 점프",
-    signLines: ["벽에 붙은 뒤 Space를 누릅니다.", "짧은 세로 훈련 공간에서만 연습합니다."]
+    signTitle: "두 벽 사이에서 Space : 벽 점프",
+    signLines: ["한쪽 벽에서 점프한 뒤 반대쪽 벽에 붙습니다.", "두 벽을 번갈아 타고 위쪽 출구까지 올라가세요."]
   },
   {
     id: "tutorial_pogo_room",
@@ -447,11 +447,22 @@ const platforms = [
   // 대시 학습용 넓은 중간 발판. 위험한 낙하 구멍은 넣지 않고, 긴 공간에서 속도를 익히게 한다.
   { x: 3380, y: 600, width: 520, height: 30, area: "tutorial_dash_step", abilityChallenge: "dash" },
 
-  // 벽 점프 학습용 짧은 세로 구조물. 기둥 난사가 아니라 2~3개만 배치한다.
-  { x: 5050, y: 470, width: 52, height: 210, area: "tutorial_wall_surface", wallJumpTest: true, abilityChallenge: "wallJump" },
-  { x: 5450, y: 390, width: 52, height: 290, area: "tutorial_wall_surface", wallJumpTest: true, abilityChallenge: "wallJump" },
-  { x: 5860, y: 320, width: 52, height: 360, area: "tutorial_wall_surface", wallJumpTest: true, abilityChallenge: "wallJump" },
-  { x: 5885, y: 300, width: 360, height: 34, area: "tutorial_wall_exit" },
+  // 벽 점프 학습용 두 벽 수직 통로.
+  // 두 벽의 간격을 넉넉히 두어 한쪽 벽에서 튕겨도 반대쪽 벽이 자연스럽게 받아 준다.
+  // 벽 아래에는 통과 가능한 입구를 남겨 플레이어가 통로 안으로 편하게 들어갈 수 있다.
+  { x: 5140, y: 210, width: 58, height: 380, area: "tutorial_wall_left", wallJumpTest: true, abilityChallenge: "wallJump" },
+  { x: 5465, y: 210, width: 58, height: 380, area: "tutorial_wall_right", wallJumpTest: true, abilityChallenge: "wallJump" },
+
+  // 통로 안의 작은 쉼터. 실패해도 바로 바닥까지 떨어지지 않고 다시 시도할 수 있다.
+  { x: 5198, y: 505, width: 82, height: 24, area: "tutorial_wall_rest_left", abilityChallenge: "wallJump" },
+  { x: 5383, y: 405, width: 82, height: 24, area: "tutorial_wall_rest_right", abilityChallenge: "wallJump" },
+
+  // 오른쪽 벽 위를 넘어 착지하는 넓은 출구 발판.
+  { x: 5465, y: 205, width: 600, height: 38, area: "tutorial_wall_exit", abilityChallenge: "wallJump" },
+
+  // 출구까지 올라온 뒤 다음 튜토리얼로 안전하게 내려갈 수 있는 완만한 계단형 발판.
+  { x: 5750, y: 330, width: 300, height: 32, area: "tutorial_wall_exit_step" },
+  { x: 5970, y: 475, width: 280, height: 32, area: "tutorial_wall_exit_step" },
 
   // 아래 공격 튕김 학습용 발판. 표적을 공격하고 위쪽으로 튕기는 감각을 확인한다.
   { x: 6540, y: 555, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
@@ -4949,7 +4960,7 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "v57 수정: 표지판을 배경 레이어로 이동해 플레이 오브젝트 가림 방지", x: 120, y: 210, width: 620, height: 24 },
+    { text: "v57 수정: 두 벽 사이를 번갈아 오르는 벽 점프 통로로 재설계", x: 120, y: 210, width: 590, height: 24 },
     { text: "각 초대형 방에는 체크포인트가 있어 낙하 시 마지막 저장점으로 복귀", x: 8700, y: 960, width: 560, height: 24 },
     { text: "현재 단계는 튜토리얼 완성 + 첫 지역 골격 유지 확인용", x: 13600, y: 1180, width: 500, height: 24 },
     { text: "하층은 강제 구멍 낙하가 아니라 선택 진입 구조로 유지", x: 21600, y: 2380, width: 520, height: 24 },
@@ -5562,7 +5573,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v57 수정: 바닥형 표지판 레이어 보정", 20, 35);
+  ctx.fillText("13단계-2 v57 수정: 두 벽 벽점프 튜토리얼", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
