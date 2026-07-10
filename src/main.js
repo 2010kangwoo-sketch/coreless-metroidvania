@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v57 수정: 벽 점프 튜토리얼을 두 벽 사이를 번갈아 오르는 넓고 안정적인 수직 통로로 재설계
+// v57 수정: 대시 전용 통과벽을 추가하고 벽 점프 통로의 높이·받침대를 보정
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -168,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v57 벽 점프 수정: 두 벽 사이를 번갈아 오르는 튜토리얼로 바꿨습니다.",
+  message: "13단계-2 v57 튜토리얼 수정: 대시 통과벽과 낮아진 두 벽 점프 통로를 적용했습니다.",
   hiddenRewards: 0
 };
 
@@ -360,21 +360,21 @@ const tutorialRooms = [
     cameraMode: "follow",
     cameraY: 250,
     floorY: 680,
-    signTitle: "Shift / K : 대시",
-    signLines: ["이 방은 두 화면 길이입니다.", "카메라가 따라오는 상태에서 빠른 이동을 익힙니다."]
+    signTitle: "Shift / K : 특수 벽 통과",
+    signLines: ["황금 기억벽은 걷거나 점프로 넘을 수 없습니다.", "벽 바로 앞에서 Shift/K 대시를 사용해 통과하세요."]
   },
   {
     id: "tutorial_wall_room",
     title: "튜토리얼 5: 벽 점프",
     x: 4500,
-    y: 120,
+    y: 180,
     width: 1800,
-    height: 900,
+    height: 820,
     cameraMode: "follow",
-    cameraY: 90,
+    cameraY: 150,
     floorY: 680,
     signTitle: "두 벽 사이에서 Space : 벽 점프",
-    signLines: ["한쪽 벽에서 점프한 뒤 반대쪽 벽에 붙습니다.", "두 벽을 번갈아 타고 위쪽 출구까지 올라가세요."]
+    signLines: ["한쪽 벽에서 점프한 뒤 반대쪽 벽에 붙습니다.", "중간 받침대에서 쉬면서 낮아진 벽 위 출구로 올라가세요."]
   },
   {
     id: "tutorial_pogo_room",
@@ -444,25 +444,27 @@ const platforms = [
   { x: 1190, y: 600, width: 220, height: 30, area: "tutorial_jump_step" },
   { x: 1490, y: 540, width: 230, height: 30, area: "tutorial_jump_step" },
 
-  // 대시 학습용 넓은 중간 발판. 위험한 낙하 구멍은 넣지 않고, 긴 공간에서 속도를 익히게 한다.
-  { x: 3380, y: 600, width: 520, height: 30, area: "tutorial_dash_step", abilityChallenge: "dash" },
+  // 대시 방은 바닥이 끊기지 않는 일자형 구조다.
+  // 공중 발판 아래로 우회하는 통로를 없애고, 특수 기억벽을 대시로 직접 통과하게 한다.
+  { x: 3200, y: 650, width: 280, height: 30, area: "tutorial_dash_runup", abilityChallenge: "dash" },
+  { x: 3920, y: 650, width: 300, height: 30, area: "tutorial_dash_landing", abilityChallenge: "dash" },
 
   // 벽 점프 학습용 두 벽 수직 통로.
-  // 두 벽의 간격을 넉넉히 두어 한쪽 벽에서 튕겨도 반대쪽 벽이 자연스럽게 받아 준다.
-  // 벽 아래에는 통과 가능한 입구를 남겨 플레이어가 통로 안으로 편하게 들어갈 수 있다.
-  { x: 5140, y: 210, width: 58, height: 380, area: "tutorial_wall_left", wallJumpTest: true, abilityChallenge: "wallJump" },
-  { x: 5465, y: 210, width: 58, height: 380, area: "tutorial_wall_right", wallJumpTest: true, abilityChallenge: "wallJump" },
+  // 기존보다 벽을 낮추고 간격을 약간 좁혀 반대편 벽에 안정적으로 닿게 한다.
+  { x: 5140, y: 330, width: 58, height: 260, area: "tutorial_wall_left", wallJumpTest: true, abilityChallenge: "wallJump" },
+  { x: 5440, y: 330, width: 58, height: 260, area: "tutorial_wall_right", wallJumpTest: true, abilityChallenge: "wallJump" },
 
-  // 통로 안의 작은 쉼터. 실패해도 바로 바닥까지 떨어지지 않고 다시 시도할 수 있다.
-  { x: 5198, y: 505, width: 82, height: 24, area: "tutorial_wall_rest_left", abilityChallenge: "wallJump" },
-  { x: 5383, y: 405, width: 82, height: 24, area: "tutorial_wall_rest_right", abilityChallenge: "wallJump" },
+  // 통로 안쪽의 넓은 받침대. 올라가는 중간에 멈추고 다시 벽 점프를 시작할 수 있다.
+  { x: 5198, y: 520, width: 96, height: 24, area: "tutorial_wall_rest_left", abilityChallenge: "wallJump" },
+  { x: 5344, y: 445, width: 96, height: 24, area: "tutorial_wall_rest_right", abilityChallenge: "wallJump" },
+  { x: 5198, y: 375, width: 108, height: 24, area: "tutorial_wall_rest_left_top", abilityChallenge: "wallJump" },
 
-  // 오른쪽 벽 위를 넘어 착지하는 넓은 출구 발판.
-  { x: 5465, y: 205, width: 600, height: 38, area: "tutorial_wall_exit", abilityChallenge: "wallJump" },
+  // 오른쪽 벽 정상 안쪽으로 돌출된 받침대를 만들어 마지막 점프 후 확실히 착지할 수 있게 한다.
+  { x: 5380, y: 305, width: 700, height: 38, area: "tutorial_wall_exit", abilityChallenge: "wallJump" },
 
-  // 출구까지 올라온 뒤 다음 튜토리얼로 안전하게 내려갈 수 있는 완만한 계단형 발판.
-  { x: 5750, y: 330, width: 300, height: 32, area: "tutorial_wall_exit_step" },
-  { x: 5970, y: 475, width: 280, height: 32, area: "tutorial_wall_exit_step" },
+  // 출구 이후에는 높이가 서서히 낮아지는 넓은 발판으로 다음 방에 연결한다.
+  { x: 5750, y: 390, width: 300, height: 32, area: "tutorial_wall_exit_step" },
+  { x: 5980, y: 520, width: 270, height: 32, area: "tutorial_wall_exit_step" },
 
   // 아래 공격 튕김 학습용 발판. 표적을 공격하고 위쪽으로 튕기는 감각을 확인한다.
   { x: 6540, y: 555, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
@@ -566,7 +568,18 @@ const rewardItems = [
   { type: "memoryFragment", name: "봉인 관문 전망대 기억 조각", x: 42310, y: 642, width: 24, height: 24, collected: false, hiddenReward: true }
 ];
 
-const dashHazards = [];
+const dashHazards = [
+  {
+    name: "튜토리얼 황금 기억벽",
+    x: 3710,
+    y: 285,
+    width: 68,
+    height: 395,
+    blocksWithoutDash: true,
+    isDashBarrier: true,
+    tutorialBarrier: true
+  }
+];
 
 const enemies = [
   createMeleeEnemy("튜토리얼 그림자", 2380, 644, 32, 34, 2180, 2600, 1.0, 2, 68, 100),
@@ -695,7 +708,7 @@ function buildRoomObjectIndex() {
 const mapData = {
   version: "v57",
   stage: "13-2-2",
-  purpose: "튜토리얼 방 6개를 조작법별로 정리하고, 각 방에 바닥에 세워진 표지판과 방별 카메라 고정/추적 기믹을 넣은 제작본이다. v56의 델타 보정과 최적화는 유지한다.",
+  purpose: "대시 방에는 대시로만 통과하는 특수 기억벽을 설치하고, 벽 점프 방은 낮은 두 벽과 중간 받침대·정상 착지대를 갖춘 구조로 보정했다. 기존 델타 보정과 최적화는 유지한다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -1014,6 +1027,16 @@ function buildSolidObjectsForCurrentFrame() {
   for (const door of getNearbyObjects(doors)) {
     if (door.locked && !door.open) {
       solidObjects.push(door);
+    }
+  }
+
+  // 특수 기억벽은 평상시에는 완전한 벽으로 막히지만,
+  // 대시·대시 무적·짧은 대시 후딜 중에는 충돌 목록에서 빠져 통과할 수 있다.
+  if (!canPassDashHazard()) {
+    for (const hazard of getNearbyObjects(dashHazards, 1400, 1000)) {
+      if (hazard.blocksWithoutDash) {
+        solidObjects.push(hazard);
+      }
     }
   }
 
@@ -1624,8 +1647,9 @@ function startDash() {
   player.dashInvincibleTimer = player.dashInvincibleMax;
   player.dashEndLagTimer = 0;
   player.vy = 0;
+  invalidateSolidObjectCache();
 
-  gameState.message = "대시를 사용했습니다. 대시 초반에는 피해를 피할 수 있습니다.";
+  gameState.message = "대시를 사용했습니다. 특수 기억벽도 통과할 수 있습니다.";
   spawnDashParticles();
   startScreenShake(4, 2.5);
 }
@@ -1664,6 +1688,7 @@ function updateDash() {
     if (player.dashTimer <= 0) {
       player.isDashing = false;
       player.dashEndLagTimer = player.dashEndLagMax;
+      invalidateSolidObjectCache();
     }
   }
 }
@@ -1960,6 +1985,10 @@ function moveHorizontally() {
 
     if (isBossGateActive() && object.text === "보스전 봉인") {
       gameState.message = "보스를 쓰러뜨리기 전에는 보스방을 나갈 수 없습니다.";
+    }
+
+    if (object.isDashBarrier) {
+      gameState.message = "황금 기억벽입니다. 벽 바로 앞에서 Shift/K 대시로 통과하세요.";
     }
 
     if (player.vx > 0) {
@@ -4045,10 +4074,20 @@ function drawDashHazards() {
       ctx.fillRect(screenX + 9, screenY + y, hazard.width - 18, 8);
     }
 
+    ctx.globalAlpha = 0.72;
+    ctx.strokeStyle = "#fde68a";
+    ctx.lineWidth = 3;
+    for (let y = 18; y < hazard.height - 12; y += 42) {
+      ctx.beginPath();
+      ctx.moveTo(screenX + 10, screenY + y);
+      ctx.lineTo(screenX + hazard.width - 10, screenY + y + 18);
+      ctx.stroke();
+    }
+
     ctx.globalAlpha = 1;
     ctx.fillStyle = "#fef3c7";
-    ctx.font = "12px Arial";
-    ctx.fillText("대시", screenX - 2, screenY - 8);
+    ctx.font = "bold 12px Arial";
+    ctx.fillText("대시 통과벽", screenX - 8, screenY - 10);
     ctx.restore();
   }
 }
@@ -4960,7 +4999,7 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "v57 수정: 두 벽 사이를 번갈아 오르는 벽 점프 통로로 재설계", x: 120, y: 210, width: 590, height: 24 },
+    { text: "v57 수정: 대시 통과벽과 낮은 두 벽 점프 통로·받침대 적용", x: 120, y: 210, width: 600, height: 24 },
     { text: "각 초대형 방에는 체크포인트가 있어 낙하 시 마지막 저장점으로 복귀", x: 8700, y: 960, width: 560, height: 24 },
     { text: "현재 단계는 튜토리얼 완성 + 첫 지역 골격 유지 확인용", x: 13600, y: 1180, width: 500, height: 24 },
     { text: "하층은 강제 구멍 낙하가 아니라 선택 진입 구조로 유지", x: 21600, y: 2380, width: 520, height: 24 },
@@ -5573,7 +5612,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v57 수정: 두 벽 벽점프 튜토리얼", 20, 35);
+  ctx.fillText("13단계-2 v57 수정: 대시 통과벽 + 벽점프 받침대", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
