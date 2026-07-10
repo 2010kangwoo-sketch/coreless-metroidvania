@@ -168,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v58-4: 2차 검토본 - 시각 정리·튜토리얼 동선·첫 스테이지 표현을 재보완했습니다.",
+  message: "13단계-2 v58-6: 첫 번째 초대형 방을 불규칙한 삼중 스네이크 구조로 전면 재설계했습니다.",
   hiddenRewards: 0,
   currentRoomId: null,
   transitionOverlayActive: false,
@@ -182,9 +182,9 @@ const gameState = {
 
 const checkpoints = [
   { id: "tutorial_start", name: "튜토리얼 시작점", x: 110, y: 620, width: 34, height: 58, spawnX: 90, spawnY: 540, activated: true, roomId: "tutorial_zone_blockout" },
-  { id: "mega_stage_start_cp", name: "초대형 스테이지 시작 체크포인트", x: 8580, y: 618, width: 36, height: 62, spawnX: 8520, spawnY: 610, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_01" },
-  { id: "mega_stage_mid_cp", name: "클로 구간 완료 체크포인트", x: 10170, y: 1138, width: 36, height: 62, spawnX: 10110, spawnY: 1130, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_09" },
-  { id: "mega_stage_chase_cp", name: "붕괴석 추격 전 체크포인트", x: 8650, y: 1658, width: 36, height: 62, spawnX: 8590, spawnY: 1650, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_11" },
+  { id: "mega_stage_start_cp", name: "제1 스네이크 시작 체크포인트", x: 8580, y: 618, width: 36, height: 62, spawnX: 8520, spawnY: 610, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_01" },
+  { id: "mega_stage_mid_cp", name: "제2 스네이크 시작 체크포인트", x: 10480, y: 1738, width: 36, height: 62, spawnX: 10420, spawnY: 1730, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_09" },
+  { id: "mega_stage_chase_cp", name: "제3 스네이크 시작 체크포인트", x: 8580, y: 2858, width: 36, height: 62, spawnX: 8520, spawnY: 2850, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_17" },
   { id: "central_cavern_cp", name: "중앙 대공동 체크포인트", x: 13680, y: 1236, width: 36, height: 62, spawnX: 13620, spawnY: 1210, activated: false, roomId: "central_cavern_blockout" },
   { id: "lower_ruins_cp", name: "하층 폐허 체크포인트", x: 21680, y: 2436, width: 36, height: 62, spawnX: 21620, spawnY: 2410, activated: false, roomId: "lower_ruins_blockout" },
   { id: "long_corridor_cp", name: "긴 폐허 회랑 체크포인트", x: 27680, y: 1116, width: 36, height: 62, spawnX: 27620, spawnY: 1090, activated: false, roomId: "long_ruin_corridor_blockout" },
@@ -220,16 +220,16 @@ const roomBlueprints = [
   },
   {
     id: "entry_cliff_blockout",
-    name: "지역 1-1: 층상 기계 폐허",
-    guide: "16개의 고정 카메라 단락이 3개 지형 층을 지그재그로 잇는 첫 번째 초대형 스테이지 블록아웃이다.",
-    role: "mega_room_1_fixed_screen_stage",
-    bounds: { x: 8500, y: 160, width: 5000, height: 1680 },
-    cameraBounds: { x: 8500, y: 160, width: 5000, height: 1680 },
+    name: "지역 1-1: 삼중 층상 기계 폐허",
+    guide: "세 개의 스네이크 구간이 직렬로 연결되는 첫 번째 초대형 맵이다. 각 스네이크는 길이와 굽힘 정도가 서로 달라 규칙적인 왕복 통로처럼 보이지 않도록 구성했다.",
+    role: "mega_room_1_triple_snake_stage",
+    bounds: { x: 8500, y: 160, width: 5000, height: 3980 },
+    cameraBounds: { x: 8500, y: 160, width: 5000, height: 3980 },
     color: "#142033",
     requiredAbilities: [],
-    mainPath: "1층은 오른쪽, 2층은 왼쪽, 3층은 다시 오른쪽으로 진행한다. 갈림길 없이 경사면·대포·스프링·클로·붕괴석 예정 구간을 순서대로 지난다.",
+    mainPath: "제1 스네이크는 상층을 오른쪽으로 진행한 뒤 중앙으로 되돌아오고, 제2 스네이크는 중층에서 오른쪽으로 갔다가 맵 왼쪽 끝까지 회귀한다. 제3 스네이크는 하층을 오른쪽으로 관통한 뒤 짧게 되감아 최종 출구로 향한다. 갈림길은 없으며 세 구간이 하나의 긴 주 진행로로 연결된다.",
     connections: { left: "tutorial_zone_blockout", right: "central_cavern_blockout" },
-    tags: ["first_area", "mega_room", "fixed_screen", "single_route", "three_layers", "blockout"]
+    tags: ["first_area", "mega_room", "fixed_screen", "triple_snake", "single_main_route", "vertical_layers", "blockout"]
   },
   {
     id: "central_cavern_blockout",
@@ -423,45 +423,51 @@ const tutorialRoomFrames = tutorialRooms.map(function(room) {
 // 하나의 거대한 방 안에 16개의 고정 카메라 단락을 배치한다.
 // 각 단락의 경계를 넘으면 카메라가 다음 정해진 화면으로 부드럽게 이동한 뒤 고정된다.
 const megaStageScreens = [
-  // 1층: 왼쪽에서 오른쪽
-  { id: "mega_01", order: 1, title: "1층-1 경사면 진입", x: 8500, y: 160, width: 900, height: 560, cameraX: 8500, cameraY: 160, layer: 1, plannedGimmick: "경사면 + 기억포 회피" },
-  { id: "mega_02", order: 2, title: "1층-2 포탄 밟기", x: 9400, y: 160, width: 900, height: 560, cameraX: 9400, cameraY: 160, layer: 1, plannedGimmick: "느린 포탄 밟기" },
-  { id: "mega_03", order: 3, title: "1층-3 굽은 경사", x: 10300, y: 160, width: 900, height: 560, cameraX: 10300, cameraY: 160, layer: 1, plannedGimmick: "구불구불한 경사면" },
-  { id: "mega_04", order: 4, title: "1층-4 스프링 예비 구간", x: 11200, y: 160, width: 900, height: 560, cameraX: 11200, cameraY: 160, layer: 1, plannedGimmick: "압축 코어 스프링" },
-  { id: "mega_05", order: 5, title: "1층-5 우측 하강 전환", x: 12100, y: 160, width: 1400, height: 560, cameraX: 12600, cameraY: 160, layer: 1, plannedGimmick: "층 전환 경사 통로" },
+  // 제1 스네이크: 상층 전체를 오른쪽으로 진행한 뒤 중앙까지 되돌아온다.
+  { id: "mega_01", order: 1, title: "제1 스네이크-진입 경사", x: 8500, y: 160, width: 900, height: 560, cameraX: 8500, cameraY: 160, layer: 1, snakeGroup: 1, plannedGimmick: "완만한 경사 + 시작 체크포인트" },
+  { id: "mega_02", order: 2, title: "제1 스네이크-상승 단차", x: 9400, y: 160, width: 900, height: 560, cameraX: 9400, cameraY: 160, layer: 1, snakeGroup: 1, plannedGimmick: "벽과 경사면을 이용한 상승" },
+  { id: "mega_03", order: 3, title: "제1 스네이크-굽은 포켓", x: 10300, y: 160, width: 900, height: 560, cameraX: 10300, cameraY: 160, layer: 1, snakeGroup: 1, plannedGimmick: "상하 포켓 + 기억포 예정" },
+  { id: "mega_04", order: 4, title: "제1 스네이크-높은 능선", x: 11200, y: 160, width: 900, height: 560, cameraX: 11200, cameraY: 160, layer: 1, snakeGroup: 1, plannedGimmick: "긴 능선 + 스프링 예정" },
+  { id: "mega_05", order: 5, title: "제1 스네이크-우측 낙차", x: 12100, y: 160, width: 1400, height: 560, cameraX: 12600, cameraY: 160, layer: 1, snakeGroup: 1, plannedGimmick: "첫 수직 낙차" },
+  { id: "mega_06", order: 6, title: "제1 스네이크-하강 착지", x: 12100, y: 720, width: 1400, height: 520, cameraX: 12600, cameraY: 720, layer: 2, snakeGroup: 1, plannedGimmick: "낙하 후 좁은 착지대" },
+  { id: "mega_07", order: 7, title: "제1 스네이크-좌측 회귀", x: 11200, y: 720, width: 900, height: 520, cameraX: 11200, cameraY: 720, layer: 2, snakeGroup: 1, plannedGimmick: "클로 예정 구간" },
+  { id: "mega_08", order: 8, title: "제1 스네이크-중앙 하강구", x: 10300, y: 720, width: 900, height: 520, cameraX: 10300, cameraY: 720, layer: 2, snakeGroup: 1, plannedGimmick: "제2 스네이크 진입" },
 
-  // 2층: 오른쪽에서 왼쪽
-  { id: "mega_06", order: 6, title: "2층-1 스프링 착지", x: 12100, y: 720, width: 1400, height: 520, cameraX: 12600, cameraY: 720, layer: 2, plannedGimmick: "스프링 착지 제어" },
-  { id: "mega_07", order: 7, title: "2층-2 코어 클로 기초", x: 11200, y: 720, width: 900, height: 520, cameraX: 11200, cameraY: 720, layer: 2, plannedGimmick: "클로 포획·흔들기" },
-  { id: "mega_08", order: 8, title: "2층-3 연속 코어 클로", x: 10300, y: 720, width: 900, height: 520, cameraX: 10300, cameraY: 720, layer: 2, plannedGimmick: "클로 2개 연속 이동" },
-  { id: "mega_09", order: 9, title: "2층-4 상층 기억포", x: 9400, y: 720, width: 900, height: 520, cameraX: 9400, cameraY: 720, layer: 2, plannedGimmick: "높이차 대포 회랑" },
-  { id: "mega_10", order: 10, title: "2층-5 좌측 하강 전환", x: 8500, y: 720, width: 900, height: 520, cameraX: 8500, cameraY: 720, layer: 2, plannedGimmick: "붕괴석 발동 전환" },
+  // 제2 스네이크: 중앙에서 시작해 우측 끝까지 진행한 뒤 맵 왼쪽 끝까지 길게 회귀한다.
+  { id: "mega_09", order: 9, title: "제2 스네이크-중앙 기점", x: 10300, y: 1280, width: 900, height: 520, cameraX: 10300, cameraY: 1280, layer: 3, snakeGroup: 2, plannedGimmick: "중간 체크포인트 + 높은 단차" },
+  { id: "mega_10", order: 10, title: "제2 스네이크-우측 전진", x: 11200, y: 1280, width: 900, height: 520, cameraX: 11200, cameraY: 1280, layer: 3, snakeGroup: 2, plannedGimmick: "포탄 밟기 예정" },
+  { id: "mega_11", order: 11, title: "제2 스네이크-우측 심부", x: 12100, y: 1280, width: 1400, height: 520, cameraX: 12600, cameraY: 1280, layer: 3, snakeGroup: 2, plannedGimmick: "두 번째 수직 낙차" },
+  { id: "mega_12", order: 12, title: "제2 스네이크-하층 회전점", x: 12100, y: 1840, width: 1400, height: 520, cameraX: 12600, cameraY: 1840, layer: 4, snakeGroup: 2, plannedGimmick: "방향 반전 포켓" },
+  { id: "mega_13", order: 13, title: "제2 스네이크-상하 회랑", x: 11200, y: 1840, width: 900, height: 520, cameraX: 11200, cameraY: 1840, layer: 4, snakeGroup: 2, plannedGimmick: "클로와 기억포 조합 예정" },
+  { id: "mega_14", order: 14, title: "제2 스네이크-중앙 압축부", x: 10300, y: 1840, width: 900, height: 520, cameraX: 10300, cameraY: 1840, layer: 4, snakeGroup: 2, plannedGimmick: "좁은 통로 + 가시" },
+  { id: "mega_15", order: 15, title: "제2 스네이크-좌측 회귀 I", x: 9400, y: 1840, width: 900, height: 520, cameraX: 9400, cameraY: 1840, layer: 4, snakeGroup: 2, plannedGimmick: "낮은 천장 회랑" },
+  { id: "mega_16", order: 16, title: "제2 스네이크-좌측 회귀 II", x: 8500, y: 1840, width: 900, height: 520, cameraX: 8500, cameraY: 1840, layer: 4, snakeGroup: 2, plannedGimmick: "제3 스네이크 하강구" },
 
-  // 3층: 왼쪽에서 오른쪽
-  { id: "mega_11", order: 11, title: "3층-1 붕괴석 발동", x: 8500, y: 1240, width: 900, height: 520, cameraX: 8500, cameraY: 1240, layer: 3, plannedGimmick: "붕괴석 추격 시작" },
-  { id: "mega_12", order: 12, title: "3층-2 추격 경사 I", x: 9400, y: 1240, width: 900, height: 520, cameraX: 9400, cameraY: 1240, layer: 3, plannedGimmick: "오른쪽 급경사" },
-  { id: "mega_13", order: 13, title: "3층-3 추격 경사 II", x: 10300, y: 1240, width: 900, height: 520, cameraX: 10300, cameraY: 1240, layer: 3, plannedGimmick: "장애물 + 스프링" },
-  { id: "mega_14", order: 14, title: "3층-4 추격 경사 III", x: 11200, y: 1240, width: 900, height: 520, cameraX: 11200, cameraY: 1240, layer: 3, plannedGimmick: "마지막 구불구불 통로" },
-  { id: "mega_15", order: 15, title: "3층-5 탈출 직선", x: 12100, y: 1240, width: 500, height: 520, cameraX: 12100, cameraY: 1240, layer: 3, plannedGimmick: "붕괴석과 마지막 경쟁" },
-  { id: "mega_16", order: 16, title: "3층-6 출구 상승", x: 12600, y: 1240, width: 900, height: 520, cameraX: 12600, cameraY: 1240, layer: 3, plannedGimmick: "다음 초대형 방 연결" }
+  // 제3 스네이크: 맵 왼쪽에서 오른쪽 끝까지 관통한 뒤 짧게 되감아 마지막 출구로 향한다.
+  { id: "mega_17", order: 17, title: "제3 스네이크-추격 전실", x: 8500, y: 2400, width: 900, height: 520, cameraX: 8500, cameraY: 2400, layer: 5, snakeGroup: 3, plannedGimmick: "추격 시작 체크포인트" },
+  { id: "mega_18", order: 18, title: "제3 스네이크-첫 경사", x: 9400, y: 2400, width: 900, height: 520, cameraX: 9400, cameraY: 2400, layer: 5, snakeGroup: 3, plannedGimmick: "급경사 + 굴림 장애물 예정" },
+  { id: "mega_19", order: 19, title: "제3 스네이크-중앙 파동", x: 10300, y: 2400, width: 900, height: 520, cameraX: 10300, cameraY: 2400, layer: 5, snakeGroup: 3, plannedGimmick: "상하 파동형 지형" },
+  { id: "mega_20", order: 20, title: "제3 스네이크-가시 회랑", x: 11200, y: 2400, width: 900, height: 520, cameraX: 11200, cameraY: 2400, layer: 5, snakeGroup: 3, plannedGimmick: "가시 + 점프대 예정" },
+  { id: "mega_21", order: 21, title: "제3 스네이크-우측 낙차", x: 12100, y: 2400, width: 1400, height: 520, cameraX: 12600, cameraY: 2400, layer: 5, snakeGroup: 3, plannedGimmick: "세 번째 수직 낙차" },
+  { id: "mega_22", order: 22, title: "제3 스네이크-짧은 되감기", x: 12100, y: 2960, width: 1400, height: 520, cameraX: 12600, cameraY: 2960, layer: 6, snakeGroup: 3, plannedGimmick: "왼쪽으로 짧게 회귀" },
+  { id: "mega_23", order: 23, title: "제3 스네이크-최종 하강구", x: 11200, y: 2960, width: 900, height: 520, cameraX: 11200, cameraY: 2960, layer: 6, snakeGroup: 3, plannedGimmick: "마지막 하강 전환" },
+  { id: "mega_24", order: 24, title: "제3 스네이크-출구 전실", x: 11200, y: 3520, width: 900, height: 520, cameraX: 11200, cameraY: 3520, layer: 7, snakeGroup: 3, plannedGimmick: "출구 전 마지막 복합 구간" },
+  { id: "mega_25", order: 25, title: "제3 스네이크-전이 관문", x: 12100, y: 3520, width: 1400, height: 520, cameraX: 12600, cameraY: 3520, layer: 7, snakeGroup: 3, plannedGimmick: "중앙 대공동 전이 관문" }
 ];
 
 // 1차 제작에서는 실제 기믹 동작을 넣지 않고 위치·크기·화면 구성을 먼저 검증한다.
 // 표시물은 충돌하지 않으며, 다음 제작에서 실제 오브젝트로 교체된다.
 const megaStageMarkers = [
-  { type: "slope", label: "경사면 예정", x: 8780, y: 575, width: 360, height: 90, screenId: "mega_01" },
-  { type: "cannon", label: "기억포 예정", x: 9750, y: 590, width: 90, height: 78, screenId: "mega_02" },
-  { type: "cannonball", label: "밟는 포탄 예정", x: 10080, y: 525, width: 46, height: 46, screenId: "mega_02" },
-  { type: "slope", label: "구불구불 경사 예정", x: 10540, y: 560, width: 430, height: 105, screenId: "mega_03" },
-  { type: "spring", label: "스프링 예정", x: 11610, y: 615, width: 92, height: 55, screenId: "mega_04" },
-  { type: "spring", label: "착지 스프링 예정", x: 12690, y: 1135, width: 92, height: 55, screenId: "mega_06" },
-  { type: "claw", label: "코어 클로 1 예정", x: 11620, y: 835, width: 110, height: 260, screenId: "mega_07" },
-  { type: "claw", label: "코어 클로 2 예정", x: 10620, y: 820, width: 110, height: 270, screenId: "mega_08" },
-  { type: "claw", label: "코어 클로 3 예정", x: 10960, y: 790, width: 110, height: 300, screenId: "mega_08" },
-  { type: "cannon", label: "상층 기억포 예정", x: 9720, y: 1110, width: 90, height: 78, screenId: "mega_09" },
-  { type: "boulder", label: "붕괴석 발동 예정", x: 8730, y: 1370, width: 155, height: 155, screenId: "mega_11" },
-  { type: "spring", label: "추격 스프링 예정", x: 10650, y: 1655, width: 92, height: 55, screenId: "mega_13" },
-  { type: "exit", label: "다음 방 출구", x: 13370, y: 1245, width: 90, height: 210, screenId: "mega_16" }
+  { type: "slope", label: "제1 경사 예정", x: 8740, y: 585, width: 280, height: 80, screenId: "mega_01" },
+  { type: "cannon", label: "상층 기억포 예정", x: 10620, y: 525, width: 90, height: 78, screenId: "mega_03" },
+  { type: "spring", label: "상층 스프링 예정", x: 11610, y: 570, width: 92, height: 55, screenId: "mega_04" },
+  { type: "claw", label: "첫 하강 클로 예정", x: 12720, y: 430, width: 110, height: 300, screenId: "mega_05" },
+  { type: "claw", label: "회귀 클로 예정", x: 11460, y: 850, width: 110, height: 250, screenId: "mega_07" },
+  { type: "cannon", label: "중층 포탄 예정", x: 11580, y: 1690, width: 90, height: 78, screenId: "mega_10" },
+  { type: "claw", label: "복합 클로 예정", x: 11520, y: 1940, width: 110, height: 270, screenId: "mega_13" },
+  { type: "boulder", label: "붕괴석 추격 예정", x: 8640, y: 2480, width: 155, height: 155, screenId: "mega_17" },
+  { type: "spring", label: "추격 스프링 예정", x: 11680, y: 2790, width: 92, height: 55, screenId: "mega_20" },
+  { type: "exit", label: "전이 관문", x: 13340, y: 3650, width: 100, height: 320, screenId: "mega_25" }
 ];
 
 let activeMegaStageScreenId = "";
@@ -477,7 +483,7 @@ const megaStageBounds = {
   x: 8500,
   y: 160,
   width: 5000,
-  height: 1600
+  height: 3980
 };
 
 const megaStageRouteState = {
@@ -500,23 +506,33 @@ const megaStageCameraTransition = {
 // 첫 번째 문은 1층→2층 이후, 두 번째 문은 2층→3층 이후 역주행을 막는다.
 const megaStageRouteGates = [
   {
-    id: "mega_gate_layer2",
-    name: "1층 복귀 차단문",
-    x: 12920,
-    y: 760,
+    id: "mega_gate_snake2",
+    name: "제1 스네이크 복귀 차단문",
+    x: 10410,
+    y: 1240,
     width: 44,
-    height: 440,
-    closeAtOrder: 7,
+    height: 560,
+    closeAtOrder: 9,
     closed: false
   },
   {
-    id: "mega_gate_layer3",
-    name: "2층 복귀 차단문",
-    x: 8960,
-    y: 1280,
+    id: "mega_gate_snake3",
+    name: "제2 스네이크 복귀 차단문",
+    x: 8580,
+    y: 2360,
     width: 44,
-    height: 440,
-    closeAtOrder: 12,
+    height: 560,
+    closeAtOrder: 17,
+    closed: false
+  },
+  {
+    id: "mega_gate_final",
+    name: "최종 하강 복귀 차단문",
+    x: 11320,
+    y: 3480,
+    width: 44,
+    height: 560,
+    closeAtOrder: 24,
     closed: false
   }
 ];
@@ -603,87 +619,123 @@ const platforms = [
   { x: 8334, y: 430, width: 36, height: 250, area: "tutorial_exit_gate_frame" },
   { x: 8090, y: 430, width: 280, height: 26, area: "tutorial_exit_gate_frame" },
 
-  // --- 초대형 스테이지 1: 외곽 ---
+      // --- 초대형 스테이지 1: 불규칙 삼중 스네이크 구조 ---
+  // 외곽 벽. 튜토리얼 연결부와 최종 전이 관문만 통로로 남긴다.
   { x: 8500, y: 180, width: 5000, height: 54, area: "mega_stage_outer_ceiling" },
   { x: 8500, y: 180, width: 54, height: 420, area: "mega_stage_outer_left_upper" },
-  { x: 8500, y: 770, width: 54, height: 1010, area: "mega_stage_outer_left_lower" },
-  { x: 13446, y: 180, width: 54, height: 1120, area: "mega_stage_outer_right_upper" },
+  { x: 8500, y: 770, width: 54, height: 3370, area: "mega_stage_outer_left_lower" },
+  { x: 13446, y: 180, width: 54, height: 3960, area: "mega_stage_outer_right_wall" },
 
-  // 1층 기본 바닥
+  // 제1 스네이크 상단: 왼쪽에서 오른쪽
   { x: 8420, y: 680, width: 180, height: 80, area: "mega_stage_entry_threshold" },
-  { x: 8500, y: 680, width: 3950, height: 80, area: "mega_stage_layer1_floor" },
+  { x: 8500, y: 680, width: 4400, height: 80, area: "snake1_top_floor" },
+  { x: 13120, y: 680, width: 380, height: 80, area: "snake1_top_floor" },
 
-  // 1층 스네이크형 루트 보강: 위아래를 번갈아 거치는 곡선 루트
-  { x: 8720, y: 640, width: 120, height: 40, area: "mega_stage_slope_step" },
-  { x: 8840, y: 610, width: 120, height: 70, area: "mega_stage_slope_step" },
-  { x: 8960, y: 580, width: 120, height: 100, area: "mega_stage_slope_step" },
-  { x: 9080, y: 610, width: 120, height: 70, area: "mega_stage_slope_step" },
-  { x: 9520, y: 520, width: 170, height: 160, area: "mega_stage_snake_wall" },
-  { x: 9710, y: 500, width: 250, height: 34, area: "mega_stage_snake_ledge" },
-  { x: 10020, y: 565, width: 220, height: 34, area: "mega_stage_snake_ledge" },
-  { x: 10420, y: 630, width: 130, height: 50, area: "mega_stage_curve_step" },
-  { x: 10550, y: 590, width: 130, height: 90, area: "mega_stage_curve_step" },
-  { x: 10680, y: 550, width: 130, height: 130, area: "mega_stage_curve_step" },
-  { x: 10810, y: 585, width: 130, height: 95, area: "mega_stage_curve_step" },
-  { x: 10940, y: 620, width: 130, height: 60, area: "mega_stage_curve_step" },
-  { x: 10700, y: 460, width: 240, height: 32, area: "mega_stage_snake_ledge" },
-  { x: 11110, y: 530, width: 80, height: 150, area: "mega_stage_snake_wall" },
-  { x: 11420, y: 555, width: 340, height: 38, area: "mega_stage_spring_preview_ledge" },
-  { x: 11840, y: 495, width: 220, height: 38, area: "mega_stage_spring_preview_ledge" },
-  { x: 11770, y: 420, width: 220, height: 32, area: "mega_stage_snake_ledge" },
+  { x: 8810, y: 635, width: 150, height: 45, area: "snake1_slope_step" },
+  { x: 8960, y: 590, width: 150, height: 90, area: "snake1_slope_step" },
+  { x: 9110, y: 545, width: 150, height: 135, area: "snake1_slope_step" },
+  { x: 9550, y: 500, width: 110, height: 180, area: "snake1_ridge_wall" },
+  { x: 9680, y: 470, width: 220, height: 34, area: "snake1_ridge_ledge" },
+  { x: 10010, y: 555, width: 220, height: 34, area: "snake1_ridge_ledge" },
+  { x: 10320, y: 470, width: 110, height: 210, area: "snake1_pocket_wall" },
+  { x: 10470, y: 430, width: 260, height: 34, area: "snake1_pocket_ledge" },
+  { x: 10840, y: 540, width: 230, height: 34, area: "snake1_pocket_ledge" },
+  { x: 11230, y: 610, width: 250, height: 70, area: "snake1_curve_step" },
+  { x: 11520, y: 550, width: 250, height: 130, area: "snake1_curve_step" },
+  { x: 11810, y: 610, width: 250, height: 70, area: "snake1_curve_step" },
+  { x: 12220, y: 510, width: 120, height: 170, area: "snake1_drop_wall" },
 
-  // 우측 층 전환
-  { x: 12450, y: 720, width: 140, height: 480, area: "mega_stage_right_descent" },
-  { x: 12590, y: 800, width: 140, height: 400, area: "mega_stage_right_descent" },
-  { x: 12730, y: 880, width: 140, height: 320, area: "mega_stage_right_descent" },
-  { x: 12870, y: 960, width: 140, height: 240, area: "mega_stage_right_descent" },
-  { x: 13010, y: 1040, width: 490, height: 160, area: "mega_stage_right_descent" },
+  // 제1 스네이크 우측 낙차. 12900~13120만 아래층으로 열린다.
+  { x: 12860, y: 680, width: 40, height: 560, area: "snake1_drop_left_wall" },
+  { x: 13120, y: 680, width: 40, height: 560, area: "snake1_drop_right_wall" },
 
-  // 2층 바닥
-  { x: 9000, y: 1200, width: 4500, height: 80, area: "mega_stage_layer2_floor" },
+  // 제1 스네이크 하단: 오른쪽에서 중앙으로 회귀
+  { x: 10300, y: 1240, width: 120, height: 80, area: "snake1_lower_floor" },
+  { x: 10640, y: 1240, width: 2860, height: 80, area: "snake1_lower_floor" },
+  { x: 12490, y: 1120, width: 250, height: 34, area: "snake1_return_ledge" },
+  { x: 12110, y: 1030, width: 250, height: 34, area: "snake1_return_ledge" },
+  { x: 11720, y: 1110, width: 250, height: 34, area: "snake1_return_ledge" },
+  { x: 11340, y: 1020, width: 260, height: 34, area: "snake1_return_ledge" },
+  { x: 10940, y: 1120, width: 260, height: 34, area: "snake1_return_ledge" },
 
-  // 2층 루트 개성화
-  { x: 12520, y: 1090, width: 300, height: 36, area: "mega_stage_spring_landing" },
-  { x: 12140, y: 1030, width: 260, height: 36, area: "mega_stage_spring_landing" },
-  { x: 11840, y: 980, width: 230, height: 34, area: "mega_stage_snake_ledge" },
-  { x: 11330, y: 1040, width: 620, height: 34, area: "mega_stage_temp_claw_bridge", temporaryBridge: true },
-  { x: 10980, y: 940, width: 160, height: 34, area: "mega_stage_snake_ledge" },
-  { x: 10420, y: 1010, width: 690, height: 34, area: "mega_stage_temp_claw_bridge", temporaryBridge: true },
-  { x: 10110, y: 1090, width: 220, height: 34, area: "mega_stage_claw_exit_ledge" },
-  { x: 9650, y: 1060, width: 280, height: 34, area: "mega_stage_upper_cannon_ledge" },
-  { x: 9300, y: 1120, width: 250, height: 34, area: "mega_stage_upper_cannon_ledge" },
-  { x: 9050, y: 1030, width: 170, height: 170, area: "mega_stage_snake_wall" },
+  // 제1→제2 스네이크 중앙 낙차
+  { x: 10380, y: 1240, width: 40, height: 560, area: "snake2_drop_left_wall" },
+  { x: 10640, y: 1240, width: 40, height: 560, area: "snake2_drop_right_wall" },
 
-  // 좌측 층 전환
-  { x: 8860, y: 1280, width: 140, height: 440, area: "mega_stage_left_descent" },
-  { x: 8720, y: 1360, width: 140, height: 360, area: "mega_stage_left_descent" },
-  { x: 8580, y: 1440, width: 140, height: 280, area: "mega_stage_left_descent" },
-  { x: 8500, y: 1520, width: 80, height: 200, area: "mega_stage_left_descent" },
+  // 제2 스네이크 상단: 중앙에서 오른쪽
+  { x: 10300, y: 1800, width: 2600, height: 80, area: "snake2_top_floor" },
+  { x: 13120, y: 1800, width: 380, height: 80, area: "snake2_top_floor" },
+  { x: 10480, y: 1680, width: 220, height: 40, area: "snake2_start_dais" },
+  { x: 10810, y: 1590, width: 250, height: 34, area: "snake2_forward_ledge" },
+  { x: 11170, y: 1660, width: 220, height: 34, area: "snake2_forward_ledge" },
+  { x: 11490, y: 1540, width: 120, height: 260, area: "snake2_forward_wall" },
+  { x: 11640, y: 1500, width: 260, height: 34, area: "snake2_forward_ledge" },
+  { x: 12030, y: 1600, width: 260, height: 34, area: "snake2_forward_ledge" },
+  { x: 12390, y: 1680, width: 250, height: 34, area: "snake2_forward_ledge" },
 
-  // 3층 바닥
-  { x: 8500, y: 1720, width: 4500, height: 100, area: "mega_stage_layer3_floor" },
+  // 제2 스네이크 우측 낙차
+  { x: 12880, y: 1800, width: 40, height: 560, area: "snake2_right_drop_left_wall" },
+  { x: 13120, y: 1800, width: 40, height: 560, area: "snake2_right_drop_right_wall" },
 
-  // 3층 추격용 곡선 계단
-  { x: 9250, y: 1660, width: 150, height: 60, area: "mega_stage_chase_step" },
-  { x: 9400, y: 1610, width: 150, height: 110, area: "mega_stage_chase_step" },
-  { x: 9550, y: 1570, width: 150, height: 150, area: "mega_stage_chase_step" },
-  { x: 9700, y: 1610, width: 150, height: 110, area: "mega_stage_chase_step" },
-  { x: 10060, y: 1540, width: 230, height: 34, area: "mega_stage_snake_ledge" },
-  { x: 10350, y: 1645, width: 160, height: 75, area: "mega_stage_chase_step" },
-  { x: 10510, y: 1595, width: 160, height: 125, area: "mega_stage_chase_step" },
-  { x: 10940, y: 1615, width: 100, height: 105, area: "mega_stage_chase_obstacle" },
-  { x: 11300, y: 1660, width: 150, height: 60, area: "mega_stage_chase_step" },
-  { x: 11450, y: 1605, width: 150, height: 115, area: "mega_stage_chase_step" },
-  { x: 11600, y: 1555, width: 150, height: 165, area: "mega_stage_chase_step" },
-  { x: 11750, y: 1605, width: 150, height: 115, area: "mega_stage_chase_step" },
-  { x: 12040, y: 1520, width: 220, height: 32, area: "mega_stage_snake_ledge" },
+  // 제2 스네이크 하단: 오른쪽에서 맵 왼쪽 끝까지 길게 회귀
+  { x: 8500, y: 2360, width: 100, height: 80, area: "snake2_lower_floor" },
+  { x: 8820, y: 2360, width: 4680, height: 80, area: "snake2_lower_floor" },
+  { x: 12500, y: 2240, width: 250, height: 34, area: "snake2_return_ledge" },
+  { x: 12140, y: 2140, width: 240, height: 34, area: "snake2_return_ledge" },
+  { x: 11770, y: 2220, width: 250, height: 34, area: "snake2_return_ledge" },
+  { x: 11390, y: 2110, width: 250, height: 34, area: "snake2_return_ledge" },
+  { x: 11020, y: 2200, width: 250, height: 34, area: "snake2_return_ledge" },
+  { x: 10640, y: 2090, width: 120, height: 270, area: "snake2_compression_wall" },
+  { x: 10350, y: 2140, width: 240, height: 34, area: "snake2_return_ledge" },
+  { x: 9980, y: 2230, width: 250, height: 34, area: "snake2_return_ledge" },
+  { x: 9600, y: 2120, width: 250, height: 34, area: "snake2_return_ledge" },
+  { x: 9220, y: 2220, width: 250, height: 34, area: "snake2_return_ledge" },
+  { x: 8850, y: 2140, width: 250, height: 34, area: "snake2_return_ledge" },
 
-  // 출구 상승
-  { x: 13000, y: 1640, width: 100, height: 180, area: "mega_stage_exit_rise" },
-  { x: 13100, y: 1560, width: 100, height: 260, area: "mega_stage_exit_rise" },
-  { x: 13200, y: 1480, width: 100, height: 340, area: "mega_stage_exit_rise" },
-  { x: 13300, y: 1400, width: 100, height: 420, area: "mega_stage_exit_rise" },
-  { x: 13400, y: 1320, width: 100, height: 500, area: "mega_stage_exit_rise" },
+  // 제2→제3 스네이크 좌측 낙차
+  { x: 8580, y: 2360, width: 40, height: 560, area: "snake3_drop_left_wall" },
+  { x: 8820, y: 2360, width: 40, height: 560, area: "snake3_drop_right_wall" },
+
+  // 제3 스네이크 상단: 왼쪽에서 오른쪽 전체 관통
+  { x: 8500, y: 2920, width: 4400, height: 100, area: "snake3_top_floor" },
+  { x: 13120, y: 2920, width: 380, height: 100, area: "snake3_top_floor" },
+  { x: 8920, y: 2860, width: 150, height: 60, area: "snake3_chase_step" },
+  { x: 9070, y: 2800, width: 150, height: 120, area: "snake3_chase_step" },
+  { x: 9220, y: 2740, width: 150, height: 180, area: "snake3_chase_step" },
+  { x: 9520, y: 2820, width: 180, height: 100, area: "snake3_chase_step" },
+  { x: 9810, y: 2720, width: 230, height: 34, area: "snake3_wave_ledge" },
+  { x: 10160, y: 2820, width: 230, height: 34, area: "snake3_wave_ledge" },
+  { x: 10500, y: 2700, width: 120, height: 220, area: "snake3_wave_wall" },
+  { x: 10660, y: 2660, width: 250, height: 34, area: "snake3_wave_ledge" },
+  { x: 11030, y: 2780, width: 250, height: 34, area: "snake3_wave_ledge" },
+  { x: 11420, y: 2840, width: 170, height: 80, area: "snake3_chase_step" },
+  { x: 11590, y: 2770, width: 170, height: 150, area: "snake3_chase_step" },
+  { x: 11760, y: 2700, width: 170, height: 220, area: "snake3_chase_step" },
+  { x: 12120, y: 2800, width: 220, height: 120, area: "snake3_chase_step" },
+
+  // 제3 스네이크 우측 낙차
+  { x: 12880, y: 2920, width: 40, height: 560, area: "snake3_right_drop_left_wall" },
+  { x: 13120, y: 2920, width: 40, height: 560, area: "snake3_right_drop_right_wall" },
+
+  // 제3 스네이크 짧은 되감기
+  { x: 11200, y: 3480, width: 120, height: 80, area: "snake3_lower_floor" },
+  { x: 11540, y: 3480, width: 1960, height: 80, area: "snake3_lower_floor" },
+  { x: 12540, y: 3360, width: 250, height: 34, area: "snake3_short_return_ledge" },
+  { x: 12170, y: 3260, width: 250, height: 34, area: "snake3_short_return_ledge" },
+  { x: 11790, y: 3360, width: 250, height: 34, area: "snake3_short_return_ledge" },
+
+  // 최종 하강구: C4에서 마지막 전실로 내려간다.
+  { x: 11280, y: 3480, width: 40, height: 560, area: "snake3_final_drop_left_wall" },
+  { x: 11540, y: 3480, width: 40, height: 560, area: "snake3_final_drop_right_wall" },
+
+  // 최종 전실: 오른쪽 전이 관문까지 이동
+  { x: 11200, y: 4040, width: 2300, height: 100, area: "snake3_final_floor" },
+  { x: 11560, y: 3970, width: 220, height: 70, area: "snake3_final_step" },
+  { x: 11820, y: 3900, width: 220, height: 140, area: "snake3_final_step" },
+  { x: 12100, y: 3970, width: 220, height: 70, area: "snake3_final_step" },
+  { x: 12420, y: 3860, width: 120, height: 180, area: "snake3_final_wall" },
+  { x: 12580, y: 3820, width: 260, height: 34, area: "snake3_final_ledge" },
+  { x: 12940, y: 3920, width: 250, height: 34, area: "snake3_final_ledge" },
 
   // 이후 초대형 방들은 기존 블록아웃 유지
   { x: 13500, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
@@ -746,7 +798,7 @@ const platforms = [
 
 const doors = [
   { x: 8460, y: 500, width: 44, height: 300, text: "진입 절벽", locked: false, open: true },
-  { x: 13460, y: 1040, width: 44, height: 280, text: "중앙 대공동", locked: false, open: true },
+  { x: 13340, y: 3660, width: 100, height: 380, text: "중앙 대공동 전이 관문", locked: false, open: true },
   { x: 21460, y: 2180, width: 44, height: 360, text: "하층 폐허", locked: false, open: true },
   { x: 27460, y: 900, width: 44, height: 360, text: "긴 폐허 회랑", locked: false, open: true },
   { x: 33960, y: 3650, width: 44, height: 420, text: "세로 상승 폐허", locked: false, open: true },
@@ -761,7 +813,7 @@ const abilityItems = [
   { type: "doubleJump", name: "이중 점프", x: 15020, y: 892, width: 28, height: 28, collected: false }
 ];
 const rewardItems = [
-  { type: "memoryFragment", name: "층상 기계 폐허 완주 기억 조각", x: 13280, y: 1438, width: 24, height: 24, collected: false, hiddenReward: true },
+  { type: "memoryFragment", name: "삼중 층상 폐허 완주 기억 조각", x: 13180, y: 3860, width: 24, height: 24, collected: false, hiddenReward: true },
   { type: "memoryFragment", name: "중앙 대공동 상층 기억 조각", x: 19750, y: 482, width: 24, height: 24, collected: false, hiddenReward: true },
   { type: "coreCapacity", name: "하층 폐허 코어 용량", x: 25600, y: 2022, width: 26, height: 26, collected: false, hiddenReward: true },
   { type: "memoryFragment", name: "긴 회랑 상층 기억 조각", x: 31920, y: 862, width: 24, height: 24, collected: false, hiddenReward: true },
@@ -815,13 +867,15 @@ const dashHazards = [
 // 가시 함정은 충돌 지형이 아니라 피해 지형이다.
 // 닿으면 접근하던 방향의 반대로 튕기고 체력이 1 감소한다.
 const spikeTraps = [
-  { id: "spike_mega_01", name: "폐허 바닥 가시", x: 9270, y: 642, width: 135, height: 38, direction: "up" },
-  { id: "spike_mega_02", name: "경사 통로 가시", x: 10770, y: 512, width: 105, height: 38, direction: "up" },
-  { id: "spike_mega_03", name: "클로 구간 가시", x: 11070, y: 1162, width: 125, height: 38, direction: "up" },
-  { id: "spike_mega_04", name: "추격 통로 가시", x: 11060, y: 1682, width: 125, height: 38, direction: "up" },
-  { id: "spike_mega_05", name: "출구 전 가시", x: 12320, y: 1682, width: 145, height: 38, direction: "up" },
-  { id: "spike_mega_06", name: "경사면 상단 가시", x: 9860, y: 496, width: 88, height: 38, direction: "up" },
-  { id: "spike_mega_07", name: "스프링 예비 가시", x: 11610, y: 457, width: 92, height: 38, direction: "up" }
+  { id: "spike_mega_01", name: "제1 스네이크 능선 가시", x: 10080, y: 517, width: 105, height: 38, direction: "up" },
+  { id: "spike_mega_02", name: "제1 스네이크 회귀 가시", x: 11780, y: 1072, width: 110, height: 38, direction: "up" },
+  { id: "spike_mega_03", name: "제2 스네이크 전진 가시", x: 12090, y: 1562, width: 115, height: 38, direction: "up" },
+  { id: "spike_mega_04", name: "제2 스네이크 압축 가시", x: 10380, y: 2102, width: 105, height: 38, direction: "up" },
+  { id: "spike_mega_05", name: "제2 스네이크 회귀 가시", x: 9260, y: 2182, width: 105, height: 38, direction: "up" },
+  { id: "spike_mega_06", name: "제3 스네이크 추격 가시", x: 9545, y: 2782, width: 120, height: 38, direction: "up" },
+  { id: "spike_mega_07", name: "제3 스네이크 파동 가시", x: 11080, y: 2742, width: 110, height: 38, direction: "up" },
+  { id: "spike_mega_08", name: "제3 스네이크 되감기 가시", x: 12190, y: 3222, width: 115, height: 38, direction: "up" },
+  { id: "spike_mega_09", name: "전이 관문 전 가시", x: 12970, y: 3882, width: 130, height: 38, direction: "up" }
 ];
 
 const enemies = [
@@ -947,9 +1001,9 @@ function buildRoomObjectIndex() {
 }
 
 const mapData = {
-  version: "v58-2",
-  stage: "13-2-3-2",
-  purpose: "첫 번째 초대형 방의 3개 층과 16개 고정 단락을 실제로 순서대로 완주할 수 있도록 단락 전환의 흔들림을 막고, 두 층 전환 뒤에는 역주행 방지문을 닫으며, 체크포인트 복귀 시 카메라·경로·투사체 상태를 함께 초기화한 안정화본이다.",
+  version: "v58-6",
+  stage: "13-2-triple-snake",
+  purpose: "첫 번째 초대형 방을 단일 왕복 구조에서 세 개의 불규칙 스네이크 구간으로 확장했다. 25개 고정 화면, 7개 높이대, 세 번의 주요 낙차와 서로 다른 길이의 회귀 구간을 통해 상하좌우 이동량을 크게 늘린 구조 검증본이다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -2339,6 +2393,7 @@ function updatePlayer() {
   checkSpikeTrapDamage();
   checkCheckpointActivation();
   updateMegaStageRouteState();
+  checkMegaStageExitPortal();
   checkFall();
 }
 
@@ -2536,13 +2591,45 @@ function getFallLimitForCurrentRoom() {
   return world.height + 200;
 }
 
+function checkMegaStageExitPortal() {
+  if (gameState.transitionOverlayActive) {
+    return;
+  }
+
+  const px = centerX(player);
+  const py = centerY(player);
+
+  if (
+    megaStageRouteState.highestOrder >= 25 &&
+    px >= 13320 &&
+    px <= 13480 &&
+    py >= 3520 &&
+    py <= 4140
+  ) {
+    player.x = 13620;
+    player.y = 1210;
+    player.vx = 0;
+    player.vy = 0;
+    player.onGround = false;
+    player.isDashing = false;
+    player.attackTimer = 0;
+
+    activeMegaStageScreenId = "";
+    activeMegaStageScreenCache = null;
+    megaStageCameraTransition.active = false;
+
+    invalidateSolidObjectCache();
+    gameState.message = "삼중 스네이크 구간을 완주했습니다. 중앙 대공동으로 이동합니다.";
+  }
+}
+
 function checkFall() {
   const px = centerX(player);
 
   // 첫 초대형 스테이지의 가장 아래 바닥은 y=1720이다.
   // 화면 아래로 완전히 벗어나면 다른 지역으로 떨어지게 두지 않고 즉시 복귀시킨다.
   if (px >= megaStageBounds.x && px < megaStageBounds.x + megaStageBounds.width) {
-    if (player.y > 1880) {
+    if (player.y > 4240) {
       respawnAtCheckpoint(
         "초대형 스테이지 아래로 추락했습니다. 마지막 체크포인트로 돌아갑니다."
       );
@@ -5795,11 +5882,10 @@ function drawWarnings() {
   }
 
   const warnings = [
-    { text: "v58-1 수정: 튜토리얼 끝 출입구가 열렸으며, 금속 가시는 피해와 반동을 준다.", x: 8580, y: 590, width: 720, height: 24 },
-    { text: "파란/보라/주황 테두리는 각각 1층·2층·3층의 고정 카메라 단락", x: 9480, y: 590, width: 620, height: 24 },
-    { text: "CLAW·CANNON·SPRING·BOULDER 표시는 다음 제작에서 실제 기믹으로 교체", x: 10400, y: 590, width: 680, height: 24 },
-    { text: "임시 다리는 클로가 구현되면 제거된다.", x: 10500, y: 1140, width: 420, height: 24 },
-    { text: "추격 구간은 현재 지형과 화면 전환만 확인한다.", x: 9500, y: 1680, width: 480, height: 24 }
+    { text: "v58-6: 세 개의 불규칙 스네이크 구간을 직렬 연결한 구조 검증본", x: 8580, y: 590, width: 650, height: 24 },
+    { text: "제1 스네이크: 상층 우측 진행 → 중앙 회귀", x: 10900, y: 1150, width: 440, height: 24 },
+    { text: "제2 스네이크: 중앙 우측 진행 → 왼쪽 끝 장거리 회귀", x: 10800, y: 2280, width: 520, height: 24 },
+    { text: "제3 스네이크: 하층 우측 관통 → 짧은 되감기 → 전이 관문", x: 10300, y: 3400, width: 560, height: 24 }
   ];
 
   for (const warning of warnings) {
@@ -6481,7 +6567,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "bold 20px Arial";
-  ctx.fillText("13단계-2 v58-4", 30, 42);
+  ctx.fillText("13단계-2 v58-6", 30, 42);
 
   ctx.font = "14px Arial";
   ctx.fillStyle = "#cbd5e1";
