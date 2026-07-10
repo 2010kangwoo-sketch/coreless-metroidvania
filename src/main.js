@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v57 수정: 벽 점프 튜토리얼의 내부 받침대를 제거하고 가까운 두 벽을 연속으로 튕겨 오르게 재설계
+// v58-1: 첫 번째 초대형 스테이지를 16개의 고정 카메라 단락과 3개 지형 층으로 나눈 1차 블록아웃
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -168,14 +168,16 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v57 벽 점프 수정: 받침대 없이 가까운 두 벽을 연속으로 튕겨 올라가도록 바꿨습니다.",
+  message: "13단계-2 v58-1: 첫 번째 초대형 스테이지의 고정 화면·단일 루트 블록아웃을 적용했습니다.",
   hiddenRewards: 0
 };
 
 
 const checkpoints = [
   { id: "tutorial_start", name: "튜토리얼 시작점", x: 110, y: 620, width: 34, height: 58, spawnX: 90, spawnY: 540, activated: true, roomId: "tutorial_zone_blockout" },
-  { id: "entry_cliff_cp", name: "진입 절벽 체크포인트", x: 8720, y: 1018, width: 36, height: 62, spawnX: 8660, spawnY: 990, activated: false, roomId: "entry_cliff_blockout" },
+  { id: "mega_stage_start_cp", name: "초대형 스테이지 시작 체크포인트", x: 8580, y: 618, width: 36, height: 62, spawnX: 8520, spawnY: 610, activated: false, roomId: "entry_cliff_blockout" },
+  { id: "mega_stage_mid_cp", name: "클로 구간 완료 체크포인트", x: 11240, y: 1138, width: 36, height: 62, spawnX: 11180, spawnY: 1130, activated: false, roomId: "entry_cliff_blockout" },
+  { id: "mega_stage_chase_cp", name: "붕괴석 추격 전 체크포인트", x: 8650, y: 1658, width: 36, height: 62, spawnX: 8590, spawnY: 1650, activated: false, roomId: "entry_cliff_blockout" },
   { id: "central_cavern_cp", name: "중앙 대공동 체크포인트", x: 13680, y: 1236, width: 36, height: 62, spawnX: 13620, spawnY: 1210, activated: false, roomId: "central_cavern_blockout" },
   { id: "lower_ruins_cp", name: "하층 폐허 체크포인트", x: 21680, y: 2436, width: 36, height: 62, spawnX: 21620, spawnY: 2410, activated: false, roomId: "lower_ruins_blockout" },
   { id: "long_corridor_cp", name: "긴 폐허 회랑 체크포인트", x: 27680, y: 1116, width: 36, height: 62, spawnX: 27620, spawnY: 1090, activated: false, roomId: "long_ruin_corridor_blockout" },
@@ -210,16 +212,16 @@ const roomBlueprints = [
   },
   {
     id: "entry_cliff_blockout",
-    name: "지역 1-1: 진입 절벽",
-    guide: "튜토리얼 직후 처음 만나는 초대형 방. 갑자기 공간이 넓어졌다는 인상을 주기 위한 첫 진입 구간이다.",
-    role: "mega_room_1_entry_cliff",
-    bounds: { x: 8500, y: 0, width: 5000, height: 8200 },
-    cameraBounds: { x: 8500, y: 0, width: 5000, height: 3600 },
+    name: "지역 1-1: 층상 기계 폐허",
+    guide: "16개의 고정 카메라 단락이 3개 지형 층을 지그재그로 잇는 첫 번째 초대형 스테이지 블록아웃이다.",
+    role: "mega_room_1_fixed_screen_stage",
+    bounds: { x: 8500, y: 160, width: 5000, height: 1680 },
+    cameraBounds: { x: 8500, y: 160, width: 5000, height: 1680 },
     color: "#142033",
     requiredAbilities: [],
-    mainPath: "넓은 바닥, 높은 벽, 위쪽에 보이는 보상 공간, 아래쪽이 아닌 옆쪽으로 이어지는 안정적 진입 흐름을 만든다.",
+    mainPath: "1층은 오른쪽, 2층은 왼쪽, 3층은 다시 오른쪽으로 진행한다. 갈림길 없이 경사면·대포·스프링·클로·붕괴석 예정 구간을 순서대로 지난다.",
     connections: { left: "tutorial_zone_blockout", right: "central_cavern_blockout" },
-    tags: ["first_area", "mega_room", "entry", "vertical_hint"]
+    tags: ["first_area", "mega_room", "fixed_screen", "single_route", "three_layers", "blockout"]
   },
   {
     id: "central_cavern_blockout",
@@ -409,6 +411,54 @@ const tutorialRoomFrames = tutorialRooms.map(function(room) {
   return { x: room.x, y: room.y, width: room.width, height: room.height, mode: room.cameraMode, title: room.title };
 });
 
+// v58-1: 첫 번째 초대형 스테이지를 작은 자유 이동 방으로 쪼개는 것이 아니라,
+// 하나의 거대한 방 안에 16개의 고정 카메라 단락을 배치한다.
+// 각 단락의 경계를 넘으면 카메라가 다음 정해진 화면으로 부드럽게 이동한 뒤 고정된다.
+const megaStageScreens = [
+  // 1층: 왼쪽에서 오른쪽
+  { id: "mega_01", order: 1, title: "1층-1 경사면 진입", x: 8500, y: 160, width: 900, height: 560, cameraX: 8500, cameraY: 160, layer: 1, plannedGimmick: "경사면 + 기억포 회피" },
+  { id: "mega_02", order: 2, title: "1층-2 포탄 밟기", x: 9400, y: 160, width: 900, height: 560, cameraX: 9400, cameraY: 160, layer: 1, plannedGimmick: "느린 포탄 밟기" },
+  { id: "mega_03", order: 3, title: "1층-3 굽은 경사", x: 10300, y: 160, width: 900, height: 560, cameraX: 10300, cameraY: 160, layer: 1, plannedGimmick: "구불구불한 경사면" },
+  { id: "mega_04", order: 4, title: "1층-4 스프링 예비 구간", x: 11200, y: 160, width: 900, height: 560, cameraX: 11200, cameraY: 160, layer: 1, plannedGimmick: "압축 코어 스프링" },
+  { id: "mega_05", order: 5, title: "1층-5 우측 하강 전환", x: 12100, y: 160, width: 1400, height: 560, cameraX: 12600, cameraY: 160, layer: 1, plannedGimmick: "층 전환 경사 통로" },
+
+  // 2층: 오른쪽에서 왼쪽
+  { id: "mega_06", order: 6, title: "2층-1 스프링 착지", x: 12100, y: 720, width: 1400, height: 520, cameraX: 12600, cameraY: 720, layer: 2, plannedGimmick: "스프링 착지 제어" },
+  { id: "mega_07", order: 7, title: "2층-2 코어 클로 기초", x: 11200, y: 720, width: 900, height: 520, cameraX: 11200, cameraY: 720, layer: 2, plannedGimmick: "클로 포획·흔들기" },
+  { id: "mega_08", order: 8, title: "2층-3 연속 코어 클로", x: 10300, y: 720, width: 900, height: 520, cameraX: 10300, cameraY: 720, layer: 2, plannedGimmick: "클로 2개 연속 이동" },
+  { id: "mega_09", order: 9, title: "2층-4 상층 기억포", x: 9400, y: 720, width: 900, height: 520, cameraX: 9400, cameraY: 720, layer: 2, plannedGimmick: "높이차 대포 회랑" },
+  { id: "mega_10", order: 10, title: "2층-5 좌측 하강 전환", x: 8500, y: 720, width: 900, height: 520, cameraX: 8500, cameraY: 720, layer: 2, plannedGimmick: "붕괴석 발동 전환" },
+
+  // 3층: 왼쪽에서 오른쪽
+  { id: "mega_11", order: 11, title: "3층-1 붕괴석 발동", x: 8500, y: 1240, width: 900, height: 520, cameraX: 8500, cameraY: 1240, layer: 3, plannedGimmick: "붕괴석 추격 시작" },
+  { id: "mega_12", order: 12, title: "3층-2 추격 경사 I", x: 9400, y: 1240, width: 900, height: 520, cameraX: 9400, cameraY: 1240, layer: 3, plannedGimmick: "오른쪽 급경사" },
+  { id: "mega_13", order: 13, title: "3층-3 추격 경사 II", x: 10300, y: 1240, width: 900, height: 520, cameraX: 10300, cameraY: 1240, layer: 3, plannedGimmick: "장애물 + 스프링" },
+  { id: "mega_14", order: 14, title: "3층-4 추격 경사 III", x: 11200, y: 1240, width: 900, height: 520, cameraX: 11200, cameraY: 1240, layer: 3, plannedGimmick: "마지막 구불구불 통로" },
+  { id: "mega_15", order: 15, title: "3층-5 탈출 직선", x: 12100, y: 1240, width: 500, height: 520, cameraX: 12100, cameraY: 1240, layer: 3, plannedGimmick: "붕괴석과 마지막 경쟁" },
+  { id: "mega_16", order: 16, title: "3층-6 출구 상승", x: 12600, y: 1240, width: 900, height: 520, cameraX: 12600, cameraY: 1240, layer: 3, plannedGimmick: "다음 초대형 방 연결" }
+];
+
+// 1차 제작에서는 실제 기믹 동작을 넣지 않고 위치·크기·화면 구성을 먼저 검증한다.
+// 표시물은 충돌하지 않으며, 다음 제작에서 실제 오브젝트로 교체된다.
+const megaStageMarkers = [
+  { type: "slope", label: "경사면 예정", x: 8780, y: 575, width: 360, height: 90, screenId: "mega_01" },
+  { type: "cannon", label: "기억포 예정", x: 9750, y: 590, width: 90, height: 78, screenId: "mega_02" },
+  { type: "cannonball", label: "밟는 포탄 예정", x: 10080, y: 525, width: 46, height: 46, screenId: "mega_02" },
+  { type: "slope", label: "구불구불 경사 예정", x: 10540, y: 560, width: 430, height: 105, screenId: "mega_03" },
+  { type: "spring", label: "스프링 예정", x: 11610, y: 615, width: 92, height: 55, screenId: "mega_04" },
+  { type: "spring", label: "착지 스프링 예정", x: 12690, y: 1135, width: 92, height: 55, screenId: "mega_06" },
+  { type: "claw", label: "코어 클로 1 예정", x: 11620, y: 835, width: 110, height: 260, screenId: "mega_07" },
+  { type: "claw", label: "코어 클로 2 예정", x: 10620, y: 820, width: 110, height: 270, screenId: "mega_08" },
+  { type: "claw", label: "코어 클로 3 예정", x: 10960, y: 790, width: 110, height: 300, screenId: "mega_08" },
+  { type: "cannon", label: "상층 기억포 예정", x: 9720, y: 1110, width: 90, height: 78, screenId: "mega_09" },
+  { type: "boulder", label: "붕괴석 발동 예정", x: 8730, y: 1370, width: 155, height: 155, screenId: "mega_11" },
+  { type: "spring", label: "추격 스프링 예정", x: 10650, y: 1655, width: 92, height: 55, screenId: "mega_13" },
+  { type: "exit", label: "다음 방 출구", x: 13370, y: 1245, width: 90, height: 210, screenId: "mega_16" }
+];
+
+let activeMegaStageScreenId = "";
+
+
 const tutorialSigns = tutorialRooms.map(function(room) {
   // 표지판은 조작 공간을 덮지 않도록 이전보다 작게 만들고 방의 왼쪽 벽 가까이에 둔다.
   const preferredWidth = room.cameraMode === "fixed" ? 350 : 410;
@@ -470,15 +520,94 @@ const platforms = [
   { x: 6540, y: 555, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
   { x: 7040, y: 500, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
 
-  // 초대형 방 1: 진입 절벽. 넓은 세계로 들어오는 감각을 주는 기본 골격
-  { x: 8500, y: 1080, width: 1100, height: 120, area: "entry_cliff_floor" },
-  { x: 9600, y: 1080, width: 1000, height: 120, area: "entry_cliff_floor" },
-  { x: 10600, y: 1080, width: 1100, height: 120, area: "entry_cliff_floor" },
-  { x: 11700, y: 1080, width: 900, height: 120, area: "entry_cliff_floor" },
-  { x: 12450, y: 930, width: 720, height: 70, area: "entry_cliff_rise" },
-  { x: 8900, y: 820, width: 520, height: 46, area: "entry_cliff_upper_visible" },
-  { x: 9650, y: 650, width: 480, height: 46, area: "entry_cliff_upper_visible" },
-  { x: 10450, y: 500, width: 460, height: 46, area: "entry_cliff_upper_visible", secretRoute: "진입 절벽 상층 보상 후보" },
+  // v58-1 첫 번째 초대형 스테이지 블록아웃
+  // 전체 경로는 1층 오른쪽 진행 → 우측 하강 → 2층 왼쪽 진행 → 좌측 하강 → 3층 오른쪽 진행이다.
+  // 선택 갈림길과 강제 낙하 구멍은 없으며, 층 전환은 넓은 계단형 경사로만 이루어진다.
+
+  // 외곽 천장과 좌우 경계
+  { x: 8500, y: 180, width: 5000, height: 54, area: "mega_stage_outer_ceiling" },
+  { x: 8500, y: 180, width: 54, height: 1600, area: "mega_stage_outer_left" },
+  { x: 13446, y: 180, width: 54, height: 1120, area: "mega_stage_outer_right_upper" },
+
+  // 1층 바닥: 왼쪽에서 오른쪽으로 진행
+  { x: 8500, y: 680, width: 3950, height: 80, area: "mega_stage_layer1_floor" },
+
+  // 1층 경사면 블록아웃: 실제 경사 충돌은 다음 제작에서 교체한다.
+  { x: 8720, y: 640, width: 120, height: 40, area: "mega_stage_slope_step" },
+  { x: 8840, y: 610, width: 120, height: 70, area: "mega_stage_slope_step" },
+  { x: 8960, y: 580, width: 120, height: 100, area: "mega_stage_slope_step" },
+  { x: 9080, y: 610, width: 120, height: 70, area: "mega_stage_slope_step" },
+
+  // 기억포·포탄 화면의 높이차
+  { x: 9650, y: 575, width: 250, height: 36, area: "mega_stage_cannon_ledge" },
+  { x: 10020, y: 515, width: 250, height: 36, area: "mega_stage_cannon_bounce_target" },
+
+  // 구불구불한 경사 화면의 계단형 임시 지형
+  { x: 10420, y: 630, width: 130, height: 50, area: "mega_stage_curve_step" },
+  { x: 10550, y: 590, width: 130, height: 90, area: "mega_stage_curve_step" },
+  { x: 10680, y: 550, width: 130, height: 130, area: "mega_stage_curve_step" },
+  { x: 10810, y: 585, width: 130, height: 95, area: "mega_stage_curve_step" },
+  { x: 10940, y: 620, width: 130, height: 60, area: "mega_stage_curve_step" },
+
+  // 스프링 예정 화면의 임시 착지대
+  { x: 11420, y: 555, width: 340, height: 38, area: "mega_stage_spring_preview_ledge" },
+  { x: 11840, y: 495, width: 220, height: 38, area: "mega_stage_spring_preview_ledge" },
+
+  // 우측 층 전환: 1층에서 2층으로 안전하게 내려가는 넓은 계단
+  { x: 12450, y: 720, width: 140, height: 480, area: "mega_stage_right_descent" },
+  { x: 12590, y: 800, width: 140, height: 400, area: "mega_stage_right_descent" },
+  { x: 12730, y: 880, width: 140, height: 320, area: "mega_stage_right_descent" },
+  { x: 12870, y: 960, width: 140, height: 240, area: "mega_stage_right_descent" },
+  { x: 13010, y: 1040, width: 490, height: 160, area: "mega_stage_right_descent" },
+
+  // 2층 바닥: 오른쪽에서 왼쪽으로 진행
+  { x: 9000, y: 1200, width: 4500, height: 80, area: "mega_stage_layer2_floor" },
+
+  // 스프링 착지 제어 예정 구간
+  { x: 12520, y: 1090, width: 300, height: 36, area: "mega_stage_spring_landing" },
+  { x: 12140, y: 1030, width: 260, height: 36, area: "mega_stage_spring_landing" },
+
+  // 클로 예정 구간: 실제 클로 대신 임시 안전 다리로 경로만 검증
+  { x: 11330, y: 1040, width: 620, height: 34, area: "mega_stage_temp_claw_bridge", temporaryBridge: true },
+  { x: 10420, y: 1010, width: 690, height: 34, area: "mega_stage_temp_claw_bridge", temporaryBridge: true },
+  { x: 10110, y: 1090, width: 220, height: 34, area: "mega_stage_claw_exit_ledge" },
+
+  // 상층 기억포 구간의 높이 변화
+  { x: 9650, y: 1060, width: 280, height: 34, area: "mega_stage_upper_cannon_ledge" },
+  { x: 9300, y: 1120, width: 250, height: 34, area: "mega_stage_upper_cannon_ledge" },
+
+  // 좌측 층 전환: 2층에서 3층으로 내려가는 넓은 계단
+  { x: 8860, y: 1280, width: 140, height: 440, area: "mega_stage_left_descent" },
+  { x: 8720, y: 1360, width: 140, height: 360, area: "mega_stage_left_descent" },
+  { x: 8580, y: 1440, width: 140, height: 280, area: "mega_stage_left_descent" },
+  { x: 8500, y: 1520, width: 80, height: 200, area: "mega_stage_left_descent" },
+
+  // 3층 바닥: 붕괴석 추격 예정 구간. 현재는 단일 루트 검증용
+  { x: 8500, y: 1720, width: 4500, height: 100, area: "mega_stage_layer3_floor" },
+
+  // 추격 경사 I
+  { x: 9250, y: 1660, width: 150, height: 60, area: "mega_stage_chase_step" },
+  { x: 9400, y: 1610, width: 150, height: 110, area: "mega_stage_chase_step" },
+  { x: 9550, y: 1570, width: 150, height: 150, area: "mega_stage_chase_step" },
+  { x: 9700, y: 1610, width: 150, height: 110, area: "mega_stage_chase_step" },
+
+  // 추격 경사 II와 낮은 장애물
+  { x: 10350, y: 1645, width: 160, height: 75, area: "mega_stage_chase_step" },
+  { x: 10510, y: 1595, width: 160, height: 125, area: "mega_stage_chase_step" },
+  { x: 10940, y: 1615, width: 100, height: 105, area: "mega_stage_chase_obstacle" },
+
+  // 추격 경사 III
+  { x: 11300, y: 1660, width: 150, height: 60, area: "mega_stage_chase_step" },
+  { x: 11450, y: 1605, width: 150, height: 115, area: "mega_stage_chase_step" },
+  { x: 11600, y: 1555, width: 150, height: 165, area: "mega_stage_chase_step" },
+  { x: 11750, y: 1605, width: 150, height: 115, area: "mega_stage_chase_step" },
+
+  // 출구 상승: 중앙 대공동의 기존 바닥 높이인 y=1300으로 자연스럽게 연결
+  { x: 13000, y: 1640, width: 100, height: 180, area: "mega_stage_exit_rise" },
+  { x: 13100, y: 1560, width: 100, height: 260, area: "mega_stage_exit_rise" },
+  { x: 13200, y: 1480, width: 100, height: 340, area: "mega_stage_exit_rise" },
+  { x: 13300, y: 1400, width: 100, height: 420, area: "mega_stage_exit_rise" },
+  { x: 13400, y: 1320, width: 100, height: 500, area: "mega_stage_exit_rise" },
 
   // 초대형 방 2: 중앙 대공동. 첫 지역의 허브가 될 가장 큰 공간의 기본 골격
   { x: 13500, y: 1300, width: 1300, height: 130, area: "central_cavern_main_floor" },
@@ -545,7 +674,7 @@ const platforms = [
 
 const doors = [
   { x: 8460, y: 500, width: 44, height: 300, text: "진입 절벽", locked: false, open: true },
-  { x: 13460, y: 850, width: 44, height: 360, text: "중앙 대공동", locked: false, open: true },
+  { x: 13460, y: 1040, width: 44, height: 280, text: "중앙 대공동", locked: false, open: true },
   { x: 21460, y: 2180, width: 44, height: 360, text: "하층 폐허", locked: false, open: true },
   { x: 27460, y: 900, width: 44, height: 360, text: "긴 폐허 회랑", locked: false, open: true },
   { x: 33960, y: 3650, width: 44, height: 420, text: "세로 상승 폐허", locked: false, open: true },
@@ -560,7 +689,7 @@ const abilityItems = [
   { type: "doubleJump", name: "이중 점프", x: 15020, y: 892, width: 28, height: 28, collected: false }
 ];
 const rewardItems = [
-  { type: "memoryFragment", name: "진입 절벽 상층 기억 조각", x: 10495, y: 462, width: 24, height: 24, collected: false, hiddenReward: true },
+  { type: "memoryFragment", name: "층상 기계 폐허 완주 기억 조각", x: 13280, y: 1438, width: 24, height: 24, collected: false, hiddenReward: true },
   { type: "memoryFragment", name: "중앙 대공동 상층 기억 조각", x: 19750, y: 482, width: 24, height: 24, collected: false, hiddenReward: true },
   { type: "coreCapacity", name: "하층 폐허 코어 용량", x: 25600, y: 2022, width: 26, height: 26, collected: false, hiddenReward: true },
   { type: "memoryFragment", name: "긴 회랑 상층 기억 조각", x: 31920, y: 862, width: 24, height: 24, collected: false, hiddenReward: true },
@@ -584,12 +713,10 @@ const dashHazards = [
 const enemies = [
   createMeleeEnemy("튜토리얼 그림자", 2380, 644, 32, 34, 2180, 2600, 1.0, 2, 68, 100),
   createMeleeEnemy("아래 공격 표적", 6780, 644, 34, 34, 6660, 7040, 0.45, 3, 62, 120),
-  createMeleeEnemy("진입 절벽 벌레", 11100, 1044, 36, 36, 9300, 12400, 1.1, 3, 72, 105),
   createMeleeEnemy("중앙 폐허 파수꾼", 16750, 1264, 38, 36, 14000, 21000, 1.15, 4, 78, 112),
   createMeleeEnemy("하층 폐허 벌레", 24100, 2464, 38, 36, 21800, 27200, 1.15, 4, 78, 112),
   createMeleeEnemy("회랑 파수꾼", 30600, 1064, 38, 36, 27800, 33500, 1.15, 4, 78, 112),
   createMeleeEnemy("봉인 관문 파수꾼", 41700, 1144, 40, 38, 39200, 43700, 1.1, 4, 78, 112),
-  createFlyingEnemy("진입 절벽 박쥐", 10200, 760),
   createFlyingEnemy("중앙 대공동 박쥐", 18100, 800),
   createFlyingEnemy("하층 폐허 박쥐", 25200, 2160),
   createFlyingEnemy("세로 상승 박쥐", 36500, 2450),
@@ -706,9 +833,9 @@ function buildRoomObjectIndex() {
 }
 
 const mapData = {
-  version: "v57",
-  stage: "13-2-2",
-  purpose: "대시 전용 기억벽은 유지하고, 벽 점프 방은 내부 받침대를 제거한 뒤 간격이 가까운 두 벽을 연속으로 번갈아 타는 구조로 다시 설계했다. 정상 바깥쪽에만 착지대를 두며 기존 델타 보정과 최적화는 유지한다.",
+  version: "v58-1",
+  stage: "13-2-3-1",
+  purpose: "첫 번째 초대형 방을 3개 지형 층과 16개의 고정 카메라 단락으로 재구성하고, 경사면·기억포·스프링·코어 클로·붕괴석의 예정 위치와 단일 진행 경로를 검증하는 1차 블록아웃이다. 실제 기믹 동작은 후속 제작에서 구현한다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -3680,6 +3807,25 @@ function getCurrentTutorialRoom() {
   return null;
 }
 
+
+function getCurrentMegaStageScreen() {
+  const px = centerX(player);
+  const py = centerY(player);
+
+  for (const screen of megaStageScreens) {
+    if (
+      px >= screen.x &&
+      px < screen.x + screen.width &&
+      py >= screen.y &&
+      py < screen.y + screen.height
+    ) {
+      return screen;
+    }
+  }
+
+  return null;
+}
+
 function clampCameraToBounds(targetX, targetY, bounds) {
   const minX = bounds.x;
   const maxX = Math.max(bounds.x, bounds.x + bounds.width - camera.width);
@@ -3699,6 +3845,8 @@ function updateCamera() {
 
   const tutorialRoom = getCurrentTutorialRoom();
 
+  const megaStageScreen = getCurrentMegaStageScreen();
+
   if (tutorialRoom) {
     if (tutorialRoom.cameraMode === "fixed") {
       targetX = tutorialRoom.cameraX;
@@ -3713,6 +3861,16 @@ function updateCamera() {
       const clamped = clampCameraToBounds(targetX, targetY, bounds);
       targetX = clamped.x;
       targetY = clamped.y;
+    }
+  } else if (megaStageScreen) {
+    // 초대형 스테이지의 각 단락은 하나의 고정 화면처럼 작동한다.
+    // 단락 경계를 넘을 때만 다음 카메라 위치로 부드럽게 전환된다.
+    targetX = megaStageScreen.cameraX;
+    targetY = megaStageScreen.cameraY;
+
+    if (activeMegaStageScreenId !== megaStageScreen.id) {
+      activeMegaStageScreenId = megaStageScreen.id;
+      gameState.message = megaStageScreen.order + "번째 단락: " + megaStageScreen.title + " / 예정 기믹: " + megaStageScreen.plannedGimmick;
     }
   } else if (gameState.bossFightStarted && player.x > 10800 && boss.alive) {
     const midpointX = (centerX(player) + centerX(boss)) / 2;
@@ -3813,6 +3971,140 @@ function drawRoundedRect(x, y, width, height, radius) {
   ctx.lineTo(x, y + radius);
   ctx.quadraticCurveTo(x, y, x + radius, y);
   ctx.closePath();
+}
+
+function drawMegaStageScreenFrames() {
+  const activeScreen = getCurrentMegaStageScreen();
+
+  for (const screen of megaStageScreens) {
+    if (!isObjectNearCamera(screen, 80, 80)) {
+      continue;
+    }
+
+    const screenX = Math.round(screen.x - camera.x);
+    const screenY = Math.round(screen.y - camera.y);
+    const isActive = activeScreen && activeScreen.id === screen.id;
+    const layerColors = {
+      1: "rgba(56, 189, 248, 0.34)",
+      2: "rgba(167, 139, 250, 0.34)",
+      3: "rgba(251, 146, 60, 0.34)"
+    };
+
+    ctx.save();
+    ctx.fillStyle = isActive ? "rgba(15, 23, 42, 0.12)" : "rgba(15, 23, 42, 0.05)";
+    ctx.fillRect(screenX, screenY, screen.width, screen.height);
+
+    ctx.strokeStyle = isActive ? "rgba(226, 232, 240, 0.82)" : layerColors[screen.layer];
+    ctx.lineWidth = isActive ? 3 : 1;
+    ctx.strokeRect(screenX, screenY, screen.width, screen.height);
+
+    ctx.fillStyle = isActive ? "#f8fafc" : "#94a3b8";
+    ctx.font = isActive ? "bold 15px Arial" : "12px Arial";
+    ctx.fillText(screen.order + ". " + screen.title, screenX + 18, screenY + 26);
+
+    ctx.fillStyle = "rgba(203, 213, 225, 0.76)";
+    ctx.font = "11px Arial";
+    ctx.fillText(screen.plannedGimmick, screenX + 18, screenY + 45);
+    ctx.restore();
+  }
+}
+
+function drawMegaStageMarkers() {
+  for (const marker of megaStageMarkers) {
+    if (!isObjectNearCamera(marker, 180, 180)) {
+      continue;
+    }
+
+    const x = marker.x - camera.x;
+    const y = marker.y - camera.y;
+
+    ctx.save();
+    ctx.globalAlpha = 0.78;
+    ctx.lineWidth = 2;
+
+    if (marker.type === "cannon") {
+      ctx.fillStyle = "#374151";
+      ctx.fillRect(x + 12, y + 38, marker.width - 24, marker.height - 38);
+      ctx.save();
+      ctx.translate(x + marker.width / 2, y + 36);
+      ctx.rotate(-0.28);
+      ctx.fillStyle = "#111827";
+      ctx.fillRect(-12, -34, 24, 58);
+      ctx.restore();
+      ctx.strokeStyle = "#f59e0b";
+      ctx.strokeRect(x, y, marker.width, marker.height);
+    } else if (marker.type === "cannonball") {
+      ctx.fillStyle = "#111827";
+      ctx.beginPath();
+      ctx.arc(x + marker.width / 2, y + marker.height / 2, marker.width / 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#fbbf24";
+      ctx.stroke();
+    } else if (marker.type === "spring") {
+      ctx.strokeStyle = "#86efac";
+      ctx.strokeRect(x, y, marker.width, marker.height);
+      ctx.beginPath();
+      const segments = 5;
+      for (let i = 0; i < segments; i++) {
+        const sx = x + 10 + i * ((marker.width - 20) / segments);
+        const sy = y + marker.height - 8 - (i % 2) * 22;
+        if (i === 0) ctx.moveTo(sx, sy);
+        else ctx.lineTo(sx, sy);
+      }
+      ctx.stroke();
+    } else if (marker.type === "claw") {
+      ctx.strokeStyle = "#cbd5e1";
+      const centerX = x + marker.width / 2;
+      ctx.beginPath();
+      ctx.moveTo(centerX, y);
+      for (let cy = y + 12; cy < y + marker.height - 54; cy += 22) {
+        ctx.arc(centerX, cy, 8, 0, Math.PI * 2);
+      }
+      ctx.stroke();
+      ctx.fillStyle = "#f59e0b";
+      ctx.beginPath();
+      ctx.arc(centerX, y + marker.height - 44, 22, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#fde68a";
+      ctx.beginPath();
+      ctx.moveTo(centerX - 10, y + marker.height - 32);
+      ctx.quadraticCurveTo(centerX - 48, y + marker.height - 5, centerX - 58, y + marker.height - 40);
+      ctx.moveTo(centerX + 10, y + marker.height - 32);
+      ctx.quadraticCurveTo(centerX + 48, y + marker.height - 5, centerX + 58, y + marker.height - 40);
+      ctx.stroke();
+    } else if (marker.type === "boulder") {
+      ctx.fillStyle = "rgba(30, 41, 59, 0.9)";
+      ctx.beginPath();
+      ctx.arc(x + marker.width / 2, y + marker.height / 2, marker.width / 2, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = "#fb923c";
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x + 36, y + 42);
+      ctx.lineTo(x + marker.width - 34, y + marker.height - 38);
+      ctx.stroke();
+    } else if (marker.type === "slope") {
+      ctx.fillStyle = "rgba(71, 85, 105, 0.62)";
+      ctx.beginPath();
+      ctx.moveTo(x, y + marker.height);
+      ctx.lineTo(x + marker.width, y + marker.height);
+      ctx.lineTo(x + marker.width, y);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "#7dd3fc";
+      ctx.stroke();
+    } else if (marker.type === "exit") {
+      ctx.fillStyle = "rgba(14, 116, 144, 0.4)";
+      ctx.fillRect(x, y, marker.width, marker.height);
+      ctx.strokeStyle = "#67e8f9";
+      ctx.strokeRect(x, y, marker.width, marker.height);
+    }
+
+    ctx.fillStyle = "#fef3c7";
+    ctx.font = "11px Arial";
+    ctx.fillText(marker.label, x - 4, y - 8);
+    ctx.restore();
+  }
 }
 
 function drawTutorialRoomFrames() {
@@ -4999,11 +5291,11 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "v57 수정: 받침대 없이 가까운 두 벽을 연속으로 튕겨 오르는 구조", x: 120, y: 210, width: 620, height: 24 },
-    { text: "각 초대형 방에는 체크포인트가 있어 낙하 시 마지막 저장점으로 복귀", x: 8700, y: 960, width: 560, height: 24 },
-    { text: "현재 단계는 튜토리얼 완성 + 첫 지역 골격 유지 확인용", x: 13600, y: 1180, width: 500, height: 24 },
-    { text: "하층은 강제 구멍 낙하가 아니라 선택 진입 구조로 유지", x: 21600, y: 2380, width: 520, height: 24 },
-    { text: "세로 상승 구역은 이후 큰 벽 안의 파인 공간으로 보강 예정", x: 34200, y: 3950, width: 540, height: 24 }
+    { text: "v58-1: 실제 기믹이 아니라 고정 화면·층·단일 진행 경로를 검증하는 블록아웃", x: 8580, y: 590, width: 680, height: 24 },
+    { text: "파란/보라/주황 테두리는 각각 1층·2층·3층의 고정 카메라 단락", x: 9480, y: 590, width: 620, height: 24 },
+    { text: "CLAW·CANNON·SPRING·BOULDER 표시는 다음 제작에서 실제 기믹으로 교체", x: 10400, y: 590, width: 680, height: 24 },
+    { text: "임시 다리는 클로가 구현되면 제거된다.", x: 10500, y: 1140, width: 420, height: 24 },
+    { text: "추격 구간은 현재 지형과 화면 전환만 확인한다.", x: 9500, y: 1680, width: 480, height: 24 }
   ];
 
   for (const warning of warnings) {
@@ -5012,7 +5304,7 @@ function drawWarnings() {
     }
 
     ctx.fillStyle = "#facc15";
-    ctx.font = "14px Arial";
+    ctx.font = "13px Arial";
     ctx.fillText(warning.text, warning.x - camera.x, warning.y - camera.y);
   }
 }
@@ -5612,7 +5904,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v57 수정: 가까운 두 벽 연속 벽점프", 20, 35);
+  ctx.fillText("13단계-2 v58-1: 첫 초대형 스테이지 고정 화면 블록아웃", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
@@ -5622,7 +5914,7 @@ function drawUI() {
   ctx.fillStyle = "#fef08a";
   ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("맵 구조: 조작별 튜토리얼 방 6개 + 초대형 방 6개 / 카메라: 고정·추적 혼합 / 체크포인트: " + activeCheckpoint.name, 20, 180);
+  ctx.fillText("맵 구조: 튜토리얼 6개 + 첫 초대형 방 16개 고정 단락 / 체크포인트: " + activeCheckpoint.name, 20, 180);
   ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
   ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
 
@@ -5666,10 +5958,12 @@ function drawWorld() {
   ctx.translate(camera.shakeX, camera.shakeY);
   drawRoomBackgrounds();
   drawTutorialRoomFrames();
+  drawMegaStageScreenFrames();
   drawBackgroundDecorations();
 
-  // 표지판은 배경 레이어: 이후에 그리는 모든 실제 오브젝트가 표지판보다 앞에 보인다.
+  // 표지판과 초대형 방의 기믹 예정 표시는 배경 레이어에 둔다.
   drawTutorialSigns();
+  drawMegaStageMarkers();
 
   drawBossRoomDecorations();
   drawRoomLabels();
