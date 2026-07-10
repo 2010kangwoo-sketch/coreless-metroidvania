@@ -168,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v58-6: 첫 번째 초대형 방을 불규칙한 삼중 스네이크 구조로 전면 재설계했습니다.",
+  message: "13단계-2 v58-7: 점프·대시벽·벽점프 튜토리얼 구조를 재검증하고 수정했습니다.",
   hiddenRewards: 0,
   currentRoomId: null,
   transitionOverlayActive: false,
@@ -384,7 +384,7 @@ const tutorialRooms = [
     cameraY: 120,
     floorY: 680,
     signTitle: "두 벽 사이에서 Space : 연속 벽 점프",
-    signLines: ["벽에서 튕긴 뒤 곧바로 반대쪽 벽에 붙으세요.", "받침대 없이 두 벽을 번갈아 타고 정상까지 올라갑니다."]
+    signLines: ["왼쪽 벽 아래의 틈으로 먼저 들어가세요.", "두 벽을 번갈아 타고 오른쪽 위 출구로 넘어갑니다."]
   },
   {
     id: "tutorial_pogo_room",
@@ -587,9 +587,10 @@ const platforms = [
   { x: 6272, y: 150, width: 28, height: 250, area: "tutorial_05_exit_wall" },
   { x: 7872, y: 220, width: 28, height: 260, area: "tutorial_06_exit_wall" },
 
-  // 점프 구역: 떠 있는 발판 대신, 아래까지 닿는 벽 2개를 순서대로 넘는다.
-  { x: 1235, y: 540, width: 90, height: 140, area: "tutorial_jump_wall" },
-  { x: 1485, y: 480, width: 90, height: 200, area: "tutorial_jump_wall" },
+  // 점프 구역: 바닥까지 이어진 벽을 점프로 넘는다.
+  // 캐릭터의 실제 최대 점프 높이보다 25px 이상 여유를 두어 첫 시도에도 통과할 수 있게 한다.
+  { x: 1235, y: 590, width: 90, height: 90, area: "tutorial_jump_wall" },
+  { x: 1495, y: 565, width: 90, height: 115, area: "tutorial_jump_wall" },
 
   // 공격 구역: 적과 전면으로 맞붙는 간단한 훈련실
   { x: 2140, y: 648, width: 80, height: 32, area: "tutorial_attack_bumper" },
@@ -598,13 +599,14 @@ const platforms = [
   { x: 3010, y: 680, width: 260, height: 110, area: "tutorial_dash_lane" },
   { x: 4080, y: 680, width: 220, height: 110, area: "tutorial_dash_lane" },
 
-  // 벽 점프 구역: 일반 거대 벽 2개 사이를 튕겨서 올라간다.
-  { x: 5195, y: 200, width: 86, height: 480, area: "tutorial_wall_left" },
-  { x: 5407, y: 170, width: 86, height: 510, area: "tutorial_wall_right" },
-  { x: 5155, y: 168, width: 140, height: 28, area: "tutorial_wall_left_cap" },
-  { x: 5488, y: 205, width: 620, height: 38, area: "tutorial_wall_exit" },
-  { x: 5760, y: 360, width: 300, height: 32, area: "tutorial_wall_exit_step" },
-  { x: 5990, y: 510, width: 250, height: 32, area: "tutorial_wall_exit_step" },
+  // 벽 점프 구역: 왼쪽 벽 아래의 입구로 들어가 두 벽 사이를 연속 벽 점프로 오른다.
+  // 왼쪽 벽은 천장에 붙여 위에 올라설 수 없게 하고, 아래 80px를 비워 진입로를 만든다.
+  // 오른쪽 벽은 바닥까지 이어지지만 위쪽이 낮아, 정상에서 오른쪽 출구 발판으로 넘어갈 수 있다.
+  { x: 5195, y: 150, width: 64, height: 450, area: "tutorial_wall_left" },
+  { x: 5410, y: 300, width: 64, height: 380, area: "tutorial_wall_right" },
+  { x: 5474, y: 270, width: 634, height: 38, area: "tutorial_wall_exit" },
+  { x: 5760, y: 390, width: 300, height: 32, area: "tutorial_wall_exit_step" },
+  { x: 5990, y: 520, width: 250, height: 32, area: "tutorial_wall_exit_step" },
   { x: 6250, y: 150, width: 64, height: 440, area: "tutorial_forced_descent_wall" },
 
   // 아래 공격 구역: 아래로 빠질 수 없는 벽과 쉬운 표적 배치
@@ -1001,9 +1003,9 @@ function buildRoomObjectIndex() {
 }
 
 const mapData = {
-  version: "v58-6",
+  version: "v58-7",
   stage: "13-2-triple-snake",
-  purpose: "첫 번째 초대형 방을 단일 왕복 구조에서 세 개의 불규칙 스네이크 구간으로 확장했다. 25개 고정 화면, 7개 높이대, 세 번의 주요 낙차와 서로 다른 길이의 회귀 구간을 통해 상하좌우 이동량을 크게 늘린 구조 검증본이다.",
+  purpose: "삼중 스네이크 초대형 방 구조는 유지하면서, 점프 튜토리얼 벽 높이를 실제 점프 가능 범위로 낮추고, 대시 통과벽을 회색 본체·45도 대각선·노란 테두리로 재디자인했으며, 벽 점프 통로에 실제 진입구와 정상 출구를 확보한 수정본이다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -4897,37 +4899,66 @@ function drawDashHazards() {
     if (!isObjectNearCamera(hazard)) {
       continue;
     }
-    const screenX = hazard.x - camera.x;
-    const screenY = hazard.y - camera.y;
-    const pulse = 0.52 + Math.sin(frameCount * 0.12 + hazard.x * 0.01) * 0.10;
+
+    const screenX = Math.round(hazard.x - camera.x);
+    const screenY = Math.round(hazard.y - camera.y);
+    const inset = 4;
+    const stripeGap = 18;
 
     ctx.save();
-    ctx.globalAlpha = 0.92;
-    ctx.fillStyle = "rgba(92, 45, 12, 0.94)";
-    drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 8);
-    ctx.fill();
 
-    ctx.globalAlpha = 0.50 * pulse;
-    ctx.fillStyle = "rgba(245, 158, 11, 0.95)";
-    ctx.fillRect(screenX + 7, screenY + 8, hazard.width - 14, hazard.height - 16);
+    // 자연스러운 일반 회색 벽 본체
+    ctx.fillStyle = "#4b5563";
+    ctx.fillRect(screenX, screenY, hazard.width, hazard.height);
 
-    ctx.globalAlpha = 0.95;
-    ctx.strokeStyle = "#fde68a";
-    ctx.lineWidth = 2;
-    drawRoundedRect(screenX, screenY, hazard.width, hazard.height, 8);
-    ctx.stroke();
+    // 벽 안쪽에만 보이는 45도 양의 대각선(/) 줄무늬
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(
+      screenX + inset,
+      screenY + inset,
+      hazard.width - inset * 2,
+      hazard.height - inset * 2
+    );
+    ctx.clip();
 
-    ctx.strokeStyle = "rgba(254, 240, 138, 0.95)";
+    ctx.strokeStyle = "rgba(203, 213, 225, 0.62)";
     ctx.lineWidth = 3;
-    for (let offset = -hazard.height; offset < hazard.width; offset += 18) {
+
+    // Canvas의 y축은 아래 방향이므로, 왼쪽 아래→오른쪽 위로 그리면 양의 대각선처럼 보인다.
+    for (
+      let offset = -hazard.height;
+      offset < hazard.width + hazard.height;
+      offset += stripeGap
+    ) {
       ctx.beginPath();
-      ctx.moveTo(screenX + Math.max(0, offset), screenY + Math.max(0, -offset));
-      ctx.lineTo(
-        screenX + Math.min(hazard.width, offset + hazard.height),
-        screenY + Math.min(hazard.height, hazard.height - offset)
-      );
+      ctx.moveTo(screenX + offset, screenY + hazard.height);
+      ctx.lineTo(screenX + offset + hazard.height, screenY);
       ctx.stroke();
     }
+
+    ctx.restore();
+
+    // 외곽에만 얇은 노란색 테두리
+    ctx.strokeStyle = "#facc15";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(
+      screenX + 1.5,
+      screenY + 1.5,
+      hazard.width - 3,
+      hazard.height - 3
+    );
+
+    // 벽의 윗면과 아랫면에 약한 금속 음영
+    ctx.fillStyle = "rgba(255, 255, 255, 0.10)";
+    ctx.fillRect(screenX + 4, screenY + 4, hazard.width - 8, 3);
+    ctx.fillStyle = "rgba(15, 23, 42, 0.22)";
+    ctx.fillRect(
+      screenX + 4,
+      screenY + hazard.height - 7,
+      hazard.width - 8,
+      3
+    );
 
     ctx.restore();
   }
@@ -6567,7 +6598,7 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "bold 20px Arial";
-  ctx.fillText("13단계-2 v58-6", 30, 42);
+  ctx.fillText("13단계-2 v58-7", 30, 42);
 
   ctx.font = "14px Arial";
   ctx.fillStyle = "#cbd5e1";
