@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v58-1 수정: 초대형 스테이지 진입구를 개방하고 튜토리얼 하강 유도벽과 가시 함정을 추가
+// v58-1 성능 보정: 화면 밖 계산·블록아웃 표시·가시 렌더링 비용을 줄여 끊김 완화
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -168,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v58-1 수정: 초대형 스테이지 진입구·하강 유도벽·가시 함정을 적용했습니다.",
+  message: "13단계-2 v58-1 성능 보정: 초대형 스테이지의 불필요한 화면 밖 연산을 줄였습니다.",
   hiddenRewards: 0
 };
 
@@ -457,6 +457,12 @@ const megaStageMarkers = [
 ];
 
 let activeMegaStageScreenId = "";
+let activeMegaStageScreenCache = null;
+const megaStageScreenById = new Map();
+
+for (const screen of megaStageScreens) {
+  megaStageScreenById.set(screen.id, screen);
+}
 
 
 const tutorialSigns = tutorialRooms.map(function(room) {
@@ -852,7 +858,7 @@ function buildRoomObjectIndex() {
 const mapData = {
   version: "v58-1",
   stage: "13-2-3-1",
-  purpose: "첫 번째 초대형 방의 3개 지형 층과 16개 고정 카메라 단락을 유지하면서, 막혀 있던 튜토리얼 출입구를 개방하고 상층에서 바닥까지 내려가게 하는 장벽과 피해·반동이 적용되는 가시 함정을 추가한 수정본이다.",
+  purpose: "첫 번째 초대형 방의 3개 층·16개 고정 단락·가시 함정은 유지하면서, 화면 밖 객체 판정의 임시 객체 생성을 제거하고 활성 단락의 표시만 그리며 가시를 캐시 렌더링하여 끊김을 줄인 성능 보정본이다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -1050,13 +1056,14 @@ function isColliding(rectA, rectB) {
 
 // v56 opt: 초대형 맵에서는 카메라 근처와 플레이어 근처만 적극적으로 처리한다.
 const optimizationSettings = {
-  renderMarginX: 320,
-  renderMarginY: 260,
-  collisionRangeX: 1150,
-  collisionRangeY: 900,
-  enemyActiveRangeX: 1800,
-  enemyActiveRangeY: 1300,
-  roomBackgroundMargin: 420,
+  // 고정 화면 스테이지에서는 화면 바깥을 넓게 그릴 필요가 없다.
+  renderMarginX: 140,
+  renderMarginY: 120,
+  collisionRangeX: 900,
+  collisionRangeY: 720,
+  enemyActiveRangeX: 1500,
+  enemyActiveRangeY: 1050,
+  roomBackgroundMargin: 180,
   lightRenderMode: true
 };
 
@@ -1070,49 +1077,61 @@ function invalidateSolidObjectCache() {
   cachedSolidObjects = null;
 }
 
-function getCameraRect(marginX = optimizationSettings.renderMarginX, marginY = optimizationSettings.renderMarginY) {
-  return {
-    x: camera.x - marginX,
-    y: camera.y - marginY,
-    width: canvas.width + marginX * 2,
-    height: canvas.height + marginY * 2
-  };
-}
-
-function getObjectRect(object) {
-  return {
-    x: object.x,
-    y: object.y,
-    width: object.width || 1,
-    height: object.height || 1
-  };
-}
-
 function isObjectNearCamera(object, marginX = optimizationSettings.renderMarginX, marginY = optimizationSettings.renderMarginY) {
-  return isColliding(getCameraRect(marginX, marginY), getObjectRect(object));
+  // 매 호출마다 임시 사각형 객체를 만들지 않고 숫자 비교만 한다.
+  const objectX = object.x || 0;
+  const objectY = object.y || 0;
+  const objectWidth = object.width || 1;
+  const objectHeight = object.height || 1;
+  const left = camera.x - marginX;
+  const top = camera.y - marginY;
+  const right = camera.x + canvas.width + marginX;
+  const bottom = camera.y + canvas.height + marginY;
+
+  return (
+    objectX + objectWidth >= left &&
+    objectX <= right &&
+    objectY + objectHeight >= top &&
+    objectY <= bottom
+  );
 }
 
 function isObjectNearPlayer(object, rangeX = optimizationSettings.collisionRangeX, rangeY = optimizationSettings.collisionRangeY) {
-  const rect = {
-    x: player.x - rangeX,
-    y: player.y - rangeY,
-    width: player.width + rangeX * 2,
-    height: player.height + rangeY * 2
-  };
+  const objectX = object.x || 0;
+  const objectY = object.y || 0;
+  const objectWidth = object.width || 1;
+  const objectHeight = object.height || 1;
+  const left = player.x - rangeX;
+  const top = player.y - rangeY;
+  const right = player.x + player.width + rangeX;
+  const bottom = player.y + player.height + rangeY;
 
-  return isColliding(rect, getObjectRect(object));
+  return (
+    objectX + objectWidth >= left &&
+    objectX <= right &&
+    objectY + objectHeight >= top &&
+    objectY <= bottom
+  );
 }
 
 function getVisibleObjects(objects, marginX = optimizationSettings.renderMarginX, marginY = optimizationSettings.renderMarginY) {
-  return objects.filter(function(object) {
-    return isObjectNearCamera(object, marginX, marginY);
-  });
+  const visible = [];
+  for (const object of objects) {
+    if (isObjectNearCamera(object, marginX, marginY)) {
+      visible.push(object);
+    }
+  }
+  return visible;
 }
 
 function getNearbyObjects(objects, rangeX = optimizationSettings.collisionRangeX, rangeY = optimizationSettings.collisionRangeY) {
-  return objects.filter(function(object) {
-    return isObjectNearPlayer(object, rangeX, rangeY);
-  });
+  const nearby = [];
+  for (const object of objects) {
+    if (isObjectNearPlayer(object, rangeX, rangeY)) {
+      nearby.push(object);
+    }
+  }
+  return nearby;
 }
 
 function isPlayerDamageInvincible() {
@@ -3876,6 +3895,17 @@ function getCurrentMegaStageScreen() {
   const px = centerX(player);
   const py = centerY(player);
 
+  // 대부분의 프레임에서는 같은 단락 안에 있으므로 캐시부터 확인한다.
+  if (
+    activeMegaStageScreenCache &&
+    px >= activeMegaStageScreenCache.x &&
+    px < activeMegaStageScreenCache.x + activeMegaStageScreenCache.width &&
+    py >= activeMegaStageScreenCache.y &&
+    py < activeMegaStageScreenCache.y + activeMegaStageScreenCache.height
+  ) {
+    return activeMegaStageScreenCache;
+  }
+
   for (const screen of megaStageScreens) {
     if (
       px >= screen.x &&
@@ -3883,10 +3913,12 @@ function getCurrentMegaStageScreen() {
       py >= screen.y &&
       py < screen.y + screen.height
     ) {
+      activeMegaStageScreenCache = screen;
       return screen;
     }
   }
 
+  activeMegaStageScreenCache = null;
   return null;
 }
 
@@ -4040,42 +4072,43 @@ function drawRoundedRect(x, y, width, height, radius) {
 function drawMegaStageScreenFrames() {
   const activeScreen = getCurrentMegaStageScreen();
 
-  for (const screen of megaStageScreens) {
-    if (!isObjectNearCamera(screen, 80, 80)) {
-      continue;
-    }
-
-    const screenX = Math.round(screen.x - camera.x);
-    const screenY = Math.round(screen.y - camera.y);
-    const isActive = activeScreen && activeScreen.id === screen.id;
-    const layerColors = {
-      1: "rgba(56, 189, 248, 0.34)",
-      2: "rgba(167, 139, 250, 0.34)",
-      3: "rgba(251, 146, 60, 0.34)"
-    };
-
-    ctx.save();
-    ctx.fillStyle = isActive ? "rgba(15, 23, 42, 0.12)" : "rgba(15, 23, 42, 0.05)";
-    ctx.fillRect(screenX, screenY, screen.width, screen.height);
-
-    ctx.strokeStyle = isActive ? "rgba(226, 232, 240, 0.82)" : layerColors[screen.layer];
-    ctx.lineWidth = isActive ? 3 : 1;
-    ctx.strokeRect(screenX, screenY, screen.width, screen.height);
-
-    ctx.fillStyle = isActive ? "#f8fafc" : "#94a3b8";
-    ctx.font = isActive ? "bold 15px Arial" : "12px Arial";
-    ctx.fillText(screen.order + ". " + screen.title, screenX + 18, screenY + 26);
-
-    ctx.fillStyle = "rgba(203, 213, 225, 0.76)";
-    ctx.font = "11px Arial";
-    ctx.fillText(screen.plannedGimmick, screenX + 18, screenY + 45);
-    ctx.restore();
+  if (!activeScreen) {
+    return;
   }
+
+  const screenX = Math.round(activeScreen.x - camera.x);
+  const screenY = Math.round(activeScreen.y - camera.y);
+
+  ctx.save();
+  ctx.fillStyle = "rgba(15, 23, 42, 0.08)";
+  ctx.fillRect(screenX, screenY, activeScreen.width, activeScreen.height);
+
+  ctx.strokeStyle =
+    activeScreen.layer === 1 ? "rgba(56, 189, 248, 0.58)" :
+    activeScreen.layer === 2 ? "rgba(167, 139, 250, 0.58)" :
+    "rgba(251, 146, 60, 0.58)";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(screenX, screenY, activeScreen.width, activeScreen.height);
+
+  ctx.fillStyle = "#f8fafc";
+  ctx.font = "bold 14px Arial";
+  ctx.fillText(activeScreen.order + ". " + activeScreen.title, screenX + 18, screenY + 25);
+
+  ctx.fillStyle = "rgba(203, 213, 225, 0.75)";
+  ctx.font = "11px Arial";
+  ctx.fillText(activeScreen.plannedGimmick, screenX + 18, screenY + 44);
+  ctx.restore();
 }
 
 function drawMegaStageMarkers() {
+  const activeScreen = getCurrentMegaStageScreen();
+
+  if (!activeScreen) {
+    return;
+  }
+
   for (const marker of megaStageMarkers) {
-    if (!isObjectNearCamera(marker, 180, 180)) {
+    if (marker.screenId !== activeScreen.id) {
       continue;
     }
 
@@ -4295,10 +4328,8 @@ function drawCheckpoints() {
 }
 
 function drawRoomBackgrounds() {
-  // v56 lag-fix: 거대한 방 배경을 월드 전체 높이로 그리지 않고, 현재 화면에 보이는 부분만 그린다.
-  // 이전 방식처럼 8000px 이상 높이의 사각형을 매 프레임 그리면, 실제 캐릭터 속도는 그대로여도 화면 전체가 슬로우모션처럼 보일 수 있다.
-  const visibleTop = Math.max(0, camera.y - 30);
-  const visibleBottom = Math.min(world.height, camera.y + canvas.height + 30);
+  const visibleTop = Math.max(0, camera.y - 20);
+  const visibleBottom = Math.min(world.height, camera.y + canvas.height + 20);
   const visibleHeight = Math.max(0, visibleBottom - visibleTop);
   const visibleLeft = camera.x - optimizationSettings.roomBackgroundMargin;
   const visibleRight = camera.x + canvas.width + optimizationSettings.roomBackgroundMargin;
@@ -4311,52 +4342,39 @@ function drawRoomBackgrounds() {
       continue;
     }
 
-    const drawLeft = Math.max(roomLeft, camera.x - 30);
-    const drawRight = Math.min(roomRight, camera.x + canvas.width + 30);
+    const drawLeft = Math.max(roomLeft, camera.x - 20);
+    const drawRight = Math.min(roomRight, camera.x + canvas.width + 20);
     const drawWidth = Math.max(0, drawRight - drawLeft);
 
     if (drawWidth <= 0 || visibleHeight <= 0) {
       continue;
     }
+
+    const screenX = drawLeft - camera.x;
+    const screenY = visibleTop - camera.y;
 
     ctx.fillStyle = room.color;
-    ctx.fillRect(drawLeft - camera.x, visibleTop - camera.y, drawWidth, visibleHeight);
-  }
+    ctx.fillRect(screenX, screenY, drawWidth, visibleHeight);
 
-  for (const room of rooms) {
-    const roomLeft = room.x;
-    const roomRight = room.x + room.width;
-
-    if (roomRight < visibleLeft || roomLeft > visibleRight) {
-      continue;
-    }
-
-    const drawLeft = Math.max(roomLeft, camera.x - 30);
-    const drawRight = Math.min(roomRight, camera.x + canvas.width + 30);
-    const drawWidth = Math.max(0, drawRight - drawLeft);
-
-    if (drawWidth <= 0 || visibleHeight <= 0) {
-      continue;
-    }
-
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
-    ctx.lineWidth = 2;
-    ctx.strokeRect(drawLeft - camera.x, visibleTop - camera.y, drawWidth, visibleHeight);
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.10)";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(screenX, screenY, drawWidth, visibleHeight);
   }
 }
 
 function drawBackgroundDecorations() {
-  // v56 smooth-fix: 초대형 방에서는 반복 배경선이 끊김의 원인이 되기 쉽다.
-  // 따라서 현재는 아주 적은 수의 큰 배경 기둥만 그려서 화면 부하를 줄인다.
-  const startColumn = Math.max(0, Math.floor((camera.x - 260) / 720) * 720);
-  const endColumn = Math.min(world.width, camera.x + canvas.width + 260);
+  // 초대형 고정 화면 안에서는 배경 기둥을 한 화면당 최대 1개만 그린다.
+  const activeMegaScreen = getCurrentMegaStageScreen();
 
   ctx.save();
-  ctx.fillStyle = "rgba(148, 163, 184, 0.055)";
+  ctx.fillStyle = "rgba(148, 163, 184, 0.045)";
 
-  for (let x = startColumn + 260; x < endColumn; x += 720) {
-    const screenX = Math.round(x - camera.x);
-    ctx.fillRect(screenX, 60, 70, canvas.height - 120);
+  if (activeMegaScreen) {
+    const screenX = Math.round(activeMegaScreen.x + activeMegaScreen.width * 0.72 - camera.x);
+    ctx.fillRect(screenX, 70, 62, canvas.height - 140);
+  } else {
+    const columnX = Math.floor((camera.x + canvas.width * 0.55) / 900) * 900;
+    ctx.fillRect(Math.round(columnX - camera.x), 70, 62, canvas.height - 140);
   }
 
   ctx.restore();
@@ -4399,49 +4417,62 @@ function drawBossRoomDecorations() {
   ctx.restore();
 }
 
+const spikeSpriteCache = new Map();
+
+function getSpikeSprite(width, height) {
+  const key = width + "x" + height;
+
+  if (spikeSpriteCache.has(key)) {
+    return spikeSpriteCache.get(key);
+  }
+
+  const sprite = document.createElement("canvas");
+  sprite.width = Math.max(1, Math.ceil(width));
+  sprite.height = Math.max(1, Math.ceil(height));
+  const spriteCtx = sprite.getContext("2d");
+  const spikeWidth = 22;
+  const count = Math.max(1, Math.floor(width / spikeWidth));
+  const actualWidth = width / count;
+
+  spriteCtx.fillStyle = "#475569";
+  spriteCtx.fillRect(0, height - 7, width, 7);
+
+  for (let i = 0; i < count; i++) {
+    const left = i * actualWidth;
+    const right = left + actualWidth;
+    const center = (left + right) / 2;
+
+    spriteCtx.beginPath();
+    spriteCtx.moveTo(left + 2, height - 7);
+    spriteCtx.lineTo(center, 0);
+    spriteCtx.lineTo(right - 2, height - 7);
+    spriteCtx.closePath();
+
+    // 매 프레임 gradient를 새로 만들지 않고 단순한 두 톤으로 고정 렌더링한다.
+    spriteCtx.fillStyle = i % 2 === 0 ? "#94a3b8" : "#64748b";
+    spriteCtx.fill();
+
+    spriteCtx.strokeStyle = "rgba(248, 250, 252, 0.62)";
+    spriteCtx.lineWidth = 1;
+    spriteCtx.stroke();
+  }
+
+  spikeSpriteCache.set(key, sprite);
+  return sprite;
+}
+
 function drawSpikeTraps() {
   for (const spike of spikeTraps) {
-    if (!isObjectNearCamera(spike, 160, 120)) {
+    if (!isObjectNearCamera(spike, 90, 70)) {
       continue;
     }
 
-    const screenX = Math.round(spike.x - camera.x);
-    const screenY = Math.round(spike.y - camera.y);
-    const spikeWidth = 22;
-    const count = Math.max(1, Math.floor(spike.width / spikeWidth));
-    const actualWidth = spike.width / count;
-
-    ctx.save();
-
-    // 바닥 받침판
-    ctx.fillStyle = "rgba(71, 85, 105, 0.95)";
-    ctx.fillRect(screenX, screenY + spike.height - 7, spike.width, 7);
-
-    // 금속 가시
-    for (let i = 0; i < count; i++) {
-      const left = screenX + i * actualWidth;
-      const right = left + actualWidth;
-      const center = (left + right) / 2;
-
-      ctx.beginPath();
-      ctx.moveTo(left + 2, screenY + spike.height - 7);
-      ctx.lineTo(center, screenY);
-      ctx.lineTo(right - 2, screenY + spike.height - 7);
-      ctx.closePath();
-
-      const gradient = ctx.createLinearGradient(left, screenY, right, screenY + spike.height);
-      gradient.addColorStop(0, "#cbd5e1");
-      gradient.addColorStop(0.55, "#64748b");
-      gradient.addColorStop(1, "#334155");
-      ctx.fillStyle = gradient;
-      ctx.fill();
-
-      ctx.strokeStyle = "rgba(248, 250, 252, 0.72)";
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    }
-
-    ctx.restore();
+    const sprite = getSpikeSprite(spike.width, spike.height);
+    ctx.drawImage(
+      sprite,
+      Math.round(spike.x - camera.x),
+      Math.round(spike.y - camera.y)
+    );
   }
 }
 
@@ -4495,10 +4526,21 @@ function drawDashHazards() {
 }
 
 function drawPlatforms() {
+  const left = camera.x - 80;
+  const top = camera.y - 70;
+  const right = camera.x + canvas.width + 80;
+  const bottom = camera.y + canvas.height + 70;
+
   for (const platform of platforms) {
-    if (!isObjectNearCamera(platform)) {
+    if (
+      platform.x + platform.width < left ||
+      platform.x > right ||
+      platform.y + platform.height < top ||
+      platform.y > bottom
+    ) {
       continue;
     }
+
     const screenX = platform.x - camera.x;
     const screenY = platform.y - camera.y;
 
@@ -6011,54 +6053,44 @@ function drawEndingPanel() {
 
 function drawUI() {
   const currentRoom = getCurrentRoom();
-  const playerState = playerAnimation.state;
+  const activeMegaScreen = getCurrentMegaStageScreen();
+
   ctx.fillStyle = "white";
-  ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v58-1 수정: 스테이지 진입 + 하강벽 + 가시", 20, 35);
-  ctx.font = "16px Arial";
-  ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
+  ctx.font = "18px Arial";
+  ctx.fillText("13단계-2 v58-1 성능 보정: 부드러운 고정 화면 스테이지", 20, 30);
+
+  ctx.font = "14px Arial";
+  ctx.fillStyle = "#cbd5e1";
+  ctx.fillText("A/D 이동 | Space 점프 | Shift/K 대시 | J 공격 | L 회복", 20, 55);
+
   ctx.fillStyle = "#bfdbfe";
-  ctx.fillText("현재 방: " + currentRoom.name, 20, 95);
-  ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("방 설명: " + currentRoom.guide + " / 역할: " + currentRoom.role, 20, 120);
+  ctx.fillText(
+    activeMegaScreen
+      ? "현재 단락: " + activeMegaScreen.order + ". " + activeMegaScreen.title
+      : "현재 방: " + currentRoom.name,
+    20,
+    82
+  );
+
   ctx.fillStyle = "#fef08a";
-  ctx.fillText("캐릭터 상태: " + getStateName(playerState), 20, 150);
-  ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("맵 구조: 튜토리얼 6개 + 첫 초대형 방 16개 고정 단락 / 체크포인트: " + activeCheckpoint.name, 20, 180);
-  ctx.fillStyle = gameState.hasKey ? "#fef08a" : "#fecaca";
-  ctx.fillText(gameState.hasKey ? "열쇠: 보유 중" : "열쇠: 없음", 20, 210);
+  ctx.fillText("체크포인트: " + activeCheckpoint.name, 20, 106);
 
   if (player.dashCooldown <= 0) {
     ctx.fillStyle = "#bbf7d0";
-    ctx.fillText("대시: 사용 가능", 20, 240);
+    ctx.fillText("대시 사용 가능", 20, 130);
   } else {
     const cooldownPercent = Math.ceil((player.dashCooldown / player.dashCooldownMax) * 100);
-    ctx.fillStyle = player.dashInvincibleTimer > 0 ? "#fef08a" : "#fde68a";
-    ctx.fillText(player.dashInvincibleTimer > 0 ? "대시 무적 중" : "대시 쿨타임: " + cooldownPercent + "%", 20, 240);
+    ctx.fillStyle = "#fde68a";
+    ctx.fillText("대시 쿨타임 " + cooldownPercent + "%", 20, 130);
   }
 
-  ctx.fillStyle = player.hasDoubleJump ? "#c4b5fd" : "#cbd5e1";
-  ctx.fillText(player.hasDoubleJump ? "능력: 이중 점프 획득" : "능력: 없음", 20, 265);
-  if (player.isWallSliding) {
-    ctx.fillStyle = "#a7f3d0";
-    ctx.fillText("벽 상태: 미끄러짐 중", 180, 265);
-  } else if (player.hasWallJump) {
-    ctx.fillStyle = "#86efac";
-    ctx.fillText("벽 점프: 사용 가능", 180, 265);
-  }
-  ctx.fillStyle = "#fef3c7";
-  ctx.fillText("기억 조각: " + gameState.memoryFragments + "개", 20, 290);
-  ctx.fillStyle = "#e9d5ff";
-  ctx.fillText("기억 핵: " + gameState.memoryCores + "개", 20, 315);
-  ctx.fillStyle = "#bae6fd";
-  ctx.fillText("원점 코어: " + gameState.originCores + "개", 20, 340);
-  ctx.fillStyle = "#bbf7d0";
-  ctx.fillText("숨겨진 보상: " + gameState.hiddenRewards + "개", 20, 365);
   drawHealthUI();
   drawCoreEnergyUI();
+
   ctx.fillStyle = "#e2e8f0";
-  ctx.font = "15px Arial";
+  ctx.font = "14px Arial";
   ctx.fillText(gameState.message, 20, 472);
+
   drawBossHealthBar();
   drawMiniMap();
 }
