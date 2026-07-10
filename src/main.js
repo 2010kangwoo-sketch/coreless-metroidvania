@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v57 수정: 대시 전용 통과벽을 추가하고 벽 점프 통로의 높이·받침대를 보정
+// v57 수정: 벽 점프 튜토리얼의 내부 받침대를 제거하고 가까운 두 벽을 연속으로 튕겨 오르게 재설계
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -168,7 +168,7 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v57 튜토리얼 수정: 대시 통과벽과 낮아진 두 벽 점프 통로를 적용했습니다.",
+  message: "13단계-2 v57 벽 점프 수정: 받침대 없이 가까운 두 벽을 연속으로 튕겨 올라가도록 바꿨습니다.",
   hiddenRewards: 0
 };
 
@@ -367,14 +367,14 @@ const tutorialRooms = [
     id: "tutorial_wall_room",
     title: "튜토리얼 5: 벽 점프",
     x: 4500,
-    y: 180,
+    y: 150,
     width: 1800,
-    height: 820,
+    height: 850,
     cameraMode: "follow",
-    cameraY: 150,
+    cameraY: 120,
     floorY: 680,
-    signTitle: "두 벽 사이에서 Space : 벽 점프",
-    signLines: ["한쪽 벽에서 점프한 뒤 반대쪽 벽에 붙습니다.", "중간 받침대에서 쉬면서 낮아진 벽 위 출구로 올라가세요."]
+    signTitle: "두 벽 사이에서 Space : 연속 벽 점프",
+    signLines: ["벽에서 튕긴 뒤 곧바로 반대쪽 벽에 붙으세요.", "받침대 없이 두 벽을 번갈아 타고 정상까지 올라갑니다."]
   },
   {
     id: "tutorial_pogo_room",
@@ -449,22 +449,22 @@ const platforms = [
   { x: 3200, y: 650, width: 280, height: 30, area: "tutorial_dash_runup", abilityChallenge: "dash" },
   { x: 3920, y: 650, width: 300, height: 30, area: "tutorial_dash_landing", abilityChallenge: "dash" },
 
-  // 벽 점프 학습용 두 벽 수직 통로.
-  // 기존보다 벽을 낮추고 간격을 약간 좁혀 반대편 벽에 안정적으로 닿게 한다.
-  { x: 5140, y: 330, width: 58, height: 260, area: "tutorial_wall_left", wallJumpTest: true, abilityChallenge: "wallJump" },
-  { x: 5440, y: 330, width: 58, height: 260, area: "tutorial_wall_right", wallJumpTest: true, abilityChallenge: "wallJump" },
+  // 벽 점프 학습용 가까운 두 벽 수직 통로.
+  // 내부 받침대를 모두 없애고, 두 벽의 안쪽 간격을 130px로 좁혀
+  // 한쪽 벽에서 튕긴 뒤 반대편 벽에 자연스럽게 붙도록 만든다.
+  //
+  // 왼쪽 벽 아래에는 70px 높이의 진입구를 남겨 바닥에서 통로 안으로 걸어 들어갈 수 있다.
+  // 오른쪽 벽은 바닥까지 이어져 옆으로 빠지는 것을 막는다.
+  { x: 5200, y: 240, width: 58, height: 370, area: "tutorial_wall_left", wallJumpTest: true, abilityChallenge: "wallJump" },
+  { x: 5388, y: 240, width: 58, height: 440, area: "tutorial_wall_right", wallJumpTest: true, abilityChallenge: "wallJump" },
 
-  // 통로 안쪽의 넓은 받침대. 올라가는 중간에 멈추고 다시 벽 점프를 시작할 수 있다.
-  { x: 5198, y: 520, width: 96, height: 24, area: "tutorial_wall_rest_left", abilityChallenge: "wallJump" },
-  { x: 5344, y: 445, width: 96, height: 24, area: "tutorial_wall_rest_right", abilityChallenge: "wallJump" },
-  { x: 5198, y: 375, width: 108, height: 24, area: "tutorial_wall_rest_left_top", abilityChallenge: "wallJump" },
+  // 벽 정상 바깥쪽에만 착지 발판을 둔다.
+  // 통로 내부에는 발판이 없으므로 두 벽을 계속 번갈아 타야 한다.
+  { x: 5388, y: 205, width: 690, height: 38, area: "tutorial_wall_exit", abilityChallenge: "wallJump" },
 
-  // 오른쪽 벽 정상 안쪽으로 돌출된 받침대를 만들어 마지막 점프 후 확실히 착지할 수 있게 한다.
-  { x: 5380, y: 305, width: 700, height: 38, area: "tutorial_wall_exit", abilityChallenge: "wallJump" },
-
-  // 출구 이후에는 높이가 서서히 낮아지는 넓은 발판으로 다음 방에 연결한다.
-  { x: 5750, y: 390, width: 300, height: 32, area: "tutorial_wall_exit_step" },
-  { x: 5980, y: 520, width: 270, height: 32, area: "tutorial_wall_exit_step" },
+  // 정상에 도착한 뒤 다음 튜토리얼로 내려가는 넓은 계단형 연결 발판.
+  { x: 5750, y: 360, width: 300, height: 32, area: "tutorial_wall_exit_step" },
+  { x: 5980, y: 510, width: 270, height: 32, area: "tutorial_wall_exit_step" },
 
   // 아래 공격 튕김 학습용 발판. 표적을 공격하고 위쪽으로 튕기는 감각을 확인한다.
   { x: 6540, y: 555, width: 320, height: 30, area: "tutorial_pogo_step", abilityChallenge: "pogo" },
@@ -708,7 +708,7 @@ function buildRoomObjectIndex() {
 const mapData = {
   version: "v57",
   stage: "13-2-2",
-  purpose: "대시 방에는 대시로만 통과하는 특수 기억벽을 설치하고, 벽 점프 방은 낮은 두 벽과 중간 받침대·정상 착지대를 갖춘 구조로 보정했다. 기존 델타 보정과 최적화는 유지한다.",
+  purpose: "대시 전용 기억벽은 유지하고, 벽 점프 방은 내부 받침대를 제거한 뒤 간격이 가까운 두 벽을 연속으로 번갈아 타는 구조로 다시 설계했다. 정상 바깥쪽에만 착지대를 두며 기존 델타 보정과 최적화는 유지한다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -4999,7 +4999,7 @@ function drawRoomLabels() {
 
 function drawWarnings() {
   const warnings = [
-    { text: "v57 수정: 대시 통과벽과 낮은 두 벽 점프 통로·받침대 적용", x: 120, y: 210, width: 600, height: 24 },
+    { text: "v57 수정: 받침대 없이 가까운 두 벽을 연속으로 튕겨 오르는 구조", x: 120, y: 210, width: 620, height: 24 },
     { text: "각 초대형 방에는 체크포인트가 있어 낙하 시 마지막 저장점으로 복귀", x: 8700, y: 960, width: 560, height: 24 },
     { text: "현재 단계는 튜토리얼 완성 + 첫 지역 골격 유지 확인용", x: 13600, y: 1180, width: 500, height: 24 },
     { text: "하층은 강제 구멍 낙하가 아니라 선택 진입 구조로 유지", x: 21600, y: 2380, width: 520, height: 24 },
@@ -5612,7 +5612,7 @@ function drawUI() {
   const playerState = playerAnimation.state;
   ctx.fillStyle = "white";
   ctx.font = "20px Arial";
-  ctx.fillText("13단계-2 v57 수정: 대시 통과벽 + 벽점프 받침대", 20, 35);
+  ctx.fillText("13단계-2 v57 수정: 가까운 두 벽 연속 벽점프", 20, 35);
   ctx.font = "16px Arial";
   ctx.fillText("A/D 이동 | Space 점프/벽점프 | Shift/K 대시 | J 공격 | W+J 위 | 공중 S+J 아래 | L 회복", 20, 65);
   ctx.fillStyle = "#bfdbfe";
