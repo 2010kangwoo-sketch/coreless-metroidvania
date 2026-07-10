@@ -6,7 +6,7 @@ if (!canvas) {
 
 const ctx = canvas.getContext("2d");
 
-// v58-1 성능 보정: 화면 밖 계산·블록아웃 표시·가시 렌더링 비용을 줄여 끊김 완화
+// v58-2: 첫 번째 초대형 스테이지의 단일 경로·고정 카메라 전환·체크포인트 복귀를 안정화
 
 if (canvas.width < 900) {
   canvas.width = 900;
@@ -168,16 +168,16 @@ const gameState = {
   endingReached: false,
   endingFrame: 0,
   endingInputUnlocked: false,
-  message: "13단계-2 v58-1 성능 보정: 초대형 스테이지의 불필요한 화면 밖 연산을 줄였습니다.",
+  message: "13단계-2 v58-2: 단일 경로·카메라 전환·체크포인트 안정화를 적용했습니다.",
   hiddenRewards: 0
 };
 
 
 const checkpoints = [
   { id: "tutorial_start", name: "튜토리얼 시작점", x: 110, y: 620, width: 34, height: 58, spawnX: 90, spawnY: 540, activated: true, roomId: "tutorial_zone_blockout" },
-  { id: "mega_stage_start_cp", name: "초대형 스테이지 시작 체크포인트", x: 8580, y: 618, width: 36, height: 62, spawnX: 8520, spawnY: 610, activated: false, roomId: "entry_cliff_blockout" },
-  { id: "mega_stage_mid_cp", name: "클로 구간 완료 체크포인트", x: 11240, y: 1138, width: 36, height: 62, spawnX: 11180, spawnY: 1130, activated: false, roomId: "entry_cliff_blockout" },
-  { id: "mega_stage_chase_cp", name: "붕괴석 추격 전 체크포인트", x: 8650, y: 1658, width: 36, height: 62, spawnX: 8590, spawnY: 1650, activated: false, roomId: "entry_cliff_blockout" },
+  { id: "mega_stage_start_cp", name: "초대형 스테이지 시작 체크포인트", x: 8580, y: 618, width: 36, height: 62, spawnX: 8520, spawnY: 610, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_01" },
+  { id: "mega_stage_mid_cp", name: "클로 구간 완료 체크포인트", x: 10170, y: 1138, width: 36, height: 62, spawnX: 10110, spawnY: 1130, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_09" },
+  { id: "mega_stage_chase_cp", name: "붕괴석 추격 전 체크포인트", x: 8650, y: 1658, width: 36, height: 62, spawnX: 8590, spawnY: 1650, activated: false, roomId: "entry_cliff_blockout", screenId: "mega_11" },
   { id: "central_cavern_cp", name: "중앙 대공동 체크포인트", x: 13680, y: 1236, width: 36, height: 62, spawnX: 13620, spawnY: 1210, activated: false, roomId: "central_cavern_blockout" },
   { id: "lower_ruins_cp", name: "하층 폐허 체크포인트", x: 21680, y: 2436, width: 36, height: 62, spawnX: 21620, spawnY: 2410, activated: false, roomId: "lower_ruins_blockout" },
   { id: "long_corridor_cp", name: "긴 폐허 회랑 체크포인트", x: 27680, y: 1116, width: 36, height: 62, spawnX: 27620, spawnY: 1090, activated: false, roomId: "long_ruin_corridor_blockout" },
@@ -458,11 +458,60 @@ const megaStageMarkers = [
 
 let activeMegaStageScreenId = "";
 let activeMegaStageScreenCache = null;
-const megaStageScreenById = new Map();
+let debugOverlayEnabled = true;
 
+const megaStageScreenById = new Map();
 for (const screen of megaStageScreens) {
   megaStageScreenById.set(screen.id, screen);
 }
+
+const megaStageBounds = {
+  x: 8500,
+  y: 160,
+  width: 5000,
+  height: 1600
+};
+
+const megaStageRouteState = {
+  activeOrder: 0,
+  highestOrder: 0,
+  invalidRouteCooldown: 0
+};
+
+const megaStageCameraTransition = {
+  active: false,
+  elapsed: 0,
+  duration: 18,
+  fromX: 0,
+  fromY: 0,
+  toX: 0,
+  toY: 0
+};
+
+// 층 전환을 마친 뒤 닫히는 문이다.
+// 첫 번째 문은 1층→2층 이후, 두 번째 문은 2층→3층 이후 역주행을 막는다.
+const megaStageRouteGates = [
+  {
+    id: "mega_gate_layer2",
+    name: "1층 복귀 차단문",
+    x: 12920,
+    y: 760,
+    width: 44,
+    height: 440,
+    closeAtOrder: 7,
+    closed: false
+  },
+  {
+    id: "mega_gate_layer3",
+    name: "2층 복귀 차단문",
+    x: 8960,
+    y: 1280,
+    width: 44,
+    height: 440,
+    closeAtOrder: 12,
+    closed: false
+  }
+];
 
 
 const tutorialSigns = tutorialRooms.map(function(room) {
@@ -856,9 +905,9 @@ function buildRoomObjectIndex() {
 }
 
 const mapData = {
-  version: "v58-1",
-  stage: "13-2-3-1",
-  purpose: "첫 번째 초대형 방의 3개 층·16개 고정 단락·가시 함정은 유지하면서, 화면 밖 객체 판정의 임시 객체 생성을 제거하고 활성 단락의 표시만 그리며 가시를 캐시 렌더링하여 끊김을 줄인 성능 보정본이다.",
+  version: "v58-2",
+  stage: "13-2-3-2",
+  purpose: "첫 번째 초대형 방의 3개 층과 16개 고정 단락을 실제로 순서대로 완주할 수 있도록 단락 전환의 흔들림을 막고, 두 층 전환 뒤에는 역주행 방지문을 닫으며, 체크포인트 복귀 시 카메라·경로·투사체 상태를 함께 초기화한 안정화본이다.",
   roomCount: roomBlueprints.length,
   worldBounds: world,
   rooms: roomBlueprints,
@@ -976,6 +1025,15 @@ function createShooterEnemy(name, x, y) {
 
 document.addEventListener("keydown", function(event) {
   keys[event.code] = true;
+
+  if (event.code === "F1" && !event.repeat) {
+    debugOverlayEnabled = !debugOverlayEnabled;
+    gameState.message = debugOverlayEnabled
+      ? "개발용 화면 경계와 기믹 예정 표시를 켰습니다."
+      : "개발용 화면 경계와 기믹 예정 표시를 숨겼습니다.";
+    event.preventDefault();
+    return;
+  }
 
   if (gameState.endingReached && gameState.endingInputUnlocked && event.code === "KeyR") {
     location.reload();
@@ -1200,6 +1258,12 @@ function buildSolidObjectsForCurrentFrame() {
       if (hazard.blocksWithoutDash) {
         solidObjects.push(hazard);
       }
+    }
+  }
+
+  for (const gate of megaStageRouteGates) {
+    if (gate.closed && isObjectNearPlayer(gate, 1100, 850)) {
+      solidObjects.push(gate);
     }
   }
 
@@ -2232,6 +2296,7 @@ function updatePlayer() {
   checkDashHazardDamage();
   checkSpikeTrapDamage();
   checkCheckpointActivation();
+  updateMegaStageRouteState();
   checkFall();
 }
 
@@ -2430,6 +2495,19 @@ function getFallLimitForCurrentRoom() {
 }
 
 function checkFall() {
+  const px = centerX(player);
+
+  // 첫 초대형 스테이지의 가장 아래 바닥은 y=1720이다.
+  // 화면 아래로 완전히 벗어나면 다른 지역으로 떨어지게 두지 않고 즉시 복귀시킨다.
+  if (px >= megaStageBounds.x && px < megaStageBounds.x + megaStageBounds.width) {
+    if (player.y > 1880) {
+      respawnAtCheckpoint(
+        "초대형 스테이지 아래로 추락했습니다. 마지막 체크포인트로 돌아갑니다."
+      );
+      return;
+    }
+  }
+
   if (player.y > getFallLimitForCurrentRoom()) {
     respawnAtCheckpoint("낙하했습니다. 마지막 체크포인트에서 다시 시작합니다.");
   }
@@ -2462,11 +2540,31 @@ function resetPlayer() {
   gameState.message = "시작 지점에서 다시 시작합니다.";
 }
 
+function resetTransientStageObjects() {
+  projectiles.length = 0;
+  shardWarnings.length = 0;
+  particles.length = 0;
+  floatingTexts.length = 0;
+}
+
 function respawnAtCheckpoint(message) {
   const checkpoint = activeCheckpoint || checkpoints[0];
   player.x = checkpoint.spawnX;
   player.y = checkpoint.spawnY;
   restorePlayerStateAfterRespawn();
+  resetTransientStageObjects();
+
+  if (checkpoint.screenId) {
+    syncMegaStageRouteToCheckpoint(checkpoint, true);
+  } else {
+    activeMegaStageScreenId = "";
+    activeMegaStageScreenCache = null;
+    megaStageRouteState.activeOrder = 0;
+    megaStageRouteState.highestOrder = 0;
+    updateMegaStageRouteGates();
+  }
+
+  invalidateSolidObjectCache();
   gameState.message = message || checkpoint.name + "에서 다시 시작합니다.";
 }
 
@@ -2481,6 +2579,18 @@ function checkCheckpointActivation() {
       if (activeCheckpoint !== checkpoint) {
         activeCheckpoint = checkpoint;
         checkpoint.activated = true;
+
+        if (checkpoint.screenId) {
+          const screen = megaStageScreenById.get(checkpoint.screenId);
+          if (screen) {
+            megaStageRouteState.highestOrder = Math.max(
+              megaStageRouteState.highestOrder,
+              screen.order
+            );
+            updateMegaStageRouteGates();
+          }
+        }
+
         gameState.message = checkpoint.name + "를 활성화했습니다.";
         addFloatingText("CHECK", checkpoint.x + checkpoint.width / 2, checkpoint.y - 10, "#bae6fd");
       }
@@ -3891,28 +4001,29 @@ function getCurrentTutorialRoom() {
 }
 
 
-function getCurrentMegaStageScreen() {
-  const px = centerX(player);
-  const py = centerY(player);
+function isPointInsideRect(x, y, rect) {
+  return (
+    x >= rect.x &&
+    x < rect.x + rect.width &&
+    y >= rect.y &&
+    y < rect.y + rect.height
+  );
+}
 
-  // 대부분의 프레임에서는 같은 단락 안에 있으므로 캐시부터 확인한다.
+function isPlayerInsideMegaStage() {
+  return isPointInsideRect(centerX(player), centerY(player), megaStageBounds);
+}
+
+function findMegaStageScreenAtPosition(x, y) {
   if (
     activeMegaStageScreenCache &&
-    px >= activeMegaStageScreenCache.x &&
-    px < activeMegaStageScreenCache.x + activeMegaStageScreenCache.width &&
-    py >= activeMegaStageScreenCache.y &&
-    py < activeMegaStageScreenCache.y + activeMegaStageScreenCache.height
+    isPointInsideRect(x, y, activeMegaStageScreenCache)
   ) {
     return activeMegaStageScreenCache;
   }
 
   for (const screen of megaStageScreens) {
-    if (
-      px >= screen.x &&
-      px < screen.x + screen.width &&
-      py >= screen.y &&
-      py < screen.y + screen.height
-    ) {
+    if (isPointInsideRect(x, y, screen)) {
       activeMegaStageScreenCache = screen;
       return screen;
     }
@@ -3920,6 +4031,129 @@ function getCurrentMegaStageScreen() {
 
   activeMegaStageScreenCache = null;
   return null;
+}
+
+function startMegaStageCameraTransition(screen) {
+  megaStageCameraTransition.active = true;
+  megaStageCameraTransition.elapsed = 0;
+  megaStageCameraTransition.fromX = camera.x;
+  megaStageCameraTransition.fromY = camera.y;
+  megaStageCameraTransition.toX = screen.cameraX;
+  megaStageCameraTransition.toY = screen.cameraY;
+}
+
+function setMegaStageActiveScreen(screen, useTransition = true) {
+  if (!screen) {
+    return;
+  }
+
+  const changed = activeMegaStageScreenId !== screen.id;
+  activeMegaStageScreenId = screen.id;
+  activeMegaStageScreenCache = screen;
+  megaStageRouteState.activeOrder = screen.order;
+  megaStageRouteState.highestOrder = Math.max(
+    megaStageRouteState.highestOrder,
+    screen.order
+  );
+
+  if (changed && useTransition) {
+    startMegaStageCameraTransition(screen);
+    gameState.message =
+      screen.order + "번째 단락: " +
+      screen.title +
+      " / 예정 기믹: " +
+      screen.plannedGimmick;
+  }
+}
+
+function updateMegaStageRouteGates() {
+  for (const gate of megaStageRouteGates) {
+    gate.closed = megaStageRouteState.highestOrder >= gate.closeAtOrder;
+  }
+}
+
+function syncMegaStageRouteToCheckpoint(checkpoint, snapCamera = true) {
+  if (!checkpoint || !checkpoint.screenId) {
+    return;
+  }
+
+  const screen = megaStageScreenById.get(checkpoint.screenId);
+  if (!screen) {
+    return;
+  }
+
+  megaStageRouteState.activeOrder = screen.order;
+  megaStageRouteState.highestOrder = screen.order;
+  megaStageRouteState.invalidRouteCooldown = 0;
+  activeMegaStageScreenId = screen.id;
+  activeMegaStageScreenCache = screen;
+  updateMegaStageRouteGates();
+
+  megaStageCameraTransition.active = false;
+  megaStageCameraTransition.elapsed = 0;
+
+  if (snapCamera) {
+    camera.x = screen.cameraX;
+    camera.y = screen.cameraY;
+  }
+}
+
+function updateMegaStageRouteState() {
+  if (megaStageRouteState.invalidRouteCooldown > 0) {
+    megaStageRouteState.invalidRouteCooldown -= frameTimeScale;
+  }
+
+  const px = centerX(player);
+  const py = centerY(player);
+  const candidate = findMegaStageScreenAtPosition(px, py);
+
+  if (!candidate) {
+    // 정상 출구인 오른쪽 끝을 통해 중앙 대공동으로 나간 경우에는 상태만 유지한다.
+    return;
+  }
+
+  if (megaStageRouteState.activeOrder === 0) {
+    setMegaStageActiveScreen(candidate, true);
+    updateMegaStageRouteGates();
+    return;
+  }
+
+  const difference = candidate.order - megaStageRouteState.activeOrder;
+
+  if (difference === 0) {
+    return;
+  }
+
+  // 실제로 이어진 바로 앞/뒤 단락으로만 이동할 수 있다.
+  // 두 단락 이상 건너뛴 경우에는 지형 밖 추락이나 의도하지 않은 지름길로 간주한다.
+  if (Math.abs(difference) > 1) {
+    if (megaStageRouteState.invalidRouteCooldown <= 0) {
+      megaStageRouteState.invalidRouteCooldown = 30;
+      respawnAtCheckpoint(
+        "정해진 진행 경로를 벗어났습니다. 마지막 체크포인트로 돌아갑니다."
+      );
+    }
+    return;
+  }
+
+  setMegaStageActiveScreen(candidate, true);
+  updateMegaStageRouteGates();
+}
+
+function getCurrentMegaStageScreen() {
+  if (!isPlayerInsideMegaStage()) {
+    return null;
+  }
+
+  if (activeMegaStageScreenId) {
+    return megaStageScreenById.get(activeMegaStageScreenId) || null;
+  }
+
+  const candidate = findMegaStageScreenAtPosition(centerX(player), centerY(player));
+  if (candidate) {
+    setMegaStageActiveScreen(candidate, false);
+  }
+  return candidate;
 }
 
 function clampCameraToBounds(targetX, targetY, bounds) {
@@ -3964,10 +4198,7 @@ function updateCamera() {
     targetX = megaStageScreen.cameraX;
     targetY = megaStageScreen.cameraY;
 
-    if (activeMegaStageScreenId !== megaStageScreen.id) {
-      activeMegaStageScreenId = megaStageScreen.id;
-      gameState.message = megaStageScreen.order + "번째 단락: " + megaStageScreen.title + " / 예정 기믹: " + megaStageScreen.plannedGimmick;
-    }
+
   } else if (gameState.bossFightStarted && player.x > 10800 && boss.alive) {
     const midpointX = (centerX(player) + centerX(boss)) / 2;
     const midpointY = (centerY(player) + centerY(boss)) / 2;
@@ -3992,13 +4223,49 @@ function updateCamera() {
   targetX = clamp(targetX, 0, world.width - camera.width);
   targetY = clamp(targetY, 0, world.height - camera.height);
 
-  const distanceX = targetX - camera.x;
-  const distanceY = targetY - camera.y;
-  const smoothX = Math.abs(distanceX) > camera.snapDistanceX ? 0.32 : camera.smoothnessX;
-  const smoothY = Math.abs(distanceY) > camera.snapDistanceY ? 0.24 : camera.smoothnessY;
+  if (megaStageScreen && megaStageCameraTransition.active) {
+    megaStageCameraTransition.elapsed += frameTimeScale;
+    const rawProgress = clamp(
+      megaStageCameraTransition.elapsed / megaStageCameraTransition.duration,
+      0,
+      1
+    );
+    const easedProgress =
+      rawProgress * rawProgress * (3 - 2 * rawProgress);
 
-  camera.x += distanceX * smoothX;
-  camera.y += distanceY * smoothY;
+    camera.x =
+      megaStageCameraTransition.fromX +
+      (megaStageCameraTransition.toX - megaStageCameraTransition.fromX) *
+        easedProgress;
+    camera.y =
+      megaStageCameraTransition.fromY +
+      (megaStageCameraTransition.toY - megaStageCameraTransition.fromY) *
+        easedProgress;
+
+    if (rawProgress >= 1) {
+      megaStageCameraTransition.active = false;
+      camera.x = megaStageCameraTransition.toX;
+      camera.y = megaStageCameraTransition.toY;
+    }
+  } else if (megaStageScreen) {
+    // 전환이 끝나면 해당 단락에 정확히 고정하여 경계 근처 떨림을 없앤다.
+    camera.x = targetX;
+    camera.y = targetY;
+  } else {
+    const distanceX = targetX - camera.x;
+    const distanceY = targetY - camera.y;
+    const smoothX =
+      Math.abs(distanceX) > camera.snapDistanceX
+        ? 0.32
+        : camera.smoothnessX;
+    const smoothY =
+      Math.abs(distanceY) > camera.snapDistanceY
+        ? 0.24
+        : camera.smoothnessY;
+
+    camera.x += distanceX * smoothX;
+    camera.y += distanceY * smoothY;
+  }
 
   if (tutorialRoom && tutorialRoom.cameraMode === "fixed") {
     camera.x = targetX;
@@ -4070,6 +4337,10 @@ function drawRoundedRect(x, y, width, height, radius) {
 }
 
 function drawMegaStageScreenFrames() {
+  if (!debugOverlayEnabled) {
+    return;
+  }
+
   const activeScreen = getCurrentMegaStageScreen();
 
   if (!activeScreen) {
@@ -4101,6 +4372,10 @@ function drawMegaStageScreenFrames() {
 }
 
 function drawMegaStageMarkers() {
+  if (!debugOverlayEnabled) {
+    return;
+  }
+
   const activeScreen = getCurrentMegaStageScreen();
 
   if (!activeScreen) {
@@ -4459,6 +4734,32 @@ function getSpikeSprite(width, height) {
 
   spikeSpriteCache.set(key, sprite);
   return sprite;
+}
+
+function drawMegaStageRouteGates() {
+  for (const gate of megaStageRouteGates) {
+    if (!gate.closed || !isObjectNearCamera(gate, 100, 100)) {
+      continue;
+    }
+
+    const x = Math.round(gate.x - camera.x);
+    const y = Math.round(gate.y - camera.y);
+
+    ctx.save();
+    ctx.fillStyle = "rgba(30, 41, 59, 0.96)";
+    ctx.fillRect(x, y, gate.width, gate.height);
+
+    ctx.strokeStyle = "#f59e0b";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(x, y, gate.width, gate.height);
+
+    ctx.fillStyle = "rgba(251, 191, 36, 0.55)";
+    for (let stripeY = 12; stripeY < gate.height - 10; stripeY += 42) {
+      ctx.fillRect(x + 7, y + stripeY, gate.width - 14, 10);
+    }
+
+    ctx.restore();
+  }
 }
 
 function drawSpikeTraps() {
@@ -5442,6 +5743,10 @@ function drawRoomLabels() {
 }
 
 function drawWarnings() {
+  if (!debugOverlayEnabled) {
+    return;
+  }
+
   const warnings = [
     { text: "v58-1 수정: 튜토리얼 끝 출입구가 열렸으며, 금속 가시는 피해와 반동을 준다.", x: 8580, y: 590, width: 720, height: 24 },
     { text: "파란/보라/주황 테두리는 각각 1층·2층·3층의 고정 카메라 단락", x: 9480, y: 590, width: 620, height: 24 },
@@ -6057,11 +6362,11 @@ function drawUI() {
 
   ctx.fillStyle = "white";
   ctx.font = "18px Arial";
-  ctx.fillText("13단계-2 v58-1 성능 보정: 부드러운 고정 화면 스테이지", 20, 30);
+  ctx.fillText("13단계-2 v58-2: 단일 경로·카메라·체크포인트 안정화", 20, 30);
 
   ctx.font = "14px Arial";
   ctx.fillStyle = "#cbd5e1";
-  ctx.fillText("A/D 이동 | Space 점프 | Shift/K 대시 | J 공격 | L 회복", 20, 55);
+  ctx.fillText("A/D 이동 | Space 점프 | Shift/K 대시 | J 공격 | L 회복 | F1 개발표시", 20, 55);
 
   ctx.fillStyle = "#bfdbfe";
   ctx.fillText(
@@ -6113,6 +6418,7 @@ function drawWorld() {
   drawBossArenaGates();
   drawDashHazards();
   drawPlatforms();
+  drawMegaStageRouteGates();
   drawSpikeTraps();
   drawCheckpoints();
   drawKeyItem();
