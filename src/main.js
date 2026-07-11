@@ -34,7 +34,26 @@
     const stream = new Blob([bytes])
       .stream()
       .pipeThrough(new DecompressionStream("gzip"));
-    const source = await new Response(stream).text();
+    let source = await new Response(stream).text();
+
+    const messagePanelPattern = /  \/\/ 하단 메시지 패널[\s\S]*?  drawBossHealthBar\(\);/;
+    if (!messagePanelPattern.test(source)) {
+      throw new Error("추격 화면 메시지 패널 수정 지점을 찾지 못했습니다.");
+    }
+    source = source.replace(
+      messagePanelPattern,
+      `  // 추격 중에는 하단 메시지 패널이 캐릭터와 붕괴석을 가리지 않도록 숨긴다.
+  if (!isMegaBoulderChaseCameraActive()) {
+    ctx.fillStyle = "rgba(2, 6, 23, 0.62)";
+    drawRoundedRect(16, canvas.height - 62, 470, 42, 10);
+    ctx.fill();
+    ctx.fillStyle = "#e2e8f0";
+    ctx.font = "14px Arial";
+    ctx.fillText(gameState.message, 28, canvas.height - 35);
+  }
+
+  drawBossHealthBar();`
+    );
 
     const playtestBridge = `\nwindow.__corelessPlaytest = {
       version: mapData.version,
