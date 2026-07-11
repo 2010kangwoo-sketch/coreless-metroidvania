@@ -1,0 +1,12 @@
+{
+  "browser": "Chromium with real keyboard input",
+  "route": "cp_turret_entry -> cp_turret_end",
+  "jumps": 4,
+  "shots_fired": 2,
+  "damage_taken": 0,
+  "deaths": 0,
+  "stomp_test": 1,
+  "final_x": 9206.82,
+  "console_errors": 0,
+  "audit": "13/13"
+}

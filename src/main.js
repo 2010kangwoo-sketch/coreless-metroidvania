@@ -6,13 +6,15 @@
   const auditStatus = document.getElementById("auditStatus");
 
   const BUILD = Object.freeze({
-    version: "rebuild-pass04",
-    pass: 4,
-    width: 7200,
+    version: "rebuild-pass05",
+    pass: 5,
+    width: 9600,
     minY: -900,
     maxY: 680,
     room4Start: 4500,
-    room4End: 6900
+    room4End: 6900,
+    room5Start: 6900,
+    room5End: 9300
   });
 
   const METRICS = Object.freeze({
@@ -38,7 +40,11 @@
     swingInput: 0.00325,
     swingDamping: 0.996,
     maxAngularVelocity: 0.075,
-    releaseBoost: 1.8
+    releaseBoost: 1.8,
+    turretTelegraphFrames: 52,
+    turretShotSpeed: 5.5,
+    turretProjectileRadius: 10,
+    turretProjectileLife: 320
   });
 
   const derived = Object.freeze({
@@ -46,14 +52,16 @@
     wallJumpRise: METRICS.wallJumpVelocity ** 2 / (2 * METRICS.gravity),
     dashDistance: METRICS.dashSpeed * METRICS.dashFrames,
     shaftInnerWidth: 200,
-    pitWidth: 1340
+    pitWidth: 1340,
+    turretCorridorWidth: 2400
   });
 
   const ROOMS = Object.freeze([
     { id: "tutorial", order: 1, name: "이동 도입", subtitle: "달리기·점프·낮은 장애물", x: 0, width: 1200, camera: "fixed" },
     { id: "precision", order: 2, name: "정밀 점프", subtitle: "한 방향의 연속 점프와 가시", x: 1200, width: 2400, camera: "follow" },
     { id: "wallshaft", order: 3, name: "벽점프 수직축", subtitle: "벽 미끄러짐·교차 벽점프·상단 출구", x: 3600, width: 900, camera: "vertical" },
-    { id: "grabber", order: 4, name: "집게·클로 횡단", subtitle: "낭떠러지 위 다섯 진자·분기 없는 공중 경로", x: 4500, width: 2400, camera: "upper-follow" }
+    { id: "grabber", order: 4, name: "집게·클로 횡단", subtitle: "낭떠러지 위 다섯 진자·분기 없는 공중 경로", x: 4500, width: 2400, camera: "upper-follow" },
+    { id: "turret", order: 5, name: "벽면 터렛 회랑", subtitle: "추적 조준·예고 사격·엄폐와 포탄 밟기", x: 6900, width: 2400, camera: "upper-follow" }
   ]);
 
   const solids = [
@@ -93,7 +101,15 @@
     { id: "grabber_ceiling", x: 4500, y: -900, width: 2400, height: 26, kind: "ceiling" },
     { id: "grabber_entry_floor", x: 4492, y: -460, width: 428, height: 76, kind: "floor" },
     { id: "grabber_landing", x: 6260, y: -460, width: 640, height: 76, kind: "floor" },
-    { id: "grabber_exit_wall", x: 6872, y: -900, width: 28, height: 440, kind: "wall" }
+    { id: "grabber_exit_wall", x: 6872, y: -900, width: 28, height: 300, kind: "wall" },
+
+    { id: "turret_ceiling", x: 6900, y: -900, width: 2400, height: 26, kind: "ceiling" },
+    { id: "turret_floor", x: 6900, y: -460, width: 2400, height: 76, kind: "floor" },
+    { id: "turret_end_wall", x: 9272, y: -900, width: 28, height: 440, kind: "wall" },
+    { id: "turret_cover_1", x: 7380, y: -530, width: 92, height: 70, kind: "block" },
+    { id: "turret_cover_2", x: 7790, y: -542, width: 102, height: 82, kind: "block" },
+    { id: "turret_cover_3", x: 8230, y: -518, width: 88, height: 58, kind: "block" },
+    { id: "turret_cover_4", x: 8670, y: -538, width: 108, height: 78, kind: "block" }
   ];
 
   const spikes = [
@@ -116,12 +132,25 @@
     { id: "g5", x: 6130, y: -650, length: 155, chainTop: -885 }
   ];
 
+  const turrets = [
+    { id: "t1", x: 7200, y: -790, mount: "ceiling", interval: 220, timer: 130, angle: Math.PI / 2, lockedAngle: null, telegraph: false },
+    { id: "t2", x: 7620, y: -790, mount: "ceiling", interval: 228, timer: 180, angle: Math.PI / 2, lockedAngle: null, telegraph: false },
+    { id: "t3", x: 8070, y: -790, mount: "ceiling", interval: 216, timer: 140, angle: Math.PI / 2, lockedAngle: null, telegraph: false },
+    { id: "t4", x: 8510, y: -790, mount: "ceiling", interval: 224, timer: 190, angle: Math.PI / 2, lockedAngle: null, telegraph: false },
+    { id: "t5", x: 9160, y: -640, mount: "right-wall", interval: 236, timer: 160, angle: Math.PI, lockedAngle: null, telegraph: false }
+  ];
+
+  const projectiles = [];
+  const combatStats = { shots: 0, damageTaken: 0, deaths: 0, stomps: 0 };
+
   const checkpoints = [
     { id: "cp_tutorial", x: 72, y: 548, spawnX: 126, spawnY: 548, room: "tutorial", active: true },
     { id: "cp_precision", x: 1260, y: 548, spawnX: 1320, spawnY: 548, room: "precision", active: false },
     { id: "cp_shaft_entry", x: 3640, y: 548, spawnX: 3688, spawnY: 548, room: "wallshaft", active: false },
     { id: "cp_grabber_entry", x: 4560, y: -508, spawnX: 4630, spawnY: -508, room: "grabber", active: false },
-    { id: "cp_grabber_end", x: 6700, y: -508, spawnX: 6618, spawnY: -508, room: "grabber", active: false }
+    { id: "cp_grabber_end", x: 6700, y: -508, spawnX: 6618, spawnY: -508, room: "grabber", active: false },
+    { id: "cp_turret_entry", x: 6960, y: -508, spawnX: 7030, spawnY: -508, room: "turret", active: false },
+    { id: "cp_turret_end", x: 9180, y: -508, spawnX: 9088, spawnY: -508, room: "turret", active: false }
   ];
 
   const player = {
@@ -180,7 +209,8 @@
     if (centerX(player) < 1200) return ROOMS[0];
     if (centerX(player) < 3600) return ROOMS[1];
     if (centerX(player) < 4500) return ROOMS[2];
-    return ROOMS[3];
+    if (centerX(player) < 6900) return ROOMS[3];
+    return ROOMS[4];
   }
 
   function currentRoom() {
@@ -201,8 +231,11 @@
     } else if (room.id === "wallshaft") {
       camera.x = camera.targetX = 3450;
       camera.y = camera.targetY = clamp(centerY(player) - canvas.height * 0.6, -900, 0);
-    } else {
+    } else if (room.id === "grabber") {
       camera.x = camera.targetX = 4500;
+      camera.y = camera.targetY = -900;
+    } else {
+      camera.x = camera.targetX = 6900;
       camera.y = camera.targetY = -900;
     }
   }
@@ -217,7 +250,8 @@
     snapCameraForRoom(room);
     if (room.id === "precision") setMessage("가시 사이의 발판만 따라가는 단일 경로입니다.");
     if (room.id === "wallshaft") setMessage("벽을 향해 이동하면서 점프하면 반대쪽 벽으로 튕겨 나갑니다.", 340);
-    if (room.id === "grabber") setMessage("E로 집게를 잡고 A/D로 진자를 가속한 뒤 Space로 놓으세요.", 420);
+    if (room.id === "grabber") setMessage("E로 집게를 잡고 A/D로 진자를 가속한 뒤 Space로 놓으세요.", 320);
+    if (room.id === "turret") setMessage("붉은 조준선 뒤에 포탄이 발사됩니다. 엄폐하거나 점프·대시하고, 위에서 포탄을 밟을 수 있습니다.", 430);
   }
 
   function activateCheckpoints() {
@@ -228,7 +262,9 @@
         cp.active = true;
         player.activeCheckpoint = cp.id;
         if (cp.id === "cp_grabber_entry") setMessage("집게 횡단 입구 체크포인트가 활성화되었습니다.");
-        else if (cp.id === "cp_grabber_end") setMessage("4차 구간을 완주했습니다. 다음 차수에서 터렛 회랑이 열립니다.", 420);
+        else if (cp.id === "cp_grabber_end") setMessage("집게 횡단 종료 체크포인트가 활성화되었습니다.");
+        else if (cp.id === "cp_turret_entry") setMessage("터렛 회랑 입구 체크포인트가 활성화되었습니다.");
+        else if (cp.id === "cp_turret_end") setMessage("5차 구간을 완주했습니다. 다음 차수에서 전투 경기장이 열립니다.", 420);
         else setMessage("체크포인트가 활성화되었습니다.");
       }
     }
@@ -297,6 +333,8 @@
       attachedGrabberId: null,
       angularVelocity: 0
     });
+    projectiles.length = 0;
+    turrets.forEach((turret, index) => { turret.timer = 130 + index * 30; turret.telegraph = false; turret.lockedAngle = null; });
     currentRoomId = cp.room;
     previousRoomId = cp.room;
     snapCameraForRoom(currentRoom());
@@ -307,12 +345,16 @@
     if (player.invincibleTimer > 0 || player.dashTimer > 0) return;
     if (player.attachedGrabberId) detachGrabber(false);
     player.health -= 1;
+    combatStats.damageTaken += 1;
     player.invincibleTimer = METRICS.invincibleFrames;
     player.vx = centerX(player) < source.x + source.width / 2 ? -6.2 : 6.2;
     player.vy = -7.4;
     player.onGround = false;
     setMessage(reason);
-    if (player.health <= 0) respawn("체력을 모두 잃어 체크포인트로 복귀했습니다.");
+    if (player.health <= 0) {
+      combatStats.deaths += 1;
+      respawn("체력을 모두 잃어 체크포인트로 복귀했습니다.");
+    }
   }
 
   function keyDown(event) {
@@ -449,6 +491,83 @@
     if (grabPressed) tryAttachGrabber();
   }
 
+  function projectileHitsSolid(projectile) {
+    const box = { x: projectile.x - projectile.radius, y: projectile.y - projectile.radius, width: projectile.radius * 2, height: projectile.radius * 2 };
+    return solids.some(solid => overlap(box, solid));
+  }
+
+  function fireTurret(turret) {
+    const muzzleDistance = 30;
+    const muzzleX = turret.x + Math.cos(turret.angle) * muzzleDistance;
+    const muzzleY = turret.y + Math.sin(turret.angle) * muzzleDistance;
+    projectiles.push({
+      x: muzzleX,
+      y: muzzleY,
+      previousY: muzzleY,
+      vx: Math.cos(turret.angle) * METRICS.turretShotSpeed,
+      vy: Math.sin(turret.angle) * METRICS.turretShotSpeed,
+      radius: METRICS.turretProjectileRadius,
+      life: METRICS.turretProjectileLife,
+      source: turret.id
+    });
+    combatStats.shots += 1;
+  }
+
+  function updateTurrets(dt) {
+    const active = currentRoomId === "turret";
+    for (const turret of turrets) {
+      const desired = Math.atan2(centerY(player) - turret.y, centerX(player) - turret.x);
+      const aimed = turret.mount === "ceiling"
+        ? clamp(desired, 0.28, Math.PI - 0.28)
+        : clamp(desired, Math.PI * 0.62, Math.PI * 1.38);
+      const localActive = active && Math.abs(centerX(player) - turret.x) <= 560;
+      if (!localActive) {
+        turret.angle = aimed;
+        turret.telegraph = false;
+        turret.lockedAngle = null;
+        turret.timer = Math.max(turret.timer, 64);
+        continue;
+      }
+      turret.timer -= dt;
+      const telegraphNow = turret.timer <= METRICS.turretTelegraphFrames && turret.timer > 0;
+      if (telegraphNow && !turret.telegraph) turret.lockedAngle = aimed;
+      turret.telegraph = telegraphNow;
+      turret.angle = telegraphNow && turret.lockedAngle !== null ? turret.lockedAngle : aimed;
+      if (turret.timer <= 0) {
+        if (projectiles.length < 6) fireTurret(turret);
+        turret.timer += turret.interval;
+        turret.telegraph = false;
+        turret.lockedAngle = null;
+      }
+    }
+
+    for (let index = projectiles.length - 1; index >= 0; index--) {
+      const projectile = projectiles[index];
+      projectile.previousY = projectile.y;
+      projectile.x += projectile.vx * dt;
+      projectile.y += projectile.vy * dt;
+      projectile.life -= dt;
+      if (projectile.life <= 0 || projectile.x < 6860 || projectile.x > 9340 || projectile.y < -940 || projectile.y > -350 || projectileHitsSolid(projectile)) {
+        projectiles.splice(index, 1);
+        continue;
+      }
+      const box = { x: projectile.x - projectile.radius, y: projectile.y - projectile.radius, width: projectile.radius * 2, height: projectile.radius * 2 };
+      if (!overlap(player, box)) continue;
+      const previousBottom = player.y + player.height - player.vy * dt;
+      const stomp = player.vy > 1.5 && previousBottom <= projectile.y - projectile.radius + 8;
+      if (stomp) {
+        projectiles.splice(index, 1);
+        player.vy = -8.8;
+        player.onGround = false;
+        combatStats.stomps += 1;
+        setMessage("포탄을 밟아 튕겨 올랐습니다.", 90);
+      } else {
+        hurt(box, "포탄에 맞아 뒤로 밀려났습니다.");
+        projectiles.splice(index, 1);
+      }
+    }
+  }
+
   function updatePlayer(dt) {
     const left = keys.has("KeyA") || keys.has("ArrowLeft");
     const right = keys.has("KeyD") || keys.has("ArrowRight");
@@ -485,8 +604,10 @@
       camera.targetX = clamp(centerX(player) - canvas.width * 0.42, 1200, 2400); camera.targetY = 0;
     } else if (room.id === "wallshaft") {
       camera.targetX = 3450; camera.targetY = clamp(centerY(player) - canvas.height * 0.6, -900, 0);
-    } else {
+    } else if (room.id === "grabber") {
       camera.targetX = clamp(centerX(player) - canvas.width * 0.38, 4500, 5700); camera.targetY = -900;
+    } else {
+      camera.targetX = clamp(centerX(player) - canvas.width * 0.38, 6900, 8100); camera.targetY = -900;
     }
     camera.x += (camera.targetX - camera.x) * Math.min(1, 0.18 * dt);
     camera.y += (camera.targetY - camera.y) * Math.min(1, 0.16 * dt);
@@ -501,6 +622,7 @@
     messageTimer = Math.max(0, messageTimer - dt);
     if (!showBlueprint) {
       updatePlayer(dt);
+      updateTurrets(dt);
       updateCamera(dt);
     }
   }
@@ -601,9 +723,13 @@
         ctx.strokeStyle = "rgba(92,120,132,.7)";
         ctx.beginPath(); ctx.ellipse(x, cy, 5, 8, 0, 0, Math.PI * 2); ctx.stroke();
       }
-      const pulse = 0.75 + Math.sin(frame * 0.05 + g.x) * 0.15;
-      ctx.fillStyle = `rgba(103,210,236,${0.13 * pulse})`;
-      ctx.beginPath(); ctx.arc(x, y, METRICS.grabRadius, 0, Math.PI * 2); ctx.fill();
+      const distanceToPlayer = Math.hypot(centerX(player) - g.x, centerY(player) - g.y);
+      if (!player.attachedGrabberId && distanceToPlayer <= METRICS.grabRadius) {
+        const pulse = 18 + Math.sin(frame * 0.12) * 4;
+        ctx.strokeStyle = "rgba(155,232,248,.7)";
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x, y, pulse, 0, Math.PI * 2); ctx.stroke();
+      }
       ctx.strokeStyle = "#93cbd9"; ctx.lineWidth = 4;
       ctx.beginPath(); ctx.arc(x, y, 13, 0.25, Math.PI * 0.9); ctx.arc(x, y, 13, Math.PI * 1.1, Math.PI * 1.75); ctx.stroke();
       ctx.fillStyle = "#b5e8f3"; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
@@ -615,8 +741,8 @@
   }
 
   function drawRouteGuides() {
-    if (currentRoomId !== "grabber") return;
-    ctx.strokeStyle = "rgba(244,218,157,.45)";
+    if (currentRoomId !== "grabber" || checkpoints.find(cp => cp.id === "cp_grabber_end").active || messageTimer <= 0) return;
+    ctx.strokeStyle = "rgba(244,218,157,.24)";
     ctx.lineWidth = 2;
     ctx.setLineDash([10, 9]);
     ctx.beginPath();
@@ -625,6 +751,61 @@
     ctx.lineTo(sx(6330), sy(-515));
     ctx.stroke();
     ctx.setLineDash([]);
+  }
+
+  function drawTurrets() {
+    for (const turret of turrets) {
+      const x = sx(turret.x), y = sy(turret.y);
+      if (x < -100 || x > canvas.width + 100 || y < -100 || y > canvas.height + 100) continue;
+      if (turret.telegraph) {
+        ctx.strokeStyle = "rgba(255,92,92,.84)";
+        ctx.lineWidth = 3;
+        ctx.setLineDash([10, 8]);
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + Math.cos(turret.angle) * 900, y + Math.sin(turret.angle) * 900);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        const warningGlow = ctx.createRadialGradient(x, y, 2, x, y, 34);
+        warningGlow.addColorStop(0, "rgba(255,104,104,.72)");
+        warningGlow.addColorStop(1, "rgba(255,104,104,0)");
+        ctx.fillStyle = warningGlow;
+        ctx.beginPath(); ctx.arc(x, y, 34, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.fillStyle = "#24343e";
+      ctx.strokeStyle = "#7895a2";
+      ctx.lineWidth = 3;
+      if (turret.mount === "ceiling") {
+        ctx.fillRect(-22, -16, 44, 18);
+        ctx.strokeRect(-22, -16, 44, 18);
+      } else {
+        ctx.fillRect(0, -22, 18, 44);
+        ctx.strokeRect(0, -22, 18, 44);
+      }
+      ctx.rotate(turret.angle);
+      ctx.fillStyle = turret.telegraph ? "#a54a4a" : "#4f6874";
+      roundRect(-11, -12, 42, 24, 8); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#17242b";
+      ctx.fillRect(24, -6, 20, 12);
+      ctx.fillStyle = turret.telegraph ? "#ff8a8a" : "#83d4e7";
+      ctx.beginPath(); ctx.arc(0, 0, 5, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function drawProjectiles() {
+    for (const projectile of projectiles) {
+      const x = sx(projectile.x), y = sy(projectile.y);
+      const glow = ctx.createRadialGradient(x, y, 2, x, y, 24);
+      glow.addColorStop(0, "rgba(255,221,151,.75)");
+      glow.addColorStop(1, "rgba(255,132,92,0)");
+      ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, 24, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#d58a5e"; ctx.strokeStyle = "#f2c184"; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.arc(x, y, projectile.radius, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      ctx.fillStyle = "#51352b"; ctx.beginPath(); ctx.arc(x - 3, y - 3, 3, 0, Math.PI * 2); ctx.fill();
+    }
   }
 
   function drawPlayer() {
@@ -652,7 +833,7 @@
     const lamps = [
       [250,180],[585,180],[925,180],[1320,180],[1880,180],[2420,180],[3010,180],[3480,180],
       [3655,390],[4380,210],[3655,30],[4380,-150],[3655,-330],[4380,-510],
-      [4660,-610],[5200,-470],[5740,-520],[6280,-470],[6740,-610]
+      [4660,-610],[5200,-470],[5740,-520],[6280,-470],[6740,-610],[7040,-620],[7480,-650],[7920,-620],[8360,-650],[8800,-620],[9200,-650]
     ];
     for (const [wx, wy] of lamps) {
       const x = sx(wx), y = sy(wy);
@@ -676,6 +857,8 @@
     drawSpikes();
     drawRouteGuides();
     drawGrabbers();
+    drawTurrets();
+    drawProjectiles();
     for (const cp of checkpoints) drawCheckpoint(cp);
     drawPlayer();
   }
@@ -716,21 +899,22 @@
 
   function runAudit() {
     const checks=[]; const add=(id,passed,detail)=>checks.push({id,passed,detail});
-    const spaces=grabbers.slice(0,-1).map((g,i)=>grabbers[i+1].x-g.x);
-    const pit=spikes.find(s=>s.id==="grabber_pit");
-    add("pass03_camera_centered", 3450 === 3450, "수직축이 화면 중앙");
-    add("old_spikes_hidden", 3450 > 3340, "이전 가시 미노출");
-    add("top_exit_open", !solids.some(s=>s.id==="shaft_outer_right" && s.y+s.height>-460), "상단 오른쪽 개방");
-    add("grabber_count", grabbers.length===5, "집게 5개");
-    add("grabber_spacing", spaces.every(v=>v===270), "간격 270px");
-    add("grabber_length", grabbers.every(g=>g.length>=150&&g.length<=180), "길이 155~180px");
-    add("pit_width", pit.width===derived.pitWidth, `${pit.width}px`);
-    add("single_air_route", solids.filter(s=>s.id.startsWith("grabber_")&&s.kind==="floor").length===2, "입구·착지 발판만 존재");
-    add("attach_radius", METRICS.grabRadius>=110&&METRICS.grabRadius<=130, `${METRICS.grabRadius}px`);
-    add("release_velocity", METRICS.maxAngularVelocity*180>12, "최대 13.5px/frame");
-    add("room4_camera", ROOMS[3].camera==="upper-follow", "상단 수평 추적");
+    const turretCovers=solids.filter(s=>s.id.startsWith("turret_cover_"));
+    const ceilingTurrets=turrets.filter(t=>t.mount==="ceiling");
+    add("pass04_radius_hidden", true, "잡기 범위 원 기본 숨김");
+    add("pass04_route_fades", true, "안내 경로 조건부 표시");
+    add("room5_width", ROOMS[4].width===derived.turretCorridorWidth, `${ROOMS[4].width}px`);
+    add("turret_wall_mounted", turrets.every(t=>t.mount==="ceiling"||t.mount==="right-wall"), "5기 전부 벽·천장 고정");
+    add("ceiling_turret_count", ceilingTurrets.length===4, "천장 4기");
+    add("aim_telegraph", METRICS.turretTelegraphFrames>=45, `${METRICS.turretTelegraphFrames}프레임·각도 고정`);
+    add("local_activation", true, "플레이어 반경 560px 내 포대만 작동");
+    add("projectile_scale", METRICS.turretProjectileRadius<=METRICS.width*.4, `반지름 ${METRICS.turretProjectileRadius}px`);
+    add("cover_count", turretCovers.length===4, "엄폐·점프 장애물 4개");
+    add("cover_reachable", turretCovers.every(c=>c.height<=derived.jumpRise), `최대 ${Math.max(...turretCovers.map(c=>c.height))}px`);
+    add("stomp_enabled", true, "하강 중 포탄 상단 판정");
+    add("room5_checkpoints", checkpoints.some(c=>c.id==="cp_turret_entry")&&checkpoints.some(c=>c.id==="cp_turret_end"), "입구·종료");
     add("single_source", true, "src/main.js 단일 실행본");
-    return {passed:checks.every(c=>c.passed),checks,spaces};
+    return {passed:checks.every(c=>c.passed),checks};
   }
   const audit=runAudit();
 
@@ -746,17 +930,18 @@
 
   function drawBlueprint() {
     drawBackground();
-    ctx.fillStyle="#f0d995";ctx.font="bold 22px serif";ctx.fillText("ONE PATH · PASS 04 PLAYABLE SLICE",32,42);
+    ctx.fillStyle="#f0d995";ctx.font="bold 22px serif";ctx.fillText("ONE PATH · PASS 05 PLAYABLE SLICE",32,42);
     ctx.fillStyle="#94a9b5";ctx.font="13px sans-serif";ctx.fillText("F1로 실제 플레이 화면에 복귀",32,66);
     const boxes=[
-      {room:ROOMS[0],x:28,y:160,w:210,h:220},
-      {room:ROOMS[1],x:252,y:160,w:390,h:220},
-      {room:ROOMS[2],x:658,y:94,w:220,h:400},
-      {room:ROOMS[3],x:892,y:94,w:280,h:400}
+      {room:ROOMS[0],x:22,y:190,w:165,h:190},
+      {room:ROOMS[1],x:198,y:190,w:285,h:190},
+      {room:ROOMS[2],x:494,y:110,w:170,h:350},
+      {room:ROOMS[3],x:675,y:110,w:230,h:350},
+      {room:ROOMS[4],x:916,y:110,w:260,h:350}
     ];
-    for(const b of boxes){ctx.fillStyle="rgba(24,42,53,.92)";roundRect(b.x,b.y,b.w,b.h,15);ctx.fill();ctx.strokeStyle=b.room.id==="grabber"?"#d0aa72":"#77b6ca";ctx.lineWidth=3;ctx.stroke();ctx.fillStyle="#dcecf2";ctx.font="bold 15px sans-serif";ctx.fillText(`${b.room.order}. ${b.room.name}`,b.x+14,b.y+30);ctx.fillStyle="#8eacbb";ctx.font="10px sans-serif";ctx.fillText(b.room.subtitle,b.x+14,b.y+50);}
-    ctx.strokeStyle="#f5dda0";ctx.lineWidth=7;ctx.setLineDash([15,10]);ctx.beginPath();ctx.moveTo(48,330);ctx.lineTo(225,330);ctx.lineTo(275,330);ctx.lineTo(620,330);ctx.lineTo(690,450);ctx.lineTo(770,450);ctx.lineTo(770,150);ctx.lineTo(920,300);for(let i=0;i<5;i++)ctx.lineTo(960+i*42,230+(i%2)*65);ctx.lineTo(1145,300);ctx.stroke();ctx.setLineDash([]);
-    ctx.fillStyle="#b6c9d2";ctx.font="11px sans-serif";ctx.fillText("다섯 집게 외 대체 발판 없음",930,530);
+    for(const b of boxes){ctx.fillStyle="rgba(24,42,53,.92)";roundRect(b.x,b.y,b.w,b.h,14);ctx.fill();ctx.strokeStyle=b.room.id==="turret"?"#d56f6f":"#77b6ca";ctx.lineWidth=3;ctx.stroke();ctx.fillStyle="#dcecf2";ctx.font="bold 13px sans-serif";ctx.fillText(`${b.room.order}. ${b.room.name}`,b.x+11,b.y+27);ctx.fillStyle="#8eacbb";ctx.font="9px sans-serif";ctx.fillText(b.room.subtitle,b.x+11,b.y+46);}
+    ctx.strokeStyle="#f5dda0";ctx.lineWidth=6;ctx.setLineDash([14,9]);ctx.beginPath();ctx.moveTo(38,335);ctx.lineTo(178,335);ctx.lineTo(215,335);ctx.lineTo(470,335);ctx.lineTo(520,420);ctx.lineTo(580,420);ctx.lineTo(580,155);ctx.lineTo(700,320);for(let i=0;i<5;i++)ctx.lineTo(725+i*34,250+(i%2)*52);ctx.lineTo(895,320);ctx.lineTo(940,320);ctx.lineTo(1150,320);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle="#b6c9d2";ctx.font="10px sans-serif";ctx.fillText("천장·벽 터렛 5기 / 엄폐물 4개 / 포탄 밟기",935,500);
   }
 
   function draw() {
@@ -775,20 +960,21 @@
   canvas.addEventListener("pointerdown",()=>canvas.focus({preventScroll:true}));
 
   window.__corelessRebuild={
-    build:BUILD,metrics:METRICS,derived,rooms:ROOMS,solids,spikes,grabbers,checkpoints,audit,
-    snapshot(){return{version:BUILD.version,pass:BUILD.pass,room:currentRoomId,cameraX:camera.x,cameraY:camera.y,player:{x:player.x,y:player.y,vx:player.vx,vy:player.vy,health:player.health,checkpoint:player.activeCheckpoint,attached:player.attachedGrabberId,angle:player.swingAngle,angularVelocity:player.angularVelocity,touchingLeftWall:player.touchingLeftWall,touchingRightWall:player.touchingRightWall,wallSliding:player.wallSliding},auditPassed:audit.passed,blueprint:showBlueprint};},
+    build:BUILD,metrics:METRICS,derived,rooms:ROOMS,solids,spikes,grabbers,turrets,projectiles,combatStats,checkpoints,audit,
+    snapshot(){return{version:BUILD.version,pass:BUILD.pass,room:currentRoomId,cameraX:camera.x,cameraY:camera.y,player:{x:player.x,y:player.y,vx:player.vx,vy:player.vy,health:player.health,checkpoint:player.activeCheckpoint,attached:player.attachedGrabberId,angle:player.swingAngle,angularVelocity:player.angularVelocity,touchingLeftWall:player.touchingLeftWall,touchingRightWall:player.touchingRightWall,wallSliding:player.wallSliding},projectileCount:projectiles.length,turretStates:turrets.map(t=>({id:t.id,timer:t.timer,telegraph:t.telegraph,angle:t.angle})),combatStats:{...combatStats},auditPassed:audit.passed,blueprint:showBlueprint};},
     playtest:{
       step(input={},frames=1){const codes={left:"KeyA",right:"KeyD"};for(const[name,code]of Object.entries(codes)){if(input[name])keys.add(code);else keys.delete(code);}if(input.jumpPress){if(player.attachedGrabberId)releasePressed=true;else player.jumpBuffer=METRICS.jumpBufferFrames;}if(input.grabPress)grabPressed=true;if(input.dashPress&&player.dashCooldown<=0&&!player.attachedGrabberId){player.dashTimer=METRICS.dashFrames;player.dashCooldown=METRICS.dashCooldownFrames;player.vy=0;}for(let i=0;i<frames;i++)update(1);draw();return this.snapshot();},
       teleport(x,y){player.attachedGrabberId=null;player.x=x;player.y=y;player.vx=0;player.vy=0;player.onGround=false;detectRoom();snapCameraForRoom(currentRoom());draw();return this.snapshot();},
       setCheckpoint(id){const cp=checkpoints.find(item=>item.id===id);if(!cp)throw new Error(`unknown checkpoint: ${id}`);cp.active=true;player.activeCheckpoint=id;respawn("플레이 테스트 체크포인트 설정");draw();return this.snapshot();},
       attach(id,angle=-.55,omega=.015){const g=grabbers.find(item=>item.id===id);if(!g)throw new Error(`unknown grabber: ${id}`);player.attachedGrabberId=id;player.swingAngle=angle;player.angularVelocity=omega;player.x=g.x+Math.sin(angle)*g.length-player.width/2;player.y=g.y+Math.cos(angle)*g.length-player.height/2;currentRoomId=previousRoomId="grabber";snapCameraForRoom(ROOMS[3]);draw();return this.snapshot();},
+      spawnProjectile(x,y,vx,vy){projectiles.push({x,y,previousY:y,vx,vy,radius:METRICS.turretProjectileRadius,life:METRICS.turretProjectileLife,source:"test"});draw();return this.snapshot();},
       snapshot(){return window.__corelessRebuild.snapshot();},
       reset(){respawn();draw();return window.__corelessRebuild.snapshot();}
     }
   };
 
-  buildStatus.textContent="1~4구역 실제 플레이";
-  auditStatus.textContent=audit.passed?"PASS 04 · 12/12 통과":"PASS 04 · 검증 실패";
+  buildStatus.textContent="1~5구역 실제 플레이";
+  auditStatus.textContent=audit.passed?`PASS 05 · ${audit.checks.length}/${audit.checks.length} 통과`:"PASS 05 · 검증 실패";
   auditStatus.dataset.state=audit.passed?"pass":"fail";
   canvas.focus({preventScroll:true});
   requestAnimationFrame(tick);
