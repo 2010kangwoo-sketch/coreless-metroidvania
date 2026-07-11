@@ -1,0 +1,45 @@
+{
+  "browser": "Chromium headless",
+  "pass06_recheck": {
+    "forced_overlap_after_one_frame": true,
+    "horizontal_overlap_after_one_frame": 38.0,
+    "contact_stress_deaths": 1
+  },
+  "pass07_fix": {
+    "forced_overlap_after_one_frame": false,
+    "horizontal_overlap_after_one_frame": -13.599948526762091,
+    "contact_stress_deaths": 0,
+    "separation_corrections": 183
+  },
+  "mixed_actual_keyboard": {
+    "start_x": 11825,
+    "after_d_x": 12022.914613338999,
+    "started": true,
+    "real_j_presses": 3,
+    "crawler_defeated": true,
+    "checkpoint_end": "cp_mixed_end",
+    "final_x": 14523.212124101403
+  },
+  "platform_carry": {
+    "relative_start": 37.55666791312615,
+    "relative_end": 37.55666791312615,
+    "relative_error": 0.0,
+    "player_moved_with_platform": -173.79071052507243
+  },
+  "deterministic_mixed_clear": {
+    "spawned": 3,
+    "defeated": 3,
+    "cleared": true,
+    "entry_gate_unlocked": true,
+    "exit_gate_opened": true
+  },
+  "exact_loader": {
+    "version": "rebuild-pass07",
+    "pass": 7,
+    "audit": "14/14",
+    "mixed_started": true,
+    "enemy_count": 3
+  },
+  "console_errors": [],
+  "audit": "14/14"
+}
