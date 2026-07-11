@@ -1,0 +1,11 @@
+{
+  "browser": "Chromium headless with real keyboard events",
+  "route": ["g1", "g2", "g3", "g4", "g5"],
+  "controls_used": ["D", "Space", "E"],
+  "damage": 0,
+  "deaths": 0,
+  "final_checkpoint": "cp_grabber_end",
+  "final_x": 6613.8,
+  "console_errors": 0,
+  "audit": "12/12"
+}
