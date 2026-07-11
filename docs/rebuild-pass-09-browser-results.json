@@ -1,0 +1,57 @@
+{
+  "browser": "Chromium headless with Playwright keyboard events and fixed-frame stepping",
+  "activation": {
+    "automatic_checkpoint": "cp_long_chase_entry",
+    "automatic_world_x_threshold": 18000,
+    "manual_debug_key": "F9"
+  },
+  "actual_keyboard_run": {
+    "right_key_held": true,
+    "jump_inputs": 13,
+    "dash_inputs": 8,
+    "elapsed_seconds": 15.116666666666667,
+    "deaths": 0,
+    "crush_deaths": 0,
+    "fall_deaths": 0,
+    "player_cleared_obstacles": 13,
+    "boulder_destroyed_obstacles": 11,
+    "boulder_impact_slowdowns": 11,
+    "breakpoints_passed": 3,
+    "finish_reached": true,
+    "final_player_x": 6120,
+    "final_boulder_x": 5955,
+    "final_checkpoint": "cp_chase_end"
+  },
+  "chase_configuration": {
+    "single_route": true,
+    "internal_world_width": 6420,
+    "route_control_points": 11,
+    "chase_distance": 5950,
+    "obstacles": 13,
+    "breakpoints": 3,
+    "release_countdown_frames": 84,
+    "boulder_radius": 76,
+    "boulder_speed_base": 4.6,
+    "boulder_speed_max": 7.65,
+    "adaptive_safe_gap": 520,
+    "impact_speed_reduction": 1.05,
+    "impact_slowdown_frames": 30,
+    "crush_reset_frames": 48
+  },
+  "collision_validation": {
+    "triangular_obstacle_surface": true,
+    "slope_jump_coyote_pixels": 12,
+    "rectangular_false_blocking_fixed": true
+  },
+  "loader_validation": {
+    "single_file": "src/pass09.js",
+    "external_payload_chunks": 0,
+    "recursive_calls": 0,
+    "automatic_retries": 0,
+    "animation_loops": 1,
+    "version": "rebuild-pass09",
+    "pass": 9,
+    "console_errors": 0
+  },
+  "audit": "16/16"
+}
