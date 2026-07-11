@@ -1,46 +1,74 @@
 {
-  "browser": "Chromium headless with DevTools Protocol keyboard events",
+  "browser": "Chromium headless with Chrome DevTools Protocol keyboard events",
+  "version": "rebuild-pass08-snake-rework",
   "activation": {
     "automatic_checkpoint": "cp_mixed_end",
     "automatic_world_x_threshold": 14500,
-    "manual_debug_key": "F8"
+    "manual_debug_key": "F8",
+    "start_checkpoint": "cp_snake_prep",
+    "end_checkpoint": "cp_snake_chase_entry"
   },
-  "actual_keyboard_run": {
-    "elapsed_seconds": 9.101480722427368,
-    "right_key_held": true,
-    "jump_inputs": 5,
-    "dash_inputs": 4,
-    "deaths": 0,
-    "crush_deaths": 0,
-    "falls": 0,
-    "player_cleared_obstacles": 4,
-    "boulder_crushed_obstacles": 1,
-    "boulder_impact_slowdowns": 1,
-    "release_triggered": true,
-    "finish_reached": true,
-    "final_local_x": 3330,
-    "final_world_x": 18030,
-    "final_checkpoint": "cp_long_chase_entry"
+  "route": {
+    "world_width": 2700,
+    "world_height": 1660,
+    "route_length": 6228.401444620699,
+    "snake_levels": 3,
+    "horizontal_reversals": 2,
+    "vertical_drops": 2,
+    "single_route": true
   },
-  "chase_configuration": {
-    "single_route": true,
-    "internal_world_width": 3550,
-    "speed_gates": 3,
-    "obstacles": 5,
-    "release_countdown_frames": 72,
-    "short_chase_length": 910,
-    "boulder_radius": 78,
-    "boulder_speed_min": 3.35,
-    "boulder_speed_max": 5.45,
-    "impact_speed_reduction": 0.92,
-    "impact_slowdown_frames": 24
+  "maze_structures": {
+    "breakable_groups": 8,
+    "breakable_pieces": 21,
+    "tested_destroyed_groups": 3,
+    "tested_boulder_slowdowns": 3
+  },
+  "actual_keyboard_tests": {
+    "top_maze": {
+      "keys": ["D", "Space"],
+      "final_x": 1364.4579999999926
+    },
+    "wall_jump_chimney": {
+      "keys": ["A", "D", "Space"],
+      "wall_jumps": 4,
+      "start_y": 850,
+      "final_y": 674.58
+    },
+    "exit": {
+      "key": "D",
+      "complete": true,
+      "checkpoint": "cp_snake_chase_entry"
+    }
+  },
+  "moving_platform_test": {
+    "frames": 120,
+    "relative_x_start": 43.51660422274949,
+    "relative_x_end": 43.51660422274949,
+    "relative_error": 0,
+    "player_carried_distance": 127.06603605648593
+  },
+  "boulder": {
+    "radius": 68,
+    "base_speed": 3.05,
+    "max_speed": 5.45,
+    "safe_gap": 430,
+    "arming_progress": 1250,
+    "release_warning_frames": 120,
+    "structure_impact_speed_reduction": 1.05,
+    "structure_slow_frames": 34,
+    "crush_reset_frames": 42
   },
   "loader_validation": {
     "single_file": "src/pass08.js",
     "external_payload_chunks": 0,
     "recursive_calls": 0,
     "automatic_retries": 0,
+    "animation_loops": 1,
     "console_errors": 0
+  },
+  "limitations": {
+    "uninterrupted_full_route_keyboard_clear": false,
+    "note": "The controls were tested in separate real-keyboard segments; the structure destruction and exit state were checked deterministically with the same game functions."
   },
   "audit": "15/15"
 }
