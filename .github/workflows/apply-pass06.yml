@@ -1,3 +1,4 @@
+# Triggered after all four payload chunks were present.
 name: Apply rebuild pass 06
 
 on:
