@@ -1,0 +1,84 @@
+name: Apply rebuild pass 05
+
+on:
+  push:
+    branches:
+      - rebuild/mega-room-40pass
+    paths:
+      - tools/apply_pass05.py
+      - .github/workflows/apply-pass05.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out rebuild branch
+        uses: actions/checkout@v4
+        with:
+          ref: rebuild/mega-room-40pass
+          fetch-depth: 0
+
+      - name: Apply pass 05
+        run: python tools/apply_pass05.py
+
+      - name: Check JavaScript syntax
+        run: node --check src/main.js
+
+      - name: Run isolated runtime smoke test
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const vm = require('vm');
+          const noop = () => {};
+          const gradient = { addColorStop: noop };
+          const ctx = new Proxy({
+            createLinearGradient: () => gradient,
+            createRadialGradient: () => gradient,
+            measureText: text => ({ width: String(text).length * 7 })
+          }, {
+            get(target, key) { return key in target ? target[key] : noop; },
+            set(target, key, value) { target[key] = value; return true; }
+          });
+          const canvas = { width: 1200, height: 680, getContext: () => ctx, addEventListener: noop, focus: noop };
+          const elements = {
+            gameCanvas: canvas,
+            buildStatus: { textContent: '', dataset: {} },
+            auditStatus: { textContent: '', dataset: {} }
+          };
+          const sandbox = {
+            console,
+            Math,
+            performance: { now: () => 0 },
+            document: { getElementById: id => elements[id] },
+            window: { addEventListener: noop },
+            requestAnimationFrame: noop,
+            setTimeout,
+            clearTimeout
+          };
+          sandbox.window.window = sandbox.window;
+          sandbox.window.document = sandbox.document;
+          vm.createContext(sandbox);
+          vm.runInContext(fs.readFileSync('src/main.js', 'utf8'), sandbox, { filename: 'src/main.js' });
+          const api = sandbox.window.__corelessRebuild;
+          if (!api) throw new Error('runtime API missing');
+          if (api.build.pass !== 5) throw new Error(`expected pass 5, got ${api.build.pass}`);
+          if (!api.audit.passed || api.audit.checks.length !== 13) throw new Error('pass 05 audit failed');
+          api.playtest.setCheckpoint('cp_turret_entry');
+          for (let i = 0; i < 180; i++) api.playtest.step({ right: true, jumpPress: i === 55, dashPress: i === 120 }, 1);
+          const snapshot = api.snapshot();
+          if (snapshot.room !== 'turret') throw new Error('turret room did not initialize');
+          console.log(JSON.stringify(snapshot));
+          NODE
+
+      - name: Commit verified pass 05
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "feat: implement rebuild pass 05 turret corridor [skip ci]"
+          git push origin HEAD:rebuild/mega-room-40pass
