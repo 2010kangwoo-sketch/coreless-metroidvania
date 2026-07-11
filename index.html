@@ -3,29 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Coreless Metroidvania · v59-16</title>
-  <link rel="stylesheet" href="style.css?v=59_16pass16c">
+  <meta name="theme-color" content="#05070b">
+  <title>Coreless · Rebuild 40-pass 01</title>
+  <link rel="stylesheet" href="style.css?v=rebuild-pass01">
 </head>
 <body>
-  <h1>Coreless Metroidvania</h1>
-  <p class="info">A/D 이동·집게 가속 · Space 점프·집게 해제 · Shift/K 대시 · J 공격 · L 회복 · F2 검증</p>
-  <p id="loadStatus" class="load-status" aria-live="polite">v59-16 게임 불러오는 중…</p>
-  <canvas id="gameCanvas" width="900" height="520" tabindex="0" aria-label="Coreless Metroidvania 게임 화면"></canvas>
+  <main class="shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">CORELESS REBUILD · 40-PASS</p>
+        <h1>1차 — 단일 경로 구조·이동 기준 확정</h1>
+      </div>
+      <div class="status-box">
+        <span id="buildStatus">초기화 중…</span>
+        <span id="auditStatus">검증 대기</span>
+      </div>
+    </header>
 
-  <script>window.__corelessGzip = "";</script>
-  <script src="src/pass16/final-part-01.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-02.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-03.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-04.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-05.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-06.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-07.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-08.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-09.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-10.js?v=59_16pass16c"></script>
-  <script src="src/main.js?v=59_16pass16c"></script>
+    <p class="controls">
+      F1 전체 설계도/이동 시험실 · A/D 이동 · Space 점프 · Shift 대시 · R 위치 초기화 · F2 검증표
+    </p>
+
+    <canvas id="gameCanvas" width="1200" height="680" tabindex="0" aria-label="Coreless 재제작 1차 설계 화면"></canvas>
+
+    <section class="notes">
+      <strong>1차 목표:</strong>
+      기존 16차 실행 구조를 사용하지 않고, 하나의 기준 파일에서 단일 루트·캐릭터 기준 수치·카메라 단위·자동 통과성 검사를 새로 확정합니다.
+    </section>
+  </main>
+  <script src="src/main.js?v=rebuild-pass01"></script>
 </body>
 </html>
