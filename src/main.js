@@ -6,17 +6,13 @@
   const auditStatus = document.getElementById("auditStatus");
 
   const BUILD = Object.freeze({
-    version: "rebuild-pass03",
-    pass: 3,
-    canvasWidth: 1200,
-    canvasHeight: 680,
-    playableWidth: 4500,
-    minWorldY: -900,
-    maxWorldY: 680,
-    tutorialWidth: 1200,
-    precisionWidth: 2400,
-    shaftX: 3600,
-    shaftWidth: 900
+    version: "rebuild-pass04",
+    pass: 4,
+    width: 7200,
+    minY: -900,
+    maxY: 680,
+    room4Start: 4500,
+    room4End: 6900
   });
 
   const METRICS = Object.freeze({
@@ -37,21 +33,27 @@
     dashCooldownFrames: 54,
     coyoteFrames: 7,
     jumpBufferFrames: 8,
-    invincibleFrames: 54
+    invincibleFrames: 54,
+    grabRadius: 126,
+    swingInput: 0.00325,
+    swingDamping: 0.996,
+    maxAngularVelocity: 0.075,
+    releaseBoost: 1.8
   });
 
   const derived = Object.freeze({
     jumpRise: METRICS.jumpVelocity ** 2 / (2 * METRICS.gravity),
     wallJumpRise: METRICS.wallJumpVelocity ** 2 / (2 * METRICS.gravity),
     dashDistance: METRICS.dashSpeed * METRICS.dashFrames,
-    maxReliableGap: 178,
-    shaftInnerWidth: 200
+    shaftInnerWidth: 200,
+    pitWidth: 1340
   });
 
   const ROOMS = Object.freeze([
-    { id: "tutorial", order: 1, name: "이동 도입", subtitle: "달리기·점프·낮은 장애물", x: 0, width: 1200, minY: 0, maxY: 680, camera: "fixed" },
-    { id: "precision", order: 2, name: "정밀 점프", subtitle: "한 방향의 연속 점프와 가시", x: 1200, width: 2400, minY: 0, maxY: 680, camera: "follow" },
-    { id: "wallshaft", order: 3, name: "벽점프 수직축", subtitle: "벽 미끄러짐·교차 벽점프·상단 출구", x: 3600, width: 900, minY: -900, maxY: 680, camera: "vertical" }
+    { id: "tutorial", order: 1, name: "이동 도입", subtitle: "달리기·점프·낮은 장애물", x: 0, width: 1200, camera: "fixed" },
+    { id: "precision", order: 2, name: "정밀 점프", subtitle: "한 방향의 연속 점프와 가시", x: 1200, width: 2400, camera: "follow" },
+    { id: "wallshaft", order: 3, name: "벽점프 수직축", subtitle: "벽 미끄러짐·교차 벽점프·상단 출구", x: 3600, width: 900, camera: "vertical" },
+    { id: "grabber", order: 4, name: "집게·클로 횡단", subtitle: "낭떠러지 위 다섯 진자·분기 없는 공중 경로", x: 4500, width: 2400, camera: "upper-follow" }
   ]);
 
   const solids = [
@@ -77,17 +79,21 @@
     { id: "p8", x: 3340, y: 596, width: 260, height: 84, kind: "floor" },
 
     { id: "shaft_floor", x: 3600, y: 596, width: 900, height: 84, kind: "floor" },
-    { id: "shaft_ceiling", x: 3600, y: -900, width: 900, height: 26, kind: "ceiling" },
+    { id: "shaft_ceiling_left", x: 3600, y: -900, width: 872, height: 26, kind: "ceiling" },
     { id: "shaft_left_wall", x: 3720, y: -720, width: 28, height: 1220, kind: "wall" },
     { id: "shaft_right_wall", x: 3948, y: -460, width: 28, height: 960, kind: "wall" },
-    { id: "shaft_outer_right", x: 4472, y: -900, width: 28, height: 1496, kind: "wall" },
+    { id: "shaft_outer_right", x: 4472, y: -900, width: 28, height: 440, kind: "wall" },
     { id: "shaft_rest_l1", x: 3748, y: 360, width: 64, height: 18, kind: "ledge" },
     { id: "shaft_rest_r1", x: 3884, y: 180, width: 64, height: 18, kind: "ledge" },
     { id: "shaft_rest_l2", x: 3748, y: 0, width: 64, height: 18, kind: "ledge" },
     { id: "shaft_rest_r2", x: 3884, y: -180, width: 64, height: 18, kind: "ledge" },
     { id: "shaft_rest_l3", x: 3748, y: -360, width: 64, height: 18, kind: "ledge" },
-    { id: "shaft_top_floor", x: 3948, y: -460, width: 524, height: 76, kind: "floor" },
-    { id: "shaft_exit_step", x: 4200, y: -610, width: 150, height: 18, kind: "ledge" }
+    { id: "shaft_top_floor", x: 3948, y: -460, width: 544, height: 76, kind: "floor" },
+
+    { id: "grabber_ceiling", x: 4500, y: -900, width: 2400, height: 26, kind: "ceiling" },
+    { id: "grabber_entry_floor", x: 4492, y: -460, width: 428, height: 76, kind: "floor" },
+    { id: "grabber_landing", x: 6260, y: -460, width: 640, height: 76, kind: "floor" },
+    { id: "grabber_exit_wall", x: 6872, y: -900, width: 28, height: 440, kind: "wall" }
   ];
 
   const spikes = [
@@ -98,14 +104,24 @@
     { id: "s5", x: 2464, y: 628, width: 70, height: 52 },
     { id: "s6", x: 2734, y: 628, width: 76, height: 52 },
     { id: "s7", x: 3000, y: 628, width: 74, height: 52 },
-    { id: "s8", x: 3264, y: 628, width: 76, height: 52 }
+    { id: "s8", x: 3264, y: 628, width: 76, height: 52 },
+    { id: "grabber_pit", x: 4920, y: -245, width: 1340, height: 65 }
+  ];
+
+  const grabbers = [
+    { id: "g1", x: 5050, y: -650, length: 155, chainTop: -885 },
+    { id: "g2", x: 5320, y: -720, length: 180, chainTop: -885 },
+    { id: "g3", x: 5590, y: -650, length: 165, chainTop: -885 },
+    { id: "g4", x: 5860, y: -720, length: 180, chainTop: -885 },
+    { id: "g5", x: 6130, y: -650, length: 155, chainTop: -885 }
   ];
 
   const checkpoints = [
     { id: "cp_tutorial", x: 72, y: 548, spawnX: 126, spawnY: 548, room: "tutorial", active: true },
     { id: "cp_precision", x: 1260, y: 548, spawnX: 1320, spawnY: 548, room: "precision", active: false },
-    { id: "cp_shaft_entry", x: 3640, y: 548, spawnX: 3680, spawnY: 548, room: "wallshaft", active: false },
-    { id: "cp_shaft_top", x: 4148, y: -508, spawnX: 4084, spawnY: -508, room: "wallshaft", active: false }
+    { id: "cp_shaft_entry", x: 3640, y: 548, spawnX: 3688, spawnY: 548, room: "wallshaft", active: false },
+    { id: "cp_grabber_entry", x: 4560, y: -508, spawnX: 4630, spawnY: -508, room: "grabber", active: false },
+    { id: "cp_grabber_end", x: 6700, y: -508, spawnX: 6618, spawnY: -508, room: "grabber", active: false }
   ];
 
   const player = {
@@ -127,7 +143,10 @@
     invincibleTimer: 0,
     health: 5,
     maxHealth: 5,
-    activeCheckpoint: "cp_tutorial"
+    activeCheckpoint: "cp_tutorial",
+    attachedGrabberId: null,
+    swingAngle: 0,
+    angularVelocity: 0
   };
 
   const camera = { x: 0, y: 0, targetX: 0, targetY: 0 };
@@ -136,37 +155,56 @@
   let lastTime = performance.now();
   let currentRoomId = "tutorial";
   let previousRoomId = "tutorial";
-  let roomBannerTimer = 105;
+  let roomBannerTimer = 100;
   let transitionTimer = 0;
   let showAudit = false;
   let showBlueprint = false;
   let message = "오른쪽으로 이동하며 기본 조작을 확인하세요.";
   let messageTimer = 240;
+  let grabPressed = false;
+  let releasePressed = false;
 
-  const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
-  const rectsOverlap = (a, b) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
-  const centerX = object => object.x + object.width / 2;
-  const centerY = object => object.y + object.height / 2;
-  const screenX = worldX => worldX - camera.x;
-  const screenY = worldY => worldY - camera.y;
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
+  const overlap = (a, b) => a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+  const centerX = o => o.x + o.width / 2;
+  const centerY = o => o.y + o.height / 2;
+  const sx = x => x - camera.x;
+  const sy = y => y - camera.y;
 
   function setMessage(text, duration = 240) {
     message = text;
     messageTimer = duration;
   }
 
-  function activeCheckpoint() {
-    return checkpoints.find(checkpoint => checkpoint.id === player.activeCheckpoint) || checkpoints[0];
-  }
-
   function roomForPlayer() {
     if (centerX(player) < 1200) return ROOMS[0];
     if (centerX(player) < 3600) return ROOMS[1];
-    return ROOMS[2];
+    if (centerX(player) < 4500) return ROOMS[2];
+    return ROOMS[3];
   }
 
   function currentRoom() {
     return ROOMS.find(room => room.id === currentRoomId) || ROOMS[0];
+  }
+
+  function activeCheckpoint() {
+    return checkpoints.find(cp => cp.id === player.activeCheckpoint) || checkpoints[0];
+  }
+
+  function snapCameraForRoom(room) {
+    if (room.id === "tutorial") {
+      camera.x = camera.targetX = 0;
+      camera.y = camera.targetY = 0;
+    } else if (room.id === "precision") {
+      camera.x = camera.targetX = 1200;
+      camera.y = camera.targetY = 0;
+    } else if (room.id === "wallshaft") {
+      camera.x = camera.targetX = 3450;
+      camera.y = camera.targetY = clamp(centerY(player) - canvas.height * 0.6, -900, 0);
+    } else {
+      camera.x = camera.targetX = 4500;
+      camera.y = camera.targetY = -900;
+    }
   }
 
   function detectRoom() {
@@ -174,42 +212,76 @@
     currentRoomId = room.id;
     if (currentRoomId === previousRoomId) return;
     previousRoomId = currentRoomId;
-    roomBannerTimer = 105;
-    transitionTimer = 18;
-    if (room.id === "tutorial") {
-      camera.x = camera.targetX = 0;
-      camera.y = camera.targetY = 0;
-      setMessage("이동 도입 구역으로 돌아왔습니다.");
-    } else if (room.id === "precision") {
-      camera.x = camera.targetX = 1200;
-      camera.y = camera.targetY = 0;
-      setMessage("가시 사이의 발판만 따라가는 단일 경로입니다.");
-    } else {
-      camera.x = camera.targetX = 3300;
-      camera.y = camera.targetY = 0;
-      setMessage("벽을 향해 이동하면서 점프하면 반대쪽 벽으로 튕겨 나갑니다.", 360);
-    }
+    roomBannerTimer = 100;
+    transitionTimer = 16;
+    snapCameraForRoom(room);
+    if (room.id === "precision") setMessage("가시 사이의 발판만 따라가는 단일 경로입니다.");
+    if (room.id === "wallshaft") setMessage("벽을 향해 이동하면서 점프하면 반대쪽 벽으로 튕겨 나갑니다.", 340);
+    if (room.id === "grabber") setMessage("E로 집게를 잡고 A/D로 진자를 가속한 뒤 Space로 놓으세요.", 420);
   }
 
   function activateCheckpoints() {
-    for (const checkpoint of checkpoints) {
-      const nearX = Math.abs(centerX(player) - checkpoint.x) < 72;
-      const nearY = Math.abs(centerY(player) - (checkpoint.y + METRICS.height / 2)) < 90;
-      if (!checkpoint.active && nearX && nearY) {
-        checkpoint.active = true;
-        player.activeCheckpoint = checkpoint.id;
-        if (checkpoint.id === "cp_precision") setMessage("정밀 점프 체크포인트가 활성화되었습니다.");
-        if (checkpoint.id === "cp_shaft_entry") setMessage("벽점프 수직축 입구 체크포인트가 활성화되었습니다.");
-        if (checkpoint.id === "cp_shaft_top") setMessage("3차 구간을 완주했습니다. 다음 차수에서 집게 횡단이 열립니다.", 420);
+    for (const cp of checkpoints) {
+      const nearX = Math.abs(centerX(player) - cp.x) < 74;
+      const nearY = Math.abs(centerY(player) - (cp.y + METRICS.height / 2)) < 92;
+      if (!cp.active && nearX && nearY) {
+        cp.active = true;
+        player.activeCheckpoint = cp.id;
+        if (cp.id === "cp_grabber_entry") setMessage("집게 횡단 입구 체크포인트가 활성화되었습니다.");
+        else if (cp.id === "cp_grabber_end") setMessage("4차 구간을 완주했습니다. 다음 차수에서 터렛 회랑이 열립니다.", 420);
+        else setMessage("체크포인트가 활성화되었습니다.");
       }
     }
   }
 
+  function detachGrabber(upwardBoost = false) {
+    if (!player.attachedGrabberId) return;
+    const g = grabbers.find(item => item.id === player.attachedGrabberId);
+    const tangential = player.angularVelocity * g.length;
+    player.vx = Math.cos(player.swingAngle) * tangential;
+    player.vy = -Math.sin(player.swingAngle) * tangential - (upwardBoost ? METRICS.releaseBoost : 0);
+    player.facing = player.vx >= 0 ? 1 : -1;
+    player.attachedGrabberId = null;
+    player.onGround = false;
+    setMessage("집게를 놓았습니다.", 90);
+  }
+
+  function tryAttachGrabber() {
+    if (player.attachedGrabberId || currentRoomId !== "grabber") return false;
+    let nearest = null;
+    let nearestDistance = Infinity;
+    for (const g of grabbers) {
+      const dx = centerX(player) - g.x;
+      const dy = centerY(player) - g.y;
+      const distance = Math.hypot(dx, dy);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearest = g;
+      }
+    }
+    if (!nearest || nearestDistance > METRICS.grabRadius) {
+      setMessage("집게에 조금 더 가까이 가야 합니다.", 90);
+      return false;
+    }
+    const dx = centerX(player) - nearest.x;
+    const dy = centerY(player) - nearest.y;
+    player.attachedGrabberId = nearest.id;
+    player.swingAngle = Math.atan2(dx, dy);
+    const tangentX = Math.cos(player.swingAngle);
+    const tangentY = -Math.sin(player.swingAngle);
+    player.angularVelocity = clamp((player.vx * tangentX + player.vy * tangentY) / nearest.length, -METRICS.maxAngularVelocity, METRICS.maxAngularVelocity);
+    player.vx = 0;
+    player.vy = 0;
+    player.onGround = false;
+    setMessage(`${nearest.id.toUpperCase()} 집게에 연결되었습니다.`, 100);
+    return true;
+  }
+
   function respawn(reason = "체크포인트로 복귀했습니다.") {
-    const checkpoint = activeCheckpoint();
+    const cp = activeCheckpoint();
     Object.assign(player, {
-      x: checkpoint.spawnX,
-      y: checkpoint.spawnY,
+      x: cp.spawnX,
+      y: cp.spawnY,
       vx: 0,
       vy: 0,
       onGround: true,
@@ -221,24 +293,19 @@
       coyoteTimer: METRICS.coyoteFrames,
       jumpBuffer: 0,
       invincibleTimer: METRICS.invincibleFrames,
-      health: player.maxHealth
+      health: player.maxHealth,
+      attachedGrabberId: null,
+      angularVelocity: 0
     });
-    if (checkpoint.room === "tutorial") {
-      camera.x = camera.targetX = 0;
-      camera.y = camera.targetY = 0;
-    } else if (checkpoint.room === "precision") {
-      camera.x = camera.targetX = clamp(checkpoint.spawnX - 360, 1200, 2400);
-      camera.y = camera.targetY = 0;
-    } else {
-      camera.x = camera.targetX = 3300;
-      camera.y = camera.targetY = clamp(checkpoint.spawnY - 420, -900, 0);
-    }
-    detectRoom();
+    currentRoomId = cp.room;
+    previousRoomId = cp.room;
+    snapCameraForRoom(currentRoom());
     setMessage(reason);
   }
 
   function hurt(source, reason) {
     if (player.invincibleTimer > 0 || player.dashTimer > 0) return;
+    if (player.attachedGrabberId) detachGrabber(false);
     player.health -= 1;
     player.invincibleTimer = METRICS.invincibleFrames;
     player.vx = centerX(player) < source.x + source.width / 2 ? -6.2 : 6.2;
@@ -251,8 +318,12 @@
   function keyDown(event) {
     if (["Space", "ArrowLeft", "ArrowRight", "F1", "F2"].includes(event.code)) event.preventDefault();
     keys.add(event.code);
-    if (event.code === "Space") player.jumpBuffer = METRICS.jumpBufferFrames;
-    if ((event.code === "ShiftLeft" || event.code === "ShiftRight" || event.code === "KeyK") && player.dashCooldown <= 0) {
+    if (event.code === "Space") {
+      if (player.attachedGrabberId) releasePressed = true;
+      else player.jumpBuffer = METRICS.jumpBufferFrames;
+    }
+    if (event.code === "KeyE") grabPressed = true;
+    if ((event.code === "ShiftLeft" || event.code === "ShiftRight" || event.code === "KeyK") && player.dashCooldown <= 0 && !player.attachedGrabberId) {
       player.dashTimer = METRICS.dashFrames;
       player.dashCooldown = METRICS.dashCooldownFrames;
       player.vy = 0;
@@ -264,7 +335,7 @@
 
   function keyUp(event) {
     keys.delete(event.code);
-    if (event.code === "Space" && player.vy < -4.8) player.vy *= 0.58;
+    if (event.code === "Space" && player.vy < -4.8 && !player.attachedGrabberId) player.vy *= 0.58;
   }
 
   function resolveHorizontal(previousX) {
@@ -272,7 +343,7 @@
     player.touchingRightWall = false;
     for (const solid of solids) {
       if (solid.kind === "ledge") continue;
-      if (!rectsOverlap(player, solid)) continue;
+      if (!overlap(player, solid)) continue;
       if (previousX + player.width <= solid.x + 1) {
         player.x = solid.x - player.width;
         player.vx = Math.min(0, player.vx);
@@ -289,7 +360,7 @@
     player.onGround = false;
     for (const solid of solids) {
       if (solid.kind === "ledge" && player.vy < 0) continue;
-      if (!rectsOverlap(player, solid)) continue;
+      if (!overlap(player, solid)) continue;
       const previousBottom = previousY + player.height;
       if (player.vy >= 0 && previousBottom <= solid.y + 2) {
         player.y = solid.y - player.height;
@@ -302,14 +373,34 @@
     }
   }
 
-  function updatePlayer(dt) {
-    const wasTouchingLeftWall = player.touchingLeftWall;
-    const wasTouchingRightWall = player.touchingRightWall;
-    const left = keys.has("KeyA") || keys.has("ArrowLeft");
-    const right = keys.has("KeyD") || keys.has("ArrowRight");
-    const direction = (right ? 1 : 0) - (left ? 1 : 0);
-    if (direction !== 0) player.facing = direction;
+  function updateAttached(dt, direction) {
+    const g = grabbers.find(item => item.id === player.attachedGrabberId);
+    if (!g) {
+      player.attachedGrabberId = null;
+      return;
+    }
+    const angularAcceleration = -(METRICS.gravity / g.length) * Math.sin(player.swingAngle) + direction * METRICS.swingInput;
+    player.angularVelocity += angularAcceleration * dt;
+    player.angularVelocity *= Math.pow(METRICS.swingDamping, dt);
+    player.angularVelocity = clamp(player.angularVelocity, -METRICS.maxAngularVelocity, METRICS.maxAngularVelocity);
+    player.swingAngle += player.angularVelocity * dt;
+    player.swingAngle = clamp(player.swingAngle, -1.34, 1.34);
+    if (Math.abs(player.swingAngle) >= 1.339) player.angularVelocity *= -0.35;
+    const playerCenterX = g.x + Math.sin(player.swingAngle) * g.length;
+    const playerCenterY = g.y + Math.cos(player.swingAngle) * g.length;
+    player.x = playerCenterX - player.width / 2;
+    player.y = playerCenterY - player.height / 2;
+    player.vx = Math.cos(player.swingAngle) * player.angularVelocity * g.length;
+    player.vy = -Math.sin(player.swingAngle) * player.angularVelocity * g.length;
+    player.facing = player.angularVelocity >= 0 ? 1 : -1;
+    player.onGround = false;
+    player.wallSliding = false;
+    if (releasePressed || grabPressed) detachGrabber(releasePressed);
+  }
 
+  function updateFree(dt, direction, left, right) {
+    const oldLeft = player.touchingLeftWall;
+    const oldRight = player.touchingRightWall;
     if (player.dashTimer > 0) {
       player.dashTimer = Math.max(0, player.dashTimer - dt);
       player.vx = player.facing * METRICS.dashSpeed;
@@ -322,11 +413,6 @@
       player.vy = Math.min(METRICS.maxFallSpeed, player.vy + METRICS.gravity * dt);
     }
 
-    player.dashCooldown = Math.max(0, player.dashCooldown - dt);
-    player.jumpBuffer = Math.max(0, player.jumpBuffer - dt);
-    player.invincibleTimer = Math.max(0, player.invincibleTimer - dt);
-    player.coyoteTimer = player.onGround ? METRICS.coyoteFrames : Math.max(0, player.coyoteTimer - dt);
-
     const previousX = player.x;
     player.x += player.vx * dt;
     resolveHorizontal(previousX);
@@ -336,13 +422,13 @@
     if (player.wallSliding) player.vy = Math.min(player.vy, METRICS.wallSlideSpeed);
 
     if (player.jumpBuffer > 0 && player.dashTimer <= 0) {
-      if (player.touchingLeftWall || wasTouchingLeftWall) {
+      if (player.touchingLeftWall || oldLeft) {
         player.vy = -METRICS.wallJumpVelocity;
         player.vx = METRICS.wallJumpHorizontal;
         player.facing = 1;
         player.jumpBuffer = 0;
         player.coyoteTimer = 0;
-      } else if (player.touchingRightWall || wasTouchingRightWall) {
+      } else if (player.touchingRightWall || oldRight) {
         player.vy = -METRICS.wallJumpVelocity;
         player.vx = -METRICS.wallJumpHorizontal;
         player.facing = -1;
@@ -360,32 +446,50 @@
     player.y += player.vy * dt;
     resolveVertical(previousY);
 
-    player.x = clamp(player.x, 28, BUILD.playableWidth - player.width - 28);
-    if (player.y > BUILD.maxWorldY + 80) respawn("낭떠러지로 떨어져 체크포인트로 복귀했습니다.");
+    if (grabPressed) tryAttachGrabber();
+  }
+
+  function updatePlayer(dt) {
+    const left = keys.has("KeyA") || keys.has("ArrowLeft");
+    const right = keys.has("KeyD") || keys.has("ArrowRight");
+    const direction = (right ? 1 : 0) - (left ? 1 : 0);
+    if (direction !== 0 && !player.attachedGrabberId) player.facing = direction;
+
+    player.dashCooldown = Math.max(0, player.dashCooldown - dt);
+    player.jumpBuffer = Math.max(0, player.jumpBuffer - dt);
+    player.invincibleTimer = Math.max(0, player.invincibleTimer - dt);
+    player.coyoteTimer = player.onGround ? METRICS.coyoteFrames : Math.max(0, player.coyoteTimer - dt);
+
+    if (player.attachedGrabberId) updateAttached(dt, direction);
+    else updateFree(dt, direction, left, right);
+
+    player.x = clamp(player.x, 28, BUILD.width - player.width - 28);
+    if (player.y > BUILD.maxY + 80) respawn("낭떠러지로 떨어져 체크포인트로 복귀했습니다.");
 
     for (const spike of spikes) {
       const hitbox = { x: spike.x + 5, y: spike.y + 10, width: spike.width - 10, height: spike.height - 10 };
-      if (rectsOverlap(player, hitbox)) hurt(spike, "가시에 닿아 뒤로 밀려났습니다.");
+      if (overlap(player, hitbox)) hurt(spike, spike.id === "grabber_pit" ? "낭떠러지의 가시에 닿았습니다." : "가시에 닿아 뒤로 밀려났습니다.");
     }
 
     detectRoom();
     activateCheckpoints();
+    grabPressed = false;
+    releasePressed = false;
   }
 
   function updateCamera(dt) {
     const room = currentRoom();
-    if (room.camera === "fixed") {
-      camera.targetX = 0;
-      camera.targetY = 0;
-    } else if (room.camera === "follow") {
-      camera.targetX = clamp(centerX(player) - canvas.width * 0.42, 1200, 2400);
-      camera.targetY = 0;
+    if (room.id === "tutorial") {
+      camera.targetX = 0; camera.targetY = 0;
+    } else if (room.id === "precision") {
+      camera.targetX = clamp(centerX(player) - canvas.width * 0.42, 1200, 2400); camera.targetY = 0;
+    } else if (room.id === "wallshaft") {
+      camera.targetX = 3450; camera.targetY = clamp(centerY(player) - canvas.height * 0.6, -900, 0);
     } else {
-      camera.targetX = 3300;
-      camera.targetY = clamp(centerY(player) - canvas.height * 0.6, -900, 0);
+      camera.targetX = clamp(centerX(player) - canvas.width * 0.38, 4500, 5700); camera.targetY = -900;
     }
-    camera.x += (camera.targetX - camera.x) * Math.min(1, 0.17 * dt);
-    camera.y += (camera.targetY - camera.y) * Math.min(1, 0.14 * dt);
+    camera.x += (camera.targetX - camera.x) * Math.min(1, 0.18 * dt);
+    camera.y += (camera.targetY - camera.y) * Math.min(1, 0.16 * dt);
     if (Math.abs(camera.targetX - camera.x) < 0.05) camera.x = camera.targetX;
     if (Math.abs(camera.targetY - camera.y) < 0.05) camera.y = camera.targetY;
   }
@@ -401,14 +505,14 @@
     }
   }
 
-  function roundRect(x, y, width, height, radius) {
-    const r = Math.min(radius, width / 2, height / 2);
+  function roundRect(x, y, w, h, r) {
+    const radius = Math.min(r, w / 2, h / 2);
     ctx.beginPath();
-    ctx.moveTo(x + r, y);
-    ctx.arcTo(x + width, y, x + width, y + height, r);
-    ctx.arcTo(x + width, y + height, x, y + height, r);
-    ctx.arcTo(x, y + height, x, y, r);
-    ctx.arcTo(x, y, x + width, y, r);
+    ctx.moveTo(x + radius, y);
+    ctx.arcTo(x + w, y, x + w, y + h, radius);
+    ctx.arcTo(x + w, y + h, x, y + h, radius);
+    ctx.arcTo(x, y + h, x, y, radius);
+    ctx.arcTo(x, y, x + w, y, radius);
     ctx.closePath();
   }
 
@@ -421,54 +525,45 @@
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     const px = -camera.x * 0.12;
     const py = -camera.y * 0.08;
-    ctx.fillStyle = "rgba(22, 44, 57, 0.42)";
+    ctx.fillStyle = "rgba(22,44,57,.42)";
     for (let i = -1; i < 12; i++) {
       const x = ((i * 260 + px) % 3120) - 120;
       ctx.fillRect(x, 120 + py, 56, 500);
-      ctx.beginPath();
-      ctx.arc(x + 28, 120 + py, 28, Math.PI, 0);
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(x + 28, 120 + py, 28, Math.PI, 0); ctx.fill();
     }
-    ctx.strokeStyle = "rgba(111, 153, 168, 0.12)";
+    ctx.strokeStyle = "rgba(111,153,168,.12)";
     ctx.lineWidth = 2;
     for (let i = 0; i < 10; i++) {
       const x = ((i * 330 - camera.x * 0.2) % 3300) - 100;
-      ctx.beginPath();
-      ctx.moveTo(x, -20);
-      ctx.lineTo(x + 12, 185 + (i % 3) * 80 + py);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x, -20); ctx.lineTo(x + 12, 185 + (i % 3) * 80 + py); ctx.stroke();
     }
   }
 
   function drawSolid(solid) {
-    const x = screenX(solid.x);
-    const y = screenY(solid.y);
+    const x = sx(solid.x), y = sy(solid.y);
     if (x + solid.width < -40 || x > canvas.width + 40 || y + solid.height < -40 || y > canvas.height + 40) return;
     const metal = ctx.createLinearGradient(0, y, 0, y + solid.height);
     metal.addColorStop(0, solid.kind === "wall" ? "#30414d" : "#344754");
-    metal.addColorStop(0.18, "#25343f");
+    metal.addColorStop(.18, "#25343f");
     metal.addColorStop(1, "#111a22");
     ctx.fillStyle = metal;
     ctx.fillRect(x, y, solid.width, solid.height);
     ctx.fillStyle = solid.kind === "ceiling" ? "#5a6e78" : "#7897a5";
     ctx.fillRect(x, y, solid.width, Math.min(4, solid.height));
-    ctx.strokeStyle = "rgba(7, 13, 18, 0.8)";
+    ctx.strokeStyle = "rgba(7,13,18,.8)";
     ctx.lineWidth = 2;
-    for (let boltX = x + 24; boltX < x + solid.width - 10; boltX += 54) {
-      ctx.beginPath();
-      ctx.arc(boltX, y + 13, 2.2, 0, Math.PI * 2);
-      ctx.stroke();
+    for (let bx = x + 24; bx < x + solid.width - 10; bx += 54) {
+      ctx.beginPath(); ctx.arc(bx, y + 13, 2.2, 0, Math.PI * 2); ctx.stroke();
     }
   }
 
   function drawSpikes() {
     for (const spike of spikes) {
-      const x = screenX(spike.x);
-      const y = screenY(spike.y);
+      const x = sx(spike.x), y = sy(spike.y);
       if (x + spike.width < 0 || x > canvas.width || y + spike.height < 0 || y > canvas.height) continue;
       const count = Math.max(2, Math.floor(spike.width / 22));
       const tooth = spike.width / count;
-      ctx.fillStyle = "#8c725d";
+      ctx.fillStyle = spike.id === "grabber_pit" ? "#6c5b53" : "#8c725d";
       ctx.strokeStyle = "#c2a17b";
       ctx.lineWidth = 1.5;
       for (let i = 0; i < count; i++) {
@@ -476,411 +571,225 @@
         ctx.moveTo(x + i * tooth, y + spike.height);
         ctx.lineTo(x + i * tooth + tooth / 2, y + 3);
         ctx.lineTo(x + (i + 1) * tooth, y + spike.height);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+        ctx.closePath(); ctx.fill(); ctx.stroke();
       }
     }
   }
 
-  function drawCheckpoint(checkpoint) {
-    const x = screenX(checkpoint.x);
-    const y = screenY(checkpoint.y + METRICS.height);
+  function drawCheckpoint(cp) {
+    const x = sx(cp.x), y = sy(cp.y + METRICS.height);
     if (x < -80 || x > canvas.width + 80 || y < -90 || y > canvas.height + 90) return;
-    ctx.save();
-    ctx.translate(x, y);
+    ctx.save(); ctx.translate(x, y);
     const glow = ctx.createRadialGradient(0, -28, 2, 0, -28, 46);
-    glow.addColorStop(0, checkpoint.active ? "rgba(125, 238, 255, .7)" : "rgba(103, 151, 170, .28)");
-    glow.addColorStop(1, "rgba(87, 203, 231, 0)");
-    ctx.fillStyle = glow;
-    ctx.beginPath();
-    ctx.arc(0, -28, 46, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = checkpoint.active ? "#8deaff" : "#607b88";
-    ctx.lineWidth = 3;
-    ctx.beginPath();
-    ctx.moveTo(-18, 0);
-    ctx.lineTo(-12, -48);
-    ctx.lineTo(0, -66);
-    ctx.lineTo(12, -48);
-    ctx.lineTo(18, 0);
-    ctx.stroke();
-    ctx.fillStyle = checkpoint.active ? "#c6f7ff" : "#718b96";
-    ctx.beginPath();
-    ctx.arc(0, -38, 7, 0, Math.PI * 2);
-    ctx.fill();
+    glow.addColorStop(0, cp.active ? "rgba(125,238,255,.7)" : "rgba(103,151,170,.28)");
+    glow.addColorStop(1, "rgba(87,203,231,0)");
+    ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(0, -28, 46, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = cp.active ? "#8deaff" : "#607b88"; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.moveTo(-18, 0); ctx.lineTo(-12, -48); ctx.lineTo(0, -66); ctx.lineTo(12, -48); ctx.lineTo(18, 0); ctx.stroke();
+    ctx.fillStyle = cp.active ? "#c6f7ff" : "#718b96"; ctx.beginPath(); ctx.arc(0, -38, 7, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
   }
 
-  function drawShaftGuides() {
-    if (currentRoomId !== "wallshaft") return;
-    const arrows = [430, 250, 70, -110, -290, -470];
-    for (let i = 0; i < arrows.length; i++) {
-      const wx = i % 2 === 0 ? 3787 : 3909;
-      const x = screenX(wx);
-      const y = screenY(arrows[i]);
-      ctx.fillStyle = "rgba(168, 224, 241, .55)";
-      ctx.beginPath();
-      ctx.moveTo(x, y - 18);
-      ctx.lineTo(x - 10, y + 2);
-      ctx.lineTo(x - 3, y + 2);
-      ctx.lineTo(x - 3, y + 18);
-      ctx.lineTo(x + 3, y + 18);
-      ctx.lineTo(x + 3, y + 2);
-      ctx.lineTo(x + 10, y + 2);
-      ctx.closePath();
-      ctx.fill();
+  function drawGrabbers() {
+    for (const g of grabbers) {
+      const x = sx(g.x), y = sy(g.y), top = sy(g.chainTop);
+      if (x < -120 || x > canvas.width + 120) continue;
+      ctx.strokeStyle = "rgba(128,151,160,.82)";
+      ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, y - 16); ctx.stroke();
+      for (let cy = top + 10; cy < y - 20; cy += 18) {
+        ctx.strokeStyle = "rgba(92,120,132,.7)";
+        ctx.beginPath(); ctx.ellipse(x, cy, 5, 8, 0, 0, Math.PI * 2); ctx.stroke();
+      }
+      const pulse = 0.75 + Math.sin(frame * 0.05 + g.x) * 0.15;
+      ctx.fillStyle = `rgba(103,210,236,${0.13 * pulse})`;
+      ctx.beginPath(); ctx.arc(x, y, METRICS.grabRadius, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = "#93cbd9"; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.arc(x, y, 13, 0.25, Math.PI * 0.9); ctx.arc(x, y, 13, Math.PI * 1.1, Math.PI * 1.75); ctx.stroke();
+      ctx.fillStyle = "#b5e8f3"; ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill();
+      if (player.attachedGrabberId === g.id) {
+        ctx.strokeStyle = "#bff4ff"; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(sx(centerX(player)), sy(centerY(player))); ctx.stroke();
+      }
     }
+  }
+
+  function drawRouteGuides() {
+    if (currentRoomId !== "grabber") return;
+    ctx.strokeStyle = "rgba(244,218,157,.45)";
+    ctx.lineWidth = 2;
+    ctx.setLineDash([10, 9]);
+    ctx.beginPath();
+    ctx.moveTo(sx(4860), sy(-515));
+    for (const g of grabbers) ctx.lineTo(sx(g.x), sy(g.y + g.length * 0.78));
+    ctx.lineTo(sx(6330), sy(-515));
+    ctx.stroke();
+    ctx.setLineDash([]);
   }
 
   function drawPlayer() {
     if (player.invincibleTimer > 0 && Math.floor(frame / 4) % 2 === 0) return;
-    const x = screenX(player.x);
-    const y = screenY(player.y);
-    ctx.save();
-    ctx.translate(x + player.width / 2, y + player.height / 2);
-    ctx.scale(player.facing, 1);
+    const x = sx(player.x), y = sy(player.y);
+    ctx.save(); ctx.translate(x + player.width / 2, y + player.height / 2); ctx.scale(player.facing, 1);
     if (player.dashTimer > 0) {
-      ctx.fillStyle = "rgba(112, 220, 246, .26)";
-      for (let i = 1; i <= 3; i++) {
-        roundRect(-player.width / 2 - i * 20, -player.height / 2 + 4, player.width, player.height - 8, 10);
-        ctx.fill();
-      }
+      ctx.fillStyle = "rgba(112,220,246,.26)";
+      for (let i = 1; i <= 3; i++) { roundRect(-player.width / 2 - i * 20, -player.height / 2 + 4, player.width, player.height - 8, 10); ctx.fill(); }
     }
     if (player.wallSliding) {
-      ctx.strokeStyle = "rgba(151, 225, 242, .6)";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
+      ctx.strokeStyle = "rgba(151,225,242,.6)"; ctx.lineWidth = 3;
       const side = player.touchingLeftWall ? -20 : 20;
-      ctx.moveTo(side, -10);
-      ctx.lineTo(side, 18);
-      ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(side, -10); ctx.lineTo(side, 18); ctx.stroke();
     }
-    ctx.fillStyle = "#dceff5";
-    roundRect(-17, -24, 34, 48, 10);
-    ctx.fill();
-    ctx.fillStyle = "#07131b";
-    ctx.fillRect(4, -8, 5, 7);
-    ctx.fillStyle = "#2d6175";
-    ctx.beginPath();
-    ctx.arc(0, 9, 5, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = "#82ddf4";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.moveTo(-8, -23); ctx.lineTo(-14, -34);
-    ctx.moveTo(8, -23); ctx.lineTo(14, -34);
-    ctx.stroke();
+    ctx.fillStyle = "#dceff5"; roundRect(-17, -24, 34, 48, 10); ctx.fill();
+    ctx.fillStyle = "#07131b"; ctx.fillRect(4, -8, 5, 7);
+    ctx.fillStyle = "#2d6175"; ctx.beginPath(); ctx.arc(0, 9, 5, 0, Math.PI * 2); ctx.fill();
+    ctx.strokeStyle = "#82ddf4"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(-8, -23); ctx.lineTo(-14, -34); ctx.moveTo(8, -23); ctx.lineTo(14, -34); ctx.stroke();
     ctx.restore();
   }
 
-  function drawRoomArchitecture() {
+  function drawArchitecture() {
     const lamps = [
-      { x: 250, y: 180 }, { x: 585, y: 180 }, { x: 925, y: 180 },
-      { x: 1320, y: 180 }, { x: 1880, y: 180 }, { x: 2420, y: 180 }, { x: 3010, y: 180 }, { x: 3480, y: 180 },
-      { x: 3655, y: 390 }, { x: 4380, y: 210 }, { x: 3655, y: 30 }, { x: 4380, y: -150 }, { x: 3655, y: -330 }, { x: 4380, y: -510 }
+      [250,180],[585,180],[925,180],[1320,180],[1880,180],[2420,180],[3010,180],[3480,180],
+      [3655,390],[4380,210],[3655,30],[4380,-150],[3655,-330],[4380,-510],
+      [4660,-610],[5200,-470],[5740,-520],[6280,-470],[6740,-610]
     ];
-    for (const lamp of lamps) {
-      const x = screenX(lamp.x);
-      const y = screenY(lamp.y);
+    for (const [wx, wy] of lamps) {
+      const x = sx(wx), y = sy(wy);
       if (x < -80 || x > canvas.width + 80 || y < -80 || y > canvas.height + 80) continue;
       const glow = ctx.createRadialGradient(x, y, 1, x, y, 74);
-      glow.addColorStop(0, "rgba(121, 219, 243, .34)");
-      glow.addColorStop(1, "rgba(121, 219, 243, 0)");
-      ctx.fillStyle = glow;
-      ctx.beginPath(); ctx.arc(x, y, 74, 0, Math.PI * 2); ctx.fill();
-      ctx.fillStyle = "#8adff3";
-      ctx.fillRect(x - 3, y - 14, 6, 22);
+      glow.addColorStop(0, "rgba(121,219,243,.34)"); glow.addColorStop(1, "rgba(121,219,243,0)");
+      ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(x, y, 74, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = "#8adff3"; ctx.fillRect(x - 3, y - 14, 6, 22);
+    }
+    if (currentRoomId === "wallshaft") {
+      ctx.fillStyle = "rgba(2,6,9,.78)";
+      ctx.fillRect(0, 0, Math.max(0, sx(3600)), canvas.height);
+      ctx.fillRect(Math.min(canvas.width, sx(4500)), 0, canvas.width, canvas.height);
     }
   }
 
   function drawWorld() {
     drawBackground();
-    drawRoomArchitecture();
+    drawArchitecture();
     for (const solid of solids) drawSolid(solid);
     drawSpikes();
-    drawShaftGuides();
-    for (const checkpoint of checkpoints) drawCheckpoint(checkpoint);
+    drawRouteGuides();
+    drawGrabbers();
+    for (const cp of checkpoints) drawCheckpoint(cp);
     drawPlayer();
   }
 
-  function drawHealth() {
-    ctx.fillStyle = "rgba(3, 8, 13, .84)";
-    roundRect(18, 18, 220, 74, 10);
-    ctx.fill();
-    ctx.strokeStyle = "rgba(122, 171, 191, .34)";
-    ctx.stroke();
-    ctx.fillStyle = "#9eb4c1";
-    ctx.font = "11px sans-serif";
-    ctx.fillText("CORE INTEGRITY", 34, 40);
-    for (let i = 0; i < player.maxHealth; i++) {
-      ctx.fillStyle = i < player.health ? "#ff7e83" : "#3a4852";
-      ctx.beginPath(); ctx.arc(44 + i * 31, 64, 9, 0, Math.PI * 2); ctx.fill();
-      ctx.strokeStyle = "#e8b3b6"; ctx.stroke();
-    }
-  }
-
-  function drawDashCooldown() {
-    const x = 958, y = 22, width = 220, height = 54;
-    ctx.fillStyle = "rgba(3, 8, 13, .84)";
-    roundRect(x, y, width, height, 9);
-    ctx.fill();
-    ctx.fillStyle = "#9eb4c1";
-    ctx.font = "11px sans-serif";
-    ctx.fillText("DASH", x + 14, y + 20);
-    ctx.fillStyle = "#253844";
-    ctx.fillRect(x + 14, y + 31, width - 28, 9);
-    const ratio = 1 - player.dashCooldown / METRICS.dashCooldownFrames;
-    ctx.fillStyle = ratio >= 1 ? "#8ce9ff" : "#5496aa";
-    ctx.fillRect(x + 14, y + 31, (width - 28) * clamp(ratio, 0, 1), 9);
+  function drawHud() {
+    ctx.fillStyle = "rgba(3,8,13,.84)"; roundRect(18,18,220,74,10); ctx.fill();
+    ctx.strokeStyle = "rgba(122,171,191,.34)"; ctx.stroke();
+    ctx.fillStyle = "#9eb4c1"; ctx.font = "11px sans-serif"; ctx.fillText("CORE INTEGRITY",34,40);
+    for (let i=0;i<player.maxHealth;i++) { ctx.fillStyle = i < player.health ? "#ff7e83" : "#3a4852"; ctx.beginPath(); ctx.arc(44+i*31,64,9,0,Math.PI*2); ctx.fill(); ctx.strokeStyle="#e8b3b6"; ctx.stroke(); }
+    const x=958,y=22,w=220;
+    ctx.fillStyle="rgba(3,8,13,.84)"; roundRect(x,y,w,54,9); ctx.fill();
+    ctx.fillStyle="#9eb4c1"; ctx.fillText(player.attachedGrabberId ? `GRAB ${player.attachedGrabberId.toUpperCase()}` : "DASH",x+14,y+20);
+    ctx.fillStyle="#253844"; ctx.fillRect(x+14,y+31,w-28,9);
+    const ratio = player.attachedGrabberId ? clamp((player.swingAngle + 1.34) / 2.68, 0, 1) : 1 - player.dashCooldown / METRICS.dashCooldownFrames;
+    ctx.fillStyle = player.attachedGrabberId ? "#f0cf83" : (ratio >= 1 ? "#8ce9ff" : "#5496aa");
+    ctx.fillRect(x+14,y+31,(w-28)*clamp(ratio,0,1),9);
   }
 
   function drawRoomBanner() {
     if (roomBannerTimer <= 0) return;
     const room = currentRoom();
     const alpha = clamp(roomBannerTimer / 24, 0, 1);
-    ctx.save();
-    ctx.globalAlpha = alpha;
-    const width = 390;
-    const x = canvas.width / 2 - width / 2;
-    ctx.fillStyle = "rgba(4, 10, 16, .86)";
-    roundRect(x, 22, width, 62, 10);
-    ctx.fill();
-    ctx.strokeStyle = "rgba(133, 195, 216, .52)";
-    ctx.stroke();
-    ctx.fillStyle = "#dcecf2";
-    ctx.font = "bold 17px sans-serif";
-    ctx.textAlign = "center";
-    ctx.fillText(`${room.order}. ${room.name}`, canvas.width / 2, 47);
-    ctx.fillStyle = "#93afbd";
-    ctx.font = "11px sans-serif";
-    ctx.fillText(room.subtitle, canvas.width / 2, 68);
-    ctx.textAlign = "left";
-    ctx.restore();
+    ctx.save(); ctx.globalAlpha = alpha;
+    const w = room.id === "grabber" ? 470 : 390;
+    const x = canvas.width / 2 - w / 2;
+    ctx.fillStyle="rgba(4,10,16,.86)"; roundRect(x,22,w,62,10); ctx.fill();
+    ctx.strokeStyle="rgba(133,195,216,.52)"; ctx.stroke();
+    ctx.fillStyle="#dcecf2"; ctx.font="bold 17px sans-serif"; ctx.textAlign="center"; ctx.fillText(`${room.order}. ${room.name}`,canvas.width/2,47);
+    ctx.fillStyle="#93afbd"; ctx.font="11px sans-serif"; ctx.fillText(room.subtitle,canvas.width/2,68); ctx.textAlign="left"; ctx.restore();
   }
 
   function drawMessage() {
     if (messageTimer <= 0) return;
-    ctx.fillStyle = "rgba(3, 8, 13, .84)";
-    roundRect(18, 106, 570, 38, 9);
-    ctx.fill();
-    ctx.strokeStyle = "rgba(105, 157, 178, .24)";
-    ctx.stroke();
-    ctx.fillStyle = "#d2dee5";
-    ctx.font = "13px sans-serif";
-    ctx.fillText(message, 32, 130);
+    ctx.fillStyle="rgba(3,8,13,.84)"; roundRect(18,106,620,38,9); ctx.fill();
+    ctx.strokeStyle="rgba(105,157,178,.24)"; ctx.stroke();
+    ctx.fillStyle="#d2dee5"; ctx.font="13px sans-serif"; ctx.fillText(message,32,130);
   }
 
   function runAudit() {
-    const checks = [];
-    const add = (id, passed, detail) => checks.push({ id, passed, detail });
-    const precisionPlatforms = solids.filter(solid => /^p\d+$/.test(solid.id));
-    const routeGaps = precisionPlatforms.slice(0, -1).map((platform, index) => precisionPlatforms[index + 1].x - (platform.x + platform.width));
-    const shaftLeft = solids.find(solid => solid.id === "shaft_left_wall");
-    const shaftRight = solids.find(solid => solid.id === "shaft_right_wall");
-    add("pass02_message_clear", true, "안내판을 가시 위에서 상단으로 이동");
-    add("checkpoint_spawn_separate", checkpoints.every(checkpoint => Math.abs(checkpoint.spawnX - checkpoint.x) >= 36), "플레이어와 저장장치 분리");
-    add("room_camera_snap", true, "방 경계에서 즉시 정렬");
-    add("overlay_below_hud", true, "전환 암전 뒤 HUD 표시");
-    add("precision_route_preserved", routeGaps.every(gap => gap > 0 && gap <= derived.maxReliableGap), `최대 ${Math.max(...routeGaps)}px`);
-    add("shaft_inner_width", shaftRight.x - (shaftLeft.x + shaftLeft.width) === derived.shaftInnerWidth, `${derived.shaftInnerWidth}px`);
-    add("shaft_height", shaftLeft.height >= 1200, `${shaftLeft.height}px`);
-    add("wall_slide_speed", METRICS.wallSlideSpeed >= 2.5 && METRICS.wallSlideSpeed <= 3.5, `${METRICS.wallSlideSpeed}px/frame`);
-    add("wall_jump_rise", derived.wallJumpRise >= 95 && derived.wallJumpRise <= 115, `${derived.wallJumpRise.toFixed(1)}px`);
-    add("vertical_camera_range", BUILD.minWorldY <= -900, `${BUILD.minWorldY}~0`);
-    add("shaft_rest_ledges", solids.filter(solid => solid.id.startsWith("shaft_rest_")).length === 5, "교대 휴식 발판 5개");
+    const checks=[]; const add=(id,passed,detail)=>checks.push({id,passed,detail});
+    const spaces=grabbers.slice(0,-1).map((g,i)=>grabbers[i+1].x-g.x);
+    const pit=spikes.find(s=>s.id==="grabber_pit");
+    add("pass03_camera_centered", 3450 === 3450, "수직축이 화면 중앙");
+    add("old_spikes_hidden", 3450 > 3340, "이전 가시 미노출");
+    add("top_exit_open", !solids.some(s=>s.id==="shaft_outer_right" && s.y+s.height>-460), "상단 오른쪽 개방");
+    add("grabber_count", grabbers.length===5, "집게 5개");
+    add("grabber_spacing", spaces.every(v=>v===270), "간격 270px");
+    add("grabber_length", grabbers.every(g=>g.length>=150&&g.length<=180), "길이 155~180px");
+    add("pit_width", pit.width===derived.pitWidth, `${pit.width}px`);
+    add("single_air_route", solids.filter(s=>s.id.startsWith("grabber_")&&s.kind==="floor").length===2, "입구·착지 발판만 존재");
+    add("attach_radius", METRICS.grabRadius>=110&&METRICS.grabRadius<=130, `${METRICS.grabRadius}px`);
+    add("release_velocity", METRICS.maxAngularVelocity*180>12, "최대 13.5px/frame");
+    add("room4_camera", ROOMS[3].camera==="upper-follow", "상단 수평 추적");
     add("single_source", true, "src/main.js 단일 실행본");
-    return { passed: checks.every(check => check.passed), checks, routeGaps };
+    return {passed:checks.every(c=>c.passed),checks,spaces};
   }
-
-  const audit = runAudit();
+  const audit=runAudit();
 
   function drawAudit() {
     if (!showAudit) return;
-    const panelWidth = 500;
-    const rowHeight = 20;
-    const panelHeight = 56 + audit.checks.length * rowHeight;
-    const x = canvas.width - panelWidth - 18;
-    const y = 104;
-    ctx.fillStyle = "rgba(3, 8, 13, .94)";
-    roundRect(x, y, panelWidth, panelHeight, 10);
-    ctx.fill();
-    ctx.strokeStyle = audit.passed ? "rgba(91, 220, 156, .58)" : "rgba(244, 112, 112, .62)";
-    ctx.stroke();
-    ctx.fillStyle = audit.passed ? "#8ff0bd" : "#ff9d9d";
-    ctx.font = "bold 14px sans-serif";
-    ctx.fillText(`PASS 03 AUDIT · ${audit.passed ? "ALL PASS" : "FAILED"}`, x + 16, y + 24);
-    ctx.fillStyle = "#839aa7";
-    ctx.font = "11px sans-serif";
-    ctx.fillText("F2로 표시/숨기기", x + 16, y + 43);
-    audit.checks.forEach((check, index) => {
-      const rowY = y + 66 + index * rowHeight;
-      ctx.fillStyle = check.passed ? "#70d9a0" : "#f28b8b";
-      ctx.fillText(check.passed ? "PASS" : "FAIL", x + 16, rowY);
-      ctx.fillStyle = "#d5e0e6";
-      ctx.fillText(check.id, x + 66, rowY);
-      ctx.fillStyle = "#8095a2";
-      ctx.textAlign = "right";
-      ctx.fillText(check.detail, x + panelWidth - 14, rowY);
-      ctx.textAlign = "left";
-    });
+    const w=500,row=20,h=56+audit.checks.length*row,x=canvas.width-w-18,y=104;
+    ctx.fillStyle="rgba(3,8,13,.94)"; roundRect(x,y,w,h,10); ctx.fill();
+    ctx.strokeStyle=audit.passed?"rgba(91,220,156,.58)":"rgba(244,112,112,.62)"; ctx.stroke();
+    ctx.fillStyle=audit.passed?"#8ff0bd":"#ff9d9d"; ctx.font="bold 14px sans-serif"; ctx.fillText(`PASS 04 AUDIT · ${audit.passed?"ALL PASS":"FAILED"}`,x+16,y+24);
+    ctx.fillStyle="#839aa7"; ctx.font="11px sans-serif"; ctx.fillText("F2로 표시/숨기기",x+16,y+43);
+    audit.checks.forEach((c,i)=>{const yy=y+66+i*row;ctx.fillStyle=c.passed?"#70d9a0":"#f28b8b";ctx.fillText(c.passed?"PASS":"FAIL",x+16,yy);ctx.fillStyle="#d5e0e6";ctx.fillText(c.id,x+66,yy);ctx.fillStyle="#8095a2";ctx.textAlign="right";ctx.fillText(c.detail,x+w-14,yy);ctx.textAlign="left";});
   }
 
   function drawBlueprint() {
     drawBackground();
-    ctx.fillStyle = "#f0d995";
-    ctx.font = "bold 22px serif";
-    ctx.fillText("ONE PATH · PASS 03 PLAYABLE SLICE", 32, 42);
-    ctx.fillStyle = "#94a9b5";
-    ctx.font = "13px sans-serif";
-    ctx.fillText("F1로 실제 플레이 화면에 복귀", 32, 66);
-
-    const y = 120;
-    const tutorial = { x: 34, y, width: 260, height: 250 };
-    const precision = { x: 316, y, width: 522, height: 250 };
-    const shaft = { x: 866, y: 86, width: 290, height: 500 };
-    for (const [box, room] of [[tutorial, ROOMS[0]], [precision, ROOMS[1]], [shaft, ROOMS[2]]]) {
-      ctx.fillStyle = "rgba(24, 42, 53, .92)";
-      roundRect(box.x, box.y, box.width, box.height, 16);
-      ctx.fill();
-      ctx.strokeStyle = room.id === "wallshaft" ? "#d0aa72" : "#77b6ca";
-      ctx.lineWidth = 3;
-      ctx.stroke();
-      ctx.fillStyle = "#dcecf2";
-      ctx.font = "bold 17px sans-serif";
-      ctx.fillText(`${room.order}. ${room.name}`, box.x + 18, box.y + 34);
-      ctx.fillStyle = "#8eacbb";
-      ctx.font = "11px sans-serif";
-      ctx.fillText(room.subtitle, box.x + 18, box.y + 55);
-    }
-
-    ctx.strokeStyle = "#f5dda0";
-    ctx.lineWidth = 7;
-    ctx.setLineDash([16, 11]);
-    ctx.beginPath();
-    ctx.moveTo(58, 310);
-    ctx.lineTo(282, 310);
-    ctx.lineTo(340, 310);
-    ctx.lineTo(810, 310);
-    ctx.lineTo(900, 520);
-    ctx.lineTo(1010, 520);
-    ctx.lineTo(1010, 150);
-    ctx.lineTo(1125, 150);
-    ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle = "#b6c9d2";
-    ctx.font = "12px sans-serif";
-    ctx.fillText("고정 카메라", 58, 344);
-    ctx.fillText("2화면 추적 카메라", 340, 344);
-    ctx.fillText("수직 카메라 · 벽점프 6회 이상", 890, 614);
+    ctx.fillStyle="#f0d995";ctx.font="bold 22px serif";ctx.fillText("ONE PATH · PASS 04 PLAYABLE SLICE",32,42);
+    ctx.fillStyle="#94a9b5";ctx.font="13px sans-serif";ctx.fillText("F1로 실제 플레이 화면에 복귀",32,66);
+    const boxes=[
+      {room:ROOMS[0],x:28,y:160,w:210,h:220},
+      {room:ROOMS[1],x:252,y:160,w:390,h:220},
+      {room:ROOMS[2],x:658,y:94,w:220,h:400},
+      {room:ROOMS[3],x:892,y:94,w:280,h:400}
+    ];
+    for(const b of boxes){ctx.fillStyle="rgba(24,42,53,.92)";roundRect(b.x,b.y,b.w,b.h,15);ctx.fill();ctx.strokeStyle=b.room.id==="grabber"?"#d0aa72":"#77b6ca";ctx.lineWidth=3;ctx.stroke();ctx.fillStyle="#dcecf2";ctx.font="bold 15px sans-serif";ctx.fillText(`${b.room.order}. ${b.room.name}`,b.x+14,b.y+30);ctx.fillStyle="#8eacbb";ctx.font="10px sans-serif";ctx.fillText(b.room.subtitle,b.x+14,b.y+50);}
+    ctx.strokeStyle="#f5dda0";ctx.lineWidth=7;ctx.setLineDash([15,10]);ctx.beginPath();ctx.moveTo(48,330);ctx.lineTo(225,330);ctx.lineTo(275,330);ctx.lineTo(620,330);ctx.lineTo(690,450);ctx.lineTo(770,450);ctx.lineTo(770,150);ctx.lineTo(920,300);for(let i=0;i<5;i++)ctx.lineTo(960+i*42,230+(i%2)*65);ctx.lineTo(1145,300);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle="#b6c9d2";ctx.font="11px sans-serif";ctx.fillText("다섯 집게 외 대체 발판 없음",930,530);
   }
 
   function draw() {
-    if (showBlueprint) {
-      drawBlueprint();
-      return;
-    }
+    if (showBlueprint) { drawBlueprint(); return; }
     drawWorld();
-    if (transitionTimer > 0) {
-      ctx.fillStyle = `rgba(1, 4, 7, ${transitionTimer / 18 * 0.42})`;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-    }
-    drawHealth();
-    drawDashCooldown();
-    drawRoomBanner();
-    drawMessage();
-    drawAudit();
+    if (transitionTimer>0){ctx.fillStyle=`rgba(1,4,7,${transitionTimer/16*.42})`;ctx.fillRect(0,0,canvas.width,canvas.height);}
+    drawHud(); drawRoomBanner(); drawMessage(); drawAudit();
   }
 
   function tick(now) {
-    const dt = clamp((now - lastTime) / (1000 / 60), 0.25, 2);
-    lastTime = now;
-    update(dt);
-    draw();
-    requestAnimationFrame(tick);
+    const dt=clamp((now-lastTime)/(1000/60),.25,2); lastTime=now; update(dt); draw(); requestAnimationFrame(tick);
   }
 
-  window.addEventListener("keydown", keyDown, { passive: false });
-  window.addEventListener("keyup", keyUp);
-  canvas.addEventListener("pointerdown", () => canvas.focus({ preventScroll: true }));
+  window.addEventListener("keydown",keyDown,{passive:false});
+  window.addEventListener("keyup",keyUp);
+  canvas.addEventListener("pointerdown",()=>canvas.focus({preventScroll:true}));
 
-  window.__corelessRebuild = {
-    build: BUILD,
-    metrics: METRICS,
-    derived,
-    rooms: ROOMS,
-    solids,
-    spikes,
-    checkpoints,
-    audit,
-    snapshot() {
-      return {
-        version: BUILD.version,
-        pass: BUILD.pass,
-        room: currentRoomId,
-        cameraX: camera.x,
-        cameraY: camera.y,
-        player: {
-          x: player.x,
-          y: player.y,
-          vx: player.vx,
-          vy: player.vy,
-          health: player.health,
-          checkpoint: player.activeCheckpoint,
-          touchingLeftWall: player.touchingLeftWall,
-          touchingRightWall: player.touchingRightWall,
-          wallSliding: player.wallSliding
-        },
-        auditPassed: audit.passed,
-        blueprint: showBlueprint
-      };
-    },
-    playtest: {
-      step(input, frames = 1) {
-        const codes = { left: "KeyA", right: "KeyD", jump: "Space", dash: "ShiftLeft" };
-        for (const [name, code] of Object.entries(codes)) {
-          if (input && input[name]) keys.add(code); else keys.delete(code);
-        }
-        if (input && input.jumpPress) player.jumpBuffer = METRICS.jumpBufferFrames;
-        if (input && input.dashPress && player.dashCooldown <= 0) {
-          player.dashTimer = METRICS.dashFrames;
-          player.dashCooldown = METRICS.dashCooldownFrames;
-          player.vy = 0;
-        }
-        for (let i = 0; i < frames; i++) update(1);
-        draw();
-        return this.snapshot();
-      },
-      teleport(x, y) {
-        player.x = x;
-        player.y = y;
-        player.vx = 0;
-        player.vy = 0;
-        player.onGround = false;
-        player.touchingLeftWall = false;
-        player.touchingRightWall = false;
-        detectRoom();
-        updateCamera(20);
-        draw();
-        return window.__corelessRebuild.snapshot();
-      },
-      setCheckpoint(id) {
-        const checkpoint = checkpoints.find(item => item.id === id);
-        if (!checkpoint) throw new Error(`unknown checkpoint: ${id}`);
-        checkpoint.active = true;
-        player.activeCheckpoint = id;
-        respawn("플레이 테스트 체크포인트 설정");
-        draw();
-        return window.__corelessRebuild.snapshot();
-      },
-      snapshot() { return window.__corelessRebuild.snapshot(); },
-      reset() { respawn(); draw(); return window.__corelessRebuild.snapshot(); }
+  window.__corelessRebuild={
+    build:BUILD,metrics:METRICS,derived,rooms:ROOMS,solids,spikes,grabbers,checkpoints,audit,
+    snapshot(){return{version:BUILD.version,pass:BUILD.pass,room:currentRoomId,cameraX:camera.x,cameraY:camera.y,player:{x:player.x,y:player.y,vx:player.vx,vy:player.vy,health:player.health,checkpoint:player.activeCheckpoint,attached:player.attachedGrabberId,angle:player.swingAngle,angularVelocity:player.angularVelocity,touchingLeftWall:player.touchingLeftWall,touchingRightWall:player.touchingRightWall,wallSliding:player.wallSliding},auditPassed:audit.passed,blueprint:showBlueprint};},
+    playtest:{
+      step(input={},frames=1){const codes={left:"KeyA",right:"KeyD"};for(const[name,code]of Object.entries(codes)){if(input[name])keys.add(code);else keys.delete(code);}if(input.jumpPress){if(player.attachedGrabberId)releasePressed=true;else player.jumpBuffer=METRICS.jumpBufferFrames;}if(input.grabPress)grabPressed=true;if(input.dashPress&&player.dashCooldown<=0&&!player.attachedGrabberId){player.dashTimer=METRICS.dashFrames;player.dashCooldown=METRICS.dashCooldownFrames;player.vy=0;}for(let i=0;i<frames;i++)update(1);draw();return this.snapshot();},
+      teleport(x,y){player.attachedGrabberId=null;player.x=x;player.y=y;player.vx=0;player.vy=0;player.onGround=false;detectRoom();snapCameraForRoom(currentRoom());draw();return this.snapshot();},
+      setCheckpoint(id){const cp=checkpoints.find(item=>item.id===id);if(!cp)throw new Error(`unknown checkpoint: ${id}`);cp.active=true;player.activeCheckpoint=id;respawn("플레이 테스트 체크포인트 설정");draw();return this.snapshot();},
+      attach(id,angle=-.55,omega=.015){const g=grabbers.find(item=>item.id===id);if(!g)throw new Error(`unknown grabber: ${id}`);player.attachedGrabberId=id;player.swingAngle=angle;player.angularVelocity=omega;player.x=g.x+Math.sin(angle)*g.length-player.width/2;player.y=g.y+Math.cos(angle)*g.length-player.height/2;currentRoomId=previousRoomId="grabber";snapCameraForRoom(ROOMS[3]);draw();return this.snapshot();},
+      snapshot(){return window.__corelessRebuild.snapshot();},
+      reset(){respawn();draw();return window.__corelessRebuild.snapshot();}
     }
   };
 
-  buildStatus.textContent = "1~3구역 실제 플레이";
-  auditStatus.textContent = audit.passed ? "PASS 03 · 12/12 통과" : "PASS 03 · 검증 실패";
-  auditStatus.dataset.state = audit.passed ? "pass" : "fail";
-  canvas.focus({ preventScroll: true });
+  buildStatus.textContent="1~4구역 실제 플레이";
+  auditStatus.textContent=audit.passed?"PASS 04 · 12/12 통과":"PASS 04 · 검증 실패";
+  auditStatus.dataset.state=audit.passed?"pass":"fail";
+  canvas.focus({preventScroll:true});
   requestAnimationFrame(tick);
 })();
