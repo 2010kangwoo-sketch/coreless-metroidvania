@@ -1,8 +1,19 @@
 (async function loadCorelessPass16() {
   const canvas = document.getElementById("gameCanvas");
+  const loadStatus = document.getElementById("loadStatus");
+
+  function setLoadStatus(message, isError = false) {
+    if (!loadStatus) return;
+    loadStatus.hidden = false;
+    loadStatus.textContent = message;
+    loadStatus.classList.toggle("is-error", isError);
+  }
 
   function showLoadError(error) {
     console.error("Coreless v59-16 load failed", error);
+    const message = String(error && error.message ? error.message : error);
+    setLoadStatus("게임 로드 실패: " + message, true);
+
     if (!canvas) return;
     const context = canvas.getContext("2d");
     context.fillStyle = "#111827";
@@ -12,10 +23,12 @@
     context.fillText("게임 코드를 불러오지 못했습니다.", 34, 72);
     context.fillStyle = "#cbd5e1";
     context.font = "14px Arial";
-    context.fillText(String(error && error.message ? error.message : error), 34, 104);
+    context.fillText(message, 34, 104);
   }
 
   try {
+    setLoadStatus("v59-16 게임 코드 확인 중…");
+
     if (!("DecompressionStream" in window)) {
       throw new Error("이 브라우저는 gzip 압축 해제를 지원하지 않습니다.");
     }
@@ -24,6 +37,8 @@
     if (encoded.length < 100000) {
       throw new Error("게임 코드 묶음이 완전하지 않습니다.");
     }
+
+    setLoadStatus("v59-16 게임 코드 압축 해제 중…");
 
     const binary = atob(encoded);
     const bytes = new Uint8Array(binary.length);
@@ -40,6 +55,7 @@
     if (!messagePanelPattern.test(source)) {
       throw new Error("추격 화면 메시지 패널 수정 지점을 찾지 못했습니다.");
     }
+
     source = source.replace(
       messagePanelPattern,
       `  // 추격 중에는 하단 메시지 패널이 캐릭터와 붕괴석을 가리지 않도록 숨긴다.
@@ -102,12 +118,32 @@
       }
     };`;
 
+    setLoadStatus("v59-16 게임 실행 준비 중…");
     (0, eval)(source + playtestBridge);
+
     delete window.__corelessGzip;
     window.__corelessLoaded = true;
-    window.dispatchEvent(new CustomEvent("coreless-loaded", { detail: { version: "v59-16" } }));
+    window.__corelessBuild = {
+      version: "v59-16",
+      pass: 16,
+      verified: true
+    };
+
+    setLoadStatus("v59-16 실행 준비 완료");
+    window.setTimeout(function() {
+      if (loadStatus) loadStatus.hidden = true;
+      if (canvas) canvas.focus({ preventScroll: true });
+    }, 900);
+
+    window.dispatchEvent(
+      new CustomEvent("coreless-loaded", {
+        detail: { version: "v59-16", pass: 16 }
+      })
+    );
   } catch (error) {
-    window.__corelessLoadError = String(error && error.stack ? error.stack : error);
+    window.__corelessLoadError = String(
+      error && error.stack ? error.stack : error
+    );
     showLoadError(error);
   }
 })();
