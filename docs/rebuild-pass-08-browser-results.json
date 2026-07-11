@@ -1,74 +1,102 @@
 {
-  "browser": "Chromium headless with Chrome DevTools Protocol keyboard events",
-  "version": "rebuild-pass08-snake-rework",
-  "activation": {
-    "automatic_checkpoint": "cp_mixed_end",
-    "automatic_world_x_threshold": 14500,
-    "manual_debug_key": "F8",
-    "start_checkpoint": "cp_snake_prep",
-    "end_checkpoint": "cp_snake_chase_entry"
-  },
+  "browser": "Chromium headless via Chrome DevTools Protocol",
+  "load_method": "about:blank document injection because managed Chromium blocked localhost, file and data URLs",
+  "version": "rebuild-pass08-browser-verified",
   "route": {
-    "world_width": 2700,
-    "world_height": 1660,
-    "route_length": 6228.401444620699,
-    "snake_levels": 3,
-    "horizontal_reversals": 2,
-    "vertical_drops": 2,
-    "single_route": true
+    "length": 8832.491289522866,
+    "single_route": true,
+    "start": {"x": 160, "y": 250},
+    "first_round_turn": {
+      "entry": {"s": 2780, "x": 2887.647233131259, "y": 424.98005387901014},
+      "exit": {"s": 3200, "x": 2777.446540906679, "y": 731.9348264608183}
+    },
+    "second_round_turn": {
+      "entry": {"s": 5800, "x": 257.20024880623515, "y": 942.8969999820001},
+      "exit": {"s": 6300, "x": 502.73888480095366, "y": 1267.19153355358}
+    },
+    "end": {"s": 8800, "x": 2929.321981743063, "y": 1479.3075136873133}
   },
-  "maze_structures": {
-    "breakable_groups": 8,
-    "breakable_pieces": 21,
-    "tested_destroyed_groups": 3,
-    "tested_boulder_slowdowns": 3
+  "configuration": {
+    "breakable_groups": 9,
+    "dash_spike_zones": 2,
+    "precision_jump_zones": 3,
+    "wall_jumps_required": 5,
+    "dash_frames": 27,
+    "dash_speed": 10.4,
+    "boulder_arm_progress": 900,
+    "boulder_warning_frames": 120,
+    "boulder_break_slowdown": 1.12,
+    "boulder_slow_frames": 38
   },
   "actual_keyboard_tests": {
-    "top_maze": {
+    "maze_jump": {
       "keys": ["D", "Space"],
-      "final_x": 1364.4579999999926
+      "final_progress": 968.4999999999968,
+      "jumps": 1,
+      "deaths": 0
     },
-    "wall_jump_chimney": {
+    "wall_jump": {
       "keys": ["A", "D", "Space"],
-      "wall_jumps": 4,
-      "start_y": 850,
-      "final_y": 674.58
+      "wall_jumps": 5,
+      "final_progress": 2801.500000000001,
+      "deaths": 0
     },
-    "exit": {
-      "key": "D",
-      "complete": true,
-      "checkpoint": "cp_snake_chase_entry"
+    "spikes_without_dash": {
+      "keys": ["D"],
+      "spike_deaths": 1
+    },
+    "first_spikes_with_dash": {
+      "keys": ["D", "Shift"],
+      "dashes": 1,
+      "final_progress": 3954.550000000007,
+      "deaths": 0
+    },
+    "precision_parkour": {
+      "keys": ["D", "Space"],
+      "jumps": 2,
+      "final_progress": 4605.150000000024,
+      "deaths": 0
+    },
+    "low_ceiling_jump": {
+      "keys": ["D", "Space"],
+      "jumps": 1,
+      "final_progress": 6695.650000000008,
+      "deaths": 0
+    },
+    "lower_spikes_with_dash": {
+      "keys": ["D", "Shift"],
+      "dashes": 1,
+      "final_progress": 7664.549999999995,
+      "deaths": 0
     }
   },
-  "moving_platform_test": {
-    "frames": 120,
-    "relative_x_start": 43.51660422274949,
-    "relative_x_end": 43.51660422274949,
-    "relative_error": 0,
-    "player_carried_distance": 127.06603605648593
+  "boulder_tests": {
+    "first_round_turn": {
+      "destroyed_groups": 4,
+      "slowdowns": 4,
+      "deaths": 0
+    },
+    "second_round_turn": {
+      "destroyed_groups_cumulative": 6,
+      "slowdowns_cumulative": 6,
+      "deaths": 0
+    },
+    "ignores_spikes": true
   },
-  "boulder": {
-    "radius": 68,
-    "base_speed": 3.05,
-    "max_speed": 5.45,
-    "safe_gap": 430,
-    "arming_progress": 1250,
-    "release_warning_frames": 120,
-    "structure_impact_speed_reduction": 1.05,
-    "structure_slow_frames": 34,
-    "crush_reset_frames": 42
-  },
-  "loader_validation": {
-    "single_file": "src/pass08.js",
+  "github_loader_test": {
+    "before_f8_api_exists": false,
+    "after_actual_f8_api_exists": true,
+    "canvas_replaced": true,
+    "audit": "16/16",
+    "console_errors": 0,
     "external_payload_chunks": 0,
     "recursive_calls": 0,
     "automatic_retries": 0,
-    "animation_loops": 1,
-    "console_errors": 0
+    "animation_loops": 1
   },
   "limitations": {
-    "uninterrupted_full_route_keyboard_clear": false,
-    "note": "The controls were tested in separate real-keyboard segments; the structure destruction and exit state were checked deterministically with the same game functions."
-  },
-  "audit": "15/15"
+    "full_run_from_pass_1_to_pass_8": false,
+    "continuous_pass_8_clear": false,
+    "note": "Each control feature was validated independently with real Chromium keyboard events; boulder path and destruction were validated deterministically with the same runtime functions."
+  }
 }
