@@ -1,0 +1,60 @@
+{
+  "version": "rebuild-pass08r-browser-verified",
+  "tested_with": "Chromium headless + Chrome DevTools Protocol actual keyboard events",
+  "source_sha256": "b14666d800ff8a56976359e49e7bdcd6e65ecbedd1357e6239222ab5562ba8dd",
+  "audit": {
+    "passed": true,
+    "checks_passed": 18,
+    "checks_total": 18
+  },
+  "precision_jump": {
+    "short_jump_min_y": 285.7062428375202,
+    "full_jump_min_y": 224.98704283752025,
+    "height_difference_px": 60.71919999999997
+  },
+  "curved_right_turn": {
+    "samples": [
+      {"progress": 2350, "x": 2453.009971466637, "y": 395.3630500074016},
+      {"progress": 2500, "x": 2591.3477580539015, "y": 450.1738790269508},
+      {"progress": 2660, "x": 2695.265873388141, "y": 567.9905759086935},
+      {"progress": 2820, "x": 2715.105529752047, "y": 724.1834107438588}
+    ]
+  },
+  "wall_jump": {
+    "start_y": 909.0200000000001,
+    "end_y": 717.3920000000006,
+    "wall_jumps": 15,
+    "deaths": 0
+  },
+  "dash_only_spikes": {
+    "without_dash_death_delta": 1,
+    "with_dash_death_delta": 0,
+    "dash_end_x": 1178.9999999999998,
+    "dash_count": 1
+  },
+  "moving_platform": {
+    "relative_start_x": 46.36350155815512,
+    "relative_end_x": 46.36350155815512,
+    "relative_error_px": 0,
+    "player_delta_x": 175.98124444426708
+  },
+  "boulder": {
+    "destroyed_structure_groups": 9,
+    "slowdowns": 9,
+    "death_delta": 0,
+    "remaining_pieces": 0
+  },
+  "finish": {
+    "complete": true,
+    "checkpoint": "cp_snake_chase_entry",
+    "player_progress": 8574.459612575067
+  },
+  "runtime": {
+    "console_errors": 0,
+    "status": "PASS 08R · 18/18"
+  },
+  "limitations": [
+    "The full start-to-finish route was not completed in one uninterrupted keyboard run.",
+    "Precision parkour, curved turn, wall jump, dash-only spikes, moving platform carry, boulder destruction, and finish checkpoint were verified as separate browser scenarios."
+  ]
+}
