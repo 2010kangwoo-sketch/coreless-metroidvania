@@ -1,0 +1,23 @@
+{
+  "browser": "Chromium headless",
+  "actual_keyboard": {
+    "movement_start_x": 9425,
+    "movement_end_x": 9629.857365643533,
+    "arena_started": true,
+    "melee_keys": 2,
+    "enemy_defeated_by_real_j": 1,
+    "enemy_stomp_detected": true,
+    "exit_checkpoint": "cp_arena_end",
+    "final_x": 11638
+  },
+  "deterministic_wave_validation": {
+    "spawned": 7,
+    "defeated": 7,
+    "waves_cleared": 3,
+    "arena_cleared": true,
+    "entry_gate_unlocked": true,
+    "exit_gate_opened": true
+  },
+  "console_errors": 0,
+  "audit": "13/13"
+}
