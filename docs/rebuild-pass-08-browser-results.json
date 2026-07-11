@@ -1,0 +1,46 @@
+{
+  "browser": "Chromium headless with DevTools Protocol keyboard events",
+  "activation": {
+    "automatic_checkpoint": "cp_mixed_end",
+    "automatic_world_x_threshold": 14500,
+    "manual_debug_key": "F8"
+  },
+  "actual_keyboard_run": {
+    "elapsed_seconds": 9.101480722427368,
+    "right_key_held": true,
+    "jump_inputs": 5,
+    "dash_inputs": 4,
+    "deaths": 0,
+    "crush_deaths": 0,
+    "falls": 0,
+    "player_cleared_obstacles": 4,
+    "boulder_crushed_obstacles": 1,
+    "boulder_impact_slowdowns": 1,
+    "release_triggered": true,
+    "finish_reached": true,
+    "final_local_x": 3330,
+    "final_world_x": 18030,
+    "final_checkpoint": "cp_long_chase_entry"
+  },
+  "chase_configuration": {
+    "single_route": true,
+    "internal_world_width": 3550,
+    "speed_gates": 3,
+    "obstacles": 5,
+    "release_countdown_frames": 72,
+    "short_chase_length": 910,
+    "boulder_radius": 78,
+    "boulder_speed_min": 3.35,
+    "boulder_speed_max": 5.45,
+    "impact_speed_reduction": 0.92,
+    "impact_slowdown_frames": 24
+  },
+  "loader_validation": {
+    "single_file": "src/pass08.js",
+    "external_payload_chunks": 0,
+    "recursive_calls": 0,
+    "automatic_retries": 0,
+    "console_errors": 0
+  },
+  "audit": "15/15"
+}
