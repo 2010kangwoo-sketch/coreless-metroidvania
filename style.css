@@ -1,22 +1,43 @@
 body {
   margin: 0;
+  padding: 0 12px 24px;
   background: #111;
   color: white;
   font-family: Arial, sans-serif;
   text-align: center;
+  overflow-x: auto;
 }
 
 h1 {
-  margin-top: 20px;
+  margin: 20px 0 8px;
 }
 
 .info {
+  margin: 0 0 8px;
   color: #cbd5e1;
 }
 
+.load-status {
+  min-height: 20px;
+  margin: 8px 0 10px;
+  color: #93c5fd;
+  font-size: 14px;
+}
+
+.load-status.is-error {
+  color: #fecaca;
+}
+
 canvas {
+  width: min(900px, calc(100vw - 24px));
+  height: auto;
   background: #222;
   display: block;
-  margin: 30px auto;
+  margin: 12px auto 30px;
   border: 2px solid #555;
+  outline: none;
+}
+
+canvas:focus {
+  border-color: #93c5fd;
 }
