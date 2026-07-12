@@ -1,6 +1,6 @@
 export const BUILD = Object.freeze({
-  id: "rebuild-v2-pass01",
-  pass: 1,
+  id: "rebuild-v2-pass02",
+  pass: 2,
   branch: "rebuild/mega-room-40pass",
   draftPullRequest: 1,
   previousBaselineSha: "f57ea9eeb878c03a61aadf0801be53be3afa562e",
@@ -34,4 +34,9 @@ export const PALETTE = Object.freeze({
   guide: "#9bc7cf",
   player: "#e8f2e7",
   checkpoint: "#d8bf78",
+  route: "#f2ddb1",
+  boulderRoute: "#d9825b",
+  zoneFill: "rgba(69, 111, 119, 0.13)",
+  zoneEdge: "rgba(139, 190, 199, 0.42)",
+  feature: "#d9a96c",
 });

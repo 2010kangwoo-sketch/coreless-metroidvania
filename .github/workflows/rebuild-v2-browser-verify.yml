@@ -35,7 +35,7 @@ jobs:
           python3 -m http.server 4173 >/tmp/coreless-v2-http.log 2>&1 &
           sleep 2
 
-      - name: Verify pass 01
+      - name: Verify pass 02
         run: |
           mkdir -p browser-artifacts
           node --input-type=module <<'NODE'
@@ -54,7 +54,7 @@ jobs:
           await page.goto('http://127.0.0.1:4173/index.html', { waitUntil: 'networkidle' });
           await page.waitForTimeout(700);
           await page.locator('#gameCanvas').focus();
-          for (const key of ['d', 'Space', 'Shift', 'a', 'r']) {
+          for (const key of ['d', 'Space', 'Shift', 'a', 'r', 'b', 'b']) {
             await page.keyboard.press(key);
             await page.waitForTimeout(80);
           }
@@ -67,16 +67,19 @@ jobs:
           result.consoleErrors = consoleErrors;
           result.pageErrors = pageErrors;
 
-          fs.writeFileSync('browser-artifacts/pass01-results.json', JSON.stringify(result, null, 2));
-          await page.screenshot({ path: 'browser-artifacts/pass01-foundation.png', fullPage: true });
+          fs.writeFileSync('browser-artifacts/pass02-results.json', JSON.stringify(result, null, 2));
+          await page.screenshot({ path: 'browser-artifacts/pass02-world-blueprint.png', fullPage: true });
           await browser.close();
 
-          const required = ['KeyA', 'KeyD', 'KeyR', 'ShiftLeft', 'Space'];
+          const required = ['KeyA', 'KeyB', 'KeyD', 'KeyR', 'ShiftLeft', 'Space'];
           const used = result.audit?.inputProbe?.usedCodes ?? [];
           if (
-            result.title !== 'Coreless · Rebuild V2 · Pass 01' ||
+            result.title !== 'Coreless · Rebuild V2 · Pass 02' ||
             result.activeElement !== 'gameCanvas' ||
             result.audit?.passed !== true ||
+            result.audit?.blueprint?.passed !== true ||
+            result.audit?.blueprint?.passedCount !== 18 ||
+            result.audit?.detailsVisible !== true ||
             !required.every(code => used.includes(code)) ||
             consoleErrors.length ||
             pageErrors.length
@@ -90,6 +93,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rebuild-v2-pass01-browser
+          name: rebuild-v2-pass02-browser
           path: browser-artifacts
           if-no-files-found: error

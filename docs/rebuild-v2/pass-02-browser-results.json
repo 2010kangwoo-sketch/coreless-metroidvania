@@ -1,0 +1,203 @@
+{
+  "version": "rebuild-v2-pass02",
+  "testedWith": "Chromium + Playwright actual keyboard events",
+  "keyboardScope": "Blueprint input probe only; no player traversal exists in pass 02.",
+  "state": {
+    "title": "Coreless · Rebuild V2 · Pass 02",
+    "activeElement": "gameCanvas",
+    "canvas": {
+      "width": 1200,
+      "height": 680
+    },
+    "buildStatus": "PASS 02 · BLUEPRINT",
+    "auditStatus": "AUDIT 10/10 · MAP 18/18",
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass02",
+        "pass": 2,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "f57ea9eeb878c03a61aadf0801be53be3afa562e"
+      },
+      "passed": true,
+      "passedCount": 10,
+      "total": 10,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas_width",
+          "passed": true
+        },
+        {
+          "id": "canvas_height",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "readable_module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_runtime_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "frameCount": 103,
+      "detailsVisible": true,
+      "inputProbe": {
+        "downs": 7,
+        "ups": 7,
+        "lastCode": "KeyB",
+        "usedCodes": [
+          "KeyA",
+          "KeyB",
+          "KeyD",
+          "KeyR",
+          "ShiftLeft",
+          "Space"
+        ]
+      }
+    },
+    "blueprint": {
+      "world": {
+        "width": 26000,
+        "height": 7800,
+        "cameraBounds": {
+          "x": 0,
+          "y": 0,
+          "width": 26000,
+          "height": 7800
+        }
+      },
+      "zones": 10,
+      "playerRoutePoints": 66,
+      "boulderRoutePoints": 34,
+      "chaseFeatures": 6
+    },
+    "legacyGlobals": []
+  },
+  "deterministicChecks": {
+    "title": true,
+    "canvas": true,
+    "focused": true,
+    "runtimeAudit": true,
+    "blueprintAudit": true,
+    "zoneCount": true,
+    "chaseFeatureCount": true,
+    "routeData": true,
+    "frameLoop": true,
+    "keyboard": true,
+    "detailToggle": true,
+    "legacyInactive": true,
+    "console": true
+  },
+  "passed": true,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "limitations": [
+    "Pass 02 validates world coordinates and route continuity, not playable collision geometry.",
+    "The boulder line is a corridor-design reference, not an active physics simulation.",
+    "No keyboard route completion is claimed in this pass."
+  ]
+}
