@@ -53,7 +53,7 @@ Each climb uses the same readable sequence:
 
 The first climb rises 200 px and the second rises 240 px. Both exceed the normal-jump rise of approximately 114.9 px, so normal jumping alone cannot reach either exit.
 
-The second exit then descends to the Pass 03 endpoint near `(4480, 3100)`, lower than the Zone 02 entry.
+The second exit then descends to the exact blueprint endpoint `(4400, 3100)`, lower than the Zone 02 entry.
 
 ## Problems found and fixed during browser play
 

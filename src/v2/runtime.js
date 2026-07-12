@@ -1,6 +1,7 @@
 import { BUILD, PALETTE, STAGE_SEQUENCE, VIEWPORT } from "./config.js";
 import { BOULDER_ROUTE, CHASE_FEATURES, PLAYER_ROUTE, WORLD, ZONES, validateBlueprint } from "./blueprint.js";
 import { PASS03_LEVEL, PLAYER_PHYSICS, validatePass03Level } from "./pass03-level.js";
+import { PASS04_LEVEL, PASS04_ZONE, validatePass04Level } from "./pass04-level.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -8,7 +9,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass03Runtime {
+export class Pass04Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -62,6 +63,13 @@ export class Pass03Runtime {
       secondDropped: false,
       secondClimb: false,
       completed: false,
+      zone03Entered: false,
+      lowerRiseReached: false,
+      atriumReached: false,
+      upperGalleryReached: false,
+      longDescentReached: false,
+      pass04Completed: false,
+      groundJumps: 0,
       wallJumps: 0,
       ledgeAssists: 0,
       dashes: 0,
@@ -70,10 +78,10 @@ export class Pass03Runtime {
 
   createPlayer() {
     return {
-      x: PASS03_LEVEL.spawn.x,
-      y: PASS03_LEVEL.spawn.y,
-      previousX: PASS03_LEVEL.spawn.x,
-      previousY: PASS03_LEVEL.spawn.y,
+      x: PASS04_LEVEL.spawn.x,
+      y: PASS04_LEVEL.spawn.y,
+      previousX: PASS04_LEVEL.spawn.x,
+      previousY: PASS04_LEVEL.spawn.y,
       vx: 0,
       vy: 0,
       facing: 1,
@@ -131,6 +139,7 @@ export class Pass03Runtime {
       if (wasGrounded) {
         p.vy = -config.jumpSpeed;
         p.grounded = false;
+        this.progress.groundJumps += 1;
       } else if (previousWall !== 0) {
         p.vx = -previousWall * config.wallJumpX;
         p.vy = -config.wallJumpY;
@@ -161,7 +170,7 @@ export class Pass03Runtime {
     this.updateProgress();
     this.updateCamera();
 
-    if (p.y > PASS03_LEVEL.bounds.y + PASS03_LEVEL.bounds.height + 120 || p.x < -120) {
+    if (p.y > PASS04_LEVEL.bounds.y + PASS04_LEVEL.bounds.height + 120 || p.x < -120) {
       this.resetPlayer(false);
     }
   }
@@ -169,7 +178,7 @@ export class Pass03Runtime {
   moveHorizontal() {
     const p = this.player;
     p.x += p.vx;
-    for (const solid of PASS03_LEVEL.solids) {
+    for (const solid of PASS04_LEVEL.solids) {
       if (solid.role === "ledge") continue;
       const bottom = p.y + PLAYER_PHYSICS.height;
       const previousBottom = p.previousY + PLAYER_PHYSICS.height;
@@ -196,7 +205,7 @@ export class Pass03Runtime {
       }
       p.vx = 0;
     }
-    p.x = clamp(p.x, PASS03_LEVEL.bounds.x, PASS03_LEVEL.bounds.x + PASS03_LEVEL.bounds.width - PLAYER_PHYSICS.width);
+    p.x = clamp(p.x, PASS04_LEVEL.bounds.x, PASS04_LEVEL.bounds.x + PASS04_LEVEL.bounds.width - PLAYER_PHYSICS.width);
   }
 
   moveVertical(wasGrounded) {
@@ -204,7 +213,7 @@ export class Pass03Runtime {
     const previousBottom = p.y + PLAYER_PHYSICS.height;
     p.y += p.vy;
 
-    for (const solid of PASS03_LEVEL.solids) {
+    for (const solid of PASS04_LEVEL.solids) {
       if (!this.overlaps(p, solid)) continue;
       if (p.vy >= 0 && previousBottom <= solid.y + 8) {
         p.y = solid.y - PLAYER_PHYSICS.height;
@@ -218,7 +227,7 @@ export class Pass03Runtime {
 
     const centerX = p.x + PLAYER_PHYSICS.width / 2;
     let bestFloor = null;
-    for (const item of PASS03_LEVEL.floors) {
+    for (const item of PASS04_LEVEL.floors) {
       if (centerX < item.x1 || centerX > item.x2) continue;
       const ratio = (centerX - item.x1) / (item.x2 - item.x1);
       const floorY = item.y1 + (item.y2 - item.y1) * ratio;
@@ -234,7 +243,7 @@ export class Pass03Runtime {
     }
 
     if (!p.grounded && p.wallSide === 0) {
-      for (const solid of PASS03_LEVEL.solids) {
+      for (const solid of PASS04_LEVEL.solids) {
         const verticalOverlap = p.y + PLAYER_PHYSICS.height > solid.y + 2 && p.y < solid.y + solid.height - 2;
         if (!verticalOverlap) continue;
         if (Math.abs(p.x + PLAYER_PHYSICS.width - solid.x) <= 1.5) p.wallSide = 1;
@@ -253,13 +262,20 @@ export class Pass03Runtime {
   updateProgress() {
     const p = this.player;
     const bottom = p.y + PLAYER_PHYSICS.height;
-    const gates = PASS03_LEVEL.gates;
-    if (p.x >= PASS03_LEVEL.zone01Exit.x - 30) this.progress.zone01Reached = true;
+    const gates = PASS04_LEVEL.gates;
+    if (p.x >= PASS04_LEVEL.zone01Exit.x - 30) this.progress.zone01Reached = true;
     if (bottom >= gates.firstDropY && p.x < gates.firstExitX) this.progress.firstDropped = true;
     if (this.progress.firstDropped && p.x >= gates.firstExitX && bottom <= gates.firstExitY) this.progress.firstClimb = true;
     if (this.progress.firstClimb && bottom >= gates.secondDropY && p.x < gates.secondExitX) this.progress.secondDropped = true;
     if (this.progress.secondDropped && p.x >= gates.secondExitX && bottom <= gates.secondExitY) this.progress.secondClimb = true;
     if (this.progress.secondClimb && p.x >= gates.completionX && bottom >= gates.completionY) this.progress.completed = true;
+    const zone03 = PASS04_ZONE.milestones;
+    if (this.progress.completed && p.x >= zone03.enteredX) this.progress.zone03Entered = true;
+    if (this.progress.zone03Entered && p.x >= zone03.lowerRiseX && bottom <= 2600) this.progress.lowerRiseReached = true;
+    if (this.progress.lowerRiseReached && p.x >= zone03.atriumX && bottom <= 2100) this.progress.atriumReached = true;
+    if (this.progress.atriumReached && p.x >= zone03.upperGalleryX && bottom <= 1700) this.progress.upperGalleryReached = true;
+    if (this.progress.upperGalleryReached && p.x >= zone03.descentX) this.progress.longDescentReached = true;
+    if (this.progress.longDescentReached && p.x >= zone03.completionX && bottom >= zone03.completionY) this.progress.pass04Completed = true;
   }
 
   resetPlayer(manual) {
@@ -274,15 +290,15 @@ export class Pass03Runtime {
 
   snapCamera() {
     const p = this.player;
-    this.camera.x = clamp(p.x - 310, PASS03_LEVEL.cameraBounds.x, PASS03_LEVEL.cameraBounds.x + PASS03_LEVEL.cameraBounds.width - VIEWPORT.width);
-    this.camera.y = clamp(p.y - 260, PASS03_LEVEL.cameraBounds.y, PASS03_LEVEL.cameraBounds.y + PASS03_LEVEL.cameraBounds.height - VIEWPORT.height);
+    this.camera.x = clamp(p.x - 310, PASS04_LEVEL.cameraBounds.x, PASS04_LEVEL.cameraBounds.x + PASS04_LEVEL.cameraBounds.width - VIEWPORT.width);
+    this.camera.y = clamp(p.y - 260, PASS04_LEVEL.cameraBounds.y, PASS04_LEVEL.cameraBounds.y + PASS04_LEVEL.cameraBounds.height - VIEWPORT.height);
   }
 
   updateCamera() {
     const p = this.player;
     const lookAhead = p.facing > 0 ? 390 : 810;
-    const targetX = clamp(p.x - lookAhead, PASS03_LEVEL.cameraBounds.x, PASS03_LEVEL.cameraBounds.x + PASS03_LEVEL.cameraBounds.width - VIEWPORT.width);
-    const targetY = clamp(p.y - 300, PASS03_LEVEL.cameraBounds.y, PASS03_LEVEL.cameraBounds.y + PASS03_LEVEL.cameraBounds.height - VIEWPORT.height);
+    const targetX = clamp(p.x - lookAhead, PASS04_LEVEL.cameraBounds.x, PASS04_LEVEL.cameraBounds.x + PASS04_LEVEL.cameraBounds.width - VIEWPORT.width);
+    const targetY = clamp(p.y - 300, PASS04_LEVEL.cameraBounds.y, PASS04_LEVEL.cameraBounds.y + PASS04_LEVEL.cameraBounds.height - VIEWPORT.height);
     this.camera.x += (targetX - this.camera.x) * 0.075;
     this.camera.y += (targetY - this.camera.y) * 0.085;
   }
@@ -301,6 +317,7 @@ export class Pass03Runtime {
     this.drawParallax(ctx);
     ctx.save();
     ctx.translate(-this.camera.x, -this.camera.y);
+    this.drawBuriedStructure(ctx);
     this.drawLevel(ctx);
     this.drawMarkers(ctx);
     this.drawPlayer(ctx);
@@ -325,9 +342,9 @@ export class Pass03Runtime {
 
   drawLevel(ctx) {
     ctx.save();
-    for (const item of PASS03_LEVEL.floors) {
-      ctx.fillStyle = item.zone === 1 ? "#263c40" : "#29383b";
-      ctx.strokeStyle = item.zone === 1 ? "#9ab7ae" : "#b4aa91";
+    for (const item of PASS04_LEVEL.floors) {
+      ctx.fillStyle = item.zone === 1 ? "#263c40" : item.zone === 3 ? "#303a3c" : "#29383b";
+      ctx.strokeStyle = item.zone === 1 ? "#9ab7ae" : item.zone === 3 ? "#c2b58f" : "#b4aa91";
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(item.x1, item.y1);
@@ -341,7 +358,7 @@ export class Pass03Runtime {
       ctx.lineTo(item.x2, item.y2);
       ctx.stroke();
     }
-    for (const solid of PASS03_LEVEL.solids) {
+    for (const solid of PASS04_LEVEL.solids) {
       ctx.fillStyle = solid.role === "baffle" ? "#26383b" : "#304246";
       ctx.strokeStyle = solid.role === "baffle" ? "#b4aa91" : "#91b1b2";
       ctx.lineWidth = 4;
@@ -358,13 +375,51 @@ export class Pass03Runtime {
     ctx.restore();
   }
 
+  drawBuriedStructure(ctx) {
+    const roof = PASS04_LEVEL.roof;
+    ctx.save();
+    ctx.fillStyle = "rgba(24, 42, 45, 0.96)";
+    ctx.strokeStyle = "#718d8d";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.lineTo(roof.at(-1).x2, 200);
+    ctx.lineTo(roof[0].x1, 200);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.stroke();
+
+    for (const item of PASS04_LEVEL.frames) {
+      ctx.fillStyle = "rgba(103, 126, 124, 0.055)";
+      ctx.strokeStyle = "rgba(156, 181, 176, 0.30)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x + item.width * 0.33, item.y);
+      ctx.lineTo(item.x + item.width * 0.33, item.y + item.height);
+      ctx.moveTo(item.x + item.width * 0.67, item.y);
+      ctx.lineTo(item.x + item.width * 0.67, item.y + item.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
   drawMarkers(ctx) {
     const markers = [
       { x: 600, y: 900, label: "START", active: true },
       { x: 2800, y: 1700, label: "ZONE 02", active: this.progress.zone01Reached },
       { x: 3290, y: 1950, label: "CLIMB I", active: this.progress.firstClimb },
       { x: 4050, y: 2410, label: "CLIMB II", active: this.progress.secondClimb },
-      { x: 4480, y: 3100, label: "PASS 03 EXIT", active: this.progress.completed },
+      { x: 4400, y: 3100, label: "ZONE 03 ENTRY", active: this.progress.completed },
+      { x: 6240, y: 2500, label: "LOWER RISE", active: this.progress.lowerRiseReached },
+      { x: 7360, y: 2000, label: "ATRIUM", active: this.progress.atriumReached },
+      { x: 8000, y: 1600, label: "UPPER GALLERY", active: this.progress.upperGalleryReached },
+      { x: 10400, y: 3300, label: "PASS 04 EXIT", active: this.progress.pass04Completed },
     ];
     ctx.save();
     ctx.font = "700 11px Arial, sans-serif";
@@ -423,11 +478,11 @@ export class Pass03Runtime {
       const topLeft = mapPoint(zone.bounds);
       const width = (zone.bounds.width / WORLD.width) * frame.width;
       const height = (zone.bounds.height / WORLD.height) * frame.height;
-      ctx.fillStyle = index < 2 ? "rgba(216, 191, 120, 0.19)" : "rgba(69, 111, 119, 0.10)";
-      ctx.strokeStyle = index < 2 ? "rgba(216, 191, 120, 0.75)" : "rgba(139, 190, 199, 0.32)";
+      ctx.fillStyle = index < 3 ? "rgba(216, 191, 120, 0.19)" : "rgba(69, 111, 119, 0.10)";
+      ctx.strokeStyle = index < 3 ? "rgba(216, 191, 120, 0.75)" : "rgba(139, 190, 199, 0.32)";
       ctx.fillRect(topLeft.x, topLeft.y, width, height);
       ctx.strokeRect(topLeft.x, topLeft.y, width, height);
-      ctx.fillStyle = index < 2 ? "#ead59b" : "#8cadb3";
+      ctx.fillStyle = index < 3 ? "#ead59b" : "#8cadb3";
       ctx.font = "700 9px Arial, sans-serif";
       ctx.fillText(`${String(index + 1).padStart(2, "0")} ${zone.name}`, topLeft.x + 6, topLeft.y + 15);
     });
@@ -448,7 +503,7 @@ export class Pass03Runtime {
     drawRoute(BOULDER_ROUTE, PALETTE.boulderRoute, true);
     ctx.fillStyle = "#eff5f3";
     ctx.font = "800 22px Arial, sans-serif";
-    ctx.fillText("PASS 03 / PLAYABLE ZONES 01–02", 42, 52);
+    ctx.fillText("PASS 04 / PLAYABLE ZONES 01–03", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
     ctx.fillText(`PASS 08 RESERVATIONS ${CHASE_FEATURES.length} · B RETURN TO GAME`, 42, 72);
@@ -478,10 +533,11 @@ export class Pass03Runtime {
   audit() {
     const blueprint = validateBlueprint();
     const pass03 = validatePass03Level();
+    const pass04 = validatePass04Level();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass03" },
-      { id: "pass_number", passed: BUILD.pass === 3 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass04" },
+      { id: "pass_number", passed: BUILD.pass === 4 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -490,6 +546,7 @@ export class Pass03Runtime {
       { id: "legacy_inactive", passed: !scriptSources.some(source => /pass08|payload-/i.test(source)) },
       { id: "blueprint_validation", passed: blueprint.passed },
       { id: "pass03_level_validation", passed: pass03.passed },
+      { id: "pass04_level_validation", passed: pass04.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -501,6 +558,7 @@ export class Pass03Runtime {
       checks,
       blueprint,
       pass03,
+      pass04,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -513,8 +571,8 @@ export class Pass03Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 03 · PLAYABLE 01–02";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · LEVEL ${audit.pass03.passedCount}/${audit.pass03.total}`;
+    this.statusElements.build.textContent = "PASS 04 · PLAYABLE 01–03";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P04 ${audit.pass04.passedCount}/${audit.pass04.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
