@@ -1,6 +1,7 @@
 import { BUILD } from "./config.js";
 import { BOULDER_ROUTE, CHASE_FEATURES, PLAYER_ROUTE, WORLD, ZONES, validateBlueprint } from "./blueprint.js";
-import { BlueprintRuntime } from "./runtime.js";
+import { PASS03_LEVEL, PLAYER_PHYSICS, validatePass03Level } from "./pass03-level.js";
+import { Pass03Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -10,7 +11,7 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const runtime = new BlueprintRuntime(canvas, {
+const runtime = new Pass03Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
 });
@@ -31,6 +32,12 @@ window.__corelessV2 = Object.freeze({
     chaseFeatures: CHASE_FEATURES,
     validate: validateBlueprint,
   }),
+  pass03: Object.freeze({
+    level: PASS03_LEVEL,
+    physics: PLAYER_PHYSICS,
+    validate: validatePass03Level,
+  }),
   runtime,
   audit: () => runtime.audit(),
+  debug: () => runtime.getDebugState(),
 });
