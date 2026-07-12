@@ -1,0 +1,52 @@
+{
+  "version": "rebuild-v2-pass01",
+  "tested_with": "Chromium + Playwright actual keyboard events",
+  "previous_runtime": {
+    "title": "Coreless · Rebuild 40-pass 08C",
+    "before_f8": "PASS 07 · 14/14",
+    "after_f8": "PASS 08C · 18/18",
+    "actual_keys": ["KeyD", "Space", "ShiftLeft"],
+    "console_errors": 0,
+    "page_errors": 0
+  },
+  "new_runtime": {
+    "title": "Coreless · Rebuild V2 · Pass 01",
+    "canvas": {
+      "width": 1200,
+      "height": 680
+    },
+    "focused_element": "gameCanvas",
+    "build_status": "PASS 01 · ACTIVE",
+    "audit_status": "AUDIT 10/10",
+    "frame_loop_started": true,
+    "legacy_runtime_active": false
+  },
+  "actual_keyboard": {
+    "keydown_count": 5,
+    "keyup_count": 5,
+    "used_codes": [
+      "KeyA",
+      "KeyD",
+      "KeyR",
+      "ShiftLeft",
+      "Space"
+    ]
+  },
+  "deterministic_checks": {
+    "title": true,
+    "canvas": true,
+    "focused": true,
+    "structural_audit": true,
+    "frame_loop": true,
+    "keyboard": true,
+    "legacy_inactive": true,
+    "console": true
+  },
+  "passed": true,
+  "console_errors": [],
+  "page_errors": [],
+  "limitations": [
+    "Pass 01 establishes the readable runtime foundation only.",
+    "Player movement and route completion are not implemented or claimed in this pass."
+  ]
+}

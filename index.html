@@ -1,29 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#05070b">
-  <title>Coreless · Rebuild 40-pass 08C</title>
-  <link rel="stylesheet" href="style.css?v=rebuild-pass08c">
+  <meta name="theme-color" content="#05080c">
+  <title>Coreless · Rebuild V2 · Pass 01</title>
+  <link rel="stylesheet" href="style.css?v=rebuild-v2-pass01">
 </head>
 <body>
-  <main class="shell">
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">CORELESS REBUILD · 40-PASS</p>
-        <h1>8차 복원 재제작 — 시네마틱 하강 스네이크 추격</h1>
-      </div>
-      <div class="status-box">
-        <span id="buildStatus">7차 구역 실행 중…</span>
-        <span id="auditStatus">F8로 8차 검사</span>
+  <main class="game-shell">
+    <canvas
+      id="gameCanvas"
+      width="1200"
+      height="680"
+      tabindex="0"
+      aria-label="Coreless rebuild version 2 pass 1 foundation"
+    ></canvas>
+
+    <header class="build-panel" aria-live="polite">
+      <p class="eyebrow">CORELESS · REBUILD V2</p>
+      <h1>PASS 01 / FOUNDATION</h1>
+      <div class="status-row">
+        <span id="buildStatus">BOOTING</span>
+        <span id="auditStatus">AUDIT PENDING</span>
       </div>
     </header>
-    <p class="controls">A/D 이동 · Space 점프·벽점프·점프 강도 조절 · Shift/K 대시 · R 체크포인트 재시작 · F8 8차 즉시 진입</p>
-    <canvas id="gameCanvas" width="1200" height="680" tabindex="0" aria-label="Coreless 8차 시네마틱 하강 스네이크 추격"></canvas>
-    <section class="notes"><strong>8차 복원 재제작:</strong> 기존 8차의 공간감과 추격 분위기를 기준으로, 네 층의 울퉁불퉁한 하강 스네이크 지형과 세 번의 완곡한 전환, 파괴 미로 구조, 필수 벽점프, 대시 가시밭, 정밀 파쿠르를 하나의 거대한 추격 통로로 연결합니다.</section>
+
+    <p class="control-hint">CLICK TO FOCUS · A/D · SPACE · SHIFT · R</p>
   </main>
-  <script src="src/main.js?v=rebuild-pass07"></script>
-  <script src="src/pass08.js?v=rebuild-pass08c"></script>
+
+  <noscript>JavaScript is required to run Coreless.</noscript>
+  <script type="module" src="src/v2/main.js?v=rebuild-v2-pass01"></script>
 </body>
 </html>
