@@ -42,6 +42,17 @@
     "legacy_inactive": true,
     "console": true
   },
+  "github_actions": {
+    "rebuild_v2_browser_verify": {
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/2010kangwoo-sketch/coreless-metroidvania/actions/runs/29191006228"
+    },
+    "legacy_pass08_workflow": {
+      "retired": true,
+      "reason": "The obsolete workflow still expected F8 and pass08 globals after the active runtime moved to src/v2."
+    }
+  },
   "passed": true,
   "console_errors": [],
   "page_errors": [],
