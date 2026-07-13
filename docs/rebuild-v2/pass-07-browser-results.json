@@ -1,0 +1,5504 @@
+{
+  "version": "rebuild-v2-pass07",
+  "testedWith": "Chromium + Playwright actual keyboard events",
+  "actualKeyboardRoute": "start slope -> zones 01-05 -> giant curve -> physical drop -> left dash run -> three jump-dash gaps -> pass 07 exit",
+  "helperCoordinateMovement": false,
+  "traversalFailure": null,
+  "state": {
+    "title": "Coreless · Rebuild V2 · Pass 07",
+    "activeElement": "gameCanvas",
+    "canvas": {
+      "width": 1200,
+      "height": 680
+    },
+    "buildStatus": "PASS 07 · PLAYABLE 01–06",
+    "auditStatus": "AUDIT 16/16 · P07 28/28",
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass07",
+        "pass": 7,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "41a9475f5f997b17f5aec2df039b9c66789e1760"
+      },
+      "passed": true,
+      "passedCount": 16,
+      "total": 16,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        },
+        {
+          "id": "pass03_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass04_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass05_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass06_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass07_level_validation",
+          "passed": true
+        },
+        {
+          "id": "player_dimensions",
+          "passed": true
+        },
+        {
+          "id": "debug_state",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "pass03": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "theoreticalJumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "world_contains_level",
+            "passed": true
+          },
+          {
+            "id": "camera_contains_level",
+            "passed": true
+          },
+          {
+            "id": "spawn_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone01_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "pass03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "two_baffles",
+            "passed": true
+          },
+          {
+            "id": "two_climb_walls",
+            "passed": true
+          },
+          {
+            "id": "first_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "second_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "first_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "second_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "walljump_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "macro_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "run_speed",
+            "passed": true
+          },
+          {
+            "id": "variable_jump",
+            "passed": true
+          },
+          {
+            "id": "air_dash",
+            "passed": true
+          }
+        ]
+      },
+      "pass04": {
+        "passed": true,
+        "passedCount": 22,
+        "total": 22,
+        "highestFloor": 1600,
+        "lowestRoof": 1100,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone03_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "zone03_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone03_single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "two_jump_gaps",
+            "passed": true
+          },
+          {
+            "id": "gap_widths",
+            "passed": true
+          },
+          {
+            "id": "rise_height",
+            "passed": true
+          },
+          {
+            "id": "highest_floor_recorded",
+            "passed": true
+          },
+          {
+            "id": "buried_below_roof",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "frames_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "pass03_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass05": {
+        "passed": true,
+        "passedCount": 25,
+        "total": 25,
+        "normalJumpRise": 114.88970588235293,
+        "ceilingClearances": [
+          80,
+          70
+        ],
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_pass04",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone04_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_distinct_gaps",
+            "passed": true
+          },
+          {
+            "id": "precision_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "shaft_requires_platform",
+            "passed": true
+          },
+          {
+            "id": "one_moving_platform",
+            "passed": true
+          },
+          {
+            "id": "platform_spans_shaft",
+            "passed": true
+          },
+          {
+            "id": "platform_travel",
+            "passed": true
+          },
+          {
+            "id": "two_low_ceiling_beams",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_clearance",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass04_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass06": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_pass05",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone05_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gates",
+            "passed": true
+          },
+          {
+            "id": "gate_shapes_distinct",
+            "passed": true
+          },
+          {
+            "id": "gates_ordered",
+            "passed": true
+          },
+          {
+            "id": "gates_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "gates_exceed_normal_jump",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_forward",
+            "passed": true
+          },
+          {
+            "id": "corridor_same_structure",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_supports",
+            "passed": true
+          },
+          {
+            "id": "supports_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "eight_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass05_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass07": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "runOnlyDistance": 196.69117647058823,
+        "dashDistance": 136.4,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_pass06",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "upper_floor_count",
+            "passed": true
+          },
+          {
+            "id": "lower_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floor_lanes",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gaps",
+            "passed": true
+          },
+          {
+            "id": "dash_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "dash_gaps_match_floors",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "curve_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "single_direction_change",
+            "passed": true
+          },
+          {
+            "id": "curve_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "curve_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "visible_vertical_drop",
+            "passed": true
+          },
+          {
+            "id": "landing_below_lip",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_coordinates",
+            "passed": true
+          },
+          {
+            "id": "pass06_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "gameplay": {
+        "player": {
+          "x": 9297.273238284331,
+          "y": 4950.758848844841,
+          "vx": 0,
+          "vy": 0,
+          "grounded": true,
+          "wallSide": 0,
+          "dashAvailable": true,
+          "standingPlatformId": null
+        },
+        "movingPlatforms": [
+          {
+            "id": "shaft_carriage",
+            "x": 11608.100000000024,
+            "y": 3290,
+            "direction": -1
+          }
+        ],
+        "breakables": [
+          {
+            "id": "west_braced_gate",
+            "shape": "cross_brace",
+            "destroyed": true
+          },
+          {
+            "id": "middle_lattice_gate",
+            "shape": "lattice",
+            "destroyed": true
+          },
+          {
+            "id": "east_split_gate",
+            "shape": "split_pillar",
+            "destroyed": true
+          }
+        ],
+        "debrisCount": 0,
+        "camera": {
+          "x": 8487.582308718167,
+          "y": 4650.747629636157
+        },
+        "progress": {
+          "zone01Reached": true,
+          "firstDropped": true,
+          "firstClimb": true,
+          "secondDropped": true,
+          "secondClimb": true,
+          "completed": true,
+          "zone03Entered": true,
+          "lowerRiseReached": true,
+          "atriumReached": true,
+          "upperGalleryReached": true,
+          "longDescentReached": true,
+          "pass04Completed": true,
+          "zone04Entered": true,
+          "lowTunnelReached": true,
+          "platformBoarded": true,
+          "movingPlatformCrossed": true,
+          "unevenTunnelReached": true,
+          "pass05Completed": true,
+          "zone05Entered": true,
+          "lowerHallReached": true,
+          "highGalleryReached": true,
+          "pass06Completed": true,
+          "zone06Entered": true,
+          "curveCommitted": true,
+          "zone06Dropped": true,
+          "eastDashGapCleared": true,
+          "middleDashGapCleared": true,
+          "westDashGapCleared": true,
+          "pass07Completed": true,
+          "dashGapClears": 3,
+          "directionChanges": 1,
+          "breakablesDestroyed": 3,
+          "platformRides": 1,
+          "groundJumps": 13,
+          "wallJumps": 2,
+          "ledgeAssists": 1,
+          "dashes": 10
+        },
+        "keys": [],
+        "blueprintVisible": false,
+        "resetCount": 0,
+        "frameCount": 8455
+      },
+      "inputProbe": {
+        "downs": 43,
+        "ups": 43,
+        "lastCode": "KeyB",
+        "usedCodes": [
+          "KeyA",
+          "KeyB",
+          "KeyD",
+          "ShiftLeft",
+          "Space"
+        ]
+      }
+    },
+    "debug": {
+      "player": {
+        "x": 9297.273238284331,
+        "y": 4950.758848844841,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true,
+        "wallSide": 0,
+        "dashAvailable": true,
+        "standingPlatformId": null
+      },
+      "movingPlatforms": [
+        {
+          "id": "shaft_carriage",
+          "x": 11608.100000000024,
+          "y": 3290,
+          "direction": -1
+        }
+      ],
+      "breakables": [
+        {
+          "id": "west_braced_gate",
+          "shape": "cross_brace",
+          "destroyed": true
+        },
+        {
+          "id": "middle_lattice_gate",
+          "shape": "lattice",
+          "destroyed": true
+        },
+        {
+          "id": "east_split_gate",
+          "shape": "split_pillar",
+          "destroyed": true
+        }
+      ],
+      "debrisCount": 0,
+      "camera": {
+        "x": 8487.582308718167,
+        "y": 4650.747629636157
+      },
+      "progress": {
+        "zone01Reached": true,
+        "firstDropped": true,
+        "firstClimb": true,
+        "secondDropped": true,
+        "secondClimb": true,
+        "completed": true,
+        "zone03Entered": true,
+        "lowerRiseReached": true,
+        "atriumReached": true,
+        "upperGalleryReached": true,
+        "longDescentReached": true,
+        "pass04Completed": true,
+        "zone04Entered": true,
+        "lowTunnelReached": true,
+        "platformBoarded": true,
+        "movingPlatformCrossed": true,
+        "unevenTunnelReached": true,
+        "pass05Completed": true,
+        "zone05Entered": true,
+        "lowerHallReached": true,
+        "highGalleryReached": true,
+        "pass06Completed": true,
+        "zone06Entered": true,
+        "curveCommitted": true,
+        "zone06Dropped": true,
+        "eastDashGapCleared": true,
+        "middleDashGapCleared": true,
+        "westDashGapCleared": true,
+        "pass07Completed": true,
+        "dashGapClears": 3,
+        "directionChanges": 1,
+        "breakablesDestroyed": 3,
+        "platformRides": 1,
+        "groundJumps": 13,
+        "wallJumps": 2,
+        "ledgeAssists": 1,
+        "dashes": 10
+      },
+      "keys": [],
+      "blueprintVisible": false,
+      "resetCount": 0,
+      "frameCount": 8455
+    },
+    "legacyGlobals": []
+  },
+  "routeSamples": [
+    {
+      "frame": 157,
+      "x": 727.2,
+      "y": 887.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 189,
+      "x": 898.4,
+      "y": 952.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 215,
+      "x": 1037.5,
+      "y": 1004.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 242,
+      "x": 1181.9,
+      "y": 1048.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 268,
+      "x": 1321,
+      "y": 1022.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 294,
+      "x": 1460.1,
+      "y": 996.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 321,
+      "x": 1713.2,
+      "y": 1113.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 351,
+      "x": 1873.7,
+      "y": 1198.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 380,
+      "x": 2028.8,
+      "y": 1278,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 409,
+      "x": 2184,
+      "y": 1337.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 438,
+      "x": 2339.1,
+      "y": 1396.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 466,
+      "x": 2488.9,
+      "y": 1467.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 495,
+      "x": 2644.1,
+      "y": 1564.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 518,
+      "x": 2767.1,
+      "y": 1642,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 533,
+      "x": 2847.4,
+      "y": 1652.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 558,
+      "x": 2966,
+      "y": 1849,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 587,
+      "x": 2966,
+      "y": 1940.3,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 615,
+      "x": 3014.8,
+      "y": 2099.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 643,
+      "x": 3164.6,
+      "y": 2015.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 670,
+      "x": 3152.9,
+      "y": 1993.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 705,
+      "x": 3039.4,
+      "y": 1996.1,
+      "vx": 2.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 728,
+      "x": 3153.7,
+      "y": 2079,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 756,
+      "x": 3231,
+      "y": 1884.6,
+      "vx": 12.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 785,
+      "x": 3484.1,
+      "y": 1880.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 813,
+      "x": 3633.9,
+      "y": 2219.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 842,
+      "x": 3726,
+      "y": 2373.3,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 870,
+      "x": 3726,
+      "y": 2461.5,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 898,
+      "x": 3828.3,
+      "y": 2520.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 927,
+      "x": 3976,
+      "y": 2590.2,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 955,
+      "x": 3907.6,
+      "y": 2397.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 983,
+      "x": 4151.8,
+      "y": 2362,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1011,
+      "x": 4301.6,
+      "y": 2478.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1039,
+      "x": 4451.4,
+      "y": 2906,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1067,
+      "x": 4601.2,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1096,
+      "x": 4756.4,
+      "y": 3046.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1133,
+      "x": 4954.3,
+      "y": 3002.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1175,
+      "x": 5179,
+      "y": 2952.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1202,
+      "x": 5323.5,
+      "y": 2837.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1230,
+      "x": 5473.3,
+      "y": 2714.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1253,
+      "x": 5596.3,
+      "y": 2613.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1268,
+      "x": 5676.6,
+      "y": 2548.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1301,
+      "x": 5853.1,
+      "y": 2502,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1337,
+      "x": 6045.7,
+      "y": 2502,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1374,
+      "x": 6243.7,
+      "y": 2486.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1402,
+      "x": 6393.5,
+      "y": 2372.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1429,
+      "x": 6537.9,
+      "y": 2263.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1456,
+      "x": 6682.4,
+      "y": 2154,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1484,
+      "x": 6832.2,
+      "y": 2040.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1511,
+      "x": 6976.6,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1538,
+      "x": 7121.1,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1576,
+      "x": 7324.4,
+      "y": 1934.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1604,
+      "x": 7474.2,
+      "y": 1909.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1625,
+      "x": 7586.5,
+      "y": 1830.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1639,
+      "x": 7661.4,
+      "y": 1778.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1664,
+      "x": 7795.2,
+      "y": 1684.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1689,
+      "x": 7928.9,
+      "y": 1590,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1715,
+      "x": 8151.9,
+      "y": 1552,
+      "vx": 11.7,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1755,
+      "x": 8390.6,
+      "y": 1552,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1791,
+      "x": 8583.2,
+      "y": 1642.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1818,
+      "x": 8727.7,
+      "y": 1772.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1846,
+      "x": 8877.5,
+      "y": 1907,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1874,
+      "x": 9027.3,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 1901,
+      "x": 9171.7,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 1927,
+      "x": 9310.8,
+      "y": 2047.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 1954,
+      "x": 9455.3,
+      "y": 2282,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 1981,
+      "x": 9599.7,
+      "y": 2516.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2002,
+      "x": 9712.1,
+      "y": 2652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2015,
+      "x": 9781.6,
+      "y": 2652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2034,
+      "x": 9883.3,
+      "y": 2652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2060,
+      "x": 10022.4,
+      "y": 2771.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2086,
+      "x": 10161.5,
+      "y": 2956.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2111,
+      "x": 10295.2,
+      "y": 3135,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2135,
+      "x": 10423.6,
+      "y": 3252,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2161,
+      "x": 10562.7,
+      "y": 3252,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2186,
+      "x": 10696.5,
+      "y": 3246.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2212,
+      "x": 10835.6,
+      "y": 3186.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2237,
+      "x": 10969.3,
+      "y": 3129.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2262,
+      "x": 11103.1,
+      "y": 3102,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2288,
+      "x": 11242.2,
+      "y": 3102,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2313,
+      "x": 11375.9,
+      "y": 3102,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2339,
+      "x": 11400.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2364,
+      "x": 11400.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2390,
+      "x": 11400.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2416,
+      "x": 11447,
+      "y": 3102,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2442,
+      "x": 11584.5,
+      "y": 3242,
+      "vx": 1.9,
+      "keys": [],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2467,
+      "x": 11644.9,
+      "y": 3242,
+      "vx": 0,
+      "keys": [],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2492,
+      "x": 11698.6,
+      "y": 3242,
+      "vx": 0,
+      "keys": [],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2517,
+      "x": 11752.4,
+      "y": 3242,
+      "vx": 0,
+      "keys": [],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2542,
+      "x": 11875.3,
+      "y": 3242,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2566,
+      "x": 11982.2,
+      "y": 3323.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2589,
+      "x": 12105.3,
+      "y": 3486.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2612,
+      "x": 12228.3,
+      "y": 3538.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2634,
+      "x": 12346,
+      "y": 3475.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2668,
+      "x": 12527.9,
+      "y": 3327.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2693,
+      "x": 12661.7,
+      "y": 3402,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2726,
+      "x": 12838.2,
+      "y": 3462.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2743,
+      "x": 12929.2,
+      "y": 3583.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2759,
+      "x": 13014.8,
+      "y": 3628.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2772,
+      "x": 13084.3,
+      "y": 3489.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2787,
+      "x": 13164.6,
+      "y": 3496,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2802,
+      "x": 13244.8,
+      "y": 3553.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2818,
+      "x": 13330.4,
+      "y": 3614.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2833,
+      "x": 13410.7,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass05_complete"
+    },
+    {
+      "frame": 2847,
+      "x": 13485.6,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass05_complete"
+    },
+    {
+      "frame": 2860,
+      "x": 13555.1,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass05_complete"
+    },
+    {
+      "frame": 2875,
+      "x": 13635.4,
+      "y": 3651.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass05_complete"
+    },
+    {
+      "frame": 2888,
+      "x": 13704.9,
+      "y": 3625.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 2901,
+      "x": 13774.5,
+      "y": 3600.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 2915,
+      "x": 13849.4,
+      "y": 3573.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 2928,
+      "x": 13918.9,
+      "y": 3548,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 2941,
+      "x": 13988.5,
+      "y": 3522.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 2956,
+      "x": 14068.7,
+      "y": 3493.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 2972,
+      "x": 14154.3,
+      "y": 3462.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 2988,
+      "x": 14239.9,
+      "y": 3452,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3006,
+      "x": 14336.2,
+      "y": 3452,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3021,
+      "x": 14416.5,
+      "y": 3452,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3036,
+      "x": 14496.7,
+      "y": 3452,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3053,
+      "x": 14608.8,
+      "y": 3452,
+      "vx": 12.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3070,
+      "x": 14787.2,
+      "y": 3452,
+      "vx": 5.9,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3086,
+      "x": 14872.8,
+      "y": 3452,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3103,
+      "x": 14963.8,
+      "y": 3498.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3119,
+      "x": 15049.4,
+      "y": 3547.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3135,
+      "x": 15135,
+      "y": 3596,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3153,
+      "x": 15231.3,
+      "y": 3651,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3171,
+      "x": 15327.6,
+      "y": 3706,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3189,
+      "x": 15423.9,
+      "y": 3761.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3205,
+      "x": 15509.5,
+      "y": 3810,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3220,
+      "x": 15589.7,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3237,
+      "x": 15680.7,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3253,
+      "x": 15766.3,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3269,
+      "x": 15851.9,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3283,
+      "x": 15926.8,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3299,
+      "x": 16012.4,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3314,
+      "x": 16092.6,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3329,
+      "x": 16172.9,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3344,
+      "x": 16253.1,
+      "y": 3852,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3360,
+      "x": 16338.7,
+      "y": 3806.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3377,
+      "x": 16429.7,
+      "y": 3732.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3393,
+      "x": 16515.3,
+      "y": 3663.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3410,
+      "x": 16606.2,
+      "y": 3589.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3427,
+      "x": 16697.2,
+      "y": 3515.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3444,
+      "x": 16788.1,
+      "y": 3441.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3461,
+      "x": 16879.1,
+      "y": 3367.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3487,
+      "x": 17018.2,
+      "y": 3254.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3518,
+      "x": 17184,
+      "y": 3202,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3535,
+      "x": 17275,
+      "y": 3202,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3546,
+      "x": 17333.8,
+      "y": 3202,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3559,
+      "x": 17403.4,
+      "y": 3202,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3585,
+      "x": 17542.5,
+      "y": 3202,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3622,
+      "x": 17740.4,
+      "y": 3202,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3652,
+      "x": 17900.9,
+      "y": 3212.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3666,
+      "x": 17975.8,
+      "y": 3254.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3687,
+      "x": 18088.2,
+      "y": 3317.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3711,
+      "x": 18216.6,
+      "y": 3389.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3728,
+      "x": 18307.5,
+      "y": 3440.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3746,
+      "x": 18403.8,
+      "y": 3495,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3762,
+      "x": 18489.4,
+      "y": 3543.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3777,
+      "x": 18569.7,
+      "y": 3588.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3794,
+      "x": 18660.6,
+      "y": 3639.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3812,
+      "x": 18756.9,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3829,
+      "x": 18847.9,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3846,
+      "x": 18938.8,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3863,
+      "x": 19029.8,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3879,
+      "x": 19115.4,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3893,
+      "x": 19211.4,
+      "y": 3652,
+      "vx": 12.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3910,
+      "x": 19389.8,
+      "y": 3652,
+      "vx": 5.9,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3928,
+      "x": 19486.1,
+      "y": 3649.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3943,
+      "x": 19566.4,
+      "y": 3596.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3958,
+      "x": 19646.6,
+      "y": 3542.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3975,
+      "x": 19737.6,
+      "y": 3482.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3993,
+      "x": 19833.9,
+      "y": 3418.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 4009,
+      "x": 19919.5,
+      "y": 3361,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 4024,
+      "x": 19999.7,
+      "y": 3307.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 4039,
+      "x": 20080,
+      "y": 3254,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 4054,
+      "x": 20160.2,
+      "y": 3200.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 4071,
+      "x": 20251.2,
+      "y": 3139.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 4098,
+      "x": 20395.6,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 4139,
+      "x": 20615,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4156,
+      "x": 20705.9,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4168,
+      "x": 20770.1,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4185,
+      "x": 20861.1,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4225,
+      "x": 21075.1,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4257,
+      "x": 21246.3,
+      "y": 3095.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4275,
+      "x": 21342.6,
+      "y": 3161.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4289,
+      "x": 21417.5,
+      "y": 3213.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4310,
+      "x": 21529.8,
+      "y": 3290.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4335,
+      "x": 21663.6,
+      "y": 3382.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4355,
+      "x": 21770.6,
+      "y": 3456,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4371,
+      "x": 21856.2,
+      "y": 3514.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4389,
+      "x": 21952.5,
+      "y": 3581,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4420,
+      "x": 22118.3,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4438,
+      "x": 22214.6,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4447,
+      "x": 22262.8,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4457,
+      "x": 22316.3,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4472,
+      "x": 22396.5,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4488,
+      "x": 22482.1,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4503,
+      "x": 22562.4,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4519,
+      "x": 22648,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4534,
+      "x": 22728.2,
+      "y": 3602,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4548,
+      "x": 22803.1,
+      "y": 3593.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4564,
+      "x": 22888.7,
+      "y": 3555.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4579,
+      "x": 22969,
+      "y": 3520.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4595,
+      "x": 23054.6,
+      "y": 3483.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4611,
+      "x": 23140.2,
+      "y": 3445.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4626,
+      "x": 23220.4,
+      "y": 3410.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4642,
+      "x": 23306,
+      "y": 3373.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4657,
+      "x": 23386.3,
+      "y": 3338.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4674,
+      "x": 23477.2,
+      "y": 3298.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4689,
+      "x": 23557.5,
+      "y": 3263.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4705,
+      "x": 23671.3,
+      "y": 3252,
+      "vx": 12.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4723,
+      "x": 23848,
+      "y": 3252,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4747,
+      "x": 23976.4,
+      "y": 3252,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4772,
+      "x": 24110.1,
+      "y": 3252,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4797,
+      "x": 24243.9,
+      "y": 3363.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4820,
+      "x": 24366.9,
+      "y": 3589.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4836,
+      "x": 24452.5,
+      "y": 3746.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4853,
+      "x": 24543.5,
+      "y": 3912.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4869,
+      "x": 24629.1,
+      "y": 4069.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4886,
+      "x": 24720,
+      "y": 4236.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_east"
+    },
+    {
+      "frame": 4901,
+      "x": 24800.3,
+      "y": 4352,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass06_complete"
+    },
+    {
+      "frame": 4912,
+      "x": 24859.1,
+      "y": 4352,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass06_complete"
+    },
+    {
+      "frame": 4921,
+      "x": 24907.3,
+      "y": 4352,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass06_complete"
+    },
+    {
+      "frame": 4931,
+      "x": 24960.8,
+      "y": 4352,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass06_complete"
+    },
+    {
+      "frame": 4940,
+      "x": 25008.9,
+      "y": 4352,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass06_complete"
+    },
+    {
+      "frame": 4949,
+      "x": 25057.1,
+      "y": 4352,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass06_complete"
+    },
+    {
+      "frame": 4998,
+      "x": 25126.2,
+      "y": 4365.5,
+      "vx": 1.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_approach"
+    },
+    {
+      "frame": 5005,
+      "x": 25154.9,
+      "y": 4374.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_approach"
+    },
+    {
+      "frame": 5016,
+      "x": 25213.7,
+      "y": 4392.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_approach"
+    },
+    {
+      "frame": 5026,
+      "x": 25267.2,
+      "y": 4431.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_approach"
+    },
+    {
+      "frame": 5035,
+      "x": 25315.4,
+      "y": 4489.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_approach"
+    },
+    {
+      "frame": 5044,
+      "x": 25363.5,
+      "y": 4548.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_approach"
+    },
+    {
+      "frame": 5053,
+      "x": 25411.7,
+      "y": 4654.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_approach"
+    },
+    {
+      "frame": 5100,
+      "x": 25461.4,
+      "y": 4797.3,
+      "vx": 5,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_drop"
+    },
+    {
+      "frame": 5114,
+      "x": 25536.3,
+      "y": 4868.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_drop"
+    },
+    {
+      "frame": 5126,
+      "x": 25600.5,
+      "y": 5031.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_drop"
+    },
+    {
+      "frame": 5141,
+      "x": 25680.7,
+      "y": 5263.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_drop"
+    },
+    {
+      "frame": 5154,
+      "x": 25750.3,
+      "y": 5335.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "curve_drop"
+    },
+    {
+      "frame": 5208,
+      "x": 25827.2,
+      "y": 5357.5,
+      "vx": -0.7,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5220,
+      "x": 25775.6,
+      "y": 5342.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5234,
+      "x": 25700.7,
+      "y": 5321.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5247,
+      "x": 25631.2,
+      "y": 5301.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5261,
+      "x": 25556.3,
+      "y": 5280.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5274,
+      "x": 25486.7,
+      "y": 5260.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5288,
+      "x": 25411.8,
+      "y": 5238.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5302,
+      "x": 25336.9,
+      "y": 5217.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5315,
+      "x": 25267.4,
+      "y": 5197.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5328,
+      "x": 25197.8,
+      "y": 5177.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5342,
+      "x": 25122.9,
+      "y": 5156.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5356,
+      "x": 25048,
+      "y": 5134.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5368,
+      "x": 24983.8,
+      "y": 5116.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5381,
+      "x": 24914.3,
+      "y": 5101,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5393,
+      "x": 24850.1,
+      "y": 5097.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5408,
+      "x": 24769.8,
+      "y": 5093.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5422,
+      "x": 24694.9,
+      "y": 5089.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5435,
+      "x": 24625.4,
+      "y": 5085.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5447,
+      "x": 24561.2,
+      "y": 5082.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5460,
+      "x": 24491.6,
+      "y": 5078.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5473,
+      "x": 24422.1,
+      "y": 5075.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5485,
+      "x": 24357.9,
+      "y": 5071.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5498,
+      "x": 24288.3,
+      "y": 5068.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5510,
+      "x": 24224.1,
+      "y": 5064.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5525,
+      "x": 24143.9,
+      "y": 5060.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5547,
+      "x": 24026.2,
+      "y": 5054.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5574,
+      "x": 23881.7,
+      "y": 5028.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5590,
+      "x": 23796.1,
+      "y": 5009.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5605,
+      "x": 23715.9,
+      "y": 4990.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5617,
+      "x": 23651.7,
+      "y": 4976.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5631,
+      "x": 23576.8,
+      "y": 4959,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5646,
+      "x": 23496.5,
+      "y": 4940.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5659,
+      "x": 23427,
+      "y": 4924.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5673,
+      "x": 23352.1,
+      "y": 4907.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5686,
+      "x": 23282.5,
+      "y": 4891.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5701,
+      "x": 23202.3,
+      "y": 4873.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5715,
+      "x": 23127.4,
+      "y": 4856.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5722,
+      "x": 23089.9,
+      "y": 4847.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5730,
+      "x": 23047.1,
+      "y": 4837.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5737,
+      "x": 23009.7,
+      "y": 4829.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5749,
+      "x": 22945.5,
+      "y": 4814.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5763,
+      "x": 22870.6,
+      "y": 4797.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5777,
+      "x": 22795.7,
+      "y": 4780.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5790,
+      "x": 22726.1,
+      "y": 4764.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5815,
+      "x": 22467.4,
+      "y": 4621.6,
+      "vx": -8.2,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5829,
+      "x": 22384.3,
+      "y": 4719.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5884,
+      "x": 22313.2,
+      "y": 4772.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5898,
+      "x": 22238.3,
+      "y": 4788.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5911,
+      "x": 22168.8,
+      "y": 4803.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5931,
+      "x": 22061.8,
+      "y": 4825.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5957,
+      "x": 21922.7,
+      "y": 4854.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5974,
+      "x": 21831.7,
+      "y": 4874,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 5987,
+      "x": 21762.2,
+      "y": 4888.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6000,
+      "x": 21692.6,
+      "y": 4903.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6014,
+      "x": 21617.7,
+      "y": 4918.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6028,
+      "x": 21542.8,
+      "y": 4934.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6041,
+      "x": 21473.3,
+      "y": 4949.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6055,
+      "x": 21398.4,
+      "y": 4964.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6070,
+      "x": 21318.1,
+      "y": 4981.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6084,
+      "x": 21243.2,
+      "y": 4997.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6097,
+      "x": 21173.7,
+      "y": 5012,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6111,
+      "x": 21098.8,
+      "y": 5027.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6126,
+      "x": 21018.5,
+      "y": 5044.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6140,
+      "x": 20943.6,
+      "y": 5043.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6155,
+      "x": 20863.4,
+      "y": 5027.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6168,
+      "x": 20793.8,
+      "y": 5013.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6182,
+      "x": 20718.9,
+      "y": 4997.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6195,
+      "x": 20649.4,
+      "y": 4983.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6209,
+      "x": 20574.5,
+      "y": 4968.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6222,
+      "x": 20504.9,
+      "y": 4954.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6236,
+      "x": 20430,
+      "y": 4938.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6250,
+      "x": 20355.1,
+      "y": 4923.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6263,
+      "x": 20285.6,
+      "y": 4909.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6276,
+      "x": 20216,
+      "y": 4895,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6291,
+      "x": 20135.8,
+      "y": 4878.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6305,
+      "x": 20060.9,
+      "y": 4863.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6320,
+      "x": 19980.6,
+      "y": 4846.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6334,
+      "x": 19905.7,
+      "y": 4831.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6348,
+      "x": 19830.8,
+      "y": 4816.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6355,
+      "x": 19793.4,
+      "y": 4808.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6362,
+      "x": 19755.9,
+      "y": 4800.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6369,
+      "x": 19718.5,
+      "y": 4793.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6380,
+      "x": 19659.6,
+      "y": 4781.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6394,
+      "x": 19584.7,
+      "y": 4765.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6409,
+      "x": 19504.5,
+      "y": 4749.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6422,
+      "x": 19434.9,
+      "y": 4735.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6437,
+      "x": 19354.7,
+      "y": 4718.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6462,
+      "x": 19109.9,
+      "y": 4564,
+      "vx": -9.9,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6475,
+      "x": 19018.1,
+      "y": 4610.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6523,
+      "x": 18945.8,
+      "y": 4723.1,
+      "vx": 0,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6535,
+      "x": 18898.9,
+      "y": 4737.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6554,
+      "x": 18797.3,
+      "y": 4769.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6578,
+      "x": 18668.9,
+      "y": 4810.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6601,
+      "x": 18545.8,
+      "y": 4849,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6614,
+      "x": 18476.3,
+      "y": 4870.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6627,
+      "x": 18406.7,
+      "y": 4892.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6641,
+      "x": 18331.8,
+      "y": 4916.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6655,
+      "x": 18256.9,
+      "y": 4939.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6669,
+      "x": 18182,
+      "y": 4963.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6681,
+      "x": 18117.8,
+      "y": 4983.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6693,
+      "x": 18053.6,
+      "y": 5003.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6705,
+      "x": 17989.4,
+      "y": 5024.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6717,
+      "x": 17925.2,
+      "y": 5044.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6729,
+      "x": 17861,
+      "y": 5064.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6741,
+      "x": 17796.8,
+      "y": 5084.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6752,
+      "x": 17738,
+      "y": 5103.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6765,
+      "x": 17668.4,
+      "y": 5125.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6778,
+      "x": 17598.9,
+      "y": 5147,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6791,
+      "x": 17529.3,
+      "y": 5140.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6805,
+      "x": 17454.4,
+      "y": 5124.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6819,
+      "x": 17379.5,
+      "y": 5108.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6833,
+      "x": 17304.6,
+      "y": 5092.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6847,
+      "x": 17229.7,
+      "y": 5076.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6860,
+      "x": 17160.2,
+      "y": 5061.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6872,
+      "x": 17096,
+      "y": 5047.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6886,
+      "x": 17021.1,
+      "y": 5031.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6899,
+      "x": 16951.5,
+      "y": 5016.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6913,
+      "x": 16876.6,
+      "y": 5000.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6928,
+      "x": 16796.4,
+      "y": 4983.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6941,
+      "x": 16726.8,
+      "y": 4968.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6955,
+      "x": 16651.9,
+      "y": 4952.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6969,
+      "x": 16577,
+      "y": 4936,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6983,
+      "x": 16502.1,
+      "y": 4919.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 6995,
+      "x": 16437.9,
+      "y": 4906.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7002,
+      "x": 16400.5,
+      "y": 4898.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7009,
+      "x": 16363,
+      "y": 4890,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7016,
+      "x": 16325.6,
+      "y": 4882,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7029,
+      "x": 16256,
+      "y": 4867.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7042,
+      "x": 16186.5,
+      "y": 4852.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7056,
+      "x": 16111.6,
+      "y": 4836,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7071,
+      "x": 16031.3,
+      "y": 4818.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7095,
+      "x": 15796.4,
+      "y": 4675.1,
+      "vx": -10.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7108,
+      "x": 15700.1,
+      "y": 4718.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7161,
+      "x": 15628.9,
+      "y": 4818.2,
+      "vx": -2.2,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7174,
+      "x": 15564.9,
+      "y": 4832.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7196,
+      "x": 15447.2,
+      "y": 4858,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7224,
+      "x": 15297.4,
+      "y": 4890.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7238,
+      "x": 15222.5,
+      "y": 4907.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7250,
+      "x": 15158.3,
+      "y": 4921.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7263,
+      "x": 15088.7,
+      "y": 4936.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7278,
+      "x": 15008.5,
+      "y": 4954.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7292,
+      "x": 14933.6,
+      "y": 4970.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7306,
+      "x": 14858.7,
+      "y": 4986.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7320,
+      "x": 14783.8,
+      "y": 5003.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7335,
+      "x": 14703.5,
+      "y": 5020.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7349,
+      "x": 14628.6,
+      "y": 5037.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7363,
+      "x": 14553.7,
+      "y": 5053.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7376,
+      "x": 14484.2,
+      "y": 5068.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7389,
+      "x": 14414.6,
+      "y": 5084.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7403,
+      "x": 14339.7,
+      "y": 5100.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7417,
+      "x": 14264.8,
+      "y": 5084.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7431,
+      "x": 14189.9,
+      "y": 5064.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7445,
+      "x": 14115,
+      "y": 5045.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7459,
+      "x": 14040.1,
+      "y": 5026.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7473,
+      "x": 13965.2,
+      "y": 5006.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7485,
+      "x": 13901,
+      "y": 4990,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7499,
+      "x": 13826.1,
+      "y": 4970.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7513,
+      "x": 13751.2,
+      "y": 4951.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7527,
+      "x": 13676.3,
+      "y": 4931.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7540,
+      "x": 13606.8,
+      "y": 4913.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7553,
+      "x": 13537.2,
+      "y": 4895.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7566,
+      "x": 13467.7,
+      "y": 4877.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7579,
+      "x": 13398.1,
+      "y": 4859.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7591,
+      "x": 13333.9,
+      "y": 4843,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7605,
+      "x": 13259,
+      "y": 4823.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7619,
+      "x": 13184.1,
+      "y": 4804.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7631,
+      "x": 13119.9,
+      "y": 4787.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7638,
+      "x": 13082.5,
+      "y": 4777.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7644,
+      "x": 13050.4,
+      "y": 4769.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7651,
+      "x": 13012.9,
+      "y": 4759.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7662,
+      "x": 12954.1,
+      "y": 4760.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7677,
+      "x": 12873.8,
+      "y": 4785.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7691,
+      "x": 12798.9,
+      "y": 4808.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7705,
+      "x": 12724,
+      "y": 4831.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7724,
+      "x": 12622.4,
+      "y": 4863,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7748,
+      "x": 12494,
+      "y": 4902.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7764,
+      "x": 12408.4,
+      "y": 4928.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7771,
+      "x": 12370.9,
+      "y": 4940.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7778,
+      "x": 12333.5,
+      "y": 4951.9,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7785,
+      "x": 12296,
+      "y": 4963.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7798,
+      "x": 12226.5,
+      "y": 4984.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7811,
+      "x": 12156.9,
+      "y": 5006.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7832,
+      "x": 12044.6,
+      "y": 5040.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7860,
+      "x": 11894.8,
+      "y": 5086.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7876,
+      "x": 11809.2,
+      "y": 5113.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7889,
+      "x": 11739.6,
+      "y": 5134.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7901,
+      "x": 11675.4,
+      "y": 5150.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7913,
+      "x": 11611.2,
+      "y": 5134.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7927,
+      "x": 11536.3,
+      "y": 5116.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7940,
+      "x": 11466.8,
+      "y": 5100.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7954,
+      "x": 11391.9,
+      "y": 5082.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7968,
+      "x": 11317,
+      "y": 5064.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7981,
+      "x": 11247.4,
+      "y": 5047.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 7995,
+      "x": 11172.5,
+      "y": 5029.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8008,
+      "x": 11103,
+      "y": 5012.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8022,
+      "x": 11028.1,
+      "y": 4994.8,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8033,
+      "x": 10969.2,
+      "y": 4980.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8047,
+      "x": 10894.3,
+      "y": 4962.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8061,
+      "x": 10819.4,
+      "y": 4944.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8074,
+      "x": 10749.9,
+      "y": 4928,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8088,
+      "x": 10675,
+      "y": 4910.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8101,
+      "x": 10605.4,
+      "y": 4893.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8115,
+      "x": 10530.5,
+      "y": 4875.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8128,
+      "x": 10461,
+      "y": 4858.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8141,
+      "x": 10391.4,
+      "y": 4855.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8155,
+      "x": 10316.5,
+      "y": 4862.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8169,
+      "x": 10241.6,
+      "y": 4868.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8182,
+      "x": 10172.1,
+      "y": 4874.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8196,
+      "x": 10097.2,
+      "y": 4881.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8211,
+      "x": 10016.9,
+      "y": 4888.2,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8225,
+      "x": 9942,
+      "y": 4894.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8238,
+      "x": 9872.5,
+      "y": 4900.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8252,
+      "x": 9797.6,
+      "y": 4907.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8265,
+      "x": 9728,
+      "y": 4913.3,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8278,
+      "x": 9658.5,
+      "y": 4919.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8291,
+      "x": 9588.9,
+      "y": 4925.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8303,
+      "x": 9524.7,
+      "y": 4931,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8316,
+      "x": 9455.2,
+      "y": 4937,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    },
+    {
+      "frame": 8329,
+      "x": 9385.6,
+      "y": 4943.1,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "left_dash_run"
+    }
+  ],
+  "deterministicChecks": {
+    "title": true,
+    "canvas": true,
+    "focused": true,
+    "runtimeAudit": true,
+    "blueprintAudit": true,
+    "pass03Audit": true,
+    "pass04Audit": true,
+    "pass05Audit": true,
+    "pass06Audit": true,
+    "pass07Audit": true,
+    "firstDrop": true,
+    "firstClimb": true,
+    "secondDrop": true,
+    "secondClimb": true,
+    "completed": true,
+    "zone03Entered": true,
+    "lowerRiseReached": true,
+    "atriumReached": true,
+    "upperGalleryReached": true,
+    "longDescentReached": true,
+    "pass04Completed": true,
+    "zone04Entered": true,
+    "lowTunnelReached": true,
+    "platformBoarded": true,
+    "movingPlatformCrossed": true,
+    "unevenTunnelReached": true,
+    "pass05Completed": true,
+    "zone05Entered": true,
+    "lowerHallReached": true,
+    "highGalleryReached": true,
+    "pass06Completed": true,
+    "zone06Entered": true,
+    "curveCommitted": true,
+    "zone06Dropped": true,
+    "threeDashGaps": true,
+    "onePhysicalDirectionChange": true,
+    "pass07Completed": true,
+    "destructionByDash": true,
+    "allGatesDestroyed": true,
+    "movingPlatformRide": true,
+    "tunnelJumpGaps": true,
+    "jumpGaps": true,
+    "wallJumps": true,
+    "noReset": true,
+    "keyboard": true,
+    "blueprintToggle": true,
+    "legacyInactive": true,
+    "console": true
+  },
+  "passed": true,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "limitations": [
+    "Only zones 01 through 06 have playable collision in pass 07.",
+    "The remaining four zones are still blueprint data.",
+    "The curve corridor is reserved geometry; no boulder is active before pass 08.",
+    "The broad collapse corridor is reserved geometry; no boulder is active before pass 08.",
+    "Graybox shapes are collision prototypes, not final terrain art."
+  ]
+}
