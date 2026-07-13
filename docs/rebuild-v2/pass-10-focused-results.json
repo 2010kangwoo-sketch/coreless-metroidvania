@@ -1,0 +1,4835 @@
+{
+  "version": "rebuild-v2-pass10-focused",
+  "testedWith": "Chromium + Playwright helper start placement, then actual keyboard events",
+  "helperCoordinateMovement": true,
+  "helperUse": "Only to place the player and boulder at the Pass 09 exit; not a full traversal.",
+  "actualKeyboardRoute": "Pass 09 exit -> shaft one wall jumps -> connector -> shaft two wall jumps -> lower hall -> Pass 10 exit",
+  "traversalFailure": null,
+  "state": {
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass10",
+        "pass": 10,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "3909e2c6505710d52af244b276b4ae7acac561c9"
+      },
+      "passed": true,
+      "passedCount": 19,
+      "total": 19,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        },
+        {
+          "id": "pass03_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass04_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass05_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass06_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass07_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass08_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass09_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass10_level_validation",
+          "passed": true
+        },
+        {
+          "id": "player_dimensions",
+          "passed": true
+        },
+        {
+          "id": "debug_state",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "pass03": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "theoreticalJumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "world_contains_level",
+            "passed": true
+          },
+          {
+            "id": "camera_contains_level",
+            "passed": true
+          },
+          {
+            "id": "spawn_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone01_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "pass03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "two_baffles",
+            "passed": true
+          },
+          {
+            "id": "two_climb_walls",
+            "passed": true
+          },
+          {
+            "id": "first_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "second_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "first_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "second_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "walljump_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "macro_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "run_speed",
+            "passed": true
+          },
+          {
+            "id": "variable_jump",
+            "passed": true
+          },
+          {
+            "id": "air_dash",
+            "passed": true
+          }
+        ]
+      },
+      "pass04": {
+        "passed": true,
+        "passedCount": 22,
+        "total": 22,
+        "highestFloor": 1600,
+        "lowestRoof": 1100,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone03_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "zone03_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone03_single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "two_jump_gaps",
+            "passed": true
+          },
+          {
+            "id": "gap_widths",
+            "passed": true
+          },
+          {
+            "id": "rise_height",
+            "passed": true
+          },
+          {
+            "id": "highest_floor_recorded",
+            "passed": true
+          },
+          {
+            "id": "buried_below_roof",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "frames_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "pass03_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass05": {
+        "passed": true,
+        "passedCount": 25,
+        "total": 25,
+        "normalJumpRise": 114.88970588235293,
+        "ceilingClearances": [
+          80,
+          70
+        ],
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_pass04",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone04_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_distinct_gaps",
+            "passed": true
+          },
+          {
+            "id": "precision_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "shaft_requires_platform",
+            "passed": true
+          },
+          {
+            "id": "one_moving_platform",
+            "passed": true
+          },
+          {
+            "id": "platform_spans_shaft",
+            "passed": true
+          },
+          {
+            "id": "platform_travel",
+            "passed": true
+          },
+          {
+            "id": "two_low_ceiling_beams",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_clearance",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass04_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass06": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_pass05",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone05_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gates",
+            "passed": true
+          },
+          {
+            "id": "gate_shapes_distinct",
+            "passed": true
+          },
+          {
+            "id": "gates_ordered",
+            "passed": true
+          },
+          {
+            "id": "gates_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "gates_exceed_normal_jump",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_forward",
+            "passed": true
+          },
+          {
+            "id": "corridor_same_structure",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_supports",
+            "passed": true
+          },
+          {
+            "id": "supports_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "eight_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass05_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass07": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "runOnlyDistance": 196.69117647058823,
+        "dashDistance": 136.4,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_pass06",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "upper_floor_count",
+            "passed": true
+          },
+          {
+            "id": "lower_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floor_lanes",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gaps",
+            "passed": true
+          },
+          {
+            "id": "dash_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "dash_gaps_match_floors",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "curve_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "single_direction_change",
+            "passed": true
+          },
+          {
+            "id": "curve_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "curve_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "visible_vertical_drop",
+            "passed": true
+          },
+          {
+            "id": "landing_below_lip",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_coordinates",
+            "passed": true
+          },
+          {
+            "id": "pass06_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass08": {
+        "passed": true,
+        "passedCount": 24,
+        "total": 24,
+        "totalDistance": 30779.372511505342,
+        "collapsePanelCount": 31,
+        "supportTargetCount": 13,
+        "checks": [
+          {
+            "id": "pass07_level_retained",
+            "passed": true
+          },
+          {
+            "id": "active_boulder",
+            "passed": true
+          },
+          {
+            "id": "single_combined_path",
+            "passed": true
+          },
+          {
+            "id": "path_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "zone05_to_zone06_join",
+            "passed": true
+          },
+          {
+            "id": "path_starts_on_zone05_floor",
+            "passed": true
+          },
+          {
+            "id": "path_ends_at_zone06_exit",
+            "passed": true
+          },
+          {
+            "id": "strict_cumulative_distance",
+            "passed": true
+          },
+          {
+            "id": "long_chase_route",
+            "passed": true
+          },
+          {
+            "id": "physical_curve_apex",
+            "passed": true
+          },
+          {
+            "id": "one_direction_change",
+            "passed": true
+          },
+          {
+            "id": "boulder_radius_fits_corridors",
+            "passed": true
+          },
+          {
+            "id": "bounded_spawn_delay",
+            "passed": true
+          },
+          {
+            "id": "bounded_speed",
+            "passed": true
+          },
+          {
+            "id": "all_chase_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "collapse_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "thirteen_support_targets",
+            "passed": true
+          },
+          {
+            "id": "support_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "supports_before_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_near_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_matches_pass07",
+            "passed": true
+          },
+          {
+            "id": "gaps_remain_physical",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "reserved_flags_unchanged",
+            "passed": true
+          }
+        ]
+      },
+      "pass09": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "totalDistance": 37613.124580885786,
+        "extensionDistance": 6833.752069380444,
+        "collapsePanelCount": 40,
+        "supportTargetCount": 19,
+        "checks": [
+          {
+            "id": "pass08_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass08",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "three_upper_floors",
+            "passed": true
+          },
+          {
+            "id": "one_middle_return",
+            "passed": true
+          },
+          {
+            "id": "five_lower_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_connected",
+            "passed": true
+          },
+          {
+            "id": "two_physical_drops",
+            "passed": true
+          },
+          {
+            "id": "single_player_route",
+            "passed": true
+          },
+          {
+            "id": "three_ceiling_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "eleven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "physical_u_turn",
+            "passed": true
+          },
+          {
+            "id": "corridor_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "corridor_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "six_internal_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "nineteen_supports",
+            "passed": true
+          },
+          {
+            "id": "breach_delay",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          }
+        ]
+      },
+      "pass10": {
+        "passed": true,
+        "passedCount": 30,
+        "total": 30,
+        "theoreticalJumpRise": 114.88970588235293,
+        "totalDistance": 46988.78994100213,
+        "extensionDistance": 9375.665360116342,
+        "collapsePanelCount": 50,
+        "supportTargetCount": 27,
+        "checks": [
+          {
+            "id": "pass09_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass09",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "ten_player_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "eight_solids",
+            "passed": true
+          },
+          {
+            "id": "two_complete_wall_pairs",
+            "passed": true
+          },
+          {
+            "id": "two_forced_shafts",
+            "passed": true
+          },
+          {
+            "id": "shaft_one_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "shaft_two_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "wall_corridor_widths",
+            "passed": true
+          },
+          {
+            "id": "second_shaft_after_first_lip",
+            "passed": true
+          },
+          {
+            "id": "no_bypass_floor",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "fourteen_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_player_endpoints",
+            "passed": true
+          },
+          {
+            "id": "corridor_descends_through_both_shafts",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "eight_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "twenty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "four_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "milestones_force_two_successes",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "gameplay": {
+        "player": {
+          "x": 23590.879206544178,
+          "y": 5852,
+          "vx": 0,
+          "vy": 0,
+          "grounded": true,
+          "wallSide": 0,
+          "dashAvailable": true,
+          "standingPlatformId": null
+        },
+        "movingPlatforms": [
+          {
+            "id": "shaft_carriage",
+            "x": 11569.549999999987,
+            "y": 3290,
+            "direction": 1
+          }
+        ],
+        "breakables": [
+          {
+            "id": "west_braced_gate",
+            "shape": "cross_brace",
+            "destroyed": false
+          },
+          {
+            "id": "middle_lattice_gate",
+            "shape": "lattice",
+            "destroyed": false
+          },
+          {
+            "id": "east_split_gate",
+            "shape": "split_pillar",
+            "destroyed": false
+          }
+        ],
+        "chase": {
+          "triggered": true,
+          "active": false,
+          "sealed": true,
+          "delayFrames": 0,
+          "breachDelayFrames": 0,
+          "breachComplete": true,
+          "internalBreakpointIndex": 6,
+          "internalPauseFrames": 0,
+          "activeFrames": 1401,
+          "pathDistance": 44642.20316588578,
+          "pathProgress": 0.9500607106915786,
+          "pathIndex": 50,
+          "x": 21292.816935958188,
+          "y": 6297.145537602787,
+          "speed": 5.719085
+        },
+        "collapsedFloorIds": [
+          "curve_approach",
+          "curve_bend",
+          "curve_drop_lip",
+          "curve_landing",
+          "curve_runout",
+          "double_wall_connector",
+          "double_wall_entry_slope",
+          "double_wall_lip_one",
+          "double_wall_pit_one",
+          "east_dash_takeoff",
+          "east_mid",
+          "east_wave",
+          "eastern_descent",
+          "eastern_hall",
+          "eastern_ridge",
+          "exit_drop",
+          "final_rise",
+          "first_rise",
+          "first_sink",
+          "high_gallery",
+          "internal_entry_surface",
+          "internal_exit_rise",
+          "internal_lower_landing",
+          "internal_lower_wave_a",
+          "internal_lower_wave_b",
+          "internal_lower_wave_c",
+          "internal_middle_return",
+          "internal_upper_gallery",
+          "internal_upper_ramp",
+          "low_wave_a",
+          "low_wave_b",
+          "low_wave_c",
+          "lower_hall",
+          "maze_entry_rise",
+          "mid_dash_takeoff",
+          "middle_descent",
+          "middle_hall",
+          "middle_wave",
+          "second_rise",
+          "west_dash_landing",
+          "western_hall",
+          "western_ridge",
+          "zone05_exit",
+          "zone06_exit_rise"
+        ],
+        "destroyedSupportIds": [
+          "curve_support_1",
+          "curve_support_2",
+          "curve_support_3",
+          "curve_support_4",
+          "curve_support_5",
+          "curve_support_6",
+          "double_wall_support_connector",
+          "double_wall_support_entry",
+          "double_wall_support_lower_hall",
+          "double_wall_support_one_left",
+          "double_wall_support_one_right",
+          "double_wall_support_two_left",
+          "double_wall_support_two_right",
+          "internal_support_drop",
+          "internal_support_entry",
+          "internal_support_exit",
+          "internal_support_lower_a",
+          "internal_support_lower_b",
+          "internal_support_return",
+          "support_east_a",
+          "support_east_b",
+          "support_exit",
+          "support_mid_a",
+          "support_mid_b",
+          "support_west_a",
+          "support_west_b"
+        ],
+        "boulderCatchCount": 0,
+        "debrisCount": 0,
+        "camera": {
+          "x": 23182.021338108396,
+          "y": 5519.009305918186,
+          "zoom": 0.9954647226697982
+        },
+        "progress": {
+          "zone01Reached": true,
+          "firstDropped": false,
+          "firstClimb": false,
+          "secondDropped": false,
+          "secondClimb": false,
+          "completed": false,
+          "zone03Entered": false,
+          "lowerRiseReached": false,
+          "atriumReached": false,
+          "upperGalleryReached": false,
+          "longDescentReached": false,
+          "pass04Completed": false,
+          "zone04Entered": false,
+          "lowTunnelReached": false,
+          "platformBoarded": false,
+          "movingPlatformCrossed": false,
+          "unevenTunnelReached": false,
+          "pass05Completed": false,
+          "zone05Entered": false,
+          "lowerHallReached": false,
+          "highGalleryReached": false,
+          "pass06Completed": false,
+          "zone06Entered": false,
+          "curveCommitted": false,
+          "zone06Dropped": false,
+          "eastDashGapCleared": false,
+          "middleDashGapCleared": false,
+          "westDashGapCleared": false,
+          "pass07Completed": true,
+          "chaseTriggered": false,
+          "boulderStarted": true,
+          "boulderEnteredCurve": true,
+          "boulderRoundedApex": true,
+          "boulderFinished": false,
+          "chaseEscaped": true,
+          "pass08Completed": true,
+          "zone07Entered": true,
+          "zone07UpperDrop": true,
+          "zone07MiddleReturn": true,
+          "zone07MiddleDrop": true,
+          "zone07LowerRun": true,
+          "zone07ExitReached": true,
+          "boulderAtInternalEntry": true,
+          "internalStructureBreached": true,
+          "pass09Completed": true,
+          "zone08Entered": true,
+          "zone08ShaftOneDropped": true,
+          "zone08ShaftOneCleared": true,
+          "zone08ShaftTwoDropped": true,
+          "zone08ShaftTwoCleared": true,
+          "zone08LowerHallReached": true,
+          "zone08ExitReached": true,
+          "pass10Completed": true,
+          "chaseWallJumps": 15,
+          "floorsCollapsed": 44,
+          "supportsDestroyed": 26,
+          "internalDirectionChanges": 0,
+          "dashGapClears": 0,
+          "directionChanges": 0,
+          "breakablesDestroyed": 0,
+          "platformRides": 0,
+          "groundJumps": 2,
+          "wallJumps": 15,
+          "ledgeAssists": 2,
+          "dashes": 2
+        },
+        "keys": [],
+        "blueprintVisible": false,
+        "resetCount": 0,
+        "frameCount": 4151
+      },
+      "inputProbe": {
+        "downs": 45,
+        "ups": 45,
+        "lastCode": "ShiftLeft",
+        "usedCodes": [
+          "KeyA",
+          "KeyD",
+          "ShiftLeft",
+          "Space"
+        ]
+      }
+    },
+    "debug": {
+      "player": {
+        "x": 23590.879206544178,
+        "y": 5852,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true,
+        "wallSide": 0,
+        "dashAvailable": true,
+        "standingPlatformId": null
+      },
+      "movingPlatforms": [
+        {
+          "id": "shaft_carriage",
+          "x": 11569.549999999987,
+          "y": 3290,
+          "direction": 1
+        }
+      ],
+      "breakables": [
+        {
+          "id": "west_braced_gate",
+          "shape": "cross_brace",
+          "destroyed": false
+        },
+        {
+          "id": "middle_lattice_gate",
+          "shape": "lattice",
+          "destroyed": false
+        },
+        {
+          "id": "east_split_gate",
+          "shape": "split_pillar",
+          "destroyed": false
+        }
+      ],
+      "chase": {
+        "triggered": true,
+        "active": false,
+        "sealed": true,
+        "delayFrames": 0,
+        "breachDelayFrames": 0,
+        "breachComplete": true,
+        "internalBreakpointIndex": 6,
+        "internalPauseFrames": 0,
+        "activeFrames": 1401,
+        "pathDistance": 44642.20316588578,
+        "pathProgress": 0.9500607106915786,
+        "pathIndex": 50,
+        "x": 21292.816935958188,
+        "y": 6297.145537602787,
+        "speed": 5.719085
+      },
+      "collapsedFloorIds": [
+        "curve_approach",
+        "curve_bend",
+        "curve_drop_lip",
+        "curve_landing",
+        "curve_runout",
+        "double_wall_connector",
+        "double_wall_entry_slope",
+        "double_wall_lip_one",
+        "double_wall_pit_one",
+        "east_dash_takeoff",
+        "east_mid",
+        "east_wave",
+        "eastern_descent",
+        "eastern_hall",
+        "eastern_ridge",
+        "exit_drop",
+        "final_rise",
+        "first_rise",
+        "first_sink",
+        "high_gallery",
+        "internal_entry_surface",
+        "internal_exit_rise",
+        "internal_lower_landing",
+        "internal_lower_wave_a",
+        "internal_lower_wave_b",
+        "internal_lower_wave_c",
+        "internal_middle_return",
+        "internal_upper_gallery",
+        "internal_upper_ramp",
+        "low_wave_a",
+        "low_wave_b",
+        "low_wave_c",
+        "lower_hall",
+        "maze_entry_rise",
+        "mid_dash_takeoff",
+        "middle_descent",
+        "middle_hall",
+        "middle_wave",
+        "second_rise",
+        "west_dash_landing",
+        "western_hall",
+        "western_ridge",
+        "zone05_exit",
+        "zone06_exit_rise"
+      ],
+      "destroyedSupportIds": [
+        "curve_support_1",
+        "curve_support_2",
+        "curve_support_3",
+        "curve_support_4",
+        "curve_support_5",
+        "curve_support_6",
+        "double_wall_support_connector",
+        "double_wall_support_entry",
+        "double_wall_support_lower_hall",
+        "double_wall_support_one_left",
+        "double_wall_support_one_right",
+        "double_wall_support_two_left",
+        "double_wall_support_two_right",
+        "internal_support_drop",
+        "internal_support_entry",
+        "internal_support_exit",
+        "internal_support_lower_a",
+        "internal_support_lower_b",
+        "internal_support_return",
+        "support_east_a",
+        "support_east_b",
+        "support_exit",
+        "support_mid_a",
+        "support_mid_b",
+        "support_west_a",
+        "support_west_b"
+      ],
+      "boulderCatchCount": 0,
+      "debrisCount": 0,
+      "camera": {
+        "x": 23182.021338108396,
+        "y": 5519.009305918186,
+        "zoom": 0.9954647226697982
+      },
+      "progress": {
+        "zone01Reached": true,
+        "firstDropped": false,
+        "firstClimb": false,
+        "secondDropped": false,
+        "secondClimb": false,
+        "completed": false,
+        "zone03Entered": false,
+        "lowerRiseReached": false,
+        "atriumReached": false,
+        "upperGalleryReached": false,
+        "longDescentReached": false,
+        "pass04Completed": false,
+        "zone04Entered": false,
+        "lowTunnelReached": false,
+        "platformBoarded": false,
+        "movingPlatformCrossed": false,
+        "unevenTunnelReached": false,
+        "pass05Completed": false,
+        "zone05Entered": false,
+        "lowerHallReached": false,
+        "highGalleryReached": false,
+        "pass06Completed": false,
+        "zone06Entered": false,
+        "curveCommitted": false,
+        "zone06Dropped": false,
+        "eastDashGapCleared": false,
+        "middleDashGapCleared": false,
+        "westDashGapCleared": false,
+        "pass07Completed": true,
+        "chaseTriggered": false,
+        "boulderStarted": true,
+        "boulderEnteredCurve": true,
+        "boulderRoundedApex": true,
+        "boulderFinished": false,
+        "chaseEscaped": true,
+        "pass08Completed": true,
+        "zone07Entered": true,
+        "zone07UpperDrop": true,
+        "zone07MiddleReturn": true,
+        "zone07MiddleDrop": true,
+        "zone07LowerRun": true,
+        "zone07ExitReached": true,
+        "boulderAtInternalEntry": true,
+        "internalStructureBreached": true,
+        "pass09Completed": true,
+        "zone08Entered": true,
+        "zone08ShaftOneDropped": true,
+        "zone08ShaftOneCleared": true,
+        "zone08ShaftTwoDropped": true,
+        "zone08ShaftTwoCleared": true,
+        "zone08LowerHallReached": true,
+        "zone08ExitReached": true,
+        "pass10Completed": true,
+        "chaseWallJumps": 15,
+        "floorsCollapsed": 44,
+        "supportsDestroyed": 26,
+        "internalDirectionChanges": 0,
+        "dashGapClears": 0,
+        "directionChanges": 0,
+        "breakablesDestroyed": 0,
+        "platformRides": 0,
+        "groundJumps": 2,
+        "wallJumps": 15,
+        "ledgeAssists": 2,
+        "dashes": 2
+      },
+      "keys": [],
+      "blueprintVisible": false,
+      "resetCount": 0,
+      "frameCount": 4151
+    }
+  },
+  "routeSamples": [
+    {
+      "frame": 97,
+      "x": 15227.5,
+      "y": 5469.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.787,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 105,
+      "x": 15270.3,
+      "y": 5486.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.788,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 113,
+      "x": 15313.1,
+      "y": 5504,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.788,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 120,
+      "x": 15350.6,
+      "y": 5519,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.789,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 129,
+      "x": 15398.7,
+      "y": 5538.3,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.79,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 137,
+      "x": 15441.5,
+      "y": 5555.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.791,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 145,
+      "x": 15484.3,
+      "y": 5572.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.792,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 153,
+      "x": 15527.1,
+      "y": 5589.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.793,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 163,
+      "x": 15580.6,
+      "y": 5611,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.794,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 172,
+      "x": 15628.8,
+      "y": 5630.3,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.796,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 182,
+      "x": 15682.3,
+      "y": 5651.7,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.797,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 189,
+      "x": 15719.7,
+      "y": 5652,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.798,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 196,
+      "x": 15757.2,
+      "y": 5658.8,
+      "vx": 5.4,
+      "vy": 2.7,
+      "wallSide": 0,
+      "boulderProgress": 0.798,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 205,
+      "x": 15805.3,
+      "y": 5713.9,
+      "vx": 5.4,
+      "vy": 8.8,
+      "wallSide": 0,
+      "boulderProgress": 0.799,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 213,
+      "x": 15848.1,
+      "y": 5809.1,
+      "vx": 5.4,
+      "vy": 14.3,
+      "wallSide": 0,
+      "boulderProgress": 0.8,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 220,
+      "x": 15885.6,
+      "y": 5917,
+      "vx": 5.4,
+      "vy": 15.5,
+      "wallSide": 0,
+      "boulderProgress": 0.801,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 228,
+      "x": 15926,
+      "y": 6041,
+      "vx": 0,
+      "vy": 15.5,
+      "wallSide": 1,
+      "boulderProgress": 0.802,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 236,
+      "x": 15926,
+      "y": 6066.2,
+      "vx": 0,
+      "vy": 3.2,
+      "wallSide": 1,
+      "boulderProgress": 0.803,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 245,
+      "x": 15926,
+      "y": 6094.6,
+      "vx": 0,
+      "vy": 3.2,
+      "wallSide": 1,
+      "boulderProgress": 0.804,
+      "chaseWallJumps": 0
+    },
+    {
+      "frame": 289,
+      "x": 15803.1,
+      "y": 5966.2,
+      "vx": 5.4,
+      "vy": -6,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 2
+    },
+    {
+      "frame": 300,
+      "x": 15861.9,
+      "y": 5945.1,
+      "vx": 5.4,
+      "vy": 1.5,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 2
+    },
+    {
+      "frame": 310,
+      "x": 15915.4,
+      "y": 5997.3,
+      "vx": 5.4,
+      "vy": 8.3,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 2
+    },
+    {
+      "frame": 323,
+      "x": 15857.6,
+      "y": 5920,
+      "vx": -5.3,
+      "vy": -5.3,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 3
+    },
+    {
+      "frame": 333,
+      "x": 15804.1,
+      "y": 5904.2,
+      "vx": -5.3,
+      "vy": 1.5,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 3
+    },
+    {
+      "frame": 344,
+      "x": 15745.2,
+      "y": 5965.3,
+      "vx": -5.3,
+      "vy": 9,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 3
+    },
+    {
+      "frame": 355,
+      "x": 15803.1,
+      "y": 5884.4,
+      "vx": 5.4,
+      "vy": -6,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 4
+    },
+    {
+      "frame": 366,
+      "x": 15861.9,
+      "y": 5863.3,
+      "vx": 5.4,
+      "vy": 1.5,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 4
+    },
+    {
+      "frame": 376,
+      "x": 15915.4,
+      "y": 5915.5,
+      "vx": 5.4,
+      "vy": 8.3,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 4
+    },
+    {
+      "frame": 386,
+      "x": 15873.6,
+      "y": 5856.1,
+      "vx": -5.3,
+      "vy": -7.4,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 428,
+      "x": 16182.9,
+      "y": 5816,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 436,
+      "x": 16225.7,
+      "y": 5821.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 447,
+      "x": 16284.6,
+      "y": 5828.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 457,
+      "x": 16338.1,
+      "y": 5834.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 466,
+      "x": 16386.2,
+      "y": 5840.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 476,
+      "x": 16439.7,
+      "y": 5846.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 486,
+      "x": 16493.2,
+      "y": 5856.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 497,
+      "x": 16552.1,
+      "y": 5879.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 508,
+      "x": 16610.9,
+      "y": 5903.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 517,
+      "x": 16659.1,
+      "y": 5922.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 527,
+      "x": 16712.6,
+      "y": 5943.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 537,
+      "x": 16766.1,
+      "y": 5965.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 546,
+      "x": 16814.2,
+      "y": 5984.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 555,
+      "x": 16862.4,
+      "y": 6003.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 565,
+      "x": 16915.9,
+      "y": 6025.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 574,
+      "x": 16964,
+      "y": 6044.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 583,
+      "x": 17012.2,
+      "y": 6052,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 592,
+      "x": 17060.3,
+      "y": 6058.8,
+      "vx": 5.4,
+      "vy": 2.7,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 601,
+      "x": 17108.5,
+      "y": 6113.9,
+      "vx": 5.4,
+      "vy": 8.8,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 611,
+      "x": 17162,
+      "y": 6239.5,
+      "vx": 5.4,
+      "vy": 15.5,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 620,
+      "x": 17210.1,
+      "y": 6379,
+      "vx": 5.4,
+      "vy": 15.5,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 629,
+      "x": 17226,
+      "y": 6444.4,
+      "vx": 0,
+      "vy": 3.2,
+      "wallSide": 1,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 639,
+      "x": 17226,
+      "y": 6475.9,
+      "vx": 0,
+      "vy": 3.2,
+      "wallSide": 1,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 5
+    },
+    {
+      "frame": 682,
+      "x": 17062.7,
+      "y": 6422.7,
+      "vx": 7.1,
+      "vy": -10.8,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 7
+    },
+    {
+      "frame": 693,
+      "x": 17124.5,
+      "y": 6349.3,
+      "vx": 5.4,
+      "vy": -3.3,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 7
+    },
+    {
+      "frame": 704,
+      "x": 17183.3,
+      "y": 6358.1,
+      "vx": 5.4,
+      "vy": 4.2,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 7
+    },
+    {
+      "frame": 714,
+      "x": 17210.5,
+      "y": 6392.6,
+      "vx": -7.6,
+      "vy": -11.4,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 8
+    },
+    {
+      "frame": 726,
+      "x": 17141.5,
+      "y": 6308.3,
+      "vx": -5.3,
+      "vy": -3.3,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 8
+    },
+    {
+      "frame": 738,
+      "x": 17077.3,
+      "y": 6322,
+      "vx": -5.3,
+      "vy": 4.9,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 8
+    },
+    {
+      "frame": 750,
+      "x": 17075.7,
+      "y": 6346.6,
+      "vx": 6.3,
+      "vy": -3.1,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 9
+    },
+    {
+      "frame": 761,
+      "x": 17135.2,
+      "y": 6357.4,
+      "vx": 5.4,
+      "vy": 4.4,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 9
+    },
+    {
+      "frame": 773,
+      "x": 17199.4,
+      "y": 6463.1,
+      "vx": 5.4,
+      "vy": 12.5,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 9
+    },
+    {
+      "frame": 785,
+      "x": 17179,
+      "y": 6502.8,
+      "vx": -5.5,
+      "vy": -1.7,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 10
+    },
+    {
+      "frame": 797,
+      "x": 17114.8,
+      "y": 6535,
+      "vx": -5.3,
+      "vy": 6.4,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 10
+    },
+    {
+      "frame": 809,
+      "x": 17072.2,
+      "y": 6470.1,
+      "vx": -1.3,
+      "vy": -6.4,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 10
+    },
+    {
+      "frame": 821,
+      "x": 17089.8,
+      "y": 6446.6,
+      "vx": 3.8,
+      "vy": 1.8,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 10
+    },
+    {
+      "frame": 834,
+      "x": 17157.1,
+      "y": 6531.6,
+      "vx": 5.4,
+      "vy": 10.6,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 10
+    },
+    {
+      "frame": 847,
+      "x": 17226,
+      "y": 6459.4,
+      "vx": 0,
+      "vy": -5,
+      "wallSide": 1,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 10
+    },
+    {
+      "frame": 860,
+      "x": 17184.4,
+      "y": 6380.8,
+      "vx": -5.9,
+      "vy": -8.7,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 11
+    },
+    {
+      "frame": 873,
+      "x": 17114.8,
+      "y": 6329.3,
+      "vx": -5.3,
+      "vy": 0.1,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 11
+    },
+    {
+      "frame": 885,
+      "x": 17050.6,
+      "y": 6383.8,
+      "vx": -5.3,
+      "vy": 8.3,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 11
+    },
+    {
+      "frame": 898,
+      "x": 17108.4,
+      "y": 6306.4,
+      "vx": 5.4,
+      "vy": -5.3,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 12
+    },
+    {
+      "frame": 910,
+      "x": 17172.6,
+      "y": 6295.6,
+      "vx": 5.4,
+      "vy": 2.8,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 12
+    },
+    {
+      "frame": 921,
+      "x": 17218,
+      "y": 6349.3,
+      "vx": -8,
+      "vy": -12.1,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 13
+    },
+    {
+      "frame": 932,
+      "x": 17152.2,
+      "y": 6260.9,
+      "vx": -5.3,
+      "vy": -4.6,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 13
+    },
+    {
+      "frame": 944,
+      "x": 17088,
+      "y": 6258.2,
+      "vx": -5.3,
+      "vy": 3.5,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 13
+    },
+    {
+      "frame": 956,
+      "x": 17062.7,
+      "y": 6286.2,
+      "vx": 7.1,
+      "vy": -10.8,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 14
+    },
+    {
+      "frame": 968,
+      "x": 17129.8,
+      "y": 6210.1,
+      "vx": 5.4,
+      "vy": -2.6,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 14
+    },
+    {
+      "frame": 980,
+      "x": 17194,
+      "y": 6232,
+      "vx": 5.4,
+      "vy": 5.6,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 14
+    },
+    {
+      "frame": 992,
+      "x": 17184.4,
+      "y": 6217.1,
+      "vx": -5.9,
+      "vy": -8.7,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1036,
+      "x": 17505.2,
+      "y": 6162.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1048,
+      "x": 17569.4,
+      "y": 6165,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1059,
+      "x": 17628.2,
+      "y": 6167.7,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1071,
+      "x": 17692.4,
+      "y": 6170.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1084,
+      "x": 17762,
+      "y": 6173.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1097,
+      "x": 17831.5,
+      "y": 6176.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1109,
+      "x": 17895.7,
+      "y": 6179.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1122,
+      "x": 17965.3,
+      "y": 6183,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1134,
+      "x": 18029.5,
+      "y": 6185.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1146,
+      "x": 18093.7,
+      "y": 6188.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1159,
+      "x": 18163.2,
+      "y": 6192,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1173,
+      "x": 18238.1,
+      "y": 6195.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1186,
+      "x": 18307.7,
+      "y": 6198.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1200,
+      "x": 18382.6,
+      "y": 6202,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1213,
+      "x": 18452.1,
+      "y": 6206.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1227,
+      "x": 18527,
+      "y": 6210.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1240,
+      "x": 18596.6,
+      "y": 6214.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1253,
+      "x": 18666.1,
+      "y": 6218.7,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1265,
+      "x": 18730.3,
+      "y": 6222.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1279,
+      "x": 18805.2,
+      "y": 6226.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1292,
+      "x": 18874.8,
+      "y": 6230.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1307,
+      "x": 18955,
+      "y": 6235.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1321,
+      "x": 19029.9,
+      "y": 6240.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1334,
+      "x": 19099.5,
+      "y": 6244.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1347,
+      "x": 19169,
+      "y": 6248.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1361,
+      "x": 19243.9,
+      "y": 6252.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1375,
+      "x": 19318.8,
+      "y": 6257,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1389,
+      "x": 19393.7,
+      "y": 6261.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1403,
+      "x": 19468.6,
+      "y": 6265.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1417,
+      "x": 19543.5,
+      "y": 6270.3,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1430,
+      "x": 19613.1,
+      "y": 6274.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1445,
+      "x": 19693.3,
+      "y": 6279.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1460,
+      "x": 19773.6,
+      "y": 6283.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1475,
+      "x": 19853.8,
+      "y": 6288.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1490,
+      "x": 19934.1,
+      "y": 6293.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1504,
+      "x": 20009,
+      "y": 6297.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1518,
+      "x": 20083.9,
+      "y": 6302,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1532,
+      "x": 20158.8,
+      "y": 6298,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1546,
+      "x": 20233.7,
+      "y": 6294.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1561,
+      "x": 20313.9,
+      "y": 6289.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1575,
+      "x": 20388.8,
+      "y": 6285.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1590,
+      "x": 20469.1,
+      "y": 6281.7,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1604,
+      "x": 20544,
+      "y": 6277.7,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1619,
+      "x": 20624.2,
+      "y": 6273.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1634,
+      "x": 20704.5,
+      "y": 6269.3,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1648,
+      "x": 20779.4,
+      "y": 6265.3,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1663,
+      "x": 20859.6,
+      "y": 6261.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1677,
+      "x": 20934.5,
+      "y": 6257.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1691,
+      "x": 21009.4,
+      "y": 6253.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1706,
+      "x": 21089.7,
+      "y": 6249,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1720,
+      "x": 21164.6,
+      "y": 6245.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1734,
+      "x": 21239.5,
+      "y": 6241.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1749,
+      "x": 21319.7,
+      "y": 6236.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1763,
+      "x": 21394.6,
+      "y": 6233,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1778,
+      "x": 21474.9,
+      "y": 6228.7,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1792,
+      "x": 21549.8,
+      "y": 6224.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1806,
+      "x": 21624.7,
+      "y": 6220.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1821,
+      "x": 21704.9,
+      "y": 6216.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1836,
+      "x": 21785.2,
+      "y": 6212.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1851,
+      "x": 21865.4,
+      "y": 6208.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1864,
+      "x": 21935,
+      "y": 6204.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1879,
+      "x": 22015.2,
+      "y": 6194.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1893,
+      "x": 22090.1,
+      "y": 6178.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1907,
+      "x": 22165,
+      "y": 6162.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1921,
+      "x": 22239.9,
+      "y": 6145.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1936,
+      "x": 22320.2,
+      "y": 6128.2,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1950,
+      "x": 22395.1,
+      "y": 6111.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1964,
+      "x": 22470,
+      "y": 6095.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1978,
+      "x": 22544.9,
+      "y": 6079.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 1990,
+      "x": 22609.1,
+      "y": 6065,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2005,
+      "x": 22689.3,
+      "y": 6047.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2019,
+      "x": 22764.2,
+      "y": 6031.1,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2034,
+      "x": 22844.5,
+      "y": 6013.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2049,
+      "x": 22924.7,
+      "y": 5996,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2064,
+      "x": 23005,
+      "y": 5978.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2080,
+      "x": 23090.6,
+      "y": 5959.7,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.809,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2097,
+      "x": 23181.5,
+      "y": 5939.8,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.81,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2111,
+      "x": 23256.4,
+      "y": 5923.4,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.812,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2122,
+      "x": 23315.3,
+      "y": 5910.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.813,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2134,
+      "x": 23379.5,
+      "y": 5896.5,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.815,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2145,
+      "x": 23438.3,
+      "y": 5883.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.816,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2157,
+      "x": 23502.5,
+      "y": 5869.6,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.818,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2167,
+      "x": 23556,
+      "y": 5857.9,
+      "vx": 5.4,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.819,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2177,
+      "x": 23587.7,
+      "y": 5852,
+      "vx": 0.9,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.82,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2189,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.821,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2201,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.823,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2212,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.824,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2224,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.826,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2235,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.827,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2247,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.828,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2258,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.83,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2270,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.831,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2281,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.832,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2290,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2301,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2314,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2325,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2336,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2347,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2359,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2371,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2383,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2395,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2407,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2418,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2429,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2440,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2450,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2461,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2474,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2485,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2497,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2508,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2522,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2534,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2545,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2557,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.834,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2568,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.836,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2579,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.837,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2591,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.838,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2603,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.84,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2615,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.841,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2627,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.843,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2639,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.844,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2651,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.846,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2662,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.847,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2674,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.848,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2684,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.85,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2694,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.851,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2703,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.852,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2714,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.853,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2725,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2737,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2749,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2761,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2773,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2784,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2795,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2808,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2821,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2833,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2844,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2857,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2868,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2878,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2890,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2901,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2912,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2922,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2933,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2944,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2954,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2966,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2977,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 2989,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3001,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3013,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3025,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3037,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3048,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3059,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3071,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3082,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3093,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3104,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3116,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3127,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3139,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3151,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3164,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3176,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3187,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3199,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3209,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3219,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3231,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3243,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3253,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3265,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3276,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3288,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3299,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3310,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3324,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.855,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3336,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.856,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3347,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.857,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3358,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.859,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3370,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.86,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3383,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.862,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3393,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.863,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3404,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.864,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3415,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.865,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3428,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.867,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3441,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.869,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3452,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.87,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3464,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.871,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3476,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.873,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3489,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.874,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3502,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.876,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3512,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.877,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3523,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.878,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3534,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.88,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3545,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.881,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3556,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.882,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3567,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.884,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3579,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.885,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3590,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.887,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3602,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.888,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3614,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.889,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3626,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.891,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3638,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.892,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3649,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.894,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3661,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.895,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3672,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.896,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3683,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.898,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3695,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.899,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3707,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.901,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3718,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.902,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3730,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.903,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3742,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.905,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3753,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.906,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3766,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.908,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3777,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.909,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3788,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.91,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3799,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.912,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3811,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.913,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3823,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.915,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3836,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.916,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3848,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.918,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3859,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.919,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3869,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.92,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3881,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.922,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3894,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.923,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3907,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.925,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3918,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.926,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3930,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.928,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3941,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.929,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3952,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.93,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3963,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.932,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3975,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.933,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3988,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.935,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 3999,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.936,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4010,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.937,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4020,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.939,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4031,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.94,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4042,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.941,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4054,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.943,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4064,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.944,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4076,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.945,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4088,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.947,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4100,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.948,
+      "chaseWallJumps": 15
+    },
+    {
+      "frame": 4111,
+      "x": 23590.9,
+      "y": 5852,
+      "vx": 0,
+      "vy": 0,
+      "wallSide": 0,
+      "boulderProgress": 0.95,
+      "chaseWallJumps": 15
+    }
+  ],
+  "checks": {
+    "runtimeAudit": true,
+    "pass10Audit": true,
+    "entered": true,
+    "firstDrop": true,
+    "firstClear": true,
+    "secondDrop": true,
+    "secondClear": true,
+    "lowerHall": true,
+    "exit": true,
+    "completed": true,
+    "repeatedWallJumps": true,
+    "boulderCoveredRoute": true,
+    "sealed": true,
+    "noReset": true,
+    "noCatch": true,
+    "console": true
+  },
+  "passed": true,
+  "consoleErrors": [],
+  "pageErrors": []
+}
