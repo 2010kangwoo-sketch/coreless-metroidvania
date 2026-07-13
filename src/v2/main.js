@@ -3,7 +3,8 @@ import { BOULDER_ROUTE, CHASE_FEATURES, PLAYER_ROUTE, WORLD, ZONES, validateBlue
 import { PASS03_LEVEL, PLAYER_PHYSICS, validatePass03Level } from "./pass03-level.js";
 import { PASS04_LEVEL, PASS04_ZONE, validatePass04Level } from "./pass04-level.js";
 import { PASS05_LEVEL, PASS05_ZONE, validatePass05Level } from "./pass05-level.js";
-import { Pass05Runtime } from "./runtime.js";
+import { PASS06_LEVEL, PASS06_ZONE, validatePass06Level } from "./pass06-level.js";
+import { Pass06Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -13,7 +14,7 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const runtime = new Pass05Runtime(canvas, {
+const runtime = new Pass06Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
 });
@@ -48,6 +49,11 @@ window.__corelessV2 = Object.freeze({
     level: PASS05_LEVEL,
     zone: PASS05_ZONE,
     validate: validatePass05Level,
+  }),
+  pass06: Object.freeze({
+    level: PASS06_LEVEL,
+    zone: PASS06_ZONE,
+    validate: validatePass06Level,
   }),
   runtime,
   audit: () => runtime.audit(),

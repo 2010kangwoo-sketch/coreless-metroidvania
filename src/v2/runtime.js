@@ -2,7 +2,8 @@ import { BUILD, PALETTE, STAGE_SEQUENCE, VIEWPORT } from "./config.js";
 import { BOULDER_ROUTE, CHASE_FEATURES, PLAYER_ROUTE, WORLD, ZONES, validateBlueprint } from "./blueprint.js";
 import { PASS03_LEVEL, PLAYER_PHYSICS, validatePass03Level } from "./pass03-level.js";
 import { PASS04_ZONE, validatePass04Level } from "./pass04-level.js";
-import { PASS05_LEVEL, PASS05_ZONE, validatePass05Level } from "./pass05-level.js";
+import { PASS05_ZONE, validatePass05Level } from "./pass05-level.js";
+import { PASS06_LEVEL, PASS06_ZONE, validatePass06Level } from "./pass06-level.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -10,7 +11,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass05Runtime {
+export class Pass06Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -27,6 +28,8 @@ export class Pass05Runtime {
     this.progress = this.createProgress();
     this.player = this.createPlayer();
     this.movingPlatforms = this.createMovingPlatforms();
+    this.breakables = this.createBreakables();
+    this.debris = [];
     this.camera = { x: 0, y: 300 };
 
     this.onKeyDown = event => {
@@ -38,7 +41,10 @@ export class Pass05Runtime {
         this.inputProbe.usedCodes.add(event.code);
         if (event.code === "Space") this.jumpQueued = true;
         if (event.code === "ShiftLeft" || event.code === "ShiftRight") this.dashQueued = true;
-        if (event.code === "KeyB") this.blueprintVisible = !this.blueprintVisible;
+        if (event.code === "KeyB") {
+          this.blueprintVisible = !this.blueprintVisible;
+          document.documentElement.classList.toggle("blueprint-open", this.blueprintVisible);
+        }
         if (event.code === "KeyR") this.resetPlayer(true);
       }
       this.keys.add(event.code);
@@ -77,6 +83,11 @@ export class Pass05Runtime {
       movingPlatformCrossed: false,
       unevenTunnelReached: false,
       pass05Completed: false,
+      zone05Entered: false,
+      lowerHallReached: false,
+      highGalleryReached: false,
+      pass06Completed: false,
+      breakablesDestroyed: 0,
       platformRides: 0,
       groundJumps: 0,
       wallJumps: 0,
@@ -87,10 +98,10 @@ export class Pass05Runtime {
 
   createPlayer() {
     return {
-      x: PASS05_LEVEL.spawn.x,
-      y: PASS05_LEVEL.spawn.y,
-      previousX: PASS05_LEVEL.spawn.x,
-      previousY: PASS05_LEVEL.spawn.y,
+      x: PASS06_LEVEL.spawn.x,
+      y: PASS06_LEVEL.spawn.y,
+      previousX: PASS06_LEVEL.spawn.x,
+      previousY: PASS06_LEVEL.spawn.y,
       vx: 0,
       vy: 0,
       facing: 1,
@@ -104,12 +115,16 @@ export class Pass05Runtime {
   }
 
   createMovingPlatforms() {
-    return PASS05_LEVEL.movingPlatforms.map(item => ({
+    return PASS06_LEVEL.movingPlatforms.map(item => ({
       ...item,
       x: item.xMin,
       previousX: item.xMin,
       direction: 1,
     }));
+  }
+
+  createBreakables() {
+    return PASS06_LEVEL.breakables.map(item => ({ ...item, destroyed: false }));
   }
 
   start() {
@@ -135,6 +150,7 @@ export class Pass05Runtime {
     const p = this.player;
     const config = PLAYER_PHYSICS;
     this.updateMovingPlatforms();
+    this.updateDebris();
     p.previousX = p.x;
     p.previousY = p.y;
     const wasGrounded = p.grounded;
@@ -191,9 +207,20 @@ export class Pass05Runtime {
     this.updateProgress();
     this.updateCamera();
 
-    if (p.y > PASS05_LEVEL.bounds.y + PASS05_LEVEL.bounds.height + 120 || p.x < -120) {
+    if (p.y > PASS06_LEVEL.bounds.y + PASS06_LEVEL.bounds.height + 120 || p.x < -120) {
       this.resetPlayer(false);
     }
+  }
+
+  updateDebris() {
+    for (const piece of this.debris) {
+      piece.x += piece.vx;
+      piece.y += piece.vy;
+      piece.vy += 0.34;
+      piece.rotation += piece.spin;
+      piece.life -= 1;
+    }
+    this.debris = this.debris.filter(piece => piece.life > 0);
   }
 
   updateMovingPlatforms() {
@@ -217,7 +244,7 @@ export class Pass05Runtime {
   moveHorizontal() {
     const p = this.player;
     p.x += p.vx;
-    for (const solid of PASS05_LEVEL.solids) {
+    for (const solid of PASS06_LEVEL.solids) {
       if (solid.role === "ledge") continue;
       const bottom = p.y + PLAYER_PHYSICS.height;
       const previousBottom = p.previousY + PLAYER_PHYSICS.height;
@@ -244,7 +271,45 @@ export class Pass05Runtime {
       }
       p.vx = 0;
     }
-    p.x = clamp(p.x, PASS05_LEVEL.bounds.x, PASS05_LEVEL.bounds.x + PASS05_LEVEL.bounds.width - PLAYER_PHYSICS.width);
+    for (const gate of this.breakables) {
+      if (gate.destroyed || !this.overlaps(p, gate)) continue;
+      if (p.dashFrames > 0) {
+        this.destroyBreakable(gate);
+        continue;
+      }
+      if (p.vx > 0) {
+        p.x = gate.x - PLAYER_PHYSICS.width;
+        p.wallSide = 1;
+      } else if (p.vx < 0) {
+        p.x = gate.x + gate.width;
+        p.wallSide = -1;
+      }
+      p.vx = 0;
+    }
+    p.x = clamp(p.x, PASS06_LEVEL.bounds.x, PASS06_LEVEL.bounds.x + PASS06_LEVEL.bounds.width - PLAYER_PHYSICS.width);
+  }
+
+  destroyBreakable(gate) {
+    if (gate.destroyed) return;
+    gate.destroyed = true;
+    this.progress.breakablesDestroyed += 1;
+    const columns = 3;
+    const rows = 5;
+    for (let row = 0; row < rows; row += 1) {
+      for (let column = 0; column < columns; column += 1) {
+        this.debris.push({
+          x: gate.x + (column + 0.5) * gate.width / columns,
+          y: gate.y + (row + 0.5) * gate.height / rows,
+          width: gate.width / columns - 2,
+          height: gate.height / rows - 3,
+          vx: (column - 1) * 1.8 + this.player.facing * 2.4,
+          vy: -4.6 + row * 0.55,
+          rotation: 0,
+          spin: (column - 1) * 0.045,
+          life: 70,
+        });
+      }
+    }
   }
 
   moveVertical(wasGrounded) {
@@ -252,7 +317,7 @@ export class Pass05Runtime {
     const previousBottom = p.y + PLAYER_PHYSICS.height;
     p.y += p.vy;
 
-    for (const solid of PASS05_LEVEL.solids) {
+    for (const solid of PASS06_LEVEL.solids) {
       if (!this.overlaps(p, solid)) continue;
       if (p.vy >= 0 && previousBottom <= solid.y + 8) {
         p.y = solid.y - PLAYER_PHYSICS.height;
@@ -260,6 +325,18 @@ export class Pass05Runtime {
         p.grounded = true;
       } else if (p.vy < 0 && p.previousY >= solid.y + solid.height - 8) {
         p.y = solid.y + solid.height;
+        p.vy = 0;
+      }
+    }
+
+    for (const gate of this.breakables) {
+      if (gate.destroyed || !this.overlaps(p, gate)) continue;
+      if (p.vy >= 0 && previousBottom <= gate.y + 8) {
+        p.y = gate.y - PLAYER_PHYSICS.height;
+        p.vy = 0;
+        p.grounded = true;
+      } else if (p.vy < 0 && p.previousY >= gate.y + gate.height - 8) {
+        p.y = gate.y + gate.height;
         p.vy = 0;
       }
     }
@@ -281,7 +358,7 @@ export class Pass05Runtime {
 
     const centerX = p.x + PLAYER_PHYSICS.width / 2;
     let bestFloor = null;
-    for (const item of PASS05_LEVEL.floors) {
+    for (const item of PASS06_LEVEL.floors) {
       if (centerX < item.x1 || centerX > item.x2) continue;
       const ratio = (centerX - item.x1) / (item.x2 - item.x1);
       const floorY = item.y1 + (item.y2 - item.y1) * ratio;
@@ -297,7 +374,7 @@ export class Pass05Runtime {
     }
 
     if (!p.grounded && p.wallSide === 0) {
-      for (const solid of PASS05_LEVEL.solids) {
+      for (const solid of PASS06_LEVEL.solids) {
         const verticalOverlap = p.y + PLAYER_PHYSICS.height > solid.y + 2 && p.y < solid.y + solid.height - 2;
         if (!verticalOverlap) continue;
         if (Math.abs(p.x + PLAYER_PHYSICS.width - solid.x) <= 1.5) p.wallSide = 1;
@@ -316,8 +393,8 @@ export class Pass05Runtime {
   updateProgress() {
     const p = this.player;
     const bottom = p.y + PLAYER_PHYSICS.height;
-    const gates = PASS05_LEVEL.gates;
-    if (p.x >= PASS05_LEVEL.zone01Exit.x - 30) this.progress.zone01Reached = true;
+    const gates = PASS06_LEVEL.gates;
+    if (p.x >= PASS06_LEVEL.zone01Exit.x - 30) this.progress.zone01Reached = true;
     if (bottom >= gates.firstDropY && p.x < gates.firstExitX) this.progress.firstDropped = true;
     if (this.progress.firstDropped && p.x >= gates.firstExitX && bottom <= gates.firstExitY) this.progress.firstClimb = true;
     if (this.progress.firstClimb && bottom >= gates.secondDropY && p.x < gates.secondExitX) this.progress.secondDropped = true;
@@ -336,12 +413,19 @@ export class Pass05Runtime {
     if (this.progress.platformBoarded && p.x >= zone04.shaftExitX) this.progress.movingPlatformCrossed = true;
     if (this.progress.movingPlatformCrossed && p.x >= zone04.unevenX) this.progress.unevenTunnelReached = true;
     if (this.progress.unevenTunnelReached && p.x >= zone04.completionX && bottom >= zone04.completionY) this.progress.pass05Completed = true;
+    const zone05 = PASS06_ZONE.milestones;
+    if (this.progress.pass05Completed && p.x >= zone05.enteredX) this.progress.zone05Entered = true;
+    if (this.progress.zone05Entered && p.x >= zone05.lowerHallX) this.progress.lowerHallReached = true;
+    if (this.progress.lowerHallReached && p.x >= zone05.highGalleryX) this.progress.highGalleryReached = true;
+    if (this.progress.highGalleryReached && this.progress.breakablesDestroyed === 3 && p.x >= zone05.completionX && bottom >= zone05.completionY) this.progress.pass06Completed = true;
   }
 
   resetPlayer(manual) {
     if (manual || this.frameCount > 0) this.resetCount += 1;
     this.player = this.createPlayer();
     this.movingPlatforms = this.createMovingPlatforms();
+    this.breakables = this.createBreakables();
+    this.debris = [];
     this.progress = this.createProgress();
     this.jumpQueued = false;
     this.dashQueued = false;
@@ -351,15 +435,15 @@ export class Pass05Runtime {
 
   snapCamera() {
     const p = this.player;
-    this.camera.x = clamp(p.x - 310, PASS05_LEVEL.cameraBounds.x, PASS05_LEVEL.cameraBounds.x + PASS05_LEVEL.cameraBounds.width - VIEWPORT.width);
-    this.camera.y = clamp(p.y - 260, PASS05_LEVEL.cameraBounds.y, PASS05_LEVEL.cameraBounds.y + PASS05_LEVEL.cameraBounds.height - VIEWPORT.height);
+    this.camera.x = clamp(p.x - 310, PASS06_LEVEL.cameraBounds.x, PASS06_LEVEL.cameraBounds.x + PASS06_LEVEL.cameraBounds.width - VIEWPORT.width);
+    this.camera.y = clamp(p.y - 260, PASS06_LEVEL.cameraBounds.y, PASS06_LEVEL.cameraBounds.y + PASS06_LEVEL.cameraBounds.height - VIEWPORT.height);
   }
 
   updateCamera() {
     const p = this.player;
     const lookAhead = p.facing > 0 ? 390 : 810;
-    const targetX = clamp(p.x - lookAhead, PASS05_LEVEL.cameraBounds.x, PASS05_LEVEL.cameraBounds.x + PASS05_LEVEL.cameraBounds.width - VIEWPORT.width);
-    const targetY = clamp(p.y - 300, PASS05_LEVEL.cameraBounds.y, PASS05_LEVEL.cameraBounds.y + PASS05_LEVEL.cameraBounds.height - VIEWPORT.height);
+    const targetX = clamp(p.x - lookAhead, PASS06_LEVEL.cameraBounds.x, PASS06_LEVEL.cameraBounds.x + PASS06_LEVEL.cameraBounds.width - VIEWPORT.width);
+    const targetY = clamp(p.y - 300, PASS06_LEVEL.cameraBounds.y, PASS06_LEVEL.cameraBounds.y + PASS06_LEVEL.cameraBounds.height - VIEWPORT.height);
     this.camera.x += (targetX - this.camera.x) * 0.075;
     this.camera.y += (targetY - this.camera.y) * 0.085;
   }
@@ -380,8 +464,11 @@ export class Pass05Runtime {
     ctx.translate(-this.camera.x, -this.camera.y);
     this.drawBuriedStructure(ctx);
     this.drawUnevenTunnelStructure(ctx);
+    this.drawDestructionMazeStructure(ctx);
     this.drawLevel(ctx);
     this.drawMovingPlatforms(ctx);
+    this.drawBreakables(ctx);
+    this.drawDebris(ctx);
     this.drawMarkers(ctx);
     this.drawPlayer(ctx);
     ctx.restore();
@@ -405,9 +492,9 @@ export class Pass05Runtime {
 
   drawLevel(ctx) {
     ctx.save();
-    for (const item of PASS05_LEVEL.floors) {
-      ctx.fillStyle = item.zone === 1 ? "#263c40" : item.zone === 3 ? "#303a3c" : item.zone === 4 ? "#34393a" : "#29383b";
-      ctx.strokeStyle = item.zone === 1 ? "#9ab7ae" : item.zone === 3 ? "#c2b58f" : item.zone === 4 ? "#c7ad82" : "#b4aa91";
+    for (const item of PASS06_LEVEL.floors) {
+      ctx.fillStyle = item.zone === 1 ? "#263c40" : item.zone === 3 ? "#303a3c" : item.zone === 4 ? "#34393a" : item.zone === 5 ? "#383b39" : "#29383b";
+      ctx.strokeStyle = item.zone === 1 ? "#9ab7ae" : item.zone === 3 ? "#c2b58f" : item.zone === 4 ? "#c7ad82" : item.zone === 5 ? "#d0a875" : "#b4aa91";
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(item.x1, item.y1);
@@ -421,7 +508,7 @@ export class Pass05Runtime {
       ctx.lineTo(item.x2, item.y2);
       ctx.stroke();
     }
-    for (const solid of PASS05_LEVEL.solids) {
+    for (const solid of PASS06_LEVEL.solids) {
       ctx.fillStyle = solid.role === "baffle" ? "#26383b" : solid.role === "ceiling" ? "#394041" : "#304246";
       ctx.strokeStyle = solid.role === "baffle" ? "#b4aa91" : solid.role === "ceiling" ? "#c7ad82" : "#91b1b2";
       ctx.lineWidth = 4;
@@ -439,7 +526,7 @@ export class Pass05Runtime {
   }
 
   drawBuriedStructure(ctx) {
-    const roof = PASS05_LEVEL.roof;
+    const roof = PASS06_LEVEL.roof;
     ctx.save();
     ctx.fillStyle = "rgba(24, 42, 45, 0.96)";
     ctx.strokeStyle = "#718d8d";
@@ -456,7 +543,7 @@ export class Pass05Runtime {
     for (const item of roof) ctx.lineTo(item.x2, item.y2);
     ctx.stroke();
 
-    for (const item of PASS05_LEVEL.frames) {
+    for (const item of PASS06_LEVEL.frames) {
       ctx.fillStyle = "rgba(103, 126, 124, 0.055)";
       ctx.strokeStyle = "rgba(156, 181, 176, 0.30)";
       ctx.lineWidth = 3;
@@ -473,7 +560,7 @@ export class Pass05Runtime {
   }
 
   drawUnevenTunnelStructure(ctx) {
-    const roof = PASS05_LEVEL.zone04Roof;
+    const roof = PASS06_LEVEL.zone04Roof;
     ctx.save();
     ctx.fillStyle = "rgba(33, 43, 43, 0.97)";
     ctx.strokeStyle = "#8a8f83";
@@ -490,7 +577,7 @@ export class Pass05Runtime {
     for (const item of roof) ctx.lineTo(item.x2, item.y2);
     ctx.stroke();
 
-    for (const item of PASS05_LEVEL.zone04Frames) {
+    for (const item of PASS06_LEVEL.zone04Frames) {
       ctx.fillStyle = "rgba(179, 151, 105, 0.055)";
       ctx.strokeStyle = "rgba(199, 173, 130, 0.32)";
       ctx.lineWidth = 3;
@@ -500,6 +587,108 @@ export class Pass05Runtime {
       ctx.moveTo(item.x, item.y + item.height);
       ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 30, item.x + item.width, item.y + item.height);
       ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawDestructionMazeStructure(ctx) {
+    const roof = PASS06_LEVEL.zone05Roof;
+    ctx.save();
+    ctx.fillStyle = "rgba(42, 43, 39, 0.98)";
+    ctx.strokeStyle = "#9a8e78";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.lineTo(roof.at(-1).x2, 200);
+    ctx.lineTo(roof[0].x1, 200);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.stroke();
+
+    const corridor = PASS06_LEVEL.collapseCorridor;
+    ctx.strokeStyle = "rgba(202, 134, 89, 0.20)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(225, 158, 104, 0.62)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([20, 16]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (const support of PASS06_LEVEL.corridorSupports) {
+      ctx.fillStyle = "rgba(113, 90, 67, 0.42)";
+      ctx.strokeStyle = "rgba(211, 163, 111, 0.52)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(support.x, support.y, support.width, support.height);
+      ctx.strokeRect(support.x, support.y, support.width, support.height);
+      ctx.beginPath();
+      ctx.moveTo(support.x, support.y);
+      ctx.lineTo(support.x + support.width, support.y + support.height);
+      ctx.moveTo(support.x + support.width, support.y);
+      ctx.lineTo(support.x, support.y + support.height);
+      ctx.stroke();
+    }
+
+    for (const item of PASS06_LEVEL.zone05Frames) {
+      ctx.fillStyle = "rgba(188, 150, 102, 0.045)";
+      ctx.strokeStyle = "rgba(207, 170, 120, 0.28)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 20, item.x + item.width, item.y + item.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawBreakables(ctx) {
+    ctx.save();
+    for (const gate of this.breakables) {
+      if (gate.destroyed) continue;
+      ctx.fillStyle = "#5b4b3e";
+      ctx.strokeStyle = "#e0b26f";
+      ctx.lineWidth = 4;
+      ctx.fillRect(gate.x, gate.y, gate.width, gate.height);
+      ctx.strokeRect(gate.x, gate.y, gate.width, gate.height);
+      ctx.beginPath();
+      ctx.moveTo(gate.x, gate.y);
+      ctx.lineTo(gate.x + gate.width, gate.y + gate.height);
+      ctx.moveTo(gate.x + gate.width, gate.y);
+      ctx.lineTo(gate.x, gate.y + gate.height);
+      if (gate.shape === "lattice") {
+        ctx.moveTo(gate.x, gate.y + gate.height * 0.33);
+        ctx.lineTo(gate.x + gate.width, gate.y + gate.height * 0.33);
+        ctx.moveTo(gate.x, gate.y + gate.height * 0.67);
+        ctx.lineTo(gate.x + gate.width, gate.y + gate.height * 0.67);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawDebris(ctx) {
+    ctx.save();
+    ctx.fillStyle = "#d4a361";
+    for (const piece of this.debris) {
+      ctx.save();
+      ctx.translate(piece.x, piece.y);
+      ctx.rotate(piece.rotation);
+      ctx.globalAlpha = Math.min(1, piece.life / 24);
+      ctx.fillRect(-piece.width * 0.5, -piece.height * 0.5, piece.width, piece.height);
+      ctx.restore();
     }
     ctx.restore();
   }
@@ -537,7 +726,12 @@ export class Pass05Runtime {
       { x: 11050, y: 3150, label: "LOW TUNNEL", active: this.progress.lowTunnelReached },
       { x: 11620, y: 3290, label: "SHAFT CARRIAGE", active: this.progress.platformBoarded },
       { x: 12220, y: 3600, label: "UNEVEN GALLERY", active: this.progress.unevenTunnelReached },
-      { x: 13400, y: 3700, label: "PASS 05 EXIT", active: this.progress.pass05Completed },
+      { x: 13400, y: 3700, label: "ZONE 05 ENTRY", active: this.progress.pass05Completed },
+      { x: 14700, y: 3500, label: "DASH GATE I", active: this.breakables[0]?.destroyed },
+      { x: 19300, y: 3700, label: "DASH GATE II", active: this.breakables[1]?.destroyed },
+      { x: 20400, y: 3100, label: "HIGH GALLERY", active: this.progress.highGalleryReached },
+      { x: 23750, y: 3300, label: "DASH GATE III", active: this.breakables[2]?.destroyed },
+      { x: 24800, y: 4400, label: "PASS 06 EXIT", active: this.progress.pass06Completed },
     ];
     ctx.save();
     ctx.font = "700 11px Arial, sans-serif";
@@ -596,11 +790,11 @@ export class Pass05Runtime {
       const topLeft = mapPoint(zone.bounds);
       const width = (zone.bounds.width / WORLD.width) * frame.width;
       const height = (zone.bounds.height / WORLD.height) * frame.height;
-      ctx.fillStyle = index < 4 ? "rgba(216, 191, 120, 0.19)" : "rgba(69, 111, 119, 0.10)";
-      ctx.strokeStyle = index < 4 ? "rgba(216, 191, 120, 0.75)" : "rgba(139, 190, 199, 0.32)";
+      ctx.fillStyle = index < 5 ? "rgba(216, 191, 120, 0.19)" : "rgba(69, 111, 119, 0.10)";
+      ctx.strokeStyle = index < 5 ? "rgba(216, 191, 120, 0.75)" : "rgba(139, 190, 199, 0.32)";
       ctx.fillRect(topLeft.x, topLeft.y, width, height);
       ctx.strokeRect(topLeft.x, topLeft.y, width, height);
-      ctx.fillStyle = index < 4 ? "#ead59b" : "#8cadb3";
+      ctx.fillStyle = index < 5 ? "#ead59b" : "#8cadb3";
       ctx.font = "700 9px Arial, sans-serif";
       ctx.fillText(`${String(index + 1).padStart(2, "0")} ${zone.name}`, topLeft.x + 6, topLeft.y + 15);
     });
@@ -621,7 +815,7 @@ export class Pass05Runtime {
     drawRoute(BOULDER_ROUTE, PALETTE.boulderRoute, true);
     ctx.fillStyle = "#eff5f3";
     ctx.font = "800 22px Arial, sans-serif";
-    ctx.fillText("PASS 05 / PLAYABLE ZONES 01–04", 42, 52);
+    ctx.fillText("PASS 06 / PLAYABLE ZONES 01–05", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
     ctx.fillText(`PASS 08 RESERVATIONS ${CHASE_FEATURES.length} · B RETURN TO GAME`, 42, 72);
@@ -646,6 +840,12 @@ export class Pass05Runtime {
         y: item.y,
         direction: item.direction,
       })),
+      breakables: this.breakables.map(item => ({
+        id: item.id,
+        shape: item.shape,
+        destroyed: item.destroyed,
+      })),
+      debrisCount: this.debris.length,
       camera: { ...this.camera },
       progress: { ...this.progress },
       keys: Array.from(this.keys).sort(),
@@ -660,10 +860,11 @@ export class Pass05Runtime {
     const pass03 = validatePass03Level();
     const pass04 = validatePass04Level();
     const pass05 = validatePass05Level();
+    const pass06 = validatePass06Level();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass05" },
-      { id: "pass_number", passed: BUILD.pass === 5 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass06" },
+      { id: "pass_number", passed: BUILD.pass === 6 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -674,6 +875,7 @@ export class Pass05Runtime {
       { id: "pass03_level_validation", passed: pass03.passed },
       { id: "pass04_level_validation", passed: pass04.passed },
       { id: "pass05_level_validation", passed: pass05.passed },
+      { id: "pass06_level_validation", passed: pass06.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -687,6 +889,7 @@ export class Pass05Runtime {
       pass03,
       pass04,
       pass05,
+      pass06,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -699,8 +902,8 @@ export class Pass05Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 05 · PLAYABLE 01–04";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P05 ${audit.pass05.passedCount}/${audit.pass05.total}`;
+    this.statusElements.build.textContent = "PASS 06 · PLAYABLE 01–05";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P06 ${audit.pass06.passedCount}/${audit.pass06.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }

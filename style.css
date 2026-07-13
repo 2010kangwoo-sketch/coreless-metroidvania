@@ -118,6 +118,10 @@ h1 {
   pointer-events: none;
 }
 
+.blueprint-open .build-panel {
+  opacity: 0;
+}
+
 @media (max-width: 720px) {
   .game-shell {
     padding: 4px;

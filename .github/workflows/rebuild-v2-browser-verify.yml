@@ -35,7 +35,7 @@ jobs:
           python3 -m http.server 4173 >/tmp/coreless-v2-http.log 2>&1 &
           sleep 2
 
-      - name: Verify pass 05
+      - name: Verify pass 06
         run: |
           mkdir -p browser-artifacts
           node --input-type=module <<'NODE'
@@ -67,14 +67,14 @@ jobs:
           result.consoleErrors = consoleErrors;
           result.pageErrors = pageErrors;
 
-          fs.writeFileSync('browser-artifacts/pass05-results.json', JSON.stringify(result, null, 2));
-          await page.screenshot({ path: 'browser-artifacts/pass05-playable-zones.png', fullPage: true });
+          fs.writeFileSync('browser-artifacts/pass06-results.json', JSON.stringify(result, null, 2));
+          await page.screenshot({ path: 'browser-artifacts/pass06-playable-zones.png', fullPage: true });
           await browser.close();
 
           const required = ['KeyA', 'KeyB', 'KeyD', 'ShiftLeft', 'Space'];
           const used = result.audit?.inputProbe?.usedCodes ?? [];
           if (
-            result.title !== 'Coreless · Rebuild V2 · Pass 05' ||
+            result.title !== 'Coreless · Rebuild V2 · Pass 06' ||
             result.activeElement !== 'gameCanvas' ||
             result.audit?.passed !== true ||
             result.audit?.blueprint?.passed !== true ||
@@ -85,6 +85,8 @@ jobs:
             result.audit?.pass04?.passedCount !== 22 ||
             result.audit?.pass05?.passed !== true ||
             result.audit?.pass05?.passedCount !== 25 ||
+            result.audit?.pass06?.passed !== true ||
+            result.audit?.pass06?.passedCount !== 28 ||
             result.audit?.gameplay?.blueprintVisible !== false ||
             !required.every(code => used.includes(code)) ||
             consoleErrors.length ||
@@ -99,6 +101,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rebuild-v2-pass05-browser
+          name: rebuild-v2-pass06-browser
           path: browser-artifacts
           if-no-files-found: error

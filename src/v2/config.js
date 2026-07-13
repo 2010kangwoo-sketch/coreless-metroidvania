@@ -1,6 +1,6 @@
 export const BUILD = Object.freeze({
-  id: "rebuild-v2-pass05",
-  pass: 5,
+  id: "rebuild-v2-pass06",
+  pass: 6,
   branch: "rebuild/mega-room-40pass",
   draftPullRequest: 1,
   previousBaselineSha: "f57ea9eeb878c03a61aadf0801be53be3afa562e",
