@@ -100,7 +100,7 @@ jobs:
             result.audit?.pass12?.passed !== true ||
             result.audit?.pass12?.passedCount !== 32 ||
             result.audit?.pass13?.passed !== true ||
-            result.audit?.pass13?.passedCount !== 36 ||
+            result.audit?.pass13?.passedCount !== 37 ||
             result.audit?.gameplay?.blueprintVisible !== false ||
             !required.every(code => used.includes(code)) ||
             consoleErrors.length ||

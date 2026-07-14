@@ -1,7 +1,14 @@
 import { chromium as playwright } from '/tmp/coreless-browser-runtime/node_modules/playwright-core/index.mjs';
-import chromium from '/tmp/coreless-browser-runtime/node_modules/@sparticuz/chromium/build/index.js';
 import fs from 'node:fs';
 import { spawn } from 'node:child_process';
+
+let chromium;
+try {
+  chromium = (await import('/tmp/coreless-browser-runtime/node_modules/@sparticuz/chromium/build/index.js')).default;
+} catch (error) {
+  if (error?.code !== 'ERR_MODULE_NOT_FOUND') throw error;
+  chromium = (await import('/tmp/coreless-browser-runtime/node_modules/@sparticuz/chromium/build/esm/index.js')).default;
+}
 
 const targetPass = Number(process.env.CORELESS_VERIFY_PASS ?? 10);
 const verifyPass13 = targetPass >= 13;
@@ -644,7 +651,7 @@ const deterministicChecks = {
   pass10Audit: state.audit?.pass10?.passed === true && state.audit?.pass10?.passedCount === 30,
   pass11Audit: !verifyPass11 || (state.audit?.pass11?.passed === true && state.audit?.pass11?.passedCount === 31),
   pass12Audit: !verifyPass12 || (state.audit?.pass12?.passed === true && state.audit?.pass12?.passedCount === 32),
-  pass13Audit: !verifyPass13 || (state.audit?.pass13?.passed === true && state.audit?.pass13?.passedCount === 36),
+  pass13Audit: !verifyPass13 || (state.audit?.pass13?.passed === true && state.audit?.pass13?.passedCount === 37),
   firstDrop: state.debug?.progress?.firstDropped === true,
   firstClimb: state.debug?.progress?.firstClimb === true,
   secondDrop: state.debug?.progress?.secondDropped === true,

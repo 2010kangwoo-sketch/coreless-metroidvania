@@ -203,7 +203,7 @@ const pass13Audit = state.audit.pass13;
 const checks = {
   title: state.title === 'Coreless · Rebuild V2 · Pass 13',
   runtimeAudit: state.audit.passed === true && state.audit.passedCount === 22,
-  pass13Audit: pass13Audit.passed === true && pass13Audit.passedCount === 36,
+  pass13Audit: pass13Audit.passed === true && pass13Audit.passedCount === 37,
   shortGapDimensions: pass13Audit.shortGap === 100,
   shortCutClears: pass13Audit.shortGap < pass13Audit.shortCutReach + 34,
   lowCeilingDiscriminates: pass13Audit.shortCutRise < pass13Audit.ceilingHeadroom && pass13Audit.fullJumpRise > pass13Audit.ceilingHeadroom,

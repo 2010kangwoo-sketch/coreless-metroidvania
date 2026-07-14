@@ -11,6 +11,7 @@
     "bothHazardsIgnoredByBoulder": true,
     "smoothBoulderSegments": true,
     "boulderPathEndsAtSharedExit": true,
+    "exitRunoutBuffer": true,
     "shortCutCannotClearLong": true,
     "fullJumpClearsLong": true,
     "runtimeAudit": true,
@@ -1569,11 +1570,13 @@
       },
       "pass13": {
         "passed": true,
-        "passedCount": 36,
-        "total": 36,
+        "passedCount": 37,
+        "total": 37,
         "shortGap": 100,
         "longGap": 195,
         "ceilingHeadroom": 72,
+        "exitRunout": 140,
+        "exitFloorYAtMarker": 7520.166666666667,
         "shortCutRise": 44.66393223529411,
         "fullJumpRise": 114.88970588235293,
         "shortCutReach": 132.05099798149396,
@@ -1618,6 +1621,10 @@
           },
           {
             "id": "six_player_floors",
+            "passed": true
+          },
+          {
+            "id": "exit_has_safe_runout",
             "passed": true
           },
           {
@@ -1911,7 +1918,7 @@
         "keys": [],
         "blueprintVisible": false,
         "resetCount": 1,
-        "frameCount": 8
+        "frameCount": 35
       },
       "inputProbe": {
         "downs": 0,

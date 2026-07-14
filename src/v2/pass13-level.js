@@ -31,7 +31,7 @@ export const PASS13_ZONE = Object.freeze({
     floor("precision_turn_descent", 19000, 7430, 19460, 7310, "turn_descent"),
     floor("precision_turn_launch", 18740, 7430, 19000, 7430, "turn_launch"),
     floor("precision_long_landing", 19195, 7500, 19580, 7500, "long_landing"),
-    floor("precision_exit_slope", 19580, 7500, 19800, 7520, "exit"),
+    floor("precision_exit_slope", 19580, 7500, 19940, 7533, "exit"),
   ]),
   hazards: Object.freeze([
     hazard("precision_short_gap_spikes", 19780, 19880, 7310, 7410, 5, "short_gap"),
@@ -208,6 +208,7 @@ export function validatePass13Level() {
   const shortLanding = zone.floors[1];
   const turnLaunch = zone.floors[3];
   const longLanding = zone.floors[4];
+  const exitFloor = zone.floors[5];
   const shortGap = entry.x1 - shortLanding.x2;
   const longGap = longLanding.x1 - turnLaunch.x2;
   const shortLandingDrop = shortLanding.y2 - entry.y1;
@@ -224,6 +225,9 @@ export function validatePass13Level() {
   const fullLongReach = PLAYER_PHYSICS.runSpeed * fullLongFlightTime;
   const lowCeiling = zone.solids.find(item => item.role === "zone09_precision_ceiling");
   const ceilingHeadroom = entry.y1 - (lowCeiling.y + lowCeiling.height) - PLAYER_PHYSICS.height;
+  const exitRunout = exitFloor.x2 - zone.exit.x;
+  const exitMarkerRatio = (zone.exit.x - exitFloor.x1) / (exitFloor.x2 - exitFloor.x1);
+  const exitFloorYAtMarker = exitFloor.y1 + (exitFloor.y2 - exitFloor.y1) * exitMarkerRatio;
   const chaseFloorIds = PASS13_LEVEL.floors.filter(item => item.zone >= 5 && item.zone <= 9).map(item => item.id);
   const panelIds = new Set(chase.collapsePanels.map(item => item.floorId));
   const extension = chase.path.points.slice(zone13StartIndex);
@@ -237,6 +241,7 @@ export function validatePass13Level() {
     { id: "route_matches_endpoints", passed: zone.playerRoute[0].x === zone.entry.x && zone.playerRoute[0].y === zone.entry.y && zone.playerRoute.at(-1).x === zone.exit.x && zone.playerRoute.at(-1).y === zone.exit.y },
     { id: "route_contains_direction_reversal", passed: zone.playerRoute.some((item, index, items) => index > 0 && index < items.length - 1 && Math.sign(item.x - items[index - 1].x) !== Math.sign(items[index + 1].x - item.x)) },
     { id: "six_player_floors", passed: zone.floors.length === 6 && zone.floors.every(item => floorInBounds(item, PASS13_LEVEL.bounds)) },
+    { id: "exit_has_safe_runout", passed: exitRunout >= PLAYER_PHYSICS.width * 3 && Math.abs(exitFloorYAtMarker - zone.exit.y) <= 1 },
     { id: "one_hundred_pixel_short_gap", passed: shortGap === 100 },
     { id: "short_cut_clears_short_gap", passed: shortGap < shortCutReach + PLAYER_PHYSICS.width - 20 },
     { id: "one_hundred_ninety_five_pixel_long_gap", passed: longGap === 195 },
@@ -272,6 +277,8 @@ export function validatePass13Level() {
     shortGap,
     longGap,
     ceilingHeadroom,
+    exitRunout,
+    exitFloorYAtMarker,
     shortCutRise,
     fullJumpRise,
     shortCutReach,

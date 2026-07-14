@@ -119,10 +119,11 @@ const checks = {
   bothHazardsIgnoredByBoulder: probe.hazards.length === 2 && probe.hazards.every(item => item.ignoredByBoulder),
   smoothBoulderSegments: probe.pathSegments.every(item => item.length < 500),
   boulderPathEndsAtSharedExit: probe.chasePathEnd.x === probe.zoneExit.x && probe.chasePathEnd.y === probe.zoneExit.y,
+  exitRunoutBuffer: pass13Audit.exitRunout >= 102 && Math.abs(pass13Audit.exitFloorYAtMarker - probe.zoneExit.y) <= 1,
   shortCutCannotClearLong: pass13Audit.longGap > pass13Audit.shortCutLongReach + 34,
   fullJumpClearsLong: pass13Audit.longGap < pass13Audit.fullLongReach + 34,
   runtimeAudit: probe.audit.passed && probe.audit.passedCount === 22,
-  pass13Audit: pass13Audit.passed && pass13Audit.passedCount === 36,
+  pass13Audit: pass13Audit.passed && pass13Audit.passedCount === 37,
   console: consoleErrors.length === 0 && pageErrors.length === 0,
 };
 const result = {
