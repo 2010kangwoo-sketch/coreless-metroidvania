@@ -4,9 +4,10 @@ import fs from 'node:fs';
 import { spawn } from 'node:child_process';
 
 const targetPass = Number(process.env.CORELESS_VERIFY_PASS ?? 10);
-const verifyPass11 = targetPass === 11;
-const artifactPass = verifyPass11 ? 'pass11' : 'pass10';
-const port = verifyPass11 ? 4181 : 4180;
+const verifyPass12 = targetPass === 12;
+const verifyPass11 = targetPass >= 11;
+const artifactPass = verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
+const port = verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
 
 const server = spawn('python3', ['-m', 'http.server', String(port)], {
   cwd: process.cwd(),
@@ -82,6 +83,8 @@ let chaseShaftOneClearScreenshot = false;
 let chaseShaftTwoDropScreenshot = false;
 let chaseShaftTwoClearScreenshot = false;
 let chaseLowerHallScreenshot = false;
+let dashSpikeTakeoffScreenshot = false;
+let dashSpikeLandingScreenshot = false;
 let routeSamples = [];
 let loop = 0;
 let traversalFailure = null;
@@ -100,6 +103,8 @@ let middleGapDash = false;
 let westGapDash = false;
 let chaseFirstLipDash = false;
 let chaseSecondLipDash = false;
+let dashSpikeJumpHeld = false;
+let dashSpikeDashUsed = false;
 const grappleAnchorData = verifyPass11
   ? await page.evaluate(() => window.__corelessV2.pass11.zone.anchors)
   : [];
@@ -119,7 +124,9 @@ while (loop < 30000) {
       boulderProgress: Math.round((state.chase?.pathProgress ?? 0) * 1000) / 1000,
       cameraZoom: Math.round((state.camera?.zoom ?? 1) * 1000) / 1000,
       keys: state.keys,
-      phase: state.progress.pass11Completed ? 'pass11_complete'
+      phase: state.progress.pass12Completed ? 'pass12_complete'
+        : state.progress.dashSpikeCleared ? 'dash_spike_exit'
+          : state.progress.pass11Completed ? 'air_dash_spikes'
         : state.progress.grappleChainCompleted ? 'grapple_exit'
           : state.progress.zone09Entered ? 'triple_grapple'
       : state.progress.pass10Completed ? 'pass10_complete'
@@ -161,7 +168,7 @@ while (loop < 30000) {
     traversalFailure = `unexpected reset at x=${p.x.toFixed(1)} y=${p.y.toFixed(1)}`;
     break;
   }
-  if (verifyPass11 ? state.progress.pass11Completed : state.progress.pass10Completed) break;
+  if (verifyPass12 ? state.progress.pass12Completed : verifyPass11 ? state.progress.pass11Completed : state.progress.pass10Completed) break;
 
   const firstClimbActive = state.progress.firstDropped && !state.progress.firstClimb;
   const secondClimbActive = state.progress.secondDropped && !state.progress.secondClimb;
@@ -215,35 +222,52 @@ while (loop < 30000) {
     const waitingForPlatform = state.progress.pass04Completed && !state.progress.platformBoarded && p.grounded && p.x >= 11380 && p.x < 11445;
     const ridingPlatform = state.progress.platformBoarded && !state.progress.movingPlatformCrossed && p.standingPlatformId === 'shaft_carriage';
     if (verifyPass11 && state.progress.pass10Completed) {
-      const grapple = state.grapple;
-      const used = grapple.usedAnchorIds.length;
-      const expected = grappleAnchorData[used];
-      const centerX = p.x + 17;
-      const centerY = p.y + 24;
-      const expectedDistance = expected
-        ? Math.hypot(expected.x - centerX, expected.y - centerY)
-        : Number.POSITIVE_INFINITY;
-      const attachThreshold = expected?.order === 3 ? 0.98 : 0.92;
-      if (!grapple.active && expected && grapple.cooldown === 0 && expectedDistance <= expected.attachRadius * attachThreshold) {
-        await page.keyboard.press('e');
-      }
-      if (grapple.active) {
-        const order = grappleAnchorData.find(item => item.id === grapple.anchorId)?.order ?? used;
-        await setDirection(order === 1 ? 'd' : 'a');
-        const readyToRelease = order === 1
-          ? grapple.attachedFrames >= 34
-          : order === 2
-            ? grapple.attachedFrames >= 46
-            : (p.x <= 22920 && p.y <= 6820) || grapple.attachedFrames >= 180;
-        if (readyToRelease) await page.keyboard.press('e');
-      } else if (used === 0 || used === 1) {
-        await setDirection('d');
-      } else if (used === 3 && !p.grounded && p.x <= 22780) {
-        await setDirection('d');
-      } else if (state.progress.zone09ExitReached) {
-        await setDirection(null);
+      if (verifyPass12 && state.progress.pass11Completed) {
+        if (state.progress.zone09DashExitReached) await setDirection(null);
+        else await setDirection('a');
+        if (!dashSpikeJumpHeld && p.grounded && p.x <= 21688 && !state.progress.dashSpikeCleared) {
+          await page.keyboard.down('Space');
+          dashSpikeJumpHeld = true;
+        }
+        if (dashSpikeJumpHeld && !dashSpikeDashUsed && !p.grounded && p.x <= 21645) {
+          await page.keyboard.press('Shift');
+          dashSpikeDashUsed = true;
+        }
+        if (dashSpikeJumpHeld && dashSpikeDashUsed && p.x <= 21440) {
+          await page.keyboard.up('Space');
+          dashSpikeJumpHeld = false;
+        }
       } else {
-        await setDirection('a');
+        const grapple = state.grapple;
+        const used = grapple.usedAnchorIds.length;
+        const expected = grappleAnchorData[used];
+        const centerX = p.x + 17;
+        const centerY = p.y + 24;
+        const expectedDistance = expected
+          ? Math.hypot(expected.x - centerX, expected.y - centerY)
+          : Number.POSITIVE_INFINITY;
+        const attachThreshold = expected?.order === 3 ? 0.98 : 0.92;
+        if (!grapple.active && expected && grapple.cooldown === 0 && expectedDistance <= expected.attachRadius * attachThreshold) {
+          await page.keyboard.press('e');
+        }
+        if (grapple.active) {
+          const order = grappleAnchorData.find(item => item.id === grapple.anchorId)?.order ?? used;
+          await setDirection(order === 1 ? 'd' : 'a');
+          const readyToRelease = order === 1
+            ? grapple.attachedFrames >= 34
+            : order === 2
+              ? grapple.attachedFrames >= 46
+              : (p.x <= 22920 && p.y <= 6820) || grapple.attachedFrames >= 180;
+          if (readyToRelease) await page.keyboard.press('e');
+        } else if (used === 0 || used === 1) {
+          await setDirection('d');
+        } else if (used === 3 && !p.grounded && p.x <= 22780) {
+          await setDirection('d');
+        } else if (state.progress.zone09ExitReached) {
+          await setDirection(null);
+        } else {
+          await setDirection('a');
+        }
       }
     } else if (state.progress.zone08ExitReached) await setDirection(null);
     else if (state.progress.pass09Completed) await setDirection('d');
@@ -514,9 +538,18 @@ while (loop < 30000) {
     chaseLowerHallScreenshot = true;
     await page.locator('#gameCanvas').screenshot({ path: 'browser-artifacts/pass10-lower-hall.png' });
   }
+  if (state.progress.dashSpikeTakeoff && !dashSpikeTakeoffScreenshot) {
+    dashSpikeTakeoffScreenshot = true;
+    await page.locator('#gameCanvas').screenshot({ path: 'browser-artifacts/pass12-air-dash-takeoff.png' });
+  }
+  if (state.progress.dashSpikeCleared && !dashSpikeLandingScreenshot) {
+    dashSpikeLandingScreenshot = true;
+    await page.locator('#gameCanvas').screenshot({ path: 'browser-artifacts/pass12-air-dash-landing.png' });
+  }
   await page.waitForTimeout(32);
 }
 
+if (dashSpikeJumpHeld) await page.keyboard.up('Space');
 await setDirection(null);
 await page.waitForTimeout(250);
 await page.evaluate(() => {
@@ -555,10 +588,10 @@ const requiredCodes = verifyPass11
   : ['KeyA', 'KeyB', 'KeyD', 'ShiftLeft', 'Space'];
 const usedCodes = state.audit?.inputProbe?.usedCodes ?? [];
 const deterministicChecks = {
-  title: state.title === 'Coreless · Rebuild V2 · Pass 11',
+  title: state.title === `Coreless · Rebuild V2 · Pass ${targetPass}`,
   canvas: state.canvas?.width === 1200 && state.canvas?.height === 680,
   focused: state.activeElement === 'gameCanvas',
-  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === 20,
+  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass12 ? 21 : 20),
   blueprintAudit: state.audit?.blueprint?.passed === true && state.audit?.blueprint?.passedCount === 18,
   pass03Audit: state.audit?.pass03?.passed === true && state.audit?.pass03?.passedCount === 20,
   pass04Audit: state.audit?.pass04?.passed === true && state.audit?.pass04?.passedCount === 22,
@@ -569,6 +602,7 @@ const deterministicChecks = {
   pass09Audit: state.audit?.pass09?.passed === true && state.audit?.pass09?.passedCount === 28,
   pass10Audit: state.audit?.pass10?.passed === true && state.audit?.pass10?.passedCount === 30,
   pass11Audit: !verifyPass11 || (state.audit?.pass11?.passed === true && state.audit?.pass11?.passedCount === 31),
+  pass12Audit: !verifyPass12 || (state.audit?.pass12?.passed === true && state.audit?.pass12?.passedCount === 32),
   firstDrop: state.debug?.progress?.firstDropped === true,
   firstClimb: state.debug?.progress?.firstClimb === true,
   secondDrop: state.debug?.progress?.secondDropped === true,
@@ -631,11 +665,23 @@ const deterministicChecks = {
   ),
   zone09Exit: !verifyPass11 || state.debug?.progress?.zone09ExitReached === true,
   pass11Completed: !verifyPass11 || state.debug?.progress?.pass11Completed === true,
+  dashSpikeEntered: !verifyPass12 || state.debug?.progress?.dashSpikeEntered === true,
+  dashSpikeTakeoff: !verifyPass12 || state.debug?.progress?.dashSpikeTakeoff === true,
+  dashSpikeAirDash: !verifyPass12 || (
+    dashSpikeDashUsed
+    && state.debug?.progress?.dashSpikeAirDashUsed === true
+    && state.debug?.progress?.chaseAirDashes === 1
+  ),
+  dashSpikeCleared: !verifyPass12 || state.debug?.progress?.dashSpikeCleared === true,
+  zone09DashExit: !verifyPass12 || state.debug?.progress?.zone09DashExitReached === true,
+  pass12Completed: !verifyPass12 || state.debug?.progress?.pass12Completed === true,
   repeatedChaseWallJumps: (state.debug?.progress?.chaseWallJumps ?? 0) >= 4,
-  collapseBehindPlayer: (state.debug?.progress?.floorsCollapsed ?? 0) >= 44,
-  supportsDestroyed: (state.debug?.progress?.supportsDestroyed ?? 0) >= 24,
-  boulderCoveredRoute: verifyPass11
-    ? (state.debug?.chase?.pathProgress ?? 0) >= 0.965
+  collapseBehindPlayer: (state.debug?.progress?.floorsCollapsed ?? 0) >= (verifyPass12 ? 54 : 44),
+  supportsDestroyed: (state.debug?.progress?.supportsDestroyed ?? 0) >= (verifyPass12 ? 36 : 24),
+  boulderCoveredRoute: verifyPass12
+    ? (state.debug?.chase?.pathProgress ?? 0) >= 0.99
+    : verifyPass11
+      ? (state.debug?.chase?.pathProgress ?? 0) >= 0.965
     : (state.debug?.chase?.pathDistance ?? 0) / (state.audit?.pass10?.totalDistance ?? Number.POSITIVE_INFINITY) >= 0.95,
   boulderSealed: verifyPass11
     ? state.debug?.chase?.sealed === true && state.debug?.chase?.active === false
@@ -658,7 +704,9 @@ const passed = !traversalFailure && Object.values(deterministicChecks).every(Boo
 const result = {
   version: `rebuild-v2-${artifactPass}`,
   testedWith: 'Chromium + Playwright actual keyboard events',
-  actualKeyboardRoute: verifyPass11
+  actualKeyboardRoute: verifyPass12
+    ? 'start slope -> zones 01-07 -> internal descent -> double wall climb -> grapple chain -> left takeoff -> jump and air dash -> long spike landing -> pass 12 exit'
+    : verifyPass11
     ? 'start slope -> zones 01-07 -> internal descent -> double wall climb -> grapple one -> grapple two -> grapple three -> pass 11 exit shelf'
     : 'start slope -> active chase -> giant curve -> pass 08 boundary -> first internal descent -> pass 09 boundary -> chase wall climb one -> connector -> chase wall climb two -> lower hall -> pass 10 exit',
   helperCoordinateMovement: false,
@@ -670,9 +718,9 @@ const result = {
   consoleErrors,
   pageErrors,
   limitations: [
-    verifyPass11 ? 'Only zones 01 through 09 have playable collision in pass 11.' : 'Only zones 01 through 08 have playable collision in pass 10.',
+    verifyPass12 ? 'Only zones 01 through 09 have playable collision in pass 12.' : verifyPass11 ? 'Only zones 01 through 09 have playable collision in pass 11.' : 'Only zones 01 through 08 have playable collision in pass 10.',
     verifyPass11 ? 'Zone 10 remains blueprint data.' : 'The remaining two zones are still blueprint data.',
-    verifyPass11 ? 'The active chase currently seals at the Pass 11 exit; the bridge finale is not implemented.' : 'The active chase currently seals at the Pass 10 exit; the bridge finale is not implemented.',
+    verifyPass12 ? 'The active chase currently seals at the Pass 12 exit; the bridge finale is not implemented.' : verifyPass11 ? 'The active chase currently seals at the Pass 11 exit; the bridge finale is not implemented.' : 'The active chase currently seals at the Pass 10 exit; the bridge finale is not implemented.',
     'Long support-break pauses are graybox chase pacing and still need later difficulty tuning.',
     'Destroyed supports and floors use graybox debris, not final destruction animation.',
     'Graybox shapes are collision prototypes, not final terrain art.',

@@ -35,7 +35,7 @@ jobs:
           python3 -m http.server 4173 >/tmp/coreless-v2-http.log 2>&1 &
           sleep 2
 
-      - name: Verify pass 11
+      - name: Verify pass 12
         run: |
           mkdir -p browser-artifacts
           node --input-type=module <<'NODE'
@@ -67,14 +67,14 @@ jobs:
           result.consoleErrors = consoleErrors;
           result.pageErrors = pageErrors;
 
-          fs.writeFileSync('browser-artifacts/pass11-results.json', JSON.stringify(result, null, 2));
-          await page.screenshot({ path: 'browser-artifacts/pass11-triple-grapple.png', fullPage: true });
+          fs.writeFileSync('browser-artifacts/pass12-results.json', JSON.stringify(result, null, 2));
+          await page.screenshot({ path: 'browser-artifacts/pass12-air-dash-spikes.png', fullPage: true });
           await browser.close();
 
           const required = ['KeyA', 'KeyB', 'KeyD', 'KeyE', 'ShiftLeft', 'Space'];
           const used = result.audit?.inputProbe?.usedCodes ?? [];
           if (
-            result.title !== 'Coreless · Rebuild V2 · Pass 11' ||
+            result.title !== 'Coreless · Rebuild V2 · Pass 12' ||
             result.activeElement !== 'gameCanvas' ||
             result.audit?.passed !== true ||
             result.audit?.blueprint?.passed !== true ||
@@ -97,6 +97,8 @@ jobs:
             result.audit?.pass10?.passedCount !== 30 ||
             result.audit?.pass11?.passed !== true ||
             result.audit?.pass11?.passedCount !== 31 ||
+            result.audit?.pass12?.passed !== true ||
+            result.audit?.pass12?.passedCount !== 32 ||
             result.audit?.gameplay?.blueprintVisible !== false ||
             !required.every(code => used.includes(code)) ||
             consoleErrors.length ||
@@ -111,6 +113,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rebuild-v2-pass11-browser
+          name: rebuild-v2-pass12-browser
           path: browser-artifacts
           if-no-files-found: error
