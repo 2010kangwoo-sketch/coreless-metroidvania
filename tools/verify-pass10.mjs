@@ -11,12 +11,13 @@ try {
 }
 
 const targetPass = Number(process.env.CORELESS_VERIFY_PASS ?? 10);
+const verifyPass15 = targetPass >= 15;
 const verifyPass14 = targetPass >= 14;
 const verifyPass13 = targetPass >= 13;
 const verifyPass12 = targetPass >= 12;
 const verifyPass11 = targetPass >= 11;
-const artifactPass = verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
-const port = verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
+const artifactPass = verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
+const port = verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
 
 const server = spawn('python3', ['-m', 'http.server', String(port)], {
   cwd: process.cwd(),
@@ -122,6 +123,10 @@ let giantCurveJumpHeld = false;
 let giantCurveJumpStartFrame = null;
 let giantCurveMovingRight = false;
 let giantCurveWaitingAtExit = false;
+let bridgeJumpHeld = false;
+let bridgeJumpStartFrame = null;
+let bridgeFinalDashUsed = false;
+let bridgeWaitingAtExit = false;
 const grappleAnchorData = verifyPass11
   ? await page.evaluate(() => window.__corelessV2.pass11.zone.anchors)
   : [];
@@ -141,7 +146,11 @@ while (loop < 36000) {
       boulderProgress: Math.round((state.chase?.pathProgress ?? 0) * 1000) / 1000,
       cameraZoom: Math.round((state.camera?.zoom ?? 1) * 1000) / 1000,
       keys: state.keys,
-      phase: state.progress.pass14Completed ? 'pass14_complete'
+      phase: state.progress.pass15Completed ? 'pass15_complete'
+        : state.progress.bridgeGapThreeCleared ? 'bridge_final_run'
+          : state.progress.bridgeGapTwoCleared ? 'bridge_gap_three'
+            : state.progress.bridgeGapOneCleared ? 'bridge_gap_two'
+              : state.progress.pass14Completed ? 'bridge_gap_one'
         : state.progress.giantCurveDirectionReversed ? 'giant_curve_lower_return'
           : state.progress.giantCurveDropStarted ? 'giant_curve_natural_drop'
             : state.progress.giantCurveUpperGapCleared ? 'giant_curve_steep_descent'
@@ -195,7 +204,7 @@ while (loop < 36000) {
     traversalFailure = `unexpected reset at x=${p.x.toFixed(1)} y=${p.y.toFixed(1)}`;
     break;
   }
-  if (verifyPass14 ? state.progress.pass14Completed : verifyPass13 ? state.progress.pass13Completed : verifyPass12 ? state.progress.pass12Completed : verifyPass11 ? state.progress.pass11Completed : state.progress.pass10Completed) break;
+  if (verifyPass15 ? state.progress.pass15Completed : verifyPass14 ? state.progress.pass14Completed : verifyPass13 ? state.progress.pass13Completed : verifyPass12 ? state.progress.pass12Completed : verifyPass11 ? state.progress.pass11Completed : state.progress.pass10Completed) break;
 
   const firstClimbActive = state.progress.firstDropped && !state.progress.firstClimb;
   const secondClimbActive = state.progress.secondDropped && !state.progress.secondClimb;
@@ -252,7 +261,30 @@ while (loop < 36000) {
       if (verifyPass12 && state.progress.pass11Completed) {
         if (verifyPass13 && state.progress.pass12Completed) {
           if (verifyPass14 && state.progress.pass13Completed) {
-            if (state.progress.giantCurveExitReached) {
+            if (verifyPass15 && state.progress.pass14Completed) {
+              const nextGap = !state.progress.bridgeGapOneCleared ? 20100
+                : !state.progress.bridgeGapTwoCleared ? 21800
+                  : !state.progress.bridgeGapThreeCleared ? 23400 : null;
+              if (state.progress.bridgeExitReached) {
+                await setDirection(null);
+                bridgeWaitingAtExit = true;
+              } else {
+                await setDirection('d');
+              }
+              if (!bridgeJumpHeld && nextGap && p.grounded && p.x + 34 >= nextGap - 35 && p.x + 34 <= nextGap - 5) {
+                await page.keyboard.down('Space');
+                bridgeJumpHeld = true;
+                bridgeJumpStartFrame = state.frameCount;
+              }
+              if (bridgeJumpHeld && nextGap === 23400 && !bridgeFinalDashUsed && state.frameCount - bridgeJumpStartFrame >= 10) {
+                await page.keyboard.press('Shift');
+                bridgeFinalDashUsed = true;
+              }
+              if (bridgeJumpHeld && state.frameCount - bridgeJumpStartFrame >= 18) {
+                await page.keyboard.up('Space');
+                bridgeJumpHeld = false;
+              }
+            } else if (state.progress.giantCurveExitReached) {
               await setDirection(null);
               giantCurveWaitingAtExit = true;
             } else if (state.progress.giantCurveLowerLanded) {
@@ -628,6 +660,7 @@ while (loop < 36000) {
 if (dashSpikeJumpHeld) await page.keyboard.up('Space');
 if (precisionShortJumpHeld || precisionLongJumpHeld) await page.keyboard.up('Space');
 if (giantCurveJumpHeld) await page.keyboard.up('Space');
+if (bridgeJumpHeld) await page.keyboard.up('Space');
 await setDirection(null);
 await page.waitForTimeout(250);
 await page.evaluate(() => {
@@ -669,7 +702,7 @@ const deterministicChecks = {
   title: state.title === `Coreless · Rebuild V2 · Pass ${targetPass}`,
   canvas: state.canvas?.width === 1200 && state.canvas?.height === 680,
   focused: state.activeElement === 'gameCanvas',
-  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
+  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
   blueprintAudit: state.audit?.blueprint?.passed === true && state.audit?.blueprint?.passedCount === 18,
   pass03Audit: state.audit?.pass03?.passed === true && state.audit?.pass03?.passedCount === 20,
   pass04Audit: state.audit?.pass04?.passed === true && state.audit?.pass04?.passedCount === 22,
@@ -683,6 +716,7 @@ const deterministicChecks = {
   pass12Audit: !verifyPass12 || (state.audit?.pass12?.passed === true && state.audit?.pass12?.passedCount === 32),
   pass13Audit: !verifyPass13 || (state.audit?.pass13?.passed === true && state.audit?.pass13?.passedCount === 37),
   pass14Audit: !verifyPass14 || (state.audit?.pass14?.passed === true && state.audit?.pass14?.passedCount === 43),
+  pass15Audit: !verifyPass15 || (state.audit?.pass15?.passed === true && state.audit?.pass15?.passedCount === 29),
   firstDrop: state.debug?.progress?.firstDropped === true,
   firstClimb: state.debug?.progress?.firstClimb === true,
   secondDrop: state.debug?.progress?.secondDropped === true,
@@ -794,10 +828,26 @@ const deterministicChecks = {
     && state.debug?.progress?.pass14Completed === true
   ),
   giantCurveWideCamera: !verifyPass14 || routeSamples.some(sample => sample.cameraZoom <= 0.4 && sample.phase.startsWith('giant_curve')),
+  bridgeFinaleSequence: !verifyPass15 || (
+    bridgeWaitingAtExit
+    && bridgeFinalDashUsed
+    && state.debug?.progress?.bridgeGapOneCleared === true
+    && state.debug?.progress?.bridgeGapTwoCleared === true
+    && state.debug?.progress?.bridgeGapThreeCleared === true
+    && state.debug?.progress?.bridgeFinalAirDash === true
+    && state.debug?.progress?.bridgeJumps === 3
+    && state.debug?.progress?.bridgeAirDashes === 1
+    && state.debug?.progress?.bridgeExitReached === true
+    && state.debug?.progress?.bridgeBoulderPlunged === true
+    && state.debug?.progress?.pass15Completed === true
+  ),
+  bridgeFinaleCamera: !verifyPass15 || routeSamples.some(sample => sample.cameraZoom <= 0.64 && sample.phase.startsWith('bridge_')),
   repeatedChaseWallJumps: (state.debug?.progress?.chaseWallJumps ?? 0) >= 4,
-  collapseBehindPlayer: (state.debug?.progress?.floorsCollapsed ?? 0) >= (verifyPass14 ? 67 : verifyPass13 ? 59 : verifyPass12 ? 54 : 44),
-  supportsDestroyed: (state.debug?.progress?.supportsDestroyed ?? 0) >= (verifyPass14 ? 48 : verifyPass13 ? 38 : verifyPass12 ? 36 : 24),
-  boulderCoveredRoute: verifyPass12
+  collapseBehindPlayer: (state.debug?.progress?.floorsCollapsed ?? 0) >= (verifyPass15 ? 77 : verifyPass14 ? 67 : verifyPass13 ? 59 : verifyPass12 ? 54 : 44),
+  supportsDestroyed: (state.debug?.progress?.supportsDestroyed ?? 0) >= (verifyPass15 ? 56 : verifyPass14 ? 48 : verifyPass13 ? 38 : verifyPass12 ? 36 : 24),
+  boulderCoveredRoute: verifyPass15
+    ? (state.debug?.chase?.pathProgress ?? 0) >= 0.995
+    : verifyPass12
     ? (state.debug?.chase?.pathProgress ?? 0) >= 0.99
     : verifyPass11
       ? (state.debug?.chase?.pathProgress ?? 0) >= 0.965
@@ -823,7 +873,9 @@ const passed = !traversalFailure && Object.values(deterministicChecks).every(Boo
 const result = {
   version: `rebuild-v2-${artifactPass}`,
   testedWith: 'Chromium + Playwright actual keyboard events',
-  actualKeyboardRoute: verifyPass14
+  actualKeyboardRoute: verifyPass15
+    ? 'start slope -> zones 01-09 -> giant curve -> collapsing bridge gap one -> gap two -> jump and air dash gap three -> final stone landing -> boulder plunge'
+    : verifyPass14
     ? 'start slope -> zones 01-09 -> precision short/long sequence -> giant curve upper jump -> steep descent -> natural fall -> opposite lower slope -> pass 14 bridge handoff'
     : verifyPass13
     ? 'start slope -> zones 01-07 -> internal descent -> double wall climb -> grapple chain -> air-dash spikes -> short jump cut -> landing reversal -> held long jump -> pass 13 exit'
@@ -841,9 +893,9 @@ const result = {
   consoleErrors,
   pageErrors,
   limitations: [
-    verifyPass14 ? 'Only zones 01 through 09 have playable collision in pass 14.' : verifyPass13 ? 'Only zones 01 through 09 have playable collision in pass 13.' : verifyPass12 ? 'Only zones 01 through 09 have playable collision in pass 12.' : verifyPass11 ? 'Only zones 01 through 09 have playable collision in pass 11.' : 'Only zones 01 through 08 have playable collision in pass 10.',
-    verifyPass11 ? 'Zone 10 remains blueprint data.' : 'The remaining two zones are still blueprint data.',
-    verifyPass14 ? 'The active chase seals at the Pass 14 bridge handoff; the wooden bridge finale is not implemented.' : verifyPass13 ? 'The active chase currently seals at the Pass 13 exit; the giant arc turn and bridge finale are not implemented.' : verifyPass12 ? 'The active chase currently seals at the Pass 12 exit; the bridge finale is not implemented.' : verifyPass11 ? 'The active chase currently seals at the Pass 11 exit; the bridge finale is not implemented.' : 'The active chase currently seals at the Pass 10 exit; the bridge finale is not implemented.',
+    verifyPass15 ? 'All ten blueprint zones have playable graybox collision in pass 15.' : verifyPass14 ? 'Only zones 01 through 09 have playable collision in pass 14.' : verifyPass13 ? 'Only zones 01 through 09 have playable collision in pass 13.' : verifyPass12 ? 'Only zones 01 through 09 have playable collision in pass 12.' : verifyPass11 ? 'Only zones 01 through 09 have playable collision in pass 11.' : 'Only zones 01 through 08 have playable collision in pass 10.',
+    verifyPass15 ? 'The active chase ends with the boulder plunge at the final bridge landing.' : verifyPass11 ? 'Zone 10 remains blueprint data.' : 'The remaining two zones are still blueprint data.',
+    verifyPass15 ? 'The final bridge is a collision and pacing graybox, not final wooden environment art.' : verifyPass14 ? 'The active chase seals at the Pass 14 bridge handoff; the wooden bridge finale is not implemented.' : verifyPass13 ? 'The active chase currently seals at the Pass 13 exit; the giant arc turn and bridge finale are not implemented.' : verifyPass12 ? 'The active chase currently seals at the Pass 12 exit; the bridge finale is not implemented.' : verifyPass11 ? 'The active chase currently seals at the Pass 11 exit; the bridge finale is not implemented.' : 'The active chase currently seals at the Pass 10 exit; the bridge finale is not implemented.',
     'Long support-break pauses are graybox chase pacing and still need later difficulty tuning.',
     'Destroyed supports and floors use graybox debris, not final destruction animation.',
     'Graybox shapes are collision prototypes, not final terrain art.',

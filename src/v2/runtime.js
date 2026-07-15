@@ -11,7 +11,8 @@ import { PASS10_CHASE, PASS10_ZONE, validatePass10Level } from "./pass10-level.j
 import { PASS11_CHASE, PASS11_LEVEL, PASS11_ZONE, validatePass11Level } from "./pass11-level.js";
 import { PASS12_CHASE, PASS12_LEVEL, PASS12_ZONE, validatePass12Level } from "./pass12-level.js";
 import { PASS13_CHASE, PASS13_ZONE, validatePass13Level } from "./pass13-level.js";
-import { PASS14_CHASE, PASS14_LEVEL, PASS14_ZONE, validatePass14Level } from "./pass14-level.js";
+import { PASS14_CHASE, PASS14_ZONE, validatePass14Level } from "./pass14-level.js";
+import { PASS15_CHASE, PASS15_LEVEL, PASS15_ZONE, validatePass15Level } from "./pass15-level.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -19,7 +20,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass14Runtime {
+export class Pass15Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -171,6 +172,14 @@ export class Pass14Runtime {
       giantCurveDirectionReversed: false,
       giantCurveExitReached: false,
       pass14Completed: false,
+      bridgeEntered: false,
+      bridgeGapOneCleared: false,
+      bridgeGapTwoCleared: false,
+      bridgeGapThreeCleared: false,
+      bridgeFinalAirDash: false,
+      bridgeExitReached: false,
+      bridgeBoulderPlunged: false,
+      pass15Completed: false,
       chaseWallJumps: 0,
       floorsCollapsed: 0,
       supportsDestroyed: 0,
@@ -194,15 +203,17 @@ export class Pass14Runtime {
       giantCurveUpperJumps: 0,
       giantCurveNaturalDrops: 0,
       giantCurveDirectionChanges: 0,
+      bridgeJumps: 0,
+      bridgeAirDashes: 0,
     };
   }
 
   createPlayer() {
     return {
-      x: PASS14_LEVEL.spawn.x,
-      y: PASS14_LEVEL.spawn.y,
-      previousX: PASS14_LEVEL.spawn.x,
-      previousY: PASS14_LEVEL.spawn.y,
+      x: PASS15_LEVEL.spawn.x,
+      y: PASS15_LEVEL.spawn.y,
+      previousX: PASS15_LEVEL.spawn.x,
+      previousY: PASS15_LEVEL.spawn.y,
       vx: 0,
       vy: 0,
       facing: 1,
@@ -217,7 +228,7 @@ export class Pass14Runtime {
   }
 
   createMovingPlatforms() {
-    return PASS14_LEVEL.movingPlatforms.map(item => ({
+    return PASS15_LEVEL.movingPlatforms.map(item => ({
       ...item,
       x: item.xMin,
       previousX: item.xMin,
@@ -226,7 +237,7 @@ export class Pass14Runtime {
   }
 
   createBreakables() {
-    return PASS14_LEVEL.breakables.map(item => ({ ...item, destroyed: false }));
+    return PASS15_LEVEL.breakables.map(item => ({ ...item, destroyed: false }));
   }
 
   createGrapple() {
@@ -249,23 +260,24 @@ export class Pass14Runtime {
   }
 
   createChase() {
-    const start = PASS14_CHASE.path.points[0];
+    const start = PASS15_CHASE.path.points[0];
     return {
       triggered: false,
       active: false,
       sealed: false,
-      delayFrames: PASS14_CHASE.boulder.spawnDelayFrames,
-      breachDelayFrames: PASS14_CHASE.boulder.breachDelayFrames,
+      delayFrames: PASS15_CHASE.boulder.spawnDelayFrames,
+      breachDelayFrames: PASS15_CHASE.boulder.breachDelayFrames,
       breachComplete: false,
       internalBreakpointIndex: 0,
       internalPauseFrames: 0,
       pass14HeadStartFrames: 0,
+      pass15HeadStartFrames: 0,
       activeFrames: 0,
       pathDistance: 0,
       pathIndex: 0,
       x: start.x,
       y: start.y,
-      speed: PASS14_CHASE.boulder.baseSpeed,
+      speed: PASS15_CHASE.boulder.baseSpeed,
       rotation: 0,
     };
   }
@@ -325,6 +337,10 @@ export class Pass14Runtime {
         this.progress.dashSpikeAirDashUsed = true;
         this.progress.chaseAirDashes += 1;
       }
+      if (this.progress.pass14Completed && !this.progress.bridgeGapThreeCleared && !wasGrounded && centerX >= 23340 && centerX <= 23620) {
+        this.progress.bridgeFinalAirDash = true;
+        this.progress.bridgeAirDashes += 1;
+      }
     }
     this.dashQueued = false;
 
@@ -345,6 +361,9 @@ export class Pass14Runtime {
         } else if (this.progress.pass13Completed && !this.progress.giantCurveUpperGapCleared && centerX >= 18920 && centerX <= 19020 && p.facing < 0) {
           this.progress.giantCurveUpperTakeoff = true;
           this.progress.giantCurveUpperJumps += 1;
+        } else if (this.progress.pass14Completed && !this.progress.pass15Completed && p.facing > 0 &&
+          PASS15_ZONE.gaps.some(gap => centerX >= gap.x1 - 90 && centerX <= gap.x1 + 30)) {
+          this.progress.bridgeJumps += 1;
         }
       } else if (previousWall !== 0) {
         p.vx = -previousWall * config.wallJumpX;
@@ -391,7 +410,7 @@ export class Pass14Runtime {
     this.updateCamera();
     this.screenShake = Math.max(0, this.screenShake - 0.7);
 
-    if (p.y > PASS14_LEVEL.bounds.y + PASS14_LEVEL.bounds.height + 120 || p.x < -120) {
+    if (p.y > PASS15_LEVEL.bounds.y + PASS15_LEVEL.bounds.height + 120 || p.x < -120) {
       this.resetPlayer(false);
     }
   }
@@ -523,7 +542,7 @@ export class Pass14Runtime {
 
   updateBoulder() {
     const chase = this.chase;
-    const config = PASS14_CHASE.boulder;
+    const config = PASS15_CHASE.boulder;
     if (!chase.triggered && this.progress.zone05Entered) {
       chase.triggered = true;
       this.progress.chaseTriggered = true;
@@ -540,8 +559,12 @@ export class Pass14Runtime {
       chase.pass14HeadStartFrames -= 1;
       return;
     }
+    if (chase.pass15HeadStartFrames > 0) {
+      chase.pass15HeadStartFrames -= 1;
+      return;
+    }
 
-    if (chase.pathDistance >= PASS14_CHASE.path.pass08EndDistance && !chase.breachComplete) {
+    if (chase.pathDistance >= PASS15_CHASE.path.pass08EndDistance && !chase.breachComplete) {
       this.progress.boulderAtInternalEntry = true;
       if (chase.breachDelayFrames > 0) {
         chase.breachDelayFrames -= 1;
@@ -564,15 +587,15 @@ export class Pass14Runtime {
 
     chase.activeFrames += 1;
     chase.speed = Math.min(config.maximumSpeed, config.baseSpeed + chase.activeFrames * config.accelerationPerFrame);
-    chase.pathDistance = Math.min(PASS14_CHASE.path.totalDistance, chase.pathDistance + chase.speed);
+    chase.pathDistance = Math.min(PASS15_CHASE.path.totalDistance, chase.pathDistance + chase.speed);
     this.updateBoulderPosition();
     chase.rotation += chase.speed / config.radius;
 
-    if (chase.pathDistance >= PASS14_CHASE.path.zone05EndDistance) this.progress.boulderEnteredCurve = true;
-    if (chase.pathDistance >= PASS14_CHASE.path.curveApexDistance) this.progress.boulderRoundedApex = true;
+    if (chase.pathDistance >= PASS15_CHASE.path.zone05EndDistance) this.progress.boulderEnteredCurve = true;
+    if (chase.pathDistance >= PASS15_CHASE.path.curveApexDistance) this.progress.boulderRoundedApex = true;
 
     const floorThreshold = chase.pathDistance - config.floorCollapseLag;
-    for (const panel of PASS14_CHASE.collapsePanels) {
+    for (const panel of PASS15_CHASE.collapsePanels) {
       if (panel.triggerDistance > floorThreshold) break;
       if (this.collapsedFloorIds.has(panel.floorId)) continue;
       this.collapsedFloorIds.add(panel.floorId);
@@ -581,7 +604,7 @@ export class Pass14Runtime {
     }
 
     const supportThreshold = chase.pathDistance - config.supportBreakLag;
-    for (const support of PASS14_CHASE.supportTargets) {
+    for (const support of PASS15_CHASE.supportTargets) {
       if (support.triggerDistance > supportThreshold) break;
       if (this.destroyedSupportIds.has(support.id)) continue;
       this.destroyedSupportIds.add(support.id);
@@ -590,7 +613,7 @@ export class Pass14Runtime {
       this.screenShake = Math.max(this.screenShake, 8);
     }
 
-    if (chase.pathDistance >= PASS14_CHASE.path.totalDistance) {
+    if (chase.pathDistance >= PASS15_CHASE.path.totalDistance) {
       this.progress.boulderFinished = true;
     }
     this.checkBoulderContact();
@@ -598,8 +621,8 @@ export class Pass14Runtime {
 
   updateBoulderPosition() {
     const chase = this.chase;
-    const distances = PASS14_CHASE.path.cumulativeDistances;
-    const points = PASS14_CHASE.path.points;
+    const distances = PASS15_CHASE.path.cumulativeDistances;
+    const points = PASS15_CHASE.path.points;
     while (chase.pathIndex < distances.length - 2 && chase.pathDistance > distances[chase.pathIndex + 1]) {
       chase.pathIndex += 1;
     }
@@ -617,7 +640,7 @@ export class Pass14Runtime {
     const p = this.player;
     const nearestX = clamp(this.chase.x, p.x, p.x + PLAYER_PHYSICS.width);
     const nearestY = clamp(this.chase.y, p.y, p.y + PLAYER_PHYSICS.height);
-    const contactRadius = PASS14_CHASE.boulder.radius + PASS14_CHASE.boulder.contactPadding;
+    const contactRadius = PASS15_CHASE.boulder.radius + PASS15_CHASE.boulder.contactPadding;
     if (Math.hypot(this.chase.x - nearestX, this.chase.y - nearestY) >= contactRadius) return;
     this.boulderCatchCount += 1;
     this.resetPlayer(false);
@@ -654,19 +677,30 @@ export class Pass14Runtime {
         this.chase.pass14HeadStartFrames = 180;
       }
     }
-    if (this.progress.pass14Completed || !this.progress.pass13Completed || !this.progress.giantCurveUpperGapCleared ||
-      !this.progress.giantCurveSteepCommitted || !this.progress.giantCurveDropStarted || !this.progress.giantCurveLowerLanded ||
-      !this.progress.giantCurveDirectionReversed || !this.progress.giantCurveExitReached) return;
-    const pass14Progress = this.chase.pathDistance / PASS14_CHASE.path.totalDistance;
-    if (pass14Progress < PASS14_CHASE.completion.minimumBoulderProgress) return;
+    if (!this.progress.pass14Completed && this.progress.pass13Completed && this.progress.giantCurveUpperGapCleared &&
+      this.progress.giantCurveSteepCommitted && this.progress.giantCurveDropStarted && this.progress.giantCurveLowerLanded &&
+      this.progress.giantCurveDirectionReversed && this.progress.giantCurveExitReached) {
+      const pass14Progress = this.chase.pathDistance / PASS14_CHASE.path.totalDistance;
+      if (pass14Progress >= PASS14_CHASE.completion.minimumBoulderProgress) {
+        this.progress.pass14Completed = true;
+        this.chase.pass15HeadStartFrames = PASS15_ZONE.headStartFrames;
+      }
+    }
+    if (this.progress.pass15Completed || !this.progress.pass14Completed || !this.progress.bridgeGapOneCleared ||
+      !this.progress.bridgeGapTwoCleared || !this.progress.bridgeGapThreeCleared || !this.progress.bridgeFinalAirDash ||
+      !this.progress.bridgeExitReached) return;
+    const pass15Progress = this.chase.pathDistance / PASS15_CHASE.path.totalDistance;
+    if (pass15Progress < PASS15_CHASE.completion.minimumBoulderProgress) return;
+    this.progress.bridgeBoulderPlunged = this.chase.pathDistance >= PASS15_CHASE.path.bridgePlungeDistance;
+    if (!this.progress.bridgeBoulderPlunged) return;
     this.progress.chaseEscaped = true;
-    this.progress.pass14Completed = true;
+    this.progress.pass15Completed = true;
     this.chase.active = false;
     this.chase.sealed = true;
   }
 
   spawnCollapseDebris(floorId, major) {
-    const item = PASS14_LEVEL.floors.find(floorItem => floorItem.id === floorId);
+    const item = PASS15_LEVEL.floors.find(floorItem => floorItem.id === floorId);
     if (!item) return;
     const centerX = (item.x1 + item.x2) * 0.5;
     const centerY = (item.y1 + item.y2) * 0.5;
@@ -725,7 +759,7 @@ export class Pass14Runtime {
   moveHorizontal() {
     const p = this.player;
     p.x += p.vx;
-    for (const solid of PASS14_LEVEL.solids) {
+    for (const solid of PASS15_LEVEL.solids) {
       if (!this.isSolidActive(solid)) continue;
       if (solid.role === "ledge" || solid.role.endsWith("_ledge")) continue;
       const bottom = p.y + PLAYER_PHYSICS.height;
@@ -768,7 +802,7 @@ export class Pass14Runtime {
       }
       p.vx = 0;
     }
-    p.x = clamp(p.x, PASS14_LEVEL.bounds.x, PASS14_LEVEL.bounds.x + PASS14_LEVEL.bounds.width - PLAYER_PHYSICS.width);
+    p.x = clamp(p.x, PASS15_LEVEL.bounds.x, PASS15_LEVEL.bounds.x + PASS15_LEVEL.bounds.width - PLAYER_PHYSICS.width);
   }
 
   destroyBreakable(gate) {
@@ -799,7 +833,7 @@ export class Pass14Runtime {
     const previousBottom = p.y + PLAYER_PHYSICS.height;
     p.y += p.vy;
 
-    for (const solid of PASS14_LEVEL.solids) {
+    for (const solid of PASS15_LEVEL.solids) {
       if (!this.isSolidActive(solid)) continue;
       if (!this.overlaps(p, solid)) continue;
       if (p.vy >= 0 && previousBottom <= solid.y + 8) {
@@ -845,7 +879,7 @@ export class Pass14Runtime {
 
     const centerX = p.x + PLAYER_PHYSICS.width / 2;
     let bestFloor = null;
-    for (const item of PASS14_LEVEL.floors) {
+    for (const item of PASS15_LEVEL.floors) {
       if (!this.isFloorActive(item)) continue;
       const bodyOverlap = p.x + PLAYER_PHYSICS.width >= item.x1 && p.x <= item.x2;
       if (item.phase >= 13 ? !bodyOverlap : centerX < item.x1 || centerX > item.x2) continue;
@@ -864,7 +898,7 @@ export class Pass14Runtime {
     }
 
     if (!p.grounded && p.wallSide === 0) {
-      for (const solid of PASS14_LEVEL.solids) {
+      for (const solid of PASS15_LEVEL.solids) {
         if (!this.isSolidActive(solid)) continue;
         const verticalOverlap = p.y + PLAYER_PHYSICS.height > solid.y + 2 && p.y < solid.y + solid.height - 2;
         if (!verticalOverlap) continue;
@@ -876,6 +910,7 @@ export class Pass14Runtime {
 
   isFloorActive(item) {
     if (this.collapsedFloorIds.has(item.id)) return false;
+    if (item.phase === 15) return this.progress.pass14Completed;
     if (item.phase === 14) {
       if (item.lane === "lower_return" || item.lane === "bridge_handoff") return this.progress.pass13Completed && this.progress.giantCurveDropStarted;
       return this.progress.pass13Completed;
@@ -900,6 +935,7 @@ export class Pass14Runtime {
   }
 
   isSolidActive(solid) {
+    if (solid.phase === 15) return this.progress.pass14Completed;
     if (solid.phase === 14) return this.progress.pass13Completed;
     if (solid.phase === 13) return this.progress.pass12Completed;
     if (solid.phase === 12) return this.progress.pass11Completed;
@@ -919,8 +955,8 @@ export class Pass14Runtime {
   updateProgress() {
     const p = this.player;
     const bottom = p.y + PLAYER_PHYSICS.height;
-    const gates = PASS14_LEVEL.gates;
-    if (p.x >= PASS14_LEVEL.zone01Exit.x - 30) this.progress.zone01Reached = true;
+    const gates = PASS15_LEVEL.gates;
+    if (p.x >= PASS15_LEVEL.zone01Exit.x - 30) this.progress.zone01Reached = true;
     if (bottom >= gates.firstDropY && p.x < gates.firstExitX) this.progress.firstDropped = true;
     if (this.progress.firstDropped && p.x >= gates.firstExitX && bottom <= gates.firstExitY) this.progress.firstClimb = true;
     if (this.progress.firstClimb && bottom >= gates.secondDropY && p.x < gates.secondExitX) this.progress.secondDropped = true;
@@ -1066,6 +1102,14 @@ export class Pass14Runtime {
     if (this.progress.giantCurveDirectionReversed && p.grounded && p.x >= giantCurve.completionX && bottom >= giantCurve.completionY) {
       this.progress.giantCurveExitReached = true;
     }
+    const bridge = PASS15_ZONE.milestones;
+    if (this.progress.pass14Completed && p.x >= bridge.enteredX) this.progress.bridgeEntered = true;
+    if (this.progress.bridgeEntered && p.grounded && p.x + PLAYER_PHYSICS.width >= bridge.gapLandings[0]) this.progress.bridgeGapOneCleared = true;
+    if (this.progress.bridgeGapOneCleared && p.grounded && p.x + PLAYER_PHYSICS.width >= bridge.gapLandings[1]) this.progress.bridgeGapTwoCleared = true;
+    if (this.progress.bridgeGapTwoCleared && p.grounded && p.x + PLAYER_PHYSICS.width >= bridge.gapLandings[2]) this.progress.bridgeGapThreeCleared = true;
+    if (this.progress.bridgeGapThreeCleared && p.grounded && p.x >= bridge.completionX && bottom >= bridge.completionY) {
+      this.progress.bridgeExitReached = true;
+    }
   }
 
   resetPlayer(manual) {
@@ -1092,8 +1136,8 @@ export class Pass14Runtime {
   snapCamera() {
     const p = this.player;
     this.camera.zoom = 1;
-    this.camera.x = clamp(p.x - 310, PASS14_LEVEL.cameraBounds.x, PASS14_LEVEL.cameraBounds.x + PASS14_LEVEL.cameraBounds.width - VIEWPORT.width);
-    this.camera.y = clamp(p.y - 260, PASS14_LEVEL.cameraBounds.y, PASS14_LEVEL.cameraBounds.y + PASS14_LEVEL.cameraBounds.height - VIEWPORT.height);
+    this.camera.x = clamp(p.x - 310, PASS15_LEVEL.cameraBounds.x, PASS15_LEVEL.cameraBounds.x + PASS15_LEVEL.cameraBounds.width - VIEWPORT.width);
+    this.camera.y = clamp(p.y - 260, PASS15_LEVEL.cameraBounds.y, PASS15_LEVEL.cameraBounds.y + PASS15_LEVEL.cameraBounds.height - VIEWPORT.height);
   }
 
   updateCamera() {
@@ -1101,20 +1145,25 @@ export class Pass14Runtime {
     const chaseVisible = this.chase.active && !this.chase.sealed;
     const separation = chaseVisible ? Math.hypot(p.x - this.chase.x, (p.y + 24) - this.chase.y) : 0;
     const curveOverviewActive = this.progress.pass13Completed && !this.progress.pass14Completed;
+    const bridgeFinaleActive = this.progress.pass14Completed && !this.progress.pass15Completed;
     const desiredZoom = curveOverviewActive
       ? PASS14_ZONE.cameraOverview.zoom
+      : bridgeFinaleActive ? PASS15_ZONE.cameraFinale.zoom
       : chaseVisible ? clamp(1180 / Math.max(1180, separation + 420), 0.62, 1) : 1;
     this.camera.zoom += (desiredZoom - this.camera.zoom) * (chaseVisible ? 0.045 : 0.11);
     const viewWidth = VIEWPORT.width / this.camera.zoom;
     const viewHeight = VIEWPORT.height / this.camera.zoom;
     let centerX;
     let centerY;
-    const canFrameTogether = chaseVisible && !curveOverviewActive &&
+    const canFrameTogether = chaseVisible && !curveOverviewActive && !bridgeFinaleActive &&
       Math.abs(p.x - this.chase.x) <= viewWidth - 320 &&
       Math.abs((p.y + 24) - this.chase.y) <= viewHeight - 200;
     if (curveOverviewActive) {
       centerX = PASS14_ZONE.cameraOverview.x;
       centerY = PASS14_ZONE.cameraOverview.y;
+    } else if (bridgeFinaleActive) {
+      centerX = p.x + viewWidth * 0.16;
+      centerY = (p.y + 24) * 0.7 + this.chase.y * 0.3;
     } else if (canFrameTogether) {
       centerX = p.x * 0.56 + this.chase.x * 0.44;
       centerY = (p.y + 24) * 0.62 + this.chase.y * 0.38;
@@ -1123,8 +1172,8 @@ export class Pass14Runtime {
       centerX = p.x + viewWidth * 0.5 - lookAhead;
       centerY = p.y + 24;
     }
-    const targetX = clamp(centerX - viewWidth * 0.5, PASS14_LEVEL.cameraBounds.x, PASS14_LEVEL.cameraBounds.x + PASS14_LEVEL.cameraBounds.width - viewWidth);
-    const targetY = clamp(centerY - viewHeight * 0.5, PASS14_LEVEL.cameraBounds.y, PASS14_LEVEL.cameraBounds.y + PASS14_LEVEL.cameraBounds.height - viewHeight);
+    const targetX = clamp(centerX - viewWidth * 0.5, PASS15_LEVEL.cameraBounds.x, PASS15_LEVEL.cameraBounds.x + PASS15_LEVEL.cameraBounds.width - viewWidth);
+    const targetY = clamp(centerY - viewHeight * 0.5, PASS15_LEVEL.cameraBounds.y, PASS15_LEVEL.cameraBounds.y + PASS15_LEVEL.cameraBounds.height - viewHeight);
     this.camera.x += (targetX - this.camera.x) * 0.075;
     this.camera.y += (targetY - this.camera.y) * 0.085;
   }
@@ -1156,6 +1205,7 @@ export class Pass14Runtime {
     this.drawDashSpikeChamber(ctx);
     this.drawPrecisionParkourChamber(ctx);
     this.drawGiantDirectionTurn(ctx);
+    this.drawCollapsingBridge(ctx);
     this.drawChaseSupports(ctx);
     this.drawLevel(ctx);
     this.drawDashSpikes(ctx);
@@ -1173,7 +1223,7 @@ export class Pass14Runtime {
 
   drawChaseHud(ctx) {
     if (!this.chase.triggered) return;
-    const progress = this.chase.pathDistance / PASS14_CHASE.path.totalDistance;
+    const progress = this.chase.pathDistance / PASS15_CHASE.path.totalDistance;
     const separation = Math.hypot(this.player.x - this.chase.x, (this.player.y + 24) - this.chase.y);
     const x = 20;
     const y = VIEWPORT.height - 72;
@@ -1216,7 +1266,7 @@ export class Pass14Runtime {
 
   drawLevel(ctx) {
     ctx.save();
-    for (const item of PASS14_LEVEL.floors) {
+    for (const item of PASS15_LEVEL.floors) {
       if (this.collapsedFloorIds.has(item.id)) {
         ctx.strokeStyle = "rgba(185, 105, 73, 0.42)";
         ctx.lineWidth = 5;
@@ -1226,6 +1276,21 @@ export class Pass14Runtime {
         ctx.lineTo(item.x2, item.y2 + 72);
         ctx.stroke();
         ctx.setLineDash([]);
+        continue;
+      }
+      if (item.phase === 15) {
+        ctx.strokeStyle = item.lane === "final_landing" ? "#9cb2ae" : "#d0a46b";
+        ctx.lineWidth = item.lane === "final_landing" ? 34 : 22;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1 + 11);
+        ctx.lineTo(item.x2, item.y2 + 11);
+        ctx.stroke();
+        ctx.strokeStyle = item.lane === "final_landing" ? "#d6ddd7" : "#f0c985";
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
         continue;
       }
       ctx.fillStyle = item.zone === 1 ? "#263c40" : item.zone === 3 ? "#303a3c" : item.zone === 4 ? "#34393a" : item.zone === 5 ? "#383b39" : item.zone === 6 ? "#303b3d" : item.zone === 7 ? "#313638" : item.zone === 8 ? "#34343a" : item.zone === 9 ? "#32383d" : "#29383b";
@@ -1243,7 +1308,7 @@ export class Pass14Runtime {
       ctx.lineTo(item.x2, item.y2);
       ctx.stroke();
     }
-    for (const solid of PASS14_LEVEL.solids) {
+    for (const solid of PASS15_LEVEL.solids) {
       const zone08Solid = solid.role.startsWith("zone08_");
       const zone09Solid = solid.role.startsWith("zone09_");
       ctx.fillStyle = solid.role === "baffle" ? "#26383b" : solid.role === "ceiling" ? "#394041" : solid.role === "zone07_ceiling" ? "#3b3833" : zone08Solid ? "#3d3937" : zone09Solid ? "#344147" : "#304246";
@@ -1662,7 +1727,7 @@ export class Pass14Runtime {
     ctx.fill();
     ctx.stroke();
 
-    const corridor = PASS14_LEVEL.zone09PrecisionBoulderCorridor;
+    const corridor = PASS15_LEVEL.zone09PrecisionBoulderCorridor;
     ctx.strokeStyle = "rgba(82, 123, 127, 0.23)";
     ctx.lineWidth = corridor.width;
     ctx.lineJoin = "round";
@@ -1679,7 +1744,7 @@ export class Pass14Runtime {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    for (const item of PASS14_LEVEL.zone09PrecisionBoulderFloors) {
+    for (const item of PASS15_LEVEL.zone09PrecisionBoulderFloors) {
       ctx.strokeStyle = "rgba(110, 155, 158, 0.58)";
       ctx.lineWidth = 12;
       ctx.beginPath();
@@ -1694,7 +1759,7 @@ export class Pass14Runtime {
       ctx.stroke();
     }
 
-    for (const item of PASS14_LEVEL.zone09PrecisionFrames) {
+    for (const item of PASS15_LEVEL.zone09PrecisionFrames) {
       ctx.fillStyle = "rgba(94, 144, 148, 0.04)";
       ctx.strokeStyle = "rgba(130, 184, 187, 0.28)";
       ctx.lineWidth = 3;
@@ -1725,7 +1790,7 @@ export class Pass14Runtime {
     ctx.fill();
     ctx.stroke();
 
-    const corridor = PASS14_LEVEL.zone09GiantCurveCorridor;
+    const corridor = PASS15_LEVEL.zone09GiantCurveCorridor;
     ctx.strokeStyle = "rgba(68, 113, 120, 0.27)";
     ctx.lineWidth = corridor.width;
     ctx.lineJoin = "round";
@@ -1737,7 +1802,7 @@ export class Pass14Runtime {
     });
     ctx.stroke();
 
-    for (const item of PASS14_LEVEL.zone09GiantCurveBoulderFloors) {
+    for (const item of PASS15_LEVEL.zone09GiantCurveBoulderFloors) {
       ctx.strokeStyle = "rgba(126, 183, 184, 0.82)";
       ctx.lineWidth = 12;
       ctx.beginPath();
@@ -1752,7 +1817,7 @@ export class Pass14Runtime {
       ctx.stroke();
     }
 
-    for (const item of PASS14_LEVEL.zone09GiantCurveFrames) {
+    for (const item of PASS15_LEVEL.zone09GiantCurveFrames) {
       ctx.fillStyle = "rgba(87, 143, 149, 0.035)";
       ctx.strokeStyle = "rgba(134, 194, 197, 0.27)";
       ctx.lineWidth = 3;
@@ -1772,6 +1837,41 @@ export class Pass14Runtime {
     ctx.lineTo(PASS14_ZONE.naturalDrop.landing.x, PASS14_ZONE.naturalDrop.landing.y - 24);
     ctx.stroke();
     ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  drawCollapsingBridge(ctx) {
+    ctx.save();
+    const corridor = PASS15_ZONE.boulderCorridor;
+    ctx.strokeStyle = "rgba(121, 77, 51, 0.20)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => index === 0 ? ctx.moveTo(item.x, item.y) : ctx.lineTo(item.x, item.y));
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(225, 151, 91, 0.62)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([24, 18]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle = "rgba(176, 118, 69, 0.38)";
+    ctx.lineWidth = 5;
+    for (const item of PASS15_ZONE.floors.filter(floorItem => floorItem.lane === "wood_deck")) {
+      if (this.collapsedFloorIds.has(item.id)) continue;
+      const length = Math.hypot(item.x2 - item.x1, item.y2 - item.y1);
+      const pieces = Math.max(1, Math.round(length / 85));
+      for (let index = 1; index < pieces; index += 1) {
+        const ratio = index / pieces;
+        const x = item.x1 + (item.x2 - item.x1) * ratio;
+        const y = item.y1 + (item.y2 - item.y1) * ratio;
+        ctx.beginPath();
+        ctx.moveTo(x - 6, y - 5);
+        ctx.lineTo(x + 8, y + 22);
+        ctx.stroke();
+      }
+    }
     ctx.restore();
   }
 
@@ -1797,7 +1897,7 @@ export class Pass14Runtime {
 
   drawPrecisionHazards(ctx) {
     ctx.save();
-    for (const hazard of PASS14_LEVEL.zone09PrecisionHazards) {
+    for (const hazard of PASS15_LEVEL.zone09PrecisionHazards) {
       const width = (hazard.x2 - hazard.x1) / hazard.teeth;
       ctx.fillStyle = "rgba(164, 79, 69, 0.88)";
       ctx.strokeStyle = "rgba(238, 151, 111, 0.92)";
@@ -1852,7 +1952,7 @@ export class Pass14Runtime {
 
   drawChaseSupports(ctx) {
     ctx.save();
-    for (const support of PASS14_CHASE.supportTargets) {
+    for (const support of PASS15_CHASE.supportTargets) {
       if (support.id.startsWith("support_") || this.destroyedSupportIds.has(support.id)) continue;
       ctx.fillStyle = "rgba(92, 82, 68, 0.72)";
       ctx.strokeStyle = "rgba(218, 153, 96, 0.68)";
@@ -1872,7 +1972,7 @@ export class Pass14Runtime {
   drawBoulder(ctx) {
     const chase = this.chase;
     if (!chase.triggered || (!chase.active && !chase.sealed)) return;
-    const radius = PASS14_CHASE.boulder.radius;
+    const radius = PASS15_CHASE.boulder.radius;
     ctx.save();
     ctx.translate(chase.x, chase.y);
     ctx.rotate(chase.rotation);
@@ -2018,6 +2118,10 @@ export class Pass14Runtime {
       { x: 16900, y: 8550, label: "NATURAL DROP", active: this.progress.giantCurveDropStarted },
       { x: 16700, y: 8800, label: "LOWER TURN", active: this.progress.giantCurveDirectionReversed },
       { x: 19000, y: 9000, label: "PASS 14 / BRIDGE", active: this.progress.pass14Completed },
+      { x: 20240, y: 9115, label: "BRIDGE GAP I", active: this.progress.bridgeGapOneCleared },
+      { x: 21960, y: 9275, label: "BRIDGE GAP II", active: this.progress.bridgeGapTwoCleared },
+      { x: 23580, y: 9420, label: "BRIDGE GAP III", active: this.progress.bridgeGapThreeCleared },
+      { x: 25200, y: 9600, label: "FINAL ESCAPE", active: this.progress.pass15Completed },
     ];
     ctx.save();
     ctx.font = "700 11px Arial, sans-serif";
@@ -2076,11 +2180,11 @@ export class Pass14Runtime {
       const topLeft = mapPoint(zone.bounds);
       const width = (zone.bounds.width / WORLD.width) * frame.width;
       const height = (zone.bounds.height / WORLD.height) * frame.height;
-      ctx.fillStyle = index < 9 ? "rgba(216, 191, 120, 0.19)" : "rgba(69, 111, 119, 0.10)";
-      ctx.strokeStyle = index < 9 ? "rgba(216, 191, 120, 0.75)" : "rgba(139, 190, 199, 0.32)";
+      ctx.fillStyle = index < 10 ? "rgba(216, 191, 120, 0.19)" : "rgba(69, 111, 119, 0.10)";
+      ctx.strokeStyle = index < 10 ? "rgba(216, 191, 120, 0.75)" : "rgba(139, 190, 199, 0.32)";
       ctx.fillRect(topLeft.x, topLeft.y, width, height);
       ctx.strokeRect(topLeft.x, topLeft.y, width, height);
-      ctx.fillStyle = index < 9 ? "#ead59b" : "#8cadb3";
+      ctx.fillStyle = index < 10 ? "#ead59b" : "#8cadb3";
       ctx.font = "700 9px Arial, sans-serif";
       ctx.fillText(`${String(index + 1).padStart(2, "0")} ${zone.name}`, topLeft.x + 6, topLeft.y + 15);
     });
@@ -2100,13 +2204,14 @@ export class Pass14Runtime {
     drawRoute(PLAYER_ROUTE, PALETTE.route, false);
     drawRoute(PASS13_ZONE.playerRoute, PALETTE.route, false);
     drawRoute(PASS14_ZONE.playerRoute, PALETTE.route, false);
-    drawRoute(PASS14_CHASE.path.points, PALETTE.boulderRoute, true);
+    drawRoute(PASS15_ZONE.playerRoute, PALETTE.route, false);
+    drawRoute(PASS15_CHASE.path.points, PALETTE.boulderRoute, true);
     ctx.fillStyle = "#eff5f3";
     ctx.font = "800 22px Arial, sans-serif";
-    ctx.fillText("PASS 14 / GIANT CURVE TURN 01–09", 42, 52);
+    ctx.fillText("PASS 15 / COLLAPSING BRIDGE 01–10", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`ACTIVE PATH ${PASS14_CHASE.path.points.length} POINTS · COLLAPSE PANELS ${PASS14_CHASE.collapsePanels.length} · UPPER SURVIVAL / NATURAL DROP / LOWER RETURN`, 42, 72);
+    ctx.fillText(`ACTIVE PATH ${PASS15_CHASE.path.points.length} POINTS · COLLAPSE PANELS ${PASS15_CHASE.collapsePanels.length} · THREE BROKEN GAPS / FINAL BOULDER PLUNGE`, 42, 72);
   }
 
   getDebugState() {
@@ -2144,9 +2249,10 @@ export class Pass14Runtime {
         internalBreakpointIndex: this.chase.internalBreakpointIndex,
         internalPauseFrames: this.chase.internalPauseFrames,
         pass14HeadStartFrames: this.chase.pass14HeadStartFrames,
+        pass15HeadStartFrames: this.chase.pass15HeadStartFrames,
         activeFrames: this.chase.activeFrames,
         pathDistance: this.chase.pathDistance,
-        pathProgress: this.chase.pathDistance / PASS14_CHASE.path.totalDistance,
+        pathProgress: this.chase.pathDistance / PASS15_CHASE.path.totalDistance,
         pathIndex: this.chase.pathIndex,
         x: this.chase.x,
         y: this.chase.y,
@@ -2189,10 +2295,11 @@ export class Pass14Runtime {
     const pass12 = validatePass12Level();
     const pass13 = validatePass13Level();
     const pass14 = validatePass14Level();
+    const pass15 = validatePass15Level();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass14" },
-      { id: "pass_number", passed: BUILD.pass === 14 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass15" },
+      { id: "pass_number", passed: BUILD.pass === 15 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -2212,6 +2319,7 @@ export class Pass14Runtime {
       { id: "pass12_level_validation", passed: pass12.passed },
       { id: "pass13_level_validation", passed: pass13.passed },
       { id: "pass14_level_validation", passed: pass14.passed },
+      { id: "pass15_level_validation", passed: pass15.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -2234,6 +2342,7 @@ export class Pass14Runtime {
       pass12,
       pass13,
       pass14,
+      pass15,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -2246,8 +2355,8 @@ export class Pass14Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 14 · GIANT CURVE TURN 01–09";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P14 ${audit.pass14.passedCount}/${audit.pass14.total}`;
+    this.statusElements.build.textContent = "PASS 15 · COLLAPSING BRIDGE 01–10";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P15 ${audit.pass15.passedCount}/${audit.pass15.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
