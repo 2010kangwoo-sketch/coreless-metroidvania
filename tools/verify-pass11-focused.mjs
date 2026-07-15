@@ -144,8 +144,13 @@ while (loop < 7000) {
     }
   } else if (used === 0 || used === 1) {
     await setDirection('d');
-  } else if (used === 3 && !p.grounded && p.x <= 22780) {
-    await setDirection('d');
+  } else if (used === 3 && !state.progress.zone09ExitReached) {
+    const targetX = 22400;
+    if (p.x > targetX + 120) await setDirection('a');
+    else if (p.x < targetX - 120) await setDirection('d');
+    else if (p.vx < -1) await setDirection('d');
+    else if (p.vx > 1) await setDirection('a');
+    else await setDirection(null);
   } else {
     await setDirection('a');
   }
