@@ -11,7 +11,8 @@ import { PASS10_CHASE, PASS10_LEVEL, PASS10_ZONE, validatePass10Level } from "./
 import { PASS11_CHASE, PASS11_LEVEL, PASS11_ZONE, validatePass11Level } from "./pass11-level.js";
 import { PASS12_CHASE, PASS12_LEVEL, PASS12_ZONE, validatePass12Level } from "./pass12-level.js";
 import { PASS13_CHASE, PASS13_LEVEL, PASS13_ZONE, validatePass13Level } from "./pass13-level.js";
-import { Pass13Runtime } from "./runtime.js";
+import { PASS14_CHASE, PASS14_LEVEL, PASS14_ZONE, validatePass14Level } from "./pass14-level.js";
+import { Pass14Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -21,7 +22,7 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const runtime = new Pass13Runtime(canvas, {
+const runtime = new Pass14Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
 });
@@ -101,6 +102,12 @@ window.__corelessV2 = Object.freeze({
     zone: PASS13_ZONE,
     chase: PASS13_CHASE,
     validate: validatePass13Level,
+  }),
+  pass14: Object.freeze({
+    level: PASS14_LEVEL,
+    zone: PASS14_ZONE,
+    chase: PASS14_CHASE,
+    validate: validatePass14Level,
   }),
   runtime,
   audit: () => runtime.audit(),

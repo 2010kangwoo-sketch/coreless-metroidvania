@@ -61,7 +61,7 @@ export const PASS13_ZONE = Object.freeze({
       point(18830, 7570),
       point(19120, 7560),
       point(19500, 7540),
-      point(19800, 7520),
+      point(19800, 7640),
     ]),
   }),
   boulderFloors: Object.freeze([
@@ -177,7 +177,7 @@ export const PASS13_CHASE = Object.freeze({
   completion: Object.freeze({
     playerX: PASS13_ZONE.milestones.completionX,
     playerY: PASS13_ZONE.milestones.completionY,
-    minimumBoulderProgress: 0.99,
+    minimumBoulderProgress: 1,
   }),
 });
 
@@ -254,7 +254,7 @@ export function validatePass13Level() {
     { id: "five_architecture_frames", passed: zone.frames.length === 5 && zone.frames.every(item => rectInBounds(item, PASS13_LEVEL.bounds)) },
     { id: "wide_boulder_corridor", passed: zone.boulderCorridor.width >= 420 && zone.boulderCorridor.width > chase.boulder.radius * 2 },
     { id: "ten_corridor_points", passed: zone.boulderCorridor.points.length === 10 && zone.boulderCorridor.points.every(pointInWorld) },
-    { id: "corridor_matches_entry_exit", passed: zone.boulderCorridor.points[0].x === zone.entry.x && zone.boulderCorridor.points.at(-1).x === zone.exit.x && zone.boulderCorridor.points.at(-1).y === zone.exit.y },
+    { id: "corridor_rejoins_below_player_exit", passed: zone.boulderCorridor.points[0].x === zone.entry.x && zone.boulderCorridor.points.at(-1).x === zone.exit.x && zone.boulderCorridor.points.at(-1).y - zone.exit.y === 120 },
     { id: "smooth_corridor_segments", passed: extension.slice(1).every((item, index) => Math.hypot(item.x - extension[index].x, item.y - extension[index].y) < 500) },
     { id: "corridor_has_rounded_return", passed: zone.boulderCorridor.points.slice(4, 8).every((item, index, items) => index === 0 || Math.hypot(item.x - items[index - 1].x, item.y - items[index - 1].y) < 300) },
     { id: "six_visible_chute_floors", passed: zone.boulderFloors.length === 6 && zone.boulderFloors.every(item => floorInBounds(item, PASS13_LEVEL.bounds)) },

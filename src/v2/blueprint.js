@@ -2,8 +2,8 @@ import { STAGE_SEQUENCE } from "./config.js";
 
 export const WORLD = Object.freeze({
   width: 26000,
-  height: 7800,
-  cameraBounds: Object.freeze({ x: 0, y: 0, width: 26000, height: 7800 }),
+  height: 9800,
+  cameraBounds: Object.freeze({ x: 0, y: 0, width: 26000, height: 9800 }),
 });
 
 const freezePoints = points => Object.freeze(
@@ -96,19 +96,19 @@ export const ZONES = Object.freeze([
   zone({
     id: "long_descent_chase",
     name: "LONG DESCENT CHASE",
-    bounds: { x: 1000, y: 5400, width: 24000, height: 2200 },
+    bounds: { x: 1000, y: 5400, width: 24000, height: 3900 },
     entry: [23600, 5900],
-    exit: [11800, 6900],
-    route: [[23600, 5900], [24800, 6300], [24200, 6900], [22000, 7200], [19000, 6900], [16000, 7300], [12500, 6800], [9000, 7200], [5500, 6700], [2500, 7000], [5000, 7400], [8000, 7000], [11800, 6900]],
+    exit: [19000, 9000],
+    route: [[23600, 5900], [24800, 6300], [24200, 6900], [22000, 7200], [20300, 7200], [19800, 7520], [18800, 7800], [18000, 8100], [17300, 8400], [16900, 8550], [16700, 8800], [17800, 8920], [19000, 9000]],
     direction: "left_then_right",
   }),
   zone({
     id: "collapsing_bridge",
     name: "COLLAPSING BRIDGE",
-    bounds: { x: 11000, y: 6200, width: 15000, height: 1500 },
-    entry: [11800, 6900],
-    exit: [25200, 7400],
-    route: [[11800, 6900], [14000, 7100], [16000, 6800], [18000, 7200], [20500, 7000], [22600, 7350], [25200, 7400]],
+    bounds: { x: 11000, y: 8500, width: 15000, height: 1300 },
+    entry: [19000, 9000],
+    exit: [25200, 9600],
+    route: [[19000, 9000], [20500, 9120], [22600, 9360], [25200, 9600]],
     direction: "right",
   }),
 ]);
@@ -169,7 +169,7 @@ export function validateBlueprint() {
   const zoneIds = ZONES.map(item => item.id);
   const checks = [
     { id: "world_width", passed: WORLD.width === 26000 },
-    { id: "world_height", passed: WORLD.height === 7800 },
+    { id: "world_height", passed: WORLD.height === 9800 },
     { id: "camera_bounds", passed: boundsInWorld(WORLD.cameraBounds) && WORLD.cameraBounds.width === WORLD.width && WORLD.cameraBounds.height === WORLD.height },
     { id: "zone_count", passed: ZONES.length === 10 },
     { id: "zone_ids_unique", passed: new Set(zoneIds).size === ZONES.length },
