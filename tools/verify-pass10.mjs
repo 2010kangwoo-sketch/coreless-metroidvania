@@ -11,14 +11,15 @@ try {
 }
 
 const targetPass = Number(process.env.CORELESS_VERIFY_PASS ?? 10);
+const verifyPass17 = targetPass >= 17;
 const verifyPass16 = targetPass >= 16;
 const verifyPass15 = targetPass >= 15;
 const verifyPass14 = targetPass >= 14;
 const verifyPass13 = targetPass >= 13;
 const verifyPass12 = targetPass >= 12;
 const verifyPass11 = targetPass >= 11;
-const artifactPass = verifyPass16 ? 'pass16' : verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
-const port = verifyPass16 ? 4186 : verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
+const artifactPass = verifyPass17 ? 'pass17' : verifyPass16 ? 'pass16' : verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
+const port = verifyPass17 ? 4188 : verifyPass16 ? 4186 : verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
 
 const server = spawn('python3', ['-m', 'http.server', String(port)], {
   cwd: process.cwd(),
@@ -712,7 +713,7 @@ const deterministicChecks = {
   title: state.title === `Coreless · Rebuild V2 · Pass ${targetPass}`,
   canvas: state.canvas?.width === 1200 && state.canvas?.height === 680,
   focused: state.activeElement === 'gameCanvas',
-  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass16 ? 25 : verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
+  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass17 ? 26 : verifyPass16 ? 25 : verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
   blueprintAudit: state.audit?.blueprint?.passed === true && state.audit?.blueprint?.passedCount === 18,
   pass03Audit: state.audit?.pass03?.passed === true && state.audit?.pass03?.passedCount === 20,
   pass04Audit: state.audit?.pass04?.passed === true && state.audit?.pass04?.passedCount === 22,
@@ -728,6 +729,7 @@ const deterministicChecks = {
   pass14Audit: !verifyPass14 || (state.audit?.pass14?.passed === true && state.audit?.pass14?.passedCount === 43),
   pass15Audit: !verifyPass15 || (state.audit?.pass15?.passed === true && state.audit?.pass15?.passedCount === 29),
   pass16Audit: !verifyPass16 || (state.audit?.pass16?.passed === true && state.audit?.pass16?.passedCount === 20),
+  pass17Audit: !verifyPass17 || (state.audit?.pass17?.passed === true && state.audit?.pass17?.passedCount === 24),
   firstDrop: state.debug?.progress?.firstDropped === true,
   firstClimb: state.debug?.progress?.firstClimb === true,
   secondDrop: state.debug?.progress?.secondDropped === true,
@@ -884,7 +886,9 @@ const passed = !traversalFailure && Object.values(deterministicChecks).every(Boo
 const result = {
   version: `rebuild-v2-${artifactPass}`,
   testedWith: 'Chromium + Playwright actual keyboard events',
-  actualKeyboardRoute: verifyPass16
+  actualKeyboardRoute: verifyPass17
+    ? 'start slope -> ten authored material zones -> structural details -> collapsing bridge finale -> final stone landing -> boulder plunge'
+    : verifyPass16
     ? 'start slope -> all ten visual terrain themes -> collapsing bridge finale -> final stone landing -> boulder plunge'
     : verifyPass15
     ? 'start slope -> zones 01-09 -> giant curve -> collapsing bridge gap one -> gap two -> jump and air dash gap three -> final stone landing -> boulder plunge'
@@ -906,9 +910,9 @@ const result = {
   consoleErrors,
   pageErrors,
   limitations: [
-    verifyPass16 ? 'All ten blueprint zones retain the pass 15 collision route under separated visual terrain layers.' : verifyPass15 ? 'All ten blueprint zones have playable graybox collision in pass 15.' : verifyPass14 ? 'Only zones 01 through 09 have playable collision in pass 14.' : verifyPass13 ? 'Only zones 01 through 09 have playable collision in pass 13.' : verifyPass12 ? 'Only zones 01 through 09 have playable collision in pass 12.' : verifyPass11 ? 'Only zones 01 through 09 have playable collision in pass 11.' : 'Only zones 01 through 08 have playable collision in pass 10.',
+    verifyPass17 ? 'All ten zones retain the pass 15 collision route under authored material facades and structural details.' : verifyPass16 ? 'All ten blueprint zones retain the pass 15 collision route under separated visual terrain layers.' : verifyPass15 ? 'All ten blueprint zones have playable graybox collision in pass 15.' : verifyPass14 ? 'Only zones 01 through 09 have playable collision in pass 14.' : verifyPass13 ? 'Only zones 01 through 09 have playable collision in pass 13.' : verifyPass12 ? 'Only zones 01 through 09 have playable collision in pass 12.' : verifyPass11 ? 'Only zones 01 through 09 have playable collision in pass 11.' : 'Only zones 01 through 08 have playable collision in pass 10.',
     verifyPass15 ? 'The active chase ends with the boulder plunge at the final bridge landing.' : verifyPass11 ? 'Zone 10 remains blueprint data.' : 'The remaining two zones are still blueprint data.',
-    verifyPass16 ? 'Pass 16 establishes palette, architecture silhouettes, route lights, and terrain skins; final authored art remains later work.' : verifyPass15 ? 'The final bridge is a collision and pacing graybox, not final wooden environment art.' : verifyPass14 ? 'The active chase seals at the Pass 14 bridge handoff; the wooden bridge finale is not implemented.' : verifyPass13 ? 'The active chase currently seals at the Pass 13 exit; the giant arc turn and bridge finale are not implemented.' : verifyPass12 ? 'The active chase currently seals at the Pass 12 exit; the bridge finale is not implemented.' : verifyPass11 ? 'The active chase currently seals at the Pass 11 exit; the bridge finale is not implemented.' : 'The active chase currently seals at the Pass 10 exit; the bridge finale is not implemented.',
+    verifyPass17 ? 'Pass 17 adds procedural authored-material detail; final hand-painted assets, animation, and post-processing remain later work.' : verifyPass16 ? 'Pass 16 establishes palette, architecture silhouettes, route lights, and terrain skins; final authored art remains later work.' : verifyPass15 ? 'The final bridge is a collision and pacing graybox, not final wooden environment art.' : verifyPass14 ? 'The active chase seals at the Pass 14 bridge handoff; the wooden bridge finale is not implemented.' : verifyPass13 ? 'The active chase currently seals at the Pass 13 exit; the giant arc turn and bridge finale are not implemented.' : verifyPass12 ? 'The active chase currently seals at the Pass 12 exit; the bridge finale is not implemented.' : verifyPass11 ? 'The active chase currently seals at the Pass 11 exit; the bridge finale is not implemented.' : 'The active chase currently seals at the Pass 10 exit; the bridge finale is not implemented.',
     'Long support-break pauses are graybox chase pacing and still need later difficulty tuning.',
     'Destroyed supports and floors use graybox debris, not final destruction animation.',
     'Graybox shapes are collision prototypes, not final terrain art.',
