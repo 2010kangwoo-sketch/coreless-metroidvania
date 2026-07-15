@@ -14,6 +14,7 @@ import { PASS13_CHASE, PASS13_ZONE, validatePass13Level } from "./pass13-level.j
 import { PASS14_CHASE, PASS14_ZONE, validatePass14Level } from "./pass14-level.js";
 import { PASS15_CHASE, PASS15_LEVEL, PASS15_ZONE, validatePass15Level } from "./pass15-level.js";
 import { PASS16_LIGHTS, PASS16_THEMES, getPass16Theme, validatePass16Visuals } from "./pass16-visuals.js";
+import { PASS17_MATERIALS, PASS17_REINFORCEMENTS, PASS17_SUPPORTS, PASS17_VEGETATION, getPass17Material, validatePass17Art } from "./pass17-art.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -21,7 +22,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass16Runtime {
+export class Pass17Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -1197,6 +1198,7 @@ export class Pass16Runtime {
     ctx.scale(this.camera.zoom, this.camera.zoom);
     ctx.translate(-this.camera.x + shakeX, -this.camera.y + shakeY);
     this.drawVisualWorld(ctx);
+    this.drawAtmosphericDepth(ctx);
     this.drawBuriedStructure(ctx);
     this.drawUnevenTunnelStructure(ctx);
     this.drawDestructionMazeStructure(ctx);
@@ -1210,6 +1212,7 @@ export class Pass16Runtime {
     this.drawCollapsingBridge(ctx);
     this.drawChaseSupports(ctx);
     this.drawLevel(ctx);
+    this.drawAuthoredTerrainDetails(ctx);
     this.drawDashSpikes(ctx);
     this.drawPrecisionHazards(ctx);
     this.drawMovingPlatforms(ctx);
@@ -1304,6 +1307,68 @@ export class Pass16Runtime {
     ctx.restore();
   }
 
+  drawAtmosphericDepth(ctx) {
+    ctx.save();
+    for (const [index, zone] of ZONES.entries()) {
+      const theme = PASS16_THEMES[index];
+      const bounds = zone.bounds;
+      const fog = ctx.createLinearGradient(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
+      fog.addColorStop(0, `${theme.background}00`);
+      fog.addColorStop(0.58, `${theme.background}18`);
+      fog.addColorStop(1, `${theme.midground}46`);
+      ctx.fillStyle = fog;
+      ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+    ctx.restore();
+  }
+
+  drawAuthoredTerrainDetails(ctx) {
+    ctx.save();
+    for (const support of PASS17_SUPPORTS) {
+      ctx.fillStyle = `${support.color}b0`;
+      ctx.fillRect(support.x, support.y, support.width, support.height);
+      ctx.strokeStyle = "rgba(210, 220, 207, 0.16)";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(support.x, support.y);
+      ctx.lineTo(support.x + support.width, support.y + support.height);
+      ctx.moveTo(support.x + support.width, support.y);
+      ctx.lineTo(support.x, support.y + support.height);
+      ctx.stroke();
+    }
+
+    for (const frame of PASS17_REINFORCEMENTS) {
+      ctx.strokeStyle = `${frame.color}72`;
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.moveTo(frame.x, frame.y + frame.height);
+      ctx.lineTo(frame.x, frame.y + 28);
+      ctx.quadraticCurveTo(frame.x + frame.width * 0.5, frame.y - 18, frame.x + frame.width, frame.y + 28);
+      ctx.lineTo(frame.x + frame.width, frame.y + frame.height);
+      ctx.stroke();
+      ctx.fillStyle = `${frame.color}33`;
+      ctx.beginPath();
+      ctx.arc(frame.x, frame.y + frame.height, 10, 0, Math.PI * 2);
+      ctx.arc(frame.x + frame.width, frame.y + frame.height, 10, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (const plant of PASS17_VEGETATION) {
+      ctx.fillStyle = `${plant.color}c8`;
+      const leaves = 7;
+      for (let index = 0; index < leaves; index += 1) {
+        const ratio = index / (leaves - 1);
+        const x = plant.x + plant.width * ratio;
+        const height = plant.height * (0.45 + ((index * 7) % 5) * 0.12);
+        ctx.beginPath();
+        ctx.moveTo(x - 8, plant.y);
+        ctx.quadraticCurveTo(x, plant.y - height, x + 8, plant.y);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
   drawLevel(ctx) {
     ctx.save();
     for (const item of PASS15_LEVEL.floors) {
@@ -1333,10 +1398,10 @@ export class Pass16Runtime {
         ctx.stroke();
         continue;
       }
-      const floorTheme = getPass16Theme(item.phase === 15 ? 10 : item.zone ?? 1);
-      ctx.fillStyle = floorTheme.terrain;
-      ctx.strokeStyle = floorTheme.edge;
-      ctx.lineWidth = 4;
+      const zoneIndex = item.phase === 15 ? 10 : item.zone ?? 1;
+      const floorTheme = getPass16Theme(zoneIndex);
+      const material = getPass17Material(zoneIndex);
+      ctx.fillStyle = material.base;
       ctx.beginPath();
       ctx.moveTo(item.x1, item.y1);
       ctx.lineTo(item.x2, item.y2);
@@ -1344,19 +1409,38 @@ export class Pass16Runtime {
       ctx.lineTo(item.x1, item.y1 + 260);
       ctx.closePath();
       ctx.fill();
+      ctx.strokeStyle = material.cap;
+      ctx.lineWidth = material.capWidth;
       ctx.beginPath();
       ctx.moveTo(item.x1, item.y1);
       ctx.lineTo(item.x2, item.y2);
       ctx.stroke();
+      const length = Math.hypot(item.x2 - item.x1, item.y2 - item.y1);
+      const seams = Math.floor(length / material.seamSpacing);
+      ctx.strokeStyle = `${material.seam}88`;
+      ctx.lineWidth = 3;
+      for (let index = 1; index <= seams; index += 1) {
+        const ratio = index / (seams + 1);
+        const x = item.x1 + (item.x2 - item.x1) * ratio;
+        const y = item.y1 + (item.y2 - item.y1) * ratio;
+        ctx.beginPath();
+        ctx.moveTo(x - 8, y + 12);
+        ctx.lineTo(x + 9, y + 42);
+        ctx.stroke();
+      }
     }
     for (const solid of PASS15_LEVEL.solids) {
       const zone08Solid = solid.role.startsWith("zone08_");
       const zone09Solid = solid.role.startsWith("zone09_");
       ctx.fillStyle = solid.role === "baffle" ? "#26383b" : solid.role === "ceiling" ? "#394041" : solid.role === "zone07_ceiling" ? "#3b3833" : zone08Solid ? "#3d3937" : zone09Solid ? "#344147" : "#304246";
-      ctx.strokeStyle = solid.role === "baffle" ? "#b4aa91" : solid.role === "ceiling" ? "#c7ad82" : solid.role === "zone07_ceiling" ? "#d0b27d" : zone08Solid ? "#d6b78a" : zone09Solid ? "#92c7c9" : "#91b1b2";
-      ctx.lineWidth = 4;
       ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
-      ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
+      const solidMaterial = getPass17Material(zone09Solid ? 9 : zone08Solid ? 8 : solid.role === "zone07_ceiling" ? 7 : solid.role === "ceiling" ? 4 : 2);
+      ctx.strokeStyle = solidMaterial.cap;
+      ctx.lineWidth = solidMaterial.capWidth;
+      ctx.beginPath();
+      ctx.moveTo(solid.x, solid.y);
+      ctx.lineTo(solid.x + solid.width, solid.y);
+      ctx.stroke();
       ctx.strokeStyle = "rgba(205, 220, 210, 0.2)";
       for (let y = solid.y + 34; y < solid.y + solid.height; y += 52) {
         ctx.beginPath();
@@ -2338,10 +2422,11 @@ export class Pass16Runtime {
     const pass14 = validatePass14Level();
     const pass15 = validatePass15Level();
     const pass16 = validatePass16Visuals();
+    const pass17 = validatePass17Art();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass16" },
-      { id: "pass_number", passed: BUILD.pass === 16 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass17" },
+      { id: "pass_number", passed: BUILD.pass === 17 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -2363,6 +2448,7 @@ export class Pass16Runtime {
       { id: "pass14_level_validation", passed: pass14.passed },
       { id: "pass15_level_validation", passed: pass15.passed },
       { id: "pass16_visual_validation", passed: pass16.passed },
+      { id: "pass17_art_validation", passed: pass17.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -2387,6 +2473,7 @@ export class Pass16Runtime {
       pass14,
       pass15,
       pass16,
+      pass17,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -2399,8 +2486,8 @@ export class Pass16Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 16 · VISUAL TERRAIN 01–10";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P16 ${audit.pass16.passedCount}/${audit.pass16.total}`;
+    this.statusElements.build.textContent = "PASS 17 · AUTHORED TERRAIN 01–10";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P17 ${audit.pass17.passedCount}/${audit.pass17.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
