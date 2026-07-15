@@ -13,6 +13,7 @@ import { PASS12_CHASE, PASS12_LEVEL, PASS12_ZONE, validatePass12Level } from "./
 import { PASS13_CHASE, PASS13_ZONE, validatePass13Level } from "./pass13-level.js";
 import { PASS14_CHASE, PASS14_ZONE, validatePass14Level } from "./pass14-level.js";
 import { PASS15_CHASE, PASS15_LEVEL, PASS15_ZONE, validatePass15Level } from "./pass15-level.js";
+import { PASS16_LIGHTS, PASS16_THEMES, getPass16Theme, validatePass16Visuals } from "./pass16-visuals.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -20,7 +21,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass15Runtime {
+export class Pass16Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -1195,6 +1196,7 @@ export class Pass15Runtime {
     const shakeY = this.screenShake > 0 ? Math.cos(this.frameCount * 1.3) * this.screenShake * 0.55 : 0;
     ctx.scale(this.camera.zoom, this.camera.zoom);
     ctx.translate(-this.camera.x + shakeX, -this.camera.y + shakeY);
+    this.drawVisualWorld(ctx);
     this.drawBuriedStructure(ctx);
     this.drawUnevenTunnelStructure(ctx);
     this.drawDestructionMazeStructure(ctx);
@@ -1264,6 +1266,44 @@ export class Pass15Runtime {
     ctx.restore();
   }
 
+  drawVisualWorld(ctx) {
+    ctx.save();
+    for (const [index, zone] of ZONES.entries()) {
+      const theme = PASS16_THEMES[index];
+      const bounds = zone.bounds;
+      ctx.fillStyle = `${theme.background}b8`;
+      ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+      ctx.fillStyle = `${theme.midground}88`;
+      const columnWidth = 150 + (index % 3) * 35;
+      const spacing = 520 + (index % 2) * 110;
+      for (let x = bounds.x + 120; x < bounds.x + bounds.width; x += spacing) {
+        const height = Math.min(bounds.height * 0.72, 420 + ((Math.round(x / spacing) + index) % 4) * 130);
+        ctx.fillRect(x, bounds.y + bounds.height - height, columnWidth, height);
+        ctx.beginPath();
+        ctx.arc(x + columnWidth * 0.5, bounds.y + bounds.height - height, columnWidth * 0.5, Math.PI, 0);
+        ctx.fill();
+      }
+
+      ctx.strokeStyle = `${theme.edge}38`;
+      ctx.lineWidth = 12;
+      ctx.strokeRect(bounds.x + 18, bounds.y + 18, bounds.width - 36, bounds.height - 36);
+    }
+
+    ctx.globalCompositeOperation = "screen";
+    for (const light of PASS16_LIGHTS) {
+      const gradient = ctx.createRadialGradient(light.x, light.y, 0, light.x, light.y, light.radius);
+      gradient.addColorStop(0, `${light.color}52`);
+      gradient.addColorStop(0.35, `${light.color}1f`);
+      gradient.addColorStop(1, `${light.color}00`);
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(light.x, light.y, light.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
   drawLevel(ctx) {
     ctx.save();
     for (const item of PASS15_LEVEL.floors) {
@@ -1293,8 +1333,9 @@ export class Pass15Runtime {
         ctx.stroke();
         continue;
       }
-      ctx.fillStyle = item.zone === 1 ? "#263c40" : item.zone === 3 ? "#303a3c" : item.zone === 4 ? "#34393a" : item.zone === 5 ? "#383b39" : item.zone === 6 ? "#303b3d" : item.zone === 7 ? "#313638" : item.zone === 8 ? "#34343a" : item.zone === 9 ? "#32383d" : "#29383b";
-      ctx.strokeStyle = item.zone === 1 ? "#9ab7ae" : item.zone === 3 ? "#c2b58f" : item.zone === 4 ? "#c7ad82" : item.zone === 5 ? "#d0a875" : item.zone === 6 ? "#8fc5c2" : item.zone === 7 ? "#d0b27d" : item.zone === 8 ? "#d6b78a" : item.zone === 9 ? "#92c7c9" : "#b4aa91";
+      const floorTheme = getPass16Theme(item.phase === 15 ? 10 : item.zone ?? 1);
+      ctx.fillStyle = floorTheme.terrain;
+      ctx.strokeStyle = floorTheme.edge;
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(item.x1, item.y1);
@@ -2296,10 +2337,11 @@ export class Pass15Runtime {
     const pass13 = validatePass13Level();
     const pass14 = validatePass14Level();
     const pass15 = validatePass15Level();
+    const pass16 = validatePass16Visuals();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass15" },
-      { id: "pass_number", passed: BUILD.pass === 15 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass16" },
+      { id: "pass_number", passed: BUILD.pass === 16 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -2320,6 +2362,7 @@ export class Pass15Runtime {
       { id: "pass13_level_validation", passed: pass13.passed },
       { id: "pass14_level_validation", passed: pass14.passed },
       { id: "pass15_level_validation", passed: pass15.passed },
+      { id: "pass16_visual_validation", passed: pass16.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -2343,6 +2386,7 @@ export class Pass15Runtime {
       pass13,
       pass14,
       pass15,
+      pass16,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -2355,8 +2399,8 @@ export class Pass15Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 15 · COLLAPSING BRIDGE 01–10";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P15 ${audit.pass15.passedCount}/${audit.pass15.total}`;
+    this.statusElements.build.textContent = "PASS 16 · VISUAL TERRAIN 01–10";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P16 ${audit.pass16.passedCount}/${audit.pass16.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
