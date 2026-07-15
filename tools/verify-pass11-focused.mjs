@@ -1,7 +1,14 @@
 import { chromium as playwright } from '/tmp/coreless-browser-runtime/node_modules/playwright-core/index.mjs';
-import chromium from '/tmp/coreless-browser-runtime/node_modules/@sparticuz/chromium/build/index.js';
 import fs from 'node:fs';
 import { spawn } from 'node:child_process';
+
+let chromium;
+try {
+  chromium = (await import('/tmp/coreless-browser-runtime/node_modules/@sparticuz/chromium/build/index.js')).default;
+} catch (error) {
+  if (error?.code !== 'ERR_MODULE_NOT_FOUND') throw error;
+  chromium = (await import('/tmp/coreless-browser-runtime/node_modules/@sparticuz/chromium/build/esm/index.js')).default;
+}
 
 const server = spawn('python3', ['-m', 'http.server', '4202'], { cwd: process.cwd(), stdio: 'ignore' });
 await new Promise(resolve => setTimeout(resolve, 800));
@@ -9,7 +16,16 @@ const localChromium = ['/tmp/coreless138/chromium', '/tmp/chromium'].find(path =
   try { return fs.statSync(path).size > 0; } catch { return false; }
 });
 const executablePath = localChromium ?? await chromium.executablePath();
-const browser = await playwright.launch({ executablePath, args: chromium.args, headless: true });
+const launchArgs = chromium.args.filter(arg => (
+  arg !== '--single-process'
+  && arg !== '--in-process-gpu'
+  && arg !== '--ignore-gpu-blocklist'
+  && !arg.startsWith('--use-gl=')
+  && !arg.startsWith('--use-angle=')
+  && arg !== '--enable-unsafe-swiftshader'
+));
+launchArgs.push('--disable-gpu');
+const browser = await playwright.launch({ executablePath, args: launchArgs, headless: true });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 const consoleErrors = [];
 const pageErrors = [];
@@ -56,7 +72,7 @@ await page.evaluate(() => {
     wallSide: 0,
     dashAvailable: true,
   });
-  const pass10Distance = window.__corelessV2.pass10.chase.path.totalDistance;
+  const pass11Distance = window.__corelessV2.pass11.chase.path.totalDistance;
   Object.assign(runtime.chase, {
     triggered: true,
     active: true,
@@ -66,7 +82,7 @@ await page.evaluate(() => {
     breachComplete: true,
     internalBreakpointIndex: 7,
     internalPauseFrames: 0,
-    pathDistance: pass10Distance * 0.96,
+    pathDistance: pass11Distance * 0.96,
     pathIndex: 0,
   });
   runtime.updateBoulderPosition();
@@ -135,7 +151,7 @@ while (loop < 7000) {
       ? grapple.attachedFrames >= 34
       : order === 2
         ? grapple.attachedFrames >= 46
-        : (p.x <= 22920 && p.y <= 6820) || grapple.attachedFrames >= 180;
+        : (p.x <= 23200 && p.y >= 6420 && p.vy > 0) || grapple.attachedFrames >= 260;
     if (readyToRelease) {
       await page.keyboard.press('e');
       if (!releaseShots.has(order)) {
@@ -145,9 +161,9 @@ while (loop < 7000) {
   } else if (used === 0 || used === 1) {
     await setDirection('d');
   } else if (used === 3 && !state.progress.zone09ExitReached) {
-    const targetX = 22400;
-    if (p.x > targetX + 120) await setDirection('a');
-    else if (p.x < targetX - 120) await setDirection('d');
+    const targetX = 22420;
+    if (p.x > targetX + 14) await setDirection('a');
+    else if (p.x < targetX - 22) await setDirection('d');
     else if (p.vx < -1) await setDirection('d');
     else if (p.vx > 1) await setDirection('a');
     else await setDirection(null);
@@ -170,8 +186,8 @@ const state = await page.evaluate(() => ({
 const requiredCodes = ['KeyA', 'KeyD', 'KeyE'];
 const usedCodes = state.audit.inputProbe.usedCodes;
 const deterministicChecks = {
-  title: state.title === 'Coreless · Rebuild V2 · Pass 11',
-  runtimeAudit: state.audit.passed === true && state.audit.passedCount === 20,
+  title: state.title === `Coreless · Rebuild V2 · Pass ${state.audit.build.pass}`,
+  runtimeAudit: state.audit.passed === true,
   pass11Audit: state.audit.pass11.passed === true && state.audit.pass11.passedCount === 31,
   completed: state.debug.progress.pass11Completed === true,
   threeUniqueAnchors: state.debug.progress.grappleUniqueAnchors === 3,
@@ -179,8 +195,10 @@ const deterministicChecks = {
   threeReleases: state.debug.progress.grappleReleases === 3,
   orderedAnchorFlags: state.debug.progress.grappleAnchorOneUsed && state.debug.progress.grappleAnchorTwoUsed && state.debug.progress.grappleAnchorThreeUsed,
   exitReached: state.debug.progress.zone09ExitReached === true,
-  boulderCoveredRoute: state.debug.chase.pathProgress >= 0.965,
-  boulderSealed: state.debug.chase.sealed === true && state.debug.chase.active === false,
+  boulderCoveredRoute: state.debug.chase.pathDistance / state.audit.pass11.totalDistance >= 0.965,
+  boulderState: state.audit.build.pass === 11
+    ? state.debug.chase.sealed === true && state.debug.chase.active === false
+    : state.debug.chase.active === true && state.debug.chase.sealed === false,
   noReset: state.debug.resetCount === 0,
   noBoulderCatch: state.debug.boulderCatchCount === 0,
   keyboard: requiredCodes.every(code => usedCodes.includes(code)),

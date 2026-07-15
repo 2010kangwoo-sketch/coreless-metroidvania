@@ -71,8 +71,8 @@ export const PASS18_ZONE = Object.freeze({
 
 export const PASS18_LEVEL = Object.freeze({
   id: "pass18_post_chase_narrow_platforming",
-  bounds: Object.freeze({ x: 0, y: 300, width: 30000, height: 10700 }),
-  cameraBounds: Object.freeze({ x: 0, y: 0, width: 30500, height: 11200 }),
+  bounds: Object.freeze({ x: 0, y: 300, width: 34500, height: 11600 }),
+  cameraBounds: WORLD.cameraBounds,
   spawn: Object.freeze({ x: 600, y: 852 }),
   floors: PASS18_ZONE.floors,
   solids: PASS18_ZONE.solids,
@@ -98,7 +98,7 @@ export function validatePass18Level() {
   });
   const routeInWorld = zone.playerRoute.every(point => point.x >= 0 && point.y >= 0 && point.x <= WORLD.width && point.y <= WORLD.height);
   const checks = [
-    { id: "world_extended", passed: WORLD.width === 30500 && WORLD.height === 11200 },
+    { id: "world_extended", passed: WORLD.width >= 30500 && WORLD.height >= 11200 },
     { id: "zone_in_world", passed: boundsInside(zone.bounds, WORLD.cameraBounds) },
     { id: "camera_in_world", passed: boundsInside(zone.cameraBounds, WORLD.cameraBounds) },
     { id: "entry_matches_bridge", passed: zone.entry.x === PASS15_ZONE.exit.x && zone.entry.y === PASS15_ZONE.exit.y },

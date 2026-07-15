@@ -11,6 +11,7 @@ try {
 }
 
 const targetPass = Number(process.env.CORELESS_VERIFY_PASS ?? 10);
+const verifyPass20 = targetPass >= 20;
 const verifyPass19 = targetPass >= 19;
 const verifyPass18 = targetPass >= 18;
 const verifyPass17 = targetPass >= 17;
@@ -20,8 +21,8 @@ const verifyPass14 = targetPass >= 14;
 const verifyPass13 = targetPass >= 13;
 const verifyPass12 = targetPass >= 12;
 const verifyPass11 = targetPass >= 11;
-const artifactPass = verifyPass19 ? 'pass19' : verifyPass18 ? 'pass18' : verifyPass17 ? 'pass17' : verifyPass16 ? 'pass16' : verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
-const port = verifyPass19 ? 4192 : verifyPass18 ? 4191 : verifyPass17 ? 4188 : verifyPass16 ? 4186 : verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
+const artifactPass = verifyPass20 ? 'pass20' : verifyPass19 ? 'pass19' : verifyPass18 ? 'pass18' : verifyPass17 ? 'pass17' : verifyPass16 ? 'pass16' : verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
+const port = verifyPass20 ? 4194 : verifyPass19 ? 4192 : verifyPass18 ? 4191 : verifyPass17 ? 4188 : verifyPass16 ? 4186 : verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
 
 const server = spawn('python3', ['-m', 'http.server', String(port)], {
   cwd: process.cwd(),
@@ -155,7 +156,7 @@ const grappleAnchorData = verifyPass11
   ? await page.evaluate(() => window.__corelessV2.pass11.zone.anchors)
   : [];
 
-while (loop < 39000) {
+while (loop < 42000) {
   loop += 1;
   const state = await debug();
   const p = state.player;
@@ -167,6 +168,8 @@ while (loop < 39000) {
       vx: Math.round(p.vx * 10) / 10,
       vy: Math.round(p.vy * 10) / 10,
       grounded: p.grounded,
+      floor: p.standingFloorId,
+      springFrames: p.springLaunchFrames,
       boulderX: Math.round((state.chase?.x ?? 0) * 10) / 10,
       boulderY: Math.round((state.chase?.y ?? 0) * 10) / 10,
       boulderProgress: Math.round((state.chase?.pathProgress ?? 0) * 1000) / 1000,
@@ -174,7 +177,10 @@ while (loop < 39000) {
       grappleAnchor: state.grapple?.anchorId ?? null,
       grappleUses: state.grapple?.usedAnchorIds?.length ?? 0,
       keys: state.keys,
-      phase: state.progress.pass19Completed ? 'pass19_complete'
+      phase: state.progress.pass20Completed ? 'pass20_complete'
+        : state.progress.pass20SpringLanded ? 'pass20_exit_run'
+        : state.progress.pass20SpringLaunched ? 'pass20_spring_flight'
+        : state.progress.pass19Completed ? 'pass20_spring_approach'
         : state.progress.pass18Completed ? 'pass19_aftershock_wait'
         : state.progress.pass15Completed ? 'pass18_precision'
         : state.progress.bridgeGapThreeCleared ? 'bridge_final_run'
@@ -234,7 +240,7 @@ while (loop < 39000) {
     traversalFailure = `unexpected reset at x=${p.x.toFixed(1)} y=${p.y.toFixed(1)}`;
     break;
   }
-  if (verifyPass19 ? state.progress.pass19Completed : verifyPass18 ? state.progress.pass18Completed : verifyPass15 ? state.progress.pass15Completed : verifyPass14 ? state.progress.pass14Completed : verifyPass13 ? state.progress.pass13Completed : verifyPass12 ? state.progress.pass12Completed : verifyPass11 ? state.progress.pass11Completed : state.progress.pass10Completed) break;
+  if (verifyPass20 ? state.progress.pass20Completed : verifyPass19 ? state.progress.pass19Completed : verifyPass18 ? state.progress.pass18Completed : verifyPass15 ? state.progress.pass15Completed : verifyPass14 ? state.progress.pass14Completed : verifyPass13 ? state.progress.pass13Completed : verifyPass12 ? state.progress.pass12Completed : verifyPass11 ? state.progress.pass11Completed : state.progress.pass10Completed) break;
 
   const firstClimbActive = state.progress.firstDropped && !state.progress.firstClimb;
   const secondClimbActive = state.progress.secondDropped && !state.progress.secondClimb;
@@ -293,7 +299,8 @@ while (loop < 39000) {
           if (verifyPass14 && state.progress.pass13Completed) {
             if (verifyPass15 && state.progress.pass14Completed) {
               if (verifyPass18 && state.progress.pass15Completed) {
-                await setDirection(verifyPass19 && state.progress.pass18Completed ? null : 'd');
+                if (verifyPass20 && state.progress.pass19Completed) await setDirection('d');
+                else await setDirection(verifyPass19 && state.progress.pass18Completed ? null : 'd');
                 const edge = pass18FloorEnds.get(p.standingFloorId);
                 if (!pass18JumpHeld && p.grounded && edge && p.x + 34 >= edge - 24) {
                   await page.keyboard.down('Space');
@@ -413,14 +420,14 @@ while (loop < 39000) {
             ? grapple.attachedFrames >= 34
             : order === 2
               ? grapple.attachedFrames >= 46
-              : (p.x <= 22920 && p.y <= 6820) || grapple.attachedFrames >= 180;
+              : (p.x <= 23200 && p.y >= 6420 && p.vy > 0) || grapple.attachedFrames >= 260;
           if (readyToRelease) await page.keyboard.press('e');
         } else if (used === 0 || used === 1) {
           await setDirection('d');
         } else if (used === 3 && !state.progress.zone09ExitReached) {
-          const targetX = 22400;
-          if (p.x > targetX + 120) await setDirection('a');
-          else if (p.x < targetX - 120) await setDirection('d');
+          const targetX = 22420;
+          if (p.x > targetX + 14) await setDirection('a');
+          else if (p.x < targetX - 22) await setDirection('d');
           else if (p.vx < -1) await setDirection('d');
           else if (p.vx > 1) await setDirection('a');
           else await setDirection(null);
@@ -756,7 +763,7 @@ const deterministicChecks = {
   title: state.title === `Coreless · Rebuild V2 · Pass ${targetPass}`,
   canvas: state.canvas?.width === 1200 && state.canvas?.height === 680,
   focused: state.activeElement === 'gameCanvas',
-  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass19 ? 28 : verifyPass18 ? 27 : verifyPass17 ? 26 : verifyPass16 ? 25 : verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
+  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass20 ? 29 : verifyPass19 ? 28 : verifyPass18 ? 27 : verifyPass17 ? 26 : verifyPass16 ? 25 : verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
   blueprintAudit: state.audit?.blueprint?.passed === true && state.audit?.blueprint?.passedCount === 18,
   pass03Audit: state.audit?.pass03?.passed === true && state.audit?.pass03?.passedCount === 20,
   pass04Audit: state.audit?.pass04?.passed === true && state.audit?.pass04?.passedCount === 22,
@@ -775,6 +782,7 @@ const deterministicChecks = {
   pass17Audit: !verifyPass17 || (state.audit?.pass17?.passed === true && state.audit?.pass17?.passedCount === 24),
   pass18Audit: !verifyPass18 || (state.audit?.pass18?.passed === true && state.audit?.pass18?.passedCount === 32),
   pass19Audit: !verifyPass19 || (state.audit?.pass19?.passed === true && state.audit?.pass19?.passedCount === 30),
+  pass20Audit: !verifyPass20 || (state.audit?.pass20?.passed === true && state.audit?.pass20?.passedCount === 36),
   firstDrop: state.debug?.progress?.firstDropped === true,
   firstClimb: state.debug?.progress?.firstClimb === true,
   secondDrop: state.debug?.progress?.secondDropped === true,
@@ -919,6 +927,19 @@ const deterministicChecks = {
     && state.debug?.progress?.pass19CheckpointStabilized === true
     && state.debug?.pass19DestroyedFloorIds?.length === 12
   ),
+  pass20SpringSequence: !verifyPass20 || (
+    state.debug?.progress?.pass20Entered === true
+    && state.debug?.progress?.pass20SpringReady === true
+    && state.debug?.progress?.pass20SpringLaunched === true
+    && state.debug?.progress?.pass20SpringApexReached === true
+    && state.debug?.progress?.pass20ChasmCleared === true
+    && state.debug?.progress?.pass20SpringLanded === true
+    && state.debug?.progress?.pass20ExitReached === true
+    && state.debug?.progress?.pass20Completed === true
+    && state.debug?.progress?.pass20SpringLaunches === 1
+    && state.debug?.progress?.pass20SpringLandings === 1
+    && state.debug?.progress?.pass20PeakHorizontalSpeed >= 20
+  ),
   repeatedChaseWallJumps: (state.debug?.progress?.chaseWallJumps ?? 0) >= 4,
   collapseBehindPlayer: (state.debug?.progress?.floorsCollapsed ?? 0) >= (verifyPass15 ? 77 : verifyPass14 ? 67 : verifyPass13 ? 59 : verifyPass12 ? 54 : 44),
   supportsDestroyed: (state.debug?.progress?.supportsDestroyed ?? 0) >= (verifyPass15 ? 56 : verifyPass14 ? 48 : verifyPass13 ? 38 : verifyPass12 ? 36 : 24),
@@ -950,7 +971,9 @@ const passed = !traversalFailure && Object.values(deterministicChecks).every(Boo
 const result = {
   version: `rebuild-v2-${artifactPass}`,
   testedWith: 'Chromium + Playwright actual keyboard events',
-  actualKeyboardRoute: verifyPass19
+  actualKeyboardRoute: verifyPass20
+    ? 'start slope -> authored chase zones -> collapsing bridge finale -> aftershock precision grotto -> directional spring runway -> 1140px chasm flight -> lower recovery checkpoint'
+    : verifyPass19
     ? 'start slope -> authored chase zones -> collapsing bridge finale -> sealed boulder -> twelve narrow precision platforms -> twelve aftershock collapses behind player -> stabilized checkpoint'
     : verifyPass18
     ? 'start slope -> authored chase zones -> collapsing bridge finale -> sealed boulder -> twelve narrow post-chase platforms -> low-ceiling precision -> lower checkpoint'
@@ -978,9 +1001,9 @@ const result = {
   consoleErrors,
   pageErrors,
   limitations: [
-    verifyPass19 ? 'Pass 19 adds a departure-triggered aftershock collapse chain to the retained Pass 18 precision grotto.' : verifyPass18 ? 'Pass 18 extends the retained ten-zone chase with one post-chase precision grotto.' : verifyPass17 ? 'All ten zones retain the pass 15 collision route under authored material facades and structural details.' : verifyPass16 ? 'All ten blueprint zones retain the pass 15 collision route under separated visual terrain layers.' : verifyPass15 ? 'All ten blueprint zones have playable graybox collision in pass 15.' : verifyPass14 ? 'Only zones 01 through 09 have playable collision in pass 14.' : verifyPass13 ? 'Only zones 01 through 09 have playable collision in pass 13.' : verifyPass12 ? 'Only zones 01 through 09 have playable collision in pass 12.' : verifyPass11 ? 'Only zones 01 through 09 have playable collision in pass 11.' : 'Only zones 01 through 08 have playable collision in pass 10.',
+    verifyPass20 ? 'Pass 20 extends the post-chase route with one directional spring flight over a 1140px chasm.' : verifyPass19 ? 'Pass 19 adds a departure-triggered aftershock collapse chain to the retained Pass 18 precision grotto.' : verifyPass18 ? 'Pass 18 extends the retained ten-zone chase with one post-chase precision grotto.' : verifyPass17 ? 'All ten zones retain the pass 15 collision route under authored material facades and structural details.' : verifyPass16 ? 'All ten blueprint zones retain the pass 15 collision route under separated visual terrain layers.' : verifyPass15 ? 'All ten blueprint zones have playable graybox collision in pass 15.' : verifyPass14 ? 'Only zones 01 through 09 have playable collision in pass 14.' : verifyPass13 ? 'Only zones 01 through 09 have playable collision in pass 13.' : verifyPass12 ? 'Only zones 01 through 09 have playable collision in pass 12.' : verifyPass11 ? 'Only zones 01 through 09 have playable collision in pass 11.' : 'Only zones 01 through 08 have playable collision in pass 10.',
     verifyPass15 ? 'The active chase ends with the boulder plunge at the final bridge landing.' : verifyPass11 ? 'Zone 10 remains blueprint data.' : 'The remaining two zones are still blueprint data.',
-    verifyPass19 ? 'The aftershock uses graybox fracture lines and debris; authored destruction animation and sound remain later work.' : verifyPass18 ? 'Pass 18 is a collision and route-readability expansion; combat, enemies, and final animation remain later work.' : verifyPass17 ? 'Pass 17 adds procedural authored-material detail; final hand-painted assets, animation, and post-processing remain later work.' : verifyPass16 ? 'Pass 16 establishes palette, architecture silhouettes, route lights, and terrain skins; final authored art remains later work.' : verifyPass15 ? 'The final bridge is a collision and pacing graybox, not final wooden environment art.' : verifyPass14 ? 'The active chase seals at the Pass 14 bridge handoff; the wooden bridge finale is not implemented.' : verifyPass13 ? 'The active chase currently seals at the Pass 13 exit; the giant arc turn and bridge finale are not implemented.' : verifyPass12 ? 'The active chase currently seals at the Pass 12 exit; the bridge finale is not implemented.' : verifyPass11 ? 'The active chase currently seals at the Pass 11 exit; the bridge finale is not implemented.' : 'The active chase currently seals at the Pass 10 exit; the bridge finale is not implemented.',
+    verifyPass20 ? 'The spring, trajectory guide, chasm and landing basin are graybox movement prototypes.' : verifyPass19 ? 'The aftershock uses graybox fracture lines and debris; authored destruction animation and sound remain later work.' : verifyPass18 ? 'Pass 18 is a collision and route-readability expansion; combat, enemies, and final animation remain later work.' : verifyPass17 ? 'Pass 17 adds procedural authored-material detail; final hand-painted assets, animation, and post-processing remain later work.' : verifyPass16 ? 'Pass 16 establishes palette, architecture silhouettes, route lights, and terrain skins; final authored art remains later work.' : verifyPass15 ? 'The final bridge is a collision and pacing graybox, not final wooden environment art.' : verifyPass14 ? 'The active chase seals at the Pass 14 bridge handoff; the wooden bridge finale is not implemented.' : verifyPass13 ? 'The active chase currently seals at the Pass 13 exit; the giant arc turn and bridge finale are not implemented.' : verifyPass12 ? 'The active chase currently seals at the Pass 12 exit; the bridge finale is not implemented.' : verifyPass11 ? 'The active chase currently seals at the Pass 11 exit; the bridge finale is not implemented.' : 'The active chase currently seals at the Pass 10 exit; the bridge finale is not implemented.',
     'Long support-break pauses are graybox chase pacing and still need later difficulty tuning.',
     'Destroyed supports and floors use graybox debris, not final destruction animation.',
     'Graybox shapes are collision prototypes, not final terrain art.',

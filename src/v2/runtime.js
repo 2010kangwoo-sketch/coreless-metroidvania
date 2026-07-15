@@ -17,6 +17,7 @@ import { PASS16_LIGHTS, PASS16_THEMES, getPass16Theme, validatePass16Visuals } f
 import { PASS17_MATERIALS, PASS17_REINFORCEMENTS, PASS17_SUPPORTS, PASS17_VEGETATION, getPass17Material, validatePass17Art } from "./pass17-art.js";
 import { PASS18_LEVEL, PASS18_ZONE, validatePass18Level } from "./pass18-level.js";
 import { PASS19_DESTRUCTION, PASS19_LEVEL, validatePass19Level } from "./pass19-level.js";
+import { PASS20_LEVEL, PASS20_ZONE, validatePass20Level } from "./pass20-level.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -24,7 +25,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass19Runtime {
+export class Pass20Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -55,8 +56,8 @@ export class Pass19Runtime {
     this.pass18Jump = this.createPass18Jump();
     this.pass19ArmedFloors = new Map();
     this.pass19DestroyedFloorIds = new Set();
-    this.collisionFloors = Object.freeze([...PASS15_LEVEL.floors, ...PASS18_LEVEL.floors]);
-    this.collisionSolids = Object.freeze([...PASS15_LEVEL.solids, ...PASS18_LEVEL.solids]);
+    this.collisionFloors = Object.freeze([...PASS15_LEVEL.floors, ...PASS18_LEVEL.floors, ...PASS20_LEVEL.floors]);
+    this.collisionSolids = Object.freeze([...PASS15_LEVEL.solids, ...PASS18_LEVEL.solids, ...PASS20_LEVEL.solids]);
     this.screenShake = 0;
     this.camera = { x: 0, y: 300, zoom: 1 };
 
@@ -199,6 +200,14 @@ export class Pass19Runtime {
       pass19AftershockStarted: false,
       pass19Completed: false,
       pass19CheckpointStabilized: false,
+      pass20Entered: false,
+      pass20SpringReady: false,
+      pass20SpringLaunched: false,
+      pass20SpringApexReached: false,
+      pass20ChasmCleared: false,
+      pass20SpringLanded: false,
+      pass20ExitReached: false,
+      pass20Completed: false,
       chaseWallJumps: 0,
       floorsCollapsed: 0,
       supportsDestroyed: 0,
@@ -233,6 +242,10 @@ export class Pass19Runtime {
       pass19FloorsCollapsed: 0,
       pass19DebrisBursts: 0,
       pass19PeakPending: 0,
+      pass20SpringLaunches: 0,
+      pass20SpringLandings: 0,
+      pass20PeakHorizontalSpeed: 0,
+      pass20FlightFrames: 0,
     };
   }
 
@@ -251,6 +264,7 @@ export class Pass19Runtime {
       dashFrames: 0,
       dashCooldown: 0,
       grappleLaunchFrames: 0,
+      springLaunchFrames: 0,
       standingPlatformId: null,
       standingFloorId: null,
     };
@@ -422,6 +436,12 @@ export class Pass19Runtime {
       p.grappleLaunchFrames -= 1;
       p.vx = clamp(p.vx + moveAxis * 0.08, -13.5, 13.5) * 0.995;
       p.vy = Math.min(p.vy + config.gravity * 0.72, config.maxFallSpeed);
+    } else if (p.springLaunchFrames > 0) {
+      p.springLaunchFrames -= 1;
+      p.vx = clamp(p.vx + moveAxis * 0.035, -24, 24) * 0.998;
+      p.vy = Math.min(p.vy + config.gravity, config.maxFallSpeed);
+      this.progress.pass20FlightFrames += 1;
+      this.progress.pass20PeakHorizontalSpeed = Math.max(this.progress.pass20PeakHorizontalSpeed, Math.abs(p.vx));
     } else if (p.dashFrames > 0) {
       p.dashFrames -= 1;
       p.vy = Math.min(p.vy + config.gravity * 0.2, config.maxFallSpeed);
@@ -440,18 +460,20 @@ export class Pass19Runtime {
     if (this.grapple.cooldown > 0) this.grapple.cooldown -= 1;
     this.moveHorizontal();
     this.moveVertical(wasGrounded);
+    this.tryActivatePass20Spring();
     if (this.grapple.active) this.constrainGrapple();
     if (p.grounded) p.dashAvailable = true;
-    if (this.checkDashSpikeContact() || this.checkPrecisionHazardContact() || this.checkPass18HazardContact()) return;
+    if (this.checkDashSpikeContact() || this.checkPrecisionHazardContact() || this.checkPass18HazardContact() || this.checkPass20HazardContact()) return;
     this.updateProgress();
     this.updatePass19Aftershock();
     this.updatePass19Completion();
+    this.updatePass20Progress();
     this.updateBoulder();
     this.updateChaseCompletion();
     this.updateCamera();
     this.screenShake = Math.max(0, this.screenShake - 0.7);
 
-    if (p.y > PASS18_LEVEL.bounds.y + PASS18_LEVEL.bounds.height + 120 || p.x < -120) {
+    if (p.y > PASS20_LEVEL.bounds.y + PASS20_LEVEL.bounds.height + 120 || p.x < -120) {
       this.resetPlayer(false);
     }
   }
@@ -467,6 +489,63 @@ export class Pass19Runtime {
       return true;
     }
     return false;
+  }
+
+  tryActivatePass20Spring() {
+    if (!this.progress.pass19Completed || this.progress.pass20SpringLaunched) return false;
+    const p = this.player;
+    const spring = PASS20_ZONE.spring;
+    const overlapsPad = p.x + PLAYER_PHYSICS.width > spring.x && p.x < spring.x + spring.width;
+    if (!p.grounded || p.standingFloorId !== "pass20_spring_runway" || !overlapsPad || !this.keys.has(spring.requiredInput)) return false;
+    p.vx = spring.launchVx;
+    p.vy = spring.launchVy;
+    p.facing = 1;
+    p.grounded = false;
+    p.standingFloorId = null;
+    p.springLaunchFrames = spring.preserveFrames;
+    p.dashFrames = 0;
+    this.progress.pass20SpringLaunched = true;
+    this.progress.pass20SpringLaunches += 1;
+    this.progress.pass20PeakHorizontalSpeed = spring.launchVx;
+    this.screenShake = Math.max(this.screenShake, 11);
+    return true;
+  }
+
+  checkPass20HazardContact() {
+    if (!this.progress.pass19Completed || this.progress.pass20Completed) return false;
+    const p = this.player;
+    const hazard = PASS20_ZONE.hazard;
+    const horizontalOverlap = p.x + PLAYER_PHYSICS.width > hazard.x1 && p.x < hazard.x2;
+    const verticalOverlap = p.y + PLAYER_PHYSICS.height > hazard.tipY && p.y < hazard.baseY;
+    if (!horizontalOverlap || !verticalOverlap) return false;
+    this.resetPlayer(false);
+    return true;
+  }
+
+  updatePass20Progress() {
+    if (!this.progress.pass19Completed) return;
+    const p = this.player;
+    const bottom = p.y + PLAYER_PHYSICS.height;
+    const milestone = PASS20_ZONE.milestones;
+    if (p.x >= milestone.enteredX) this.progress.pass20Entered = true;
+    if (this.progress.pass20Entered && p.x >= milestone.readyX) this.progress.pass20SpringReady = true;
+    if (this.progress.pass20SpringLaunched && bottom <= milestone.apexBottomY) this.progress.pass20SpringApexReached = true;
+    if (this.progress.pass20SpringLaunched && p.x + PLAYER_PHYSICS.width >= milestone.chasmClearX) this.progress.pass20ChasmCleared = true;
+    if (!this.progress.pass20SpringLanded && this.progress.pass20ChasmCleared && p.grounded &&
+      p.standingFloorId === "pass20_landing_basin" && p.x + PLAYER_PHYSICS.width >= milestone.landingX1 && p.x <= milestone.landingX2) {
+      this.progress.pass20SpringLanded = true;
+      this.progress.pass20SpringLandings += 1;
+      p.springLaunchFrames = 0;
+      this.screenShake = Math.max(this.screenShake, 6);
+    }
+    if (this.progress.pass20SpringLanded && p.grounded && p.x >= milestone.completionX && bottom >= milestone.completionY) {
+      this.progress.pass20ExitReached = true;
+    }
+    if (!this.progress.pass20Completed && this.progress.pass20ExitReached && this.progress.pass20SpringApexReached &&
+      this.progress.pass20SpringLaunches >= milestone.requiredLaunches && this.progress.pass20SpringLandings >= milestone.requiredLandings) {
+      this.progress.pass20Completed = true;
+      this.screenShake = Math.max(this.screenShake, 8);
+    }
   }
 
   tryAttachGrapple() {
@@ -981,6 +1060,8 @@ export class Pass19Runtime {
 
   isFloorActive(item) {
     if (this.collapsedFloorIds.has(item.id)) return false;
+    if (item.id === "double_wall_exit_rise" && this.progress.grappleAnchorThreeUsed) return false;
+    if (item.phase === 20) return this.progress.pass19Completed;
     if (item.phase === 18) return this.progress.pass15Completed;
     if (item.phase === 15) return this.progress.pass14Completed;
     if (item.phase === 14) {
@@ -1007,6 +1088,8 @@ export class Pass19Runtime {
   }
 
   isSolidActive(solid) {
+    if (solid.role === "pass18_exit_wall") return this.progress.pass15Completed && !this.progress.pass19Completed;
+    if (solid.phase === 20) return this.progress.pass19Completed;
     if (solid.phase === 18) return this.progress.pass15Completed;
     if (solid.phase === 15) return this.progress.pass14Completed;
     if (solid.phase === 14) return this.progress.pass13Completed;
@@ -1290,8 +1373,8 @@ export class Pass19Runtime {
   snapCamera() {
     const p = this.player;
     this.camera.zoom = 1;
-    this.camera.x = clamp(p.x - 310, PASS18_LEVEL.cameraBounds.x, PASS18_LEVEL.cameraBounds.x + PASS18_LEVEL.cameraBounds.width - VIEWPORT.width);
-    this.camera.y = clamp(p.y - 260, PASS18_LEVEL.cameraBounds.y, PASS18_LEVEL.cameraBounds.y + PASS18_LEVEL.cameraBounds.height - VIEWPORT.height);
+    this.camera.x = clamp(p.x - 310, PASS20_LEVEL.cameraBounds.x, PASS20_LEVEL.cameraBounds.x + PASS20_LEVEL.cameraBounds.width - VIEWPORT.width);
+    this.camera.y = clamp(p.y - 260, PASS20_LEVEL.cameraBounds.y, PASS20_LEVEL.cameraBounds.y + PASS20_LEVEL.cameraBounds.height - VIEWPORT.height);
   }
 
   updateCamera() {
@@ -1300,7 +1383,10 @@ export class Pass19Runtime {
     const separation = chaseVisible ? Math.hypot(p.x - this.chase.x, (p.y + 24) - this.chase.y) : 0;
     const curveOverviewActive = this.progress.pass13Completed && !this.progress.pass14Completed;
     const bridgeFinaleActive = this.progress.pass14Completed && !this.progress.pass15Completed;
-    const desiredZoom = curveOverviewActive
+    const springFlightActive = this.progress.pass20SpringLaunched && !this.progress.pass20SpringLanded;
+    const desiredZoom = springFlightActive
+      ? PASS20_ZONE.cameraFlight.zoom
+      : curveOverviewActive
       ? PASS14_ZONE.cameraOverview.zoom
       : bridgeFinaleActive ? PASS15_ZONE.cameraFinale.zoom
       : chaseVisible ? clamp(1180 / Math.max(1180, separation + 420), 0.62, 1) : 1;
@@ -1312,7 +1398,10 @@ export class Pass19Runtime {
     const canFrameTogether = chaseVisible && !curveOverviewActive && !bridgeFinaleActive &&
       Math.abs(p.x - this.chase.x) <= viewWidth - 320 &&
       Math.abs((p.y + 24) - this.chase.y) <= viewHeight - 200;
-    if (curveOverviewActive) {
+    if (springFlightActive) {
+      centerX = PASS20_ZONE.cameraFlight.x;
+      centerY = PASS20_ZONE.cameraFlight.y;
+    } else if (curveOverviewActive) {
       centerX = PASS14_ZONE.cameraOverview.x;
       centerY = PASS14_ZONE.cameraOverview.y;
     } else if (bridgeFinaleActive) {
@@ -1326,8 +1415,8 @@ export class Pass19Runtime {
       centerX = p.x + viewWidth * 0.5 - lookAhead;
       centerY = p.y + 24;
     }
-    const targetX = clamp(centerX - viewWidth * 0.5, PASS18_LEVEL.cameraBounds.x, PASS18_LEVEL.cameraBounds.x + PASS18_LEVEL.cameraBounds.width - viewWidth);
-    const targetY = clamp(centerY - viewHeight * 0.5, PASS18_LEVEL.cameraBounds.y, PASS18_LEVEL.cameraBounds.y + PASS18_LEVEL.cameraBounds.height - viewHeight);
+    const targetX = clamp(centerX - viewWidth * 0.5, PASS20_LEVEL.cameraBounds.x, PASS20_LEVEL.cameraBounds.x + PASS20_LEVEL.cameraBounds.width - viewWidth);
+    const targetY = clamp(centerY - viewHeight * 0.5, PASS20_LEVEL.cameraBounds.y, PASS20_LEVEL.cameraBounds.y + PASS20_LEVEL.cameraBounds.height - viewHeight);
     this.camera.x += (targetX - this.camera.x) * 0.075;
     this.camera.y += (targetY - this.camera.y) * 0.085;
   }
@@ -1364,12 +1453,15 @@ export class Pass19Runtime {
     this.drawCollapsingBridge(ctx);
     this.drawPass18Grotto(ctx);
     this.drawPass19Aftershock(ctx);
+    this.drawPass20SpringFlight(ctx);
     this.drawChaseSupports(ctx);
     this.drawLevel(ctx);
+    this.drawPass20SpringPad(ctx);
     this.drawAuthoredTerrainDetails(ctx);
     this.drawDashSpikes(ctx);
     this.drawPrecisionHazards(ctx);
     this.drawPass18Hazards(ctx);
+    this.drawPass20Hazard(ctx);
     this.drawMovingPlatforms(ctx);
     this.drawBreakables(ctx);
     this.drawDebris(ctx);
@@ -1580,6 +1672,24 @@ export class Pass19Runtime {
         ctx.stroke();
         continue;
       }
+      if (item.phase === 20) {
+        const palette = PASS20_ZONE.palette;
+        ctx.fillStyle = item.lane === "landing" ? "#233d3c" : "#263b3d";
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.lineTo(item.x2 - 30, item.y2 + 260);
+        ctx.lineTo(item.x1 + 34, item.y1 + 220);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = item.lane === "landing" ? palette.landing : item.lane === "checkpoint" ? palette.checkpoint : palette.trajectory;
+        ctx.lineWidth = item.lane === "launch" ? 13 : 10;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
+        continue;
+      }
       const zoneIndex = item.phase === 15 ? 10 : item.zone ?? 1;
       const floorTheme = getPass16Theme(zoneIndex);
       const material = getPass17Material(zoneIndex);
@@ -1612,6 +1722,18 @@ export class Pass19Runtime {
       }
     }
     for (const solid of this.collisionSolids) {
+      if (!this.isSolidActive(solid)) continue;
+      if (solid.phase === 20) {
+        ctx.fillStyle = "#1b3033";
+        ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+        ctx.strokeStyle = PASS20_ZONE.palette.checkpoint;
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.moveTo(solid.x, solid.y);
+        ctx.lineTo(solid.x + solid.width, solid.y);
+        ctx.stroke();
+        continue;
+      }
       if (solid.phase === 18) {
         ctx.fillStyle = PASS18_ZONE.palette.midground;
         ctx.beginPath();
@@ -1752,6 +1874,87 @@ export class Pass19Runtime {
       ctx.beginPath();
       ctx.arc(origin.x, origin.y, 120 + pulse * 900, -0.65, 0.65);
       ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPass20SpringFlight(ctx) {
+    if (!this.progress.pass19Completed) return;
+    const zone = PASS20_ZONE;
+    const spring = zone.spring;
+    const palette = zone.palette;
+    ctx.save();
+
+    ctx.fillStyle = "rgba(8, 20, 24, 0.92)";
+    ctx.beginPath();
+    ctx.moveTo(zone.bounds.x, zone.bounds.y + 220);
+    ctx.quadraticCurveTo(30900, 10040, 31800, 10220);
+    ctx.quadraticCurveTo(33100, 10080, zone.bounds.x + zone.bounds.width, zone.bounds.y + 360);
+    ctx.lineTo(zone.bounds.x + zone.bounds.width, zone.bounds.y + zone.bounds.height);
+    ctx.lineTo(zone.bounds.x, zone.bounds.y + zone.bounds.height);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle = `${palette.trajectory}72`;
+    ctx.lineWidth = 4;
+    ctx.setLineDash([18, 16]);
+    ctx.beginPath();
+    ctx.moveTo(spring.x + spring.width * 0.5, spring.y - 12);
+    ctx.quadraticCurveTo(30960, 10140, spring.landingX1 + 140, 10825);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    const checkpoint = zone.checkpoint;
+    ctx.strokeStyle = this.progress.pass20Completed ? palette.checkpoint : `${palette.checkpoint}66`;
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.moveTo(checkpoint.x, checkpoint.y);
+    ctx.lineTo(checkpoint.x, checkpoint.y - 150);
+    ctx.stroke();
+    ctx.fillStyle = this.progress.pass20Completed ? palette.checkpoint : `${palette.checkpoint}55`;
+    ctx.beginPath();
+    ctx.arc(checkpoint.x, checkpoint.y - 172, 21, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  drawPass20SpringPad(ctx) {
+    if (!this.progress.pass19Completed) return;
+    const spring = PASS20_ZONE.spring;
+    const palette = PASS20_ZONE.palette;
+    const compression = this.progress.pass20SpringLaunched ? 0.25 : 1;
+    const coilLeft = spring.x + 18;
+    const coilRight = spring.x + spring.width - 18;
+    const coilTop = spring.y - 42 * compression;
+    ctx.save();
+    ctx.strokeStyle = palette.spring;
+    ctx.lineWidth = 11;
+    ctx.beginPath();
+    ctx.moveTo(coilLeft, spring.y + spring.height);
+    for (let index = 0; index <= 6; index += 1) {
+      const ratio = index / 6;
+      const x = index % 2 === 0 ? coilLeft : coilRight;
+      const y = spring.y + spring.height - (spring.y + spring.height - coilTop) * ratio;
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.fillStyle = palette.springCore;
+    ctx.fillRect(spring.x + 6, coilTop - 10, spring.width - 12, 18);
+    ctx.restore();
+  }
+
+  drawPass20Hazard(ctx) {
+    if (!this.progress.pass19Completed) return;
+    const hazard = PASS20_ZONE.hazard;
+    ctx.save();
+    ctx.fillStyle = PASS20_ZONE.palette.hazard;
+    for (let x = hazard.x1; x < hazard.x2; x += 36) {
+      ctx.beginPath();
+      ctx.moveTo(x, hazard.baseY);
+      ctx.lineTo(Math.min(x + 18, hazard.x2), hazard.tipY);
+      ctx.lineTo(Math.min(x + 36, hazard.x2), hazard.baseY);
+      ctx.closePath();
+      ctx.fill();
     }
     ctx.restore();
   }
@@ -2628,6 +2831,13 @@ export class Pass19Runtime {
     ctx.fillStyle = "#eadb9f";
     ctx.font = "700 9px Arial, sans-serif";
     ctx.fillText("11 NARROW PRECISION / AFTERSHOCK", pass18TopLeft.x + 6, pass18TopLeft.y + 15);
+    const pass20TopLeft = mapPoint(PASS20_ZONE.bounds);
+    ctx.fillStyle = "rgba(239, 185, 111, 0.16)";
+    ctx.strokeStyle = "rgba(239, 185, 111, 0.82)";
+    ctx.fillRect(pass20TopLeft.x, pass20TopLeft.y, (PASS20_ZONE.bounds.width / WORLD.width) * frame.width, (PASS20_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.strokeRect(pass20TopLeft.x, pass20TopLeft.y, (PASS20_ZONE.bounds.width / WORLD.width) * frame.width, (PASS20_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.fillStyle = "#f0d39a";
+    ctx.fillText("12 CHASE SPRING FLIGHT", pass20TopLeft.x + 6, pass20TopLeft.y + 15);
     const drawRoute = (points, color, dash) => {
       ctx.strokeStyle = color;
       ctx.lineWidth = dash ? 2 : 3;
@@ -2646,6 +2856,7 @@ export class Pass19Runtime {
     drawRoute(PASS14_ZONE.playerRoute, PALETTE.route, false);
     drawRoute(PASS15_ZONE.playerRoute, PALETTE.route, false);
     drawRoute(PASS18_ZONE.playerRoute, "#dfc978", false);
+    drawRoute(PASS20_ZONE.playerRoute, PASS20_ZONE.palette.spring, false);
     drawRoute(PASS15_CHASE.path.points, PALETTE.boulderRoute, true);
     ctx.fillStyle = PASS19_DESTRUCTION.palette.fracture;
     for (const support of PASS19_DESTRUCTION.supports) {
@@ -2656,10 +2867,16 @@ export class Pass19Runtime {
     }
     ctx.fillStyle = "#eff5f3";
     ctx.font = "800 22px Arial, sans-serif";
-    ctx.fillText("PASS 19 / AFTERSHOCK COLLAPSE", 42, 52);
+    const springPoint = mapPoint({ x: PASS20_ZONE.spring.x + PASS20_ZONE.spring.width * 0.5, y: PASS20_ZONE.spring.y });
+    ctx.fillStyle = PASS20_ZONE.palette.spring;
+    ctx.beginPath();
+    ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#eff5f3";
+    ctx.fillText("PASS 20 / CHASE SPRING FLIGHT", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`CHASE ${PASS15_CHASE.path.points.length} POINTS · NARROW PLATFORMS ${PASS18_ZONE.floors.filter(item => item.lane === "narrow").length} · AFTERSHOCK COLLAPSES ${PASS19_DESTRUCTION.collapseFloorIds.length}`, 42, 72);
+    ctx.fillText(`CHASE ${PASS15_CHASE.path.points.length} POINTS · AFTERSHOCK ${PASS19_DESTRUCTION.collapseFloorIds.length} · SPRING CHASM ${PASS20_ZONE.hazard.x2 - PASS20_ZONE.hazard.x1}px`, 42, 72);
   }
 
   getDebugState() {
@@ -2674,6 +2891,7 @@ export class Pass19Runtime {
         wallSide: p.wallSide,
         dashAvailable: p.dashAvailable,
         grappleLaunchFrames: p.grappleLaunchFrames,
+        springLaunchFrames: p.springLaunchFrames,
         standingPlatformId: p.standingPlatformId,
         standingFloorId: p.standingFloorId,
       },
@@ -2753,10 +2971,11 @@ export class Pass19Runtime {
     const pass17 = validatePass17Art();
     const pass18 = validatePass18Level();
     const pass19 = validatePass19Level();
+    const pass20 = validatePass20Level();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass19" },
-      { id: "pass_number", passed: BUILD.pass === 19 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass20" },
+      { id: "pass_number", passed: BUILD.pass === 20 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -2781,6 +3000,7 @@ export class Pass19Runtime {
       { id: "pass17_art_validation", passed: pass17.passed },
       { id: "pass18_level_validation", passed: pass18.passed },
       { id: "pass19_destruction_validation", passed: pass19.passed },
+      { id: "pass20_spring_validation", passed: pass20.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -2808,6 +3028,7 @@ export class Pass19Runtime {
       pass17,
       pass18,
       pass19,
+      pass20,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -2820,8 +3041,8 @@ export class Pass19Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 19 · AFTERSHOCK COLLAPSE";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P19 ${audit.pass19.passedCount}/${audit.pass19.total}`;
+    this.statusElements.build.textContent = "PASS 20 · CHASE SPRING FLIGHT";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P20 ${audit.pass20.passedCount}/${audit.pass20.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }

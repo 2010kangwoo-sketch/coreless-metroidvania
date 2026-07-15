@@ -1,9 +1,9 @@
 import { STAGE_SEQUENCE } from "./config.js";
 
 export const WORLD = Object.freeze({
-  width: 30500,
-  height: 11200,
-  cameraBounds: Object.freeze({ x: 0, y: 0, width: 30500, height: 11200 }),
+  width: 35000,
+  height: 12200,
+  cameraBounds: Object.freeze({ x: 0, y: 0, width: 35000, height: 12200 }),
 });
 
 const freezePoints = points => Object.freeze(
@@ -168,8 +168,8 @@ export function validateBlueprint() {
   ));
   const zoneIds = ZONES.map(item => item.id);
   const checks = [
-    { id: "world_width", passed: WORLD.width === 30500 },
-    { id: "world_height", passed: WORLD.height === 11200 },
+    { id: "world_width", passed: WORLD.width === 35000 },
+    { id: "world_height", passed: WORLD.height === 12200 },
     { id: "camera_bounds", passed: boundsInWorld(WORLD.cameraBounds) && WORLD.cameraBounds.width === WORLD.width && WORLD.cameraBounds.height === WORLD.height },
     { id: "zone_count", passed: ZONES.length === 10 },
     { id: "zone_ids_unique", passed: new Set(zoneIds).size === ZONES.length },

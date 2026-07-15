@@ -67,7 +67,7 @@ export function validatePass19Level() {
   const floorIds = new Set(narrowFloors.map(item => item.id));
   const supportFloorIds = new Set(supports.map(item => item.floorId));
   const checks = [
-    { id: "world_retained", passed: WORLD.width === 30500 && WORLD.height === 11200 },
+    { id: "world_retained", passed: WORLD.width >= 30500 && WORLD.height >= 11200 },
     { id: "pass18_level_retained", passed: PASS19_LEVEL.floors === PASS18_LEVEL.floors && PASS19_LEVEL.solids === PASS18_LEVEL.solids },
     { id: "bounds_retained", passed: PASS19_LEVEL.bounds === PASS18_LEVEL.bounds && PASS19_LEVEL.cameraBounds === PASS18_LEVEL.cameraBounds },
     { id: "spawn_retained", passed: PASS19_LEVEL.spawn.x === 600 && PASS19_LEVEL.spawn.y === 852 },
