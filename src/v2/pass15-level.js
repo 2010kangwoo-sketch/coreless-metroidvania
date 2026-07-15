@@ -170,7 +170,7 @@ export function validatePass15Level() {
     { id: "nine_boulder_points", passed: zone.boulderCorridor.points.length === 9 && zone.boulderCorridor.points.every(pointInWorld) },
     { id: "corridor_continuous_from_pass14", passed: zone.boulderCorridor.points[0].x === PASS14_CHASE.path.points.at(-1).x && zone.boulderCorridor.points[0].y === PASS14_CHASE.path.points.at(-1).y },
     { id: "corridor_runs_below_bridge", passed: zone.boulderCorridor.points.every((item, index) => index === 0 || item.y >= zone.playerRoute[Math.min(index, zone.playerRoute.length - 1)].y + 120) },
-    { id: "final_boulder_plunge", passed: zone.boulderCorridor.points.at(-1).y === WORLD.height && zone.boulderCorridor.points.at(-1).x === zone.exit.x },
+    { id: "final_boulder_plunge", passed: zone.boulderCorridor.points.at(-1).y === PASS15_LEVEL.bounds.y + PASS15_LEVEL.bounds.height && zone.boulderCorridor.points.at(-1).x === zone.exit.x },
     { id: "extended_chase_path", passed: chase.path.points.length === 95 && chase.path.totalDistance > PASS14_CHASE.path.totalDistance + 6000 },
     { id: "strict_chase_distances", passed: chase.path.cumulativeDistances.every((value, index, values) => index === 0 || value > values[index - 1]) },
     { id: "all_wood_decks_collapsible", passed: bridgeFloorIds.every(id => panelIds.has(id)) },
