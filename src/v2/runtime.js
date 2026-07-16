@@ -22,6 +22,20 @@ import { PASS21_PACING, getPass21DestructionMultiplier, getPass21TargetSpeed, va
 import { PASS22_LEVEL, PASS22_ZONE, validatePass22Level } from "./pass22-level.js";
 import { PASS23_LEVEL, PASS23_ZONE, validatePass23Level } from "./pass23-level.js";
 import { PASS24_INTEGRATION, getPass24IntegrationState, validatePass24Integration } from "./pass24-integration.js";
+import {
+  PASS25_BUTTRESSES,
+  PASS25_CHAINS,
+  PASS25_DUST,
+  PASS25_FAR_VAULTS,
+  PASS25_FOREGROUND,
+  PASS25_LIGHT_SHAFTS,
+  PASS25_PALETTE,
+  PASS25_RIBS,
+  PASS25_ROUTE_LANTERNS,
+  PASS25_SURFACE_MARKS,
+  PASS25_VISUAL_SLICE,
+  validatePass25Visuals,
+} from "./pass25-visuals.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -29,7 +43,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass24Runtime {
+export class Pass25Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -1811,7 +1825,9 @@ export class Pass24Runtime {
     ctx.scale(this.camera.zoom, this.camera.zoom);
     ctx.translate(-this.camera.x + shakeX, -this.camera.y + shakeY);
     this.drawVisualWorld(ctx);
+    this.drawPass25BuriedDepth(ctx);
     this.drawAtmosphericDepth(ctx);
+    this.drawPass25BuriedArchitecture(ctx);
     this.drawBuriedStructure(ctx);
     this.drawUnevenTunnelStructure(ctx);
     this.drawDestructionMazeStructure(ctx);
@@ -1829,6 +1845,7 @@ export class Pass24Runtime {
     this.drawPass23Gauntlet(ctx);
     this.drawChaseSupports(ctx);
     this.drawLevel(ctx);
+    this.drawPass25BuriedSurface(ctx);
     this.drawPass20SpringPad(ctx);
     this.drawAuthoredTerrainDetails(ctx);
     this.drawDashSpikes(ctx);
@@ -1842,6 +1859,8 @@ export class Pass24Runtime {
     this.drawBoulder(ctx);
     this.drawMarkers(ctx);
     this.drawGrappleAnchors(ctx);
+    this.drawPass25BuriedAtmosphere(ctx);
+    this.drawPass25BuriedForeground(ctx);
     this.drawPlayer(ctx);
     ctx.restore();
     this.drawChaseHud(ctx);
@@ -1976,6 +1995,296 @@ export class Pass24Runtime {
       fog.addColorStop(1, `${theme.midground}46`);
       ctx.fillStyle = fog;
       ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+    ctx.restore();
+  }
+
+  drawPass25BuriedDepth(ctx) {
+    const bounds = PASS25_VISUAL_SLICE.bounds;
+    const palette = PASS25_PALETTE;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+
+    const deepGradient = ctx.createLinearGradient(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
+    deepGradient.addColorStop(0, palette.void);
+    deepGradient.addColorStop(0.46, "#0d1718");
+    deepGradient.addColorStop(1, "#182322");
+    ctx.fillStyle = deepGradient;
+    ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+    for (const vault of PASS25_FAR_VAULTS) {
+      const shoulderY = vault.y + vault.width * 0.52;
+      ctx.fillStyle = `rgba(26, 39, 39, ${0.48 + vault.depth})`;
+      ctx.beginPath();
+      ctx.moveTo(vault.x, vault.y + vault.height);
+      ctx.lineTo(vault.x, shoulderY);
+      ctx.quadraticCurveTo(vault.x + vault.width * 0.5, vault.y - vault.width * 0.22, vault.x + vault.width, shoulderY);
+      ctx.lineTo(vault.x + vault.width, vault.y + vault.height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = `rgba(102, 125, 119, ${0.12 + vault.depth * 0.22})`;
+      ctx.lineWidth = 22;
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(4, 10, 11, 0.58)";
+      ctx.beginPath();
+      ctx.moveTo(vault.x + 76, vault.y + vault.height);
+      ctx.lineTo(vault.x + 76, shoulderY + 42);
+      ctx.quadraticCurveTo(vault.x + vault.width * 0.5, vault.y + 42, vault.x + vault.width - 76, shoulderY + 42);
+      ctx.lineTo(vault.x + vault.width - 76, vault.y + vault.height);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    const monument = PASS25_VISUAL_SLICE.monument;
+    ctx.save();
+    ctx.translate(monument.x, monument.y);
+    ctx.strokeStyle = "rgba(93, 89, 72, 0.72)";
+    ctx.lineWidth = 96;
+    ctx.beginPath();
+    ctx.arc(0, 0, monument.outerRadius - 48, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(168, 152, 109, 0.20)";
+    ctx.lineWidth = 18;
+    ctx.beginPath();
+    ctx.arc(0, 0, monument.outerRadius - 8, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0, 0, monument.innerRadius, 0, Math.PI * 2);
+    ctx.stroke();
+    for (let index = 0; index < monument.spokes; index += 1) {
+      const angle = (index / monument.spokes) * Math.PI * 2 + 0.07;
+      ctx.strokeStyle = index % 3 === 0 ? "rgba(159, 143, 101, 0.38)" : "rgba(87, 91, 76, 0.46)";
+      ctx.lineWidth = index % 3 === 0 ? 30 : 18;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(angle) * 155, Math.sin(angle) * 155);
+      ctx.lineTo(Math.cos(angle) * (monument.outerRadius - 95), Math.sin(angle) * (monument.outerRadius - 95));
+      ctx.stroke();
+    }
+    ctx.fillStyle = "rgba(5, 12, 13, 0.88)";
+    ctx.beginPath();
+    ctx.arc(0, 0, 155, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(206, 177, 111, 0.42)";
+    ctx.lineWidth = 16;
+    ctx.stroke();
+    ctx.restore();
+    ctx.restore();
+  }
+
+  drawPass25BuriedArchitecture(ctx) {
+    const bounds = PASS25_VISUAL_SLICE.bounds;
+    const palette = PASS25_PALETTE;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+
+    for (const shaft of PASS25_LIGHT_SHAFTS) {
+      const gradient = ctx.createLinearGradient(shaft.x, shaft.y, shaft.x, shaft.y + shaft.height);
+      gradient.addColorStop(0, `rgba(232, 214, 161, ${shaft.alpha})`);
+      gradient.addColorStop(0.7, `rgba(204, 184, 127, ${shaft.alpha * 0.36})`);
+      gradient.addColorStop(1, "rgba(204, 184, 127, 0)");
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(shaft.x - shaft.topWidth * 0.5, shaft.y);
+      ctx.lineTo(shaft.x + shaft.topWidth * 0.5, shaft.y);
+      ctx.lineTo(shaft.x + shaft.bottomWidth * 0.5, shaft.y + shaft.height);
+      ctx.lineTo(shaft.x - shaft.bottomWidth * 0.5, shaft.y + shaft.height);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    for (const buttress of PASS25_BUTTRESSES) {
+      ctx.fillStyle = "rgba(38, 49, 46, 0.88)";
+      ctx.strokeStyle = "rgba(117, 144, 138, 0.27)";
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      ctx.moveTo(buttress.x, buttress.y + buttress.height);
+      ctx.lineTo(buttress.x + buttress.width * 0.13, buttress.y + 90);
+      ctx.lineTo(buttress.x + buttress.width * 0.5, buttress.y);
+      ctx.lineTo(buttress.x + buttress.width * 0.87, buttress.y + 90);
+      ctx.lineTo(buttress.x + buttress.width, buttress.y + buttress.height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(168, 152, 109, 0.20)";
+      ctx.lineWidth = 4;
+      for (let y = buttress.y + 150; y < buttress.y + buttress.height; y += 145) {
+        ctx.beginPath();
+        ctx.moveTo(buttress.x + 9, y);
+        ctx.lineTo(buttress.x + buttress.width - 9, y - 22);
+        ctx.stroke();
+      }
+      if (buttress.cap) {
+        ctx.fillStyle = "rgba(111, 102, 75, 0.72)";
+        ctx.fillRect(buttress.x - 24, buttress.y + 72, buttress.width + 48, 32);
+      }
+    }
+
+    for (const rib of PASS25_RIBS) {
+      ctx.save();
+      ctx.translate(rib.x, rib.y);
+      ctx.rotate(rib.angle);
+      ctx.strokeStyle = "rgba(136, 139, 119, 0.38)";
+      ctx.lineWidth = 23;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(rib.width * 0.5, rib.drop, rib.width, 0);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(205, 187, 136, 0.16)";
+      ctx.lineWidth = 5;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    for (const chain of PASS25_CHAINS) {
+      for (let index = 0; index < chain.links; index += 1) {
+        const ratio = index / Math.max(1, chain.links - 1);
+        const sway = Math.sin(this.frameCount * 0.006 + index * 0.32 + chain.x) * 9 * ratio;
+        ctx.save();
+        ctx.translate(chain.x + sway, chain.y + ratio * chain.length);
+        ctx.rotate(index % 2 === 0 ? 0 : Math.PI * 0.5);
+        ctx.strokeStyle = index % 4 === 0 ? "rgba(172, 150, 101, 0.52)" : "rgba(91, 99, 88, 0.72)";
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 13, 22, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    ctx.globalCompositeOperation = "screen";
+    for (const lantern of PASS25_ROUTE_LANTERNS) {
+      const glow = ctx.createRadialGradient(lantern.x, lantern.y, 0, lantern.x, lantern.y, lantern.radius);
+      glow.addColorStop(0, "rgba(255, 240, 176, 0.55)");
+      glow.addColorStop(0.12, "rgba(227, 187, 114, 0.34)");
+      glow.addColorStop(1, "rgba(227, 187, 114, 0)");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(lantern.x, lantern.y, lantern.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = "source-over";
+    for (const lantern of PASS25_ROUTE_LANTERNS) {
+      ctx.fillStyle = palette.bronze;
+      ctx.fillRect(lantern.x - 18, lantern.y - 34, 36, 68);
+      ctx.strokeStyle = palette.bronzeEdge;
+      ctx.lineWidth = 5;
+      ctx.strokeRect(lantern.x - 18, lantern.y - 34, 36, 68);
+      ctx.fillStyle = palette.routeCore;
+      ctx.fillRect(lantern.x - 7, lantern.y - 19, 14, 36);
+    }
+    ctx.restore();
+  }
+
+  drawPass25BuriedSurface(ctx) {
+    ctx.save();
+    for (const floor of PASS04_ZONE.floors) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(floor.x1, floor.y1 + 10);
+      ctx.lineTo(floor.x2, floor.y2 + 10);
+      ctx.lineTo(floor.x2, floor.y2 + 258);
+      ctx.lineTo(floor.x1, floor.y1 + 258);
+      ctx.closePath();
+      ctx.clip();
+
+      const width = floor.x2 - floor.x1;
+      const blocks = Math.max(2, Math.ceil(width / 150));
+      for (let row = 0; row < 3; row += 1) {
+        const rowY = Math.min(floor.y1, floor.y2) + 38 + row * 72;
+        for (let column = -1; column <= blocks; column += 1) {
+          const offset = row % 2 === 0 ? 0 : 62;
+          const x = floor.x1 + column * 145 + offset;
+          const shade = (row + column + floor.x1) % 3;
+          ctx.fillStyle = shade === 0 ? "rgba(18, 27, 26, 0.38)" : shade === 1 ? "rgba(75, 78, 67, 0.18)" : "rgba(37, 47, 43, 0.26)";
+          ctx.fillRect(x + 4, rowY + 4, 136, 62);
+          ctx.strokeStyle = "rgba(151, 144, 112, 0.13)";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x + 4, rowY + 4, 136, 62);
+        }
+      }
+      ctx.fillStyle = "rgba(4, 10, 10, 0.34)";
+      ctx.beginPath();
+      ctx.moveTo(floor.x1, floor.y1 + 230);
+      ctx.lineTo(floor.x2, floor.y2 + 185);
+      ctx.lineTo(floor.x2, floor.y2 + 260);
+      ctx.lineTo(floor.x1, floor.y1 + 260);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      const centerX = (floor.x1 + floor.x2) * 0.5;
+      const centerY = (floor.y1 + floor.y2) * 0.5;
+      ctx.strokeStyle = "rgba(100, 104, 88, 0.38)";
+      ctx.lineWidth = 14;
+      ctx.beginPath();
+      ctx.moveTo(centerX - 48, centerY + 246);
+      ctx.lineTo(centerX, centerY + 175);
+      ctx.lineTo(centerX + 48, centerY + 246);
+      ctx.stroke();
+    }
+    for (const mark of PASS25_SURFACE_MARKS) {
+      ctx.strokeStyle = mark.moss ? "rgba(82, 119, 94, 0.72)" : "rgba(178, 169, 133, 0.28)";
+      ctx.lineWidth = mark.moss ? 5 : 3;
+      ctx.beginPath();
+      ctx.moveTo(mark.x - mark.length * 0.5, mark.y + 14);
+      ctx.lineTo(mark.x - mark.length * 0.08, mark.y + 28);
+      ctx.lineTo(mark.x + mark.length * 0.18, mark.y + 18);
+      ctx.lineTo(mark.x + mark.length * 0.5, mark.y + 34);
+      ctx.stroke();
+      if (mark.moss) {
+        ctx.fillStyle = "rgba(64, 94, 76, 0.62)";
+        for (let index = 0; index < 3; index += 1) {
+          ctx.beginPath();
+          ctx.ellipse(mark.x - 12 + index * 12, mark.y + 8, 9, 4 + index * 2, -0.4 + index * 0.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+    ctx.restore();
+  }
+
+  drawPass25BuriedAtmosphere(ctx) {
+    const bounds = PASS25_VISUAL_SLICE.bounds;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    for (const mote of PASS25_DUST) {
+      const offsetY = (this.frameCount * mote.drift) % 150;
+      const y = mote.y - offsetY < bounds.y ? mote.y - offsetY + bounds.height : mote.y - offsetY;
+      const x = mote.x + Math.sin(this.frameCount * 0.012 + mote.phase) * 18;
+      const alpha = 0.12 + (Math.sin(this.frameCount * 0.018 + mote.phase) + 1) * 0.09;
+      ctx.fillStyle = `rgba(207, 194, 151, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(x, y, mote.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  drawPass25BuriedForeground(ctx) {
+    ctx.save();
+    for (const item of PASS25_FOREGROUND) {
+      const gradient = ctx.createLinearGradient(item.x, item.y, item.x + item.width, item.y + item.height);
+      gradient.addColorStop(0, "rgba(4, 9, 10, 0.88)");
+      gradient.addColorStop(1, "rgba(18, 28, 26, 0.64)");
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.lineTo(item.x + item.width * 0.18, item.y + 95);
+      ctx.lineTo(item.x + item.width * 0.52, item.y);
+      ctx.lineTo(item.x + item.width, item.y + 135);
+      ctx.lineTo(item.x + item.width, item.y + item.height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "rgba(115, 139, 129, 0.25)";
+      ctx.lineWidth = 8;
+      ctx.stroke();
     }
     ctx.restore();
   }
@@ -2530,9 +2839,9 @@ export class Pass24Runtime {
   drawBuriedStructure(ctx) {
     const roof = PASS12_LEVEL.roof;
     ctx.save();
-    ctx.fillStyle = "rgba(24, 42, 45, 0.96)";
-    ctx.strokeStyle = "#718d8d";
-    ctx.lineWidth = 5;
+    ctx.fillStyle = "rgba(16, 26, 26, 0.98)";
+    ctx.strokeStyle = "rgba(117, 144, 138, 0.52)";
+    ctx.lineWidth = 9;
     ctx.beginPath();
     ctx.moveTo(roof[0].x1, roof[0].y1);
     for (const item of roof) ctx.lineTo(item.x2, item.y2);
@@ -2545,18 +2854,42 @@ export class Pass24Runtime {
     for (const item of roof) ctx.lineTo(item.x2, item.y2);
     ctx.stroke();
 
+    ctx.strokeStyle = "rgba(168, 152, 109, 0.18)";
+    ctx.lineWidth = 24;
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1 + 30);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2 + 30);
+    ctx.stroke();
+
     for (const item of PASS12_LEVEL.frames) {
-      ctx.fillStyle = "rgba(103, 126, 124, 0.055)";
-      ctx.strokeStyle = "rgba(156, 181, 176, 0.30)";
-      ctx.lineWidth = 3;
-      ctx.fillRect(item.x, item.y, item.width, item.height);
-      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      const shoulderY = item.y + Math.min(190, item.height * 0.34);
+      const inset = Math.min(92, item.width * 0.12);
+      ctx.fillStyle = "rgba(43, 52, 47, 0.34)";
+      ctx.strokeStyle = "rgba(161, 150, 112, 0.38)";
+      ctx.lineWidth = 32;
       ctx.beginPath();
-      ctx.moveTo(item.x + item.width * 0.33, item.y);
-      ctx.lineTo(item.x + item.width * 0.33, item.y + item.height);
-      ctx.moveTo(item.x + item.width * 0.67, item.y);
-      ctx.lineTo(item.x + item.width * 0.67, item.y + item.height);
+      ctx.moveTo(item.x + inset, item.y + item.height);
+      ctx.lineTo(item.x + inset, shoulderY);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y - 80, item.x + item.width - inset, shoulderY);
+      ctx.lineTo(item.x + item.width - inset, item.y + item.height);
       ctx.stroke();
+      ctx.strokeStyle = "rgba(113, 137, 129, 0.22)";
+      ctx.lineWidth = 7;
+      ctx.stroke();
+      ctx.fillStyle = "rgba(103, 93, 69, 0.54)";
+      ctx.fillRect(item.x + inset - 38, item.y + item.height - 42, 76, 42);
+      ctx.fillRect(item.x + item.width - inset - 38, item.y + item.height - 42, 76, 42);
+      for (let index = 1; index <= 4; index += 1) {
+        const y = shoulderY + ((item.height - (shoulderY - item.y)) * index) / 5;
+        ctx.strokeStyle = "rgba(179, 164, 121, 0.16)";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(item.x + inset - 14, y);
+        ctx.lineTo(item.x + inset + 14, y - 9);
+        ctx.moveTo(item.x + item.width - inset - 14, y - 9);
+        ctx.lineTo(item.x + item.width - inset + 14, y);
+        ctx.stroke();
+      }
     }
     ctx.restore();
   }
@@ -3459,10 +3792,10 @@ export class Pass24Runtime {
     ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 24 / SYSTEMS INTEGRATION RUN", 42, 52);
+    ctx.fillText("PASS 25 / BURIED MEGA-ROOM VISUAL SLICE", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`14 ZONES · 7 SYSTEMS · START ${PASS24_INTEGRATION.route.start.x},${PASS24_INTEGRATION.route.start.y} → GOAL ${PASS24_INTEGRATION.route.goal.x},${PASS24_INTEGRATION.route.goal.y}`, 42, 72);
+    ctx.fillText(`7 DEPTH LAYERS · 3 MATERIAL PLANES · VISUAL-ONLY · ROUTE AND COLLISION RETAINED`, 42, 72);
   }
 
   getDebugState() {
@@ -3583,10 +3916,11 @@ export class Pass24Runtime {
     const pass22 = validatePass22Level();
     const pass23 = validatePass23Level();
     const pass24 = validatePass24Integration();
+    const pass25 = validatePass25Visuals();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass24" },
-      { id: "pass_number", passed: BUILD.pass === 24 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass25" },
+      { id: "pass_number", passed: BUILD.pass === 25 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -3616,6 +3950,7 @@ export class Pass24Runtime {
       { id: "pass22_shaft_validation", passed: pass22.passed },
       { id: "pass23_convergence_validation", passed: pass23.passed },
       { id: "pass24_integration_validation", passed: pass24.passed },
+      { id: "pass25_visual_validation", passed: pass25.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -3648,6 +3983,7 @@ export class Pass24Runtime {
       pass22,
       pass23,
       pass24,
+      pass25,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -3660,8 +3996,8 @@ export class Pass24Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 24 · SYSTEMS INTEGRATION RUN";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P24 ${audit.pass24.passedCount}/${audit.pass24.total}`;
+    this.statusElements.build.textContent = "PASS 25 · BURIED MEGA-ROOM VISUAL SLICE";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P25 ${audit.pass25.passedCount}/${audit.pass25.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
