@@ -1,0 +1,5728 @@
+{
+  "version": "rebuild-v2-pass23-focused",
+  "category": "focused actual-keyboard mixed traversal after helper placement at the Pass 22 exit",
+  "helperCoordinateMovement": true,
+  "actualKeyboardRoute": "Pass 22 exit helper placement -> moving carriage -> two sentinels -> anchors four/five -> left spring -> late checkpoint",
+  "traversalFailure": null,
+  "mixedScreenshotTaken": true,
+  "passed": true,
+  "checks": {
+    "title": true,
+    "runtimeAudit": true,
+    "pass23Audit": true,
+    "platform": true,
+    "combat": true,
+    "grapple": true,
+    "spring": true,
+    "pursuit": true,
+    "completed": true,
+    "keyboard": true,
+    "noReset": true,
+    "console": true
+  },
+  "state": {
+    "title": "Coreless · Rebuild V2 · Pass 23",
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass23",
+        "pass": 23,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "64e862a"
+      },
+      "passed": true,
+      "passedCount": 32,
+      "total": 32,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        },
+        {
+          "id": "pass03_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass04_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass05_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass06_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass07_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass08_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass09_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass10_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass11_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass12_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass13_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass14_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass15_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass16_visual_validation",
+          "passed": true
+        },
+        {
+          "id": "pass17_art_validation",
+          "passed": true
+        },
+        {
+          "id": "pass18_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass19_destruction_validation",
+          "passed": true
+        },
+        {
+          "id": "pass20_spring_validation",
+          "passed": true
+        },
+        {
+          "id": "pass21_pacing_validation",
+          "passed": true
+        },
+        {
+          "id": "pass22_shaft_validation",
+          "passed": true
+        },
+        {
+          "id": "pass23_convergence_validation",
+          "passed": true
+        },
+        {
+          "id": "player_dimensions",
+          "passed": true
+        },
+        {
+          "id": "debug_state",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "pass03": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "theoreticalJumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "world_contains_level",
+            "passed": true
+          },
+          {
+            "id": "camera_contains_level",
+            "passed": true
+          },
+          {
+            "id": "spawn_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone01_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "pass03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "two_baffles",
+            "passed": true
+          },
+          {
+            "id": "two_climb_walls",
+            "passed": true
+          },
+          {
+            "id": "first_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "second_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "first_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "second_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "walljump_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "macro_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "run_speed",
+            "passed": true
+          },
+          {
+            "id": "variable_jump",
+            "passed": true
+          },
+          {
+            "id": "air_dash",
+            "passed": true
+          }
+        ]
+      },
+      "pass04": {
+        "passed": true,
+        "passedCount": 22,
+        "total": 22,
+        "highestFloor": 1600,
+        "lowestRoof": 1100,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone03_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "zone03_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone03_single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "two_jump_gaps",
+            "passed": true
+          },
+          {
+            "id": "gap_widths",
+            "passed": true
+          },
+          {
+            "id": "rise_height",
+            "passed": true
+          },
+          {
+            "id": "highest_floor_recorded",
+            "passed": true
+          },
+          {
+            "id": "buried_below_roof",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "frames_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "pass03_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass05": {
+        "passed": true,
+        "passedCount": 25,
+        "total": 25,
+        "normalJumpRise": 114.88970588235293,
+        "ceilingClearances": [
+          80,
+          70
+        ],
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_pass04",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone04_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_distinct_gaps",
+            "passed": true
+          },
+          {
+            "id": "precision_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "shaft_requires_platform",
+            "passed": true
+          },
+          {
+            "id": "one_moving_platform",
+            "passed": true
+          },
+          {
+            "id": "platform_spans_shaft",
+            "passed": true
+          },
+          {
+            "id": "platform_travel",
+            "passed": true
+          },
+          {
+            "id": "two_low_ceiling_beams",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_clearance",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass04_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass06": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_pass05",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone05_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gates",
+            "passed": true
+          },
+          {
+            "id": "gate_shapes_distinct",
+            "passed": true
+          },
+          {
+            "id": "gates_ordered",
+            "passed": true
+          },
+          {
+            "id": "gates_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "gates_exceed_normal_jump",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_forward",
+            "passed": true
+          },
+          {
+            "id": "corridor_same_structure",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_supports",
+            "passed": true
+          },
+          {
+            "id": "supports_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "eight_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass05_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass07": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "runOnlyDistance": 196.69117647058823,
+        "dashDistance": 136.4,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_pass06",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "upper_floor_count",
+            "passed": true
+          },
+          {
+            "id": "lower_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floor_lanes",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gaps",
+            "passed": true
+          },
+          {
+            "id": "dash_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "dash_gaps_match_floors",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "curve_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "single_direction_change",
+            "passed": true
+          },
+          {
+            "id": "curve_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "curve_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "visible_vertical_drop",
+            "passed": true
+          },
+          {
+            "id": "landing_below_lip",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_coordinates",
+            "passed": true
+          },
+          {
+            "id": "pass06_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass08": {
+        "passed": true,
+        "passedCount": 24,
+        "total": 24,
+        "totalDistance": 30779.372511505342,
+        "collapsePanelCount": 31,
+        "supportTargetCount": 13,
+        "checks": [
+          {
+            "id": "pass07_level_retained",
+            "passed": true
+          },
+          {
+            "id": "active_boulder",
+            "passed": true
+          },
+          {
+            "id": "single_combined_path",
+            "passed": true
+          },
+          {
+            "id": "path_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "zone05_to_zone06_join",
+            "passed": true
+          },
+          {
+            "id": "path_starts_on_zone05_floor",
+            "passed": true
+          },
+          {
+            "id": "path_ends_at_zone06_exit",
+            "passed": true
+          },
+          {
+            "id": "strict_cumulative_distance",
+            "passed": true
+          },
+          {
+            "id": "long_chase_route",
+            "passed": true
+          },
+          {
+            "id": "physical_curve_apex",
+            "passed": true
+          },
+          {
+            "id": "one_direction_change",
+            "passed": true
+          },
+          {
+            "id": "boulder_radius_fits_corridors",
+            "passed": true
+          },
+          {
+            "id": "bounded_spawn_delay",
+            "passed": true
+          },
+          {
+            "id": "bounded_speed",
+            "passed": true
+          },
+          {
+            "id": "all_chase_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "collapse_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "thirteen_support_targets",
+            "passed": true
+          },
+          {
+            "id": "support_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "supports_before_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_near_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_matches_pass07",
+            "passed": true
+          },
+          {
+            "id": "gaps_remain_physical",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "reserved_flags_unchanged",
+            "passed": true
+          }
+        ]
+      },
+      "pass09": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "totalDistance": 37613.124580885786,
+        "extensionDistance": 6833.752069380444,
+        "collapsePanelCount": 40,
+        "supportTargetCount": 19,
+        "checks": [
+          {
+            "id": "pass08_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass08",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "three_upper_floors",
+            "passed": true
+          },
+          {
+            "id": "one_middle_return",
+            "passed": true
+          },
+          {
+            "id": "five_lower_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_connected",
+            "passed": true
+          },
+          {
+            "id": "two_physical_drops",
+            "passed": true
+          },
+          {
+            "id": "single_player_route",
+            "passed": true
+          },
+          {
+            "id": "three_ceiling_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "eleven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "physical_u_turn",
+            "passed": true
+          },
+          {
+            "id": "corridor_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "corridor_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "six_internal_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "nineteen_supports",
+            "passed": true
+          },
+          {
+            "id": "breach_delay",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          }
+        ]
+      },
+      "pass10": {
+        "passed": true,
+        "passedCount": 30,
+        "total": 30,
+        "theoreticalJumpRise": 114.88970588235293,
+        "totalDistance": 46988.78994100213,
+        "extensionDistance": 9375.665360116342,
+        "collapsePanelCount": 50,
+        "supportTargetCount": 27,
+        "checks": [
+          {
+            "id": "pass09_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass09",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "ten_player_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "eight_solids",
+            "passed": true
+          },
+          {
+            "id": "two_complete_wall_pairs",
+            "passed": true
+          },
+          {
+            "id": "two_forced_shafts",
+            "passed": true
+          },
+          {
+            "id": "shaft_one_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "shaft_two_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "wall_corridor_widths",
+            "passed": true
+          },
+          {
+            "id": "second_shaft_after_first_lip",
+            "passed": true
+          },
+          {
+            "id": "no_bypass_floor",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "fourteen_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_player_endpoints",
+            "passed": true
+          },
+          {
+            "id": "corridor_descends_through_both_shafts",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "eight_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "twenty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "four_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "milestones_force_two_successes",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass11": {
+        "passed": true,
+        "passedCount": 31,
+        "total": 31,
+        "directHorizontalGap": 750,
+        "noGrappleAirReach": 457.4,
+        "totalDistance": 51578.488132262966,
+        "extensionDistance": 4589.698191260839,
+        "collapsePanelCount": 52,
+        "supportTargetCount": 33,
+        "checks": [
+          {
+            "id": "pass10_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass10",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "six_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "two_player_floors",
+            "passed": true
+          },
+          {
+            "id": "no_direct_floor_bridge",
+            "passed": true
+          },
+          {
+            "id": "three_ordered_anchors",
+            "passed": true
+          },
+          {
+            "id": "unique_anchor_ids",
+            "passed": true
+          },
+          {
+            "id": "anchors_inside_zone",
+            "passed": true
+          },
+          {
+            "id": "anchor_ranges",
+            "passed": true
+          },
+          {
+            "id": "first_anchor_reachable_from_launch",
+            "passed": true
+          },
+          {
+            "id": "anchor_chain_overlaps",
+            "passed": true
+          },
+          {
+            "id": "two_arch_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_entry_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "six_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "six_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "thirty_three_supports",
+            "passed": true
+          },
+          {
+            "id": "three_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_three_anchors",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass12": {
+        "passed": true,
+        "passedCount": 32,
+        "total": 32,
+        "horizontalGap": 300,
+        "landingDrop": 100,
+        "airTime": 43.52253087835111,
+        "jumpOnlyReach": 232.84554019917843,
+        "jumpDashReach": 310.3955401991784,
+        "totalDistance": 53722.74478801561,
+        "extensionDistance": 2144.2566557526443,
+        "collapsePanelCount": 55,
+        "supportTargetCount": 37,
+        "checks": [
+          {
+            "id": "pass11_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass11",
+            "passed": true
+          },
+          {
+            "id": "entry_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "six_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_player_floors",
+            "passed": true
+          },
+          {
+            "id": "three_hundred_pixel_gap",
+            "passed": true
+          },
+          {
+            "id": "jump_alone_cannot_clear",
+            "passed": true
+          },
+          {
+            "id": "jump_dash_can_clear",
+            "passed": true
+          },
+          {
+            "id": "no_floor_bridge_over_spikes",
+            "passed": true
+          },
+          {
+            "id": "single_long_spike_bed",
+            "passed": true
+          },
+          {
+            "id": "spikes_ignored_by_boulder",
+            "passed": true
+          },
+          {
+            "id": "two_arch_solids",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "five_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_entry_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "four_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "four_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "fifty_five_collapse_panels",
+            "passed": true
+          },
+          {
+            "id": "thirty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "two_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_air_dash",
+            "passed": true
+          },
+          {
+            "id": "extension_stays_in_zone09",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass13": {
+        "passed": true,
+        "passedCount": 37,
+        "total": 37,
+        "shortGap": 100,
+        "longGap": 195,
+        "ceilingHeadroom": 72,
+        "exitRunout": 140,
+        "exitFloorYAtMarker": 7520.166666666667,
+        "shortCutRise": 44.66393223529411,
+        "fullJumpRise": 114.88970588235293,
+        "shortCutReach": 132.05099798149396,
+        "shortCutLongReach": 151.01879194732,
+        "fullLongReach": 223.10424473817906,
+        "totalDistance": 56403.691109140615,
+        "extensionDistance": 2680.946321125004,
+        "collapsePanelCount": 61,
+        "supportTargetCount": 42,
+        "checks": [
+          {
+            "id": "pass12_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass12",
+            "passed": true
+          },
+          {
+            "id": "entry_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "ten_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "route_contains_direction_reversal",
+            "passed": true
+          },
+          {
+            "id": "six_player_floors",
+            "passed": true
+          },
+          {
+            "id": "exit_has_safe_runout",
+            "passed": true
+          },
+          {
+            "id": "one_hundred_pixel_short_gap",
+            "passed": true
+          },
+          {
+            "id": "short_cut_clears_short_gap",
+            "passed": true
+          },
+          {
+            "id": "one_hundred_ninety_five_pixel_long_gap",
+            "passed": true
+          },
+          {
+            "id": "short_cut_cannot_clear_long_gap",
+            "passed": true
+          },
+          {
+            "id": "full_jump_clears_long_gap",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_requires_jump_cut",
+            "passed": true
+          },
+          {
+            "id": "two_gap_hazards",
+            "passed": true
+          },
+          {
+            "id": "hazards_exactly_fill_gaps",
+            "passed": true
+          },
+          {
+            "id": "three_architecture_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "ten_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_rejoins_below_player_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "corridor_has_rounded_return",
+            "passed": true
+          },
+          {
+            "id": "six_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "five_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "sixty_one_collapse_panels",
+            "passed": true
+          },
+          {
+            "id": "forty_two_supports",
+            "passed": true
+          },
+          {
+            "id": "three_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_precision_sequence",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_boulder",
+            "passed": true
+          },
+          {
+            "id": "extension_stays_in_zone09",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass14": {
+        "passed": true,
+        "passedCount": 43,
+        "total": 43,
+        "upperGap": 120,
+        "fullJumpReach": 230.69117647058823,
+        "dropHeight": 250,
+        "descendingSlopes": [
+          0.2,
+          0.25,
+          0.375,
+          0.475,
+          0.6285714285714286,
+          0.7333333333333333
+        ],
+        "totalDistance": 62255.781225650295,
+        "extensionDistance": 5852.09011650968,
+        "collapsePanelCount": 68,
+        "supportTargetCount": 49,
+        "checks": [
+          {
+            "id": "pass13_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass13",
+            "passed": true
+          },
+          {
+            "id": "entry_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_zone09_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "ten_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "player_route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "player_route_reverses_once",
+            "passed": true
+          },
+          {
+            "id": "seven_player_floors",
+            "passed": true
+          },
+          {
+            "id": "one_hundred_twenty_pixel_upper_gap",
+            "passed": true
+          },
+          {
+            "id": "normal_jump_clears_upper_gap",
+            "passed": true
+          },
+          {
+            "id": "upper_gap_has_no_safety_floor",
+            "passed": true
+          },
+          {
+            "id": "upper_route_continuously_descends",
+            "passed": true
+          },
+          {
+            "id": "natural_drop_in_range",
+            "passed": true
+          },
+          {
+            "id": "lower_landing_below_lip",
+            "passed": true
+          },
+          {
+            "id": "lower_route_rolls_right_and_down",
+            "passed": true
+          },
+          {
+            "id": "lower_route_collapse_delayed",
+            "passed": true
+          },
+          {
+            "id": "no_indefinite_high_ledge",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_solids",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_visible_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "sixteen_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_starts_below_shared_entry",
+            "passed": true
+          },
+          {
+            "id": "corridor_finishes_below_player_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "curve_progressively_steepens",
+            "passed": true
+          },
+          {
+            "id": "corridor_direction_reverses_once",
+            "passed": true
+          },
+          {
+            "id": "short_visible_boulder_fall",
+            "passed": true
+          },
+          {
+            "id": "lower_boulder_lane_rolls_right",
+            "passed": true
+          },
+          {
+            "id": "fourteen_visible_boulder_floors",
+            "passed": true
+          },
+          {
+            "id": "boulder_floor_gap_matches_fall",
+            "passed": true
+          },
+          {
+            "id": "boulder_floor_offset_matches_radius",
+            "passed": true
+          },
+          {
+            "id": "seven_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "sixty_eight_collapse_panels",
+            "passed": true
+          },
+          {
+            "id": "forty_nine_supports",
+            "passed": true
+          },
+          {
+            "id": "three_new_curve_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_full_curve_sequence",
+            "passed": true
+          },
+          {
+            "id": "camera_has_wide_curve_overview",
+            "passed": true
+          },
+          {
+            "id": "bridge_handoff_matches_zone10",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass15": {
+        "passed": true,
+        "passedCount": 29,
+        "total": 29,
+        "fullJumpReach": 230.69117647058823,
+        "totalDistance": 68479.41758589377,
+        "extensionDistance": 6223.636360243472,
+        "collapsePanelCount": 79,
+        "supportTargetCount": 57,
+        "checks": [
+          {
+            "id": "pass14_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass14",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "nine_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "twelve_bridge_floors",
+            "passed": true
+          },
+          {
+            "id": "eleven_wood_decks",
+            "passed": true
+          },
+          {
+            "id": "stone_final_landing",
+            "passed": true
+          },
+          {
+            "id": "three_broken_gaps",
+            "passed": true
+          },
+          {
+            "id": "all_gaps_jumpable",
+            "passed": true
+          },
+          {
+            "id": "gaps_increase_toward_finale",
+            "passed": true
+          },
+          {
+            "id": "no_safety_floor_under_gaps",
+            "passed": true
+          },
+          {
+            "id": "eight_wood_supports",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "nine_boulder_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_continuous_from_pass14",
+            "passed": true
+          },
+          {
+            "id": "corridor_runs_below_bridge",
+            "passed": true
+          },
+          {
+            "id": "final_boulder_plunge",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_wood_decks_collapsible",
+            "passed": true
+          },
+          {
+            "id": "seventy_nine_collapse_panels",
+            "passed": true
+          },
+          {
+            "id": "fifty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "two_bridge_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "bridge_head_start",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_three_jumps_and_final_dash",
+            "passed": true
+          },
+          {
+            "id": "finale_camera",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass16": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "checks": [
+          {
+            "id": "ten_zone_themes",
+            "passed": true
+          },
+          {
+            "id": "theme_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "theme_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "five_visual_layers",
+            "passed": true
+          },
+          {
+            "id": "collision_debug_hidden",
+            "passed": true
+          },
+          {
+            "id": "two_lights_per_zone",
+            "passed": true
+          },
+          {
+            "id": "twenty_route_lights",
+            "passed": true
+          },
+          {
+            "id": "light_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "light_zone_refs",
+            "passed": true
+          },
+          {
+            "id": "lights_in_world",
+            "passed": true
+          },
+          {
+            "id": "theme_backgrounds",
+            "passed": true
+          },
+          {
+            "id": "theme_midgrounds",
+            "passed": true
+          },
+          {
+            "id": "theme_terrain",
+            "passed": true
+          },
+          {
+            "id": "theme_edges",
+            "passed": true
+          },
+          {
+            "id": "theme_lights",
+            "passed": true
+          },
+          {
+            "id": "motifs_unique",
+            "passed": true
+          },
+          {
+            "id": "theme_indices",
+            "passed": true
+          },
+          {
+            "id": "light_radius",
+            "passed": true
+          },
+          {
+            "id": "world_reference",
+            "passed": true
+          },
+          {
+            "id": "actor_layer_last",
+            "passed": true
+          }
+        ]
+      },
+      "pass17": {
+        "passed": true,
+        "passedCount": 24,
+        "total": 24,
+        "checks": [
+          {
+            "id": "ten_material_profiles",
+            "passed": true
+          },
+          {
+            "id": "material_zone_order",
+            "passed": true
+          },
+          {
+            "id": "material_types_unique",
+            "passed": true
+          },
+          {
+            "id": "material_colors",
+            "passed": true
+          },
+          {
+            "id": "cap_widths",
+            "passed": true
+          },
+          {
+            "id": "seam_spacing",
+            "passed": true
+          },
+          {
+            "id": "thirty_reinforcements",
+            "passed": true
+          },
+          {
+            "id": "reinforcement_zone_coverage",
+            "passed": true
+          },
+          {
+            "id": "reinforcements_in_world",
+            "passed": true
+          },
+          {
+            "id": "reinforcement_dimensions",
+            "passed": true
+          },
+          {
+            "id": "twelve_vegetation_clusters",
+            "passed": true
+          },
+          {
+            "id": "vegetation_noncollision_zones",
+            "passed": true
+          },
+          {
+            "id": "vegetation_in_world",
+            "passed": true
+          },
+          {
+            "id": "twenty_visual_supports",
+            "passed": true
+          },
+          {
+            "id": "support_zone_coverage",
+            "passed": true
+          },
+          {
+            "id": "supports_in_world",
+            "passed": true
+          },
+          {
+            "id": "feature_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "feature_zone_refs",
+            "passed": true
+          },
+          {
+            "id": "raw_collision_hidden",
+            "passed": true
+          },
+          {
+            "id": "five_depth_layers",
+            "passed": true
+          },
+          {
+            "id": "surface_cap_layer",
+            "passed": true
+          },
+          {
+            "id": "route_readability_last",
+            "passed": true
+          },
+          {
+            "id": "materials_reference",
+            "passed": true
+          },
+          {
+            "id": "visual_only_features",
+            "passed": true
+          }
+        ]
+      },
+      "pass18": {
+        "passed": true,
+        "passedCount": 32,
+        "total": 32,
+        "gaps": [
+          80,
+          90,
+          100,
+          110,
+          115,
+          120,
+          120,
+          125,
+          130,
+          135,
+          140,
+          145,
+          120
+        ],
+        "widths": [
+          160,
+          140,
+          125,
+          120,
+          120,
+          120,
+          120,
+          120,
+          120,
+          130,
+          140,
+          150
+        ],
+        "ceilingClearances": [
+          118,
+          118,
+          70
+        ],
+        "checks": [
+          {
+            "id": "world_extended",
+            "passed": true
+          },
+          {
+            "id": "zone_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_in_world",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_bridge",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "route_in_world",
+            "passed": true
+          },
+          {
+            "id": "route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "fourteen_floor_segments",
+            "passed": true
+          },
+          {
+            "id": "twelve_narrow_platforms",
+            "passed": true
+          },
+          {
+            "id": "narrow_widths",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_zone",
+            "passed": true
+          },
+          {
+            "id": "gaps_ordered",
+            "passed": true
+          },
+          {
+            "id": "precision_gap_range",
+            "passed": true
+          },
+          {
+            "id": "gaps_within_jump_reach",
+            "passed": true
+          },
+          {
+            "id": "three_low_ceilings",
+            "passed": true
+          },
+          {
+            "id": "ceiling_clearance",
+            "passed": true
+          },
+          {
+            "id": "solids_in_zone",
+            "passed": true
+          },
+          {
+            "id": "two_hazard_beds",
+            "passed": true
+          },
+          {
+            "id": "hazards_cover_gaps",
+            "passed": true
+          },
+          {
+            "id": "hazards_below_route",
+            "passed": true
+          },
+          {
+            "id": "unique_floor_ids",
+            "passed": true
+          },
+          {
+            "id": "unique_solid_ids",
+            "passed": true
+          },
+          {
+            "id": "unique_hazard_ids",
+            "passed": true
+          },
+          {
+            "id": "phase_18_collision",
+            "passed": true
+          },
+          {
+            "id": "completion_requirements",
+            "passed": true
+          },
+          {
+            "id": "zero_ceiling_bumps",
+            "passed": true
+          },
+          {
+            "id": "checkpoint_at_exit",
+            "passed": true
+          },
+          {
+            "id": "level_bounds_in_world",
+            "passed": true
+          },
+          {
+            "id": "level_camera_matches_world",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass19": {
+        "passed": true,
+        "passedCount": 30,
+        "total": 30,
+        "collapseFloorCount": 12,
+        "supportCount": 12,
+        "checks": [
+          {
+            "id": "world_retained",
+            "passed": true
+          },
+          {
+            "id": "pass18_level_retained",
+            "passed": true
+          },
+          {
+            "id": "bounds_retained",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "exit_retained",
+            "passed": true
+          },
+          {
+            "id": "destruction_in_world",
+            "passed": true
+          },
+          {
+            "id": "bridge_plunge_trigger",
+            "passed": true
+          },
+          {
+            "id": "pass18_entry_trigger",
+            "passed": true
+          },
+          {
+            "id": "twelve_narrow_sources",
+            "passed": true
+          },
+          {
+            "id": "twelve_collapse_targets",
+            "passed": true
+          },
+          {
+            "id": "collapse_targets_unique",
+            "passed": true
+          },
+          {
+            "id": "collapse_targets_are_narrow",
+            "passed": true
+          },
+          {
+            "id": "collapse_order_matches_route",
+            "passed": true
+          },
+          {
+            "id": "twelve_fracture_supports",
+            "passed": true
+          },
+          {
+            "id": "support_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "one_support_per_floor",
+            "passed": true
+          },
+          {
+            "id": "supports_inside_zone",
+            "passed": true
+          },
+          {
+            "id": "support_dimensions",
+            "passed": true
+          },
+          {
+            "id": "support_offsets_bounded",
+            "passed": true
+          },
+          {
+            "id": "leave_delay_safe",
+            "passed": true
+          },
+          {
+            "id": "warning_before_collapse",
+            "passed": true
+          },
+          {
+            "id": "pulse_interval_bounded",
+            "passed": true
+          },
+          {
+            "id": "requires_all_armed",
+            "passed": true
+          },
+          {
+            "id": "requires_all_collapsed",
+            "passed": true
+          },
+          {
+            "id": "requires_all_debris_bursts",
+            "passed": true
+          },
+          {
+            "id": "completion_matches_pass18",
+            "passed": true
+          },
+          {
+            "id": "checkpoint_retained",
+            "passed": true
+          },
+          {
+            "id": "hazards_retained",
+            "passed": true
+          },
+          {
+            "id": "palette_complete",
+            "passed": true
+          },
+          {
+            "id": "single_forward_destruction_chain",
+            "passed": true
+          }
+        ]
+      },
+      "pass20": {
+        "passed": true,
+        "passedCount": 36,
+        "total": 36,
+        "gapWidth": 1140,
+        "ordinaryJumpReach": 333.09117647058827,
+        "flightToLandingFrames": 62.57288691630843,
+        "projectedLandingX": 31586.603512158785,
+        "checks": [
+          {
+            "id": "world_extended_width",
+            "passed": true
+          },
+          {
+            "id": "world_extended_height",
+            "passed": true
+          },
+          {
+            "id": "zone_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_in_world",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass19",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "route_in_world",
+            "passed": true
+          },
+          {
+            "id": "three_floor_segments",
+            "passed": true
+          },
+          {
+            "id": "floors_in_zone",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "phase_20_floors",
+            "passed": true
+          },
+          {
+            "id": "unique_floor_ids",
+            "passed": true
+          },
+          {
+            "id": "one_launch_floor",
+            "passed": true
+          },
+          {
+            "id": "one_landing_floor",
+            "passed": true
+          },
+          {
+            "id": "long_chasm",
+            "passed": true
+          },
+          {
+            "id": "ordinary_move_insufficient",
+            "passed": true
+          },
+          {
+            "id": "spring_on_runway",
+            "passed": true
+          },
+          {
+            "id": "directional_right",
+            "passed": true
+          },
+          {
+            "id": "horizontal_launch_speed",
+            "passed": true
+          },
+          {
+            "id": "vertical_launch_speed",
+            "passed": true
+          },
+          {
+            "id": "inertia_window",
+            "passed": true
+          },
+          {
+            "id": "projected_landing",
+            "passed": true
+          },
+          {
+            "id": "landing_target_matches_floor",
+            "passed": true
+          },
+          {
+            "id": "hazard_covers_chasm",
+            "passed": true
+          },
+          {
+            "id": "hazard_below_arc",
+            "passed": true
+          },
+          {
+            "id": "single_exit_wall",
+            "passed": true
+          },
+          {
+            "id": "solid_in_zone",
+            "passed": true
+          },
+          {
+            "id": "completion_requirements",
+            "passed": true
+          },
+          {
+            "id": "checkpoint_at_exit",
+            "passed": true
+          },
+          {
+            "id": "flight_camera_wide",
+            "passed": true
+          },
+          {
+            "id": "level_bounds_in_world",
+            "passed": true
+          },
+          {
+            "id": "level_camera_matches_world",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "palette_complete",
+            "passed": true
+          }
+        ]
+      },
+      "pass21": {
+        "passed": true,
+        "passedCount": 29,
+        "total": 29,
+        "targetSpeedSamples": [
+          2.2,
+          2.2,
+          5.55,
+          7.15,
+          8.1,
+          8.1
+        ],
+        "slowdownStart": 0.36,
+        "slowdownMiddle": 0.6799999999999999,
+        "checks": [
+          {
+            "id": "retains_complete_chase_path",
+            "passed": true
+          },
+          {
+            "id": "lead_bands_ordered",
+            "passed": true
+          },
+          {
+            "id": "safety_lead_bounded",
+            "passed": true
+          },
+          {
+            "id": "target_lead_bounded",
+            "passed": true
+          },
+          {
+            "id": "maximum_lead_bounded",
+            "passed": true
+          },
+          {
+            "id": "speed_bands_ordered",
+            "passed": true
+          },
+          {
+            "id": "minimum_speed_safe",
+            "passed": true
+          },
+          {
+            "id": "cruise_near_previous_base",
+            "passed": true
+          },
+          {
+            "id": "catchup_speed_bounded",
+            "passed": true
+          },
+          {
+            "id": "maximum_speed_bounded",
+            "passed": true
+          },
+          {
+            "id": "braking_faster_than_acceleration",
+            "passed": true
+          },
+          {
+            "id": "acceleration_response_bounded",
+            "passed": true
+          },
+          {
+            "id": "braking_response_bounded",
+            "passed": true
+          },
+          {
+            "id": "target_samples_monotonic",
+            "passed": true
+          },
+          {
+            "id": "target_samples_bounded",
+            "passed": true
+          },
+          {
+            "id": "far_lead_uses_maximum",
+            "passed": true
+          },
+          {
+            "id": "slowdown_duration_bounded",
+            "passed": true
+          },
+          {
+            "id": "slowdown_stack_bounded",
+            "passed": true
+          },
+          {
+            "id": "slowdown_multiplier_bounded",
+            "passed": true
+          },
+          {
+            "id": "slowdown_absolute_floor",
+            "passed": true
+          },
+          {
+            "id": "slowdown_starts_reduced",
+            "passed": true
+          },
+          {
+            "id": "slowdown_recovers",
+            "passed": true
+          },
+          {
+            "id": "adaptive_pause_enabled",
+            "passed": true
+          },
+          {
+            "id": "catchup_pause_decrement_bounded",
+            "passed": true
+          },
+          {
+            "id": "maximum_pause_decrement_bounded",
+            "passed": true
+          },
+          {
+            "id": "long_breakpoint_present",
+            "passed": true
+          },
+          {
+            "id": "projection_window_bounded",
+            "passed": true
+          },
+          {
+            "id": "projection_bootstrap_ahead",
+            "passed": true
+          },
+          {
+            "id": "projection_lateral_tolerance",
+            "passed": true
+          }
+        ]
+      },
+      "pass22": {
+        "passed": true,
+        "passedCount": 12,
+        "total": 12,
+        "checks": [
+          {
+            "id": "zone_in_world",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass20",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "route_descends_after_handoff",
+            "passed": true
+          },
+          {
+            "id": "three_landing_surfaces",
+            "passed": true
+          },
+          {
+            "id": "single_leftward_route",
+            "passed": true
+          },
+          {
+            "id": "gaps_are_jumpable",
+            "passed": true
+          },
+          {
+            "id": "walls_bound_shaft",
+            "passed": true
+          },
+          {
+            "id": "checkpoint_at_exit",
+            "passed": true
+          },
+          {
+            "id": "three_required_landings",
+            "passed": true
+          },
+          {
+            "id": "palette_complete",
+            "passed": true
+          }
+        ]
+      },
+      "pass23": {
+        "passed": true,
+        "passedCount": 24,
+        "total": 24,
+        "flightFrames": 36.39371630127576,
+        "projectedLandingX": 24328.51939027576,
+        "checks": [
+          {
+            "id": "zone_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_in_world",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass22",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "single_leftward_route",
+            "passed": true
+          },
+          {
+            "id": "route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "route_in_world",
+            "passed": true
+          },
+          {
+            "id": "six_floor_segments",
+            "passed": true
+          },
+          {
+            "id": "unique_collision_ids",
+            "passed": true
+          },
+          {
+            "id": "one_moving_platform",
+            "passed": true
+          },
+          {
+            "id": "platform_bridges_gap",
+            "passed": true
+          },
+          {
+            "id": "two_ordered_enemies",
+            "passed": true
+          },
+          {
+            "id": "two_followup_anchors",
+            "passed": true
+          },
+          {
+            "id": "anchors_reachable",
+            "passed": true
+          },
+          {
+            "id": "leftward_spring",
+            "passed": true
+          },
+          {
+            "id": "spring_on_runway",
+            "passed": true
+          },
+          {
+            "id": "spring_projected_landing",
+            "passed": true
+          },
+          {
+            "id": "hazard_covers_escape_gap",
+            "passed": true
+          },
+          {
+            "id": "pursuer_route_leftward",
+            "passed": true
+          },
+          {
+            "id": "pursuer_fair_delay",
+            "passed": true
+          },
+          {
+            "id": "mixed_requirements",
+            "passed": true
+          },
+          {
+            "id": "late_checkpoint_identity",
+            "passed": true
+          },
+          {
+            "id": "level_fills_world",
+            "passed": true
+          },
+          {
+            "id": "palette_complete",
+            "passed": true
+          }
+        ]
+      },
+      "gameplay": {
+        "player": {
+          "x": 24276.877173191806,
+          "y": 12044.612282680819,
+          "vx": -0.06337563666409299,
+          "vy": 0,
+          "grounded": true,
+          "wallSide": 0,
+          "dashAvailable": true,
+          "grappleLaunchFrames": 0,
+          "springLaunchFrames": 0,
+          "standingPlatformId": null,
+          "standingFloorId": "pass23_exit_slope"
+        },
+        "movingPlatforms": [
+          {
+            "id": "shaft_carriage",
+            "x": 11567.250000000031,
+            "y": 3290,
+            "direction": -1
+          },
+          {
+            "id": "pass23_chase_carriage",
+            "x": 27898.000000000084,
+            "y": 11900,
+            "direction": -1
+          }
+        ],
+        "pass23Enemies": [
+          {
+            "id": "pass23_sentinel_a",
+            "health": 0,
+            "defeated": true,
+            "hitFrames": 0
+          },
+          {
+            "id": "pass23_sentinel_b",
+            "health": 0,
+            "defeated": true,
+            "hitFrames": 0
+          }
+        ],
+        "pass23Pursuer": {
+          "active": false,
+          "escaped": true,
+          "delayFrames": 0,
+          "pathDistance": 1377.000000000013,
+          "totalDistance": 5628.71555266161,
+          "x": 28446.483139801803,
+          "y": 11887.094803762388,
+          "minimumGap": 1605.8607870188955
+        },
+        "attackFrames": 0,
+        "breakables": [
+          {
+            "id": "west_braced_gate",
+            "shape": "cross_brace",
+            "destroyed": false
+          },
+          {
+            "id": "middle_lattice_gate",
+            "shape": "lattice",
+            "destroyed": false
+          },
+          {
+            "id": "east_split_gate",
+            "shape": "split_pillar",
+            "destroyed": false
+          }
+        ],
+        "chase": {
+          "triggered": false,
+          "active": false,
+          "sealed": true,
+          "delayFrames": 220,
+          "breachDelayFrames": 220,
+          "breachComplete": false,
+          "internalBreakpointIndex": 0,
+          "internalPauseFrames": 0,
+          "pass14HeadStartFrames": 0,
+          "pass15HeadStartFrames": 0,
+          "activeFrames": 0,
+          "pathDistance": 0,
+          "pathProgress": 0,
+          "pathIndex": 0,
+          "x": 13400,
+          "y": 3900,
+          "speed": 5.6,
+          "basePacedSpeed": 5.6,
+          "targetSpeed": 5.6,
+          "playerPathDistance": 0,
+          "playerPathIndex": 0,
+          "leadDistance": 0,
+          "projectionGap": 0,
+          "destructionSlowdownFrames": 0
+        },
+        "collapsedFloorIds": [],
+        "destroyedSupportIds": [],
+        "grapple": {
+          "active": false,
+          "anchorId": null,
+          "ropeLength": 573.0974246491812,
+          "attachedFrames": 0,
+          "cooldown": 0,
+          "lastAnchorId": "pass23_anchor_five",
+          "usedAnchorIds": [
+            "grapple_anchor_one",
+            "grapple_anchor_two",
+            "grapple_anchor_three",
+            "pass23_anchor_four",
+            "pass23_anchor_five"
+          ]
+        },
+        "precisionJump": {
+          "kind": null,
+          "holdFrames": 0,
+          "cut": false
+        },
+        "pass18Jump": {
+          "active": false,
+          "holdFrames": 0,
+          "cut": false,
+          "recorded": false
+        },
+        "pass18VisitedFloorIds": [],
+        "pass19ArmedFloorIds": [],
+        "pass19DestroyedFloorIds": [],
+        "boulderCatchCount": 0,
+        "debrisCount": 0,
+        "camera": {
+          "x": 23501.347607625965,
+          "y": 11499.177424141408,
+          "zoom": 0.9957424554538999
+        },
+        "progress": {
+          "zone01Reached": true,
+          "firstDropped": false,
+          "firstClimb": false,
+          "secondDropped": false,
+          "secondClimb": false,
+          "completed": false,
+          "zone03Entered": false,
+          "lowerRiseReached": false,
+          "atriumReached": false,
+          "upperGalleryReached": false,
+          "longDescentReached": false,
+          "pass04Completed": false,
+          "zone04Entered": false,
+          "lowTunnelReached": false,
+          "platformBoarded": false,
+          "movingPlatformCrossed": false,
+          "unevenTunnelReached": false,
+          "pass05Completed": false,
+          "zone05Entered": false,
+          "lowerHallReached": false,
+          "highGalleryReached": false,
+          "pass06Completed": false,
+          "zone06Entered": false,
+          "curveCommitted": false,
+          "zone06Dropped": false,
+          "eastDashGapCleared": false,
+          "middleDashGapCleared": false,
+          "westDashGapCleared": false,
+          "pass07Completed": false,
+          "chaseTriggered": false,
+          "boulderStarted": false,
+          "boulderEnteredCurve": false,
+          "boulderRoundedApex": false,
+          "boulderFinished": false,
+          "chaseEscaped": false,
+          "pass08Completed": false,
+          "zone07Entered": false,
+          "zone07UpperDrop": false,
+          "zone07MiddleReturn": false,
+          "zone07MiddleDrop": false,
+          "zone07LowerRun": false,
+          "zone07ExitReached": false,
+          "boulderAtInternalEntry": false,
+          "internalStructureBreached": false,
+          "pass09Completed": false,
+          "zone08Entered": false,
+          "zone08ShaftOneDropped": false,
+          "zone08ShaftOneCleared": false,
+          "zone08ShaftTwoDropped": false,
+          "zone08ShaftTwoCleared": false,
+          "zone08LowerHallReached": false,
+          "zone08ExitReached": false,
+          "pass10Completed": true,
+          "zone09Entered": true,
+          "grappleAnchorOneUsed": true,
+          "grappleAnchorTwoUsed": true,
+          "grappleAnchorThreeUsed": true,
+          "grappleChainCompleted": true,
+          "zone09ExitReached": false,
+          "pass11Completed": true,
+          "dashSpikeEntered": false,
+          "dashSpikeTakeoff": false,
+          "dashSpikeAirDashUsed": false,
+          "dashSpikeCleared": false,
+          "zone09DashExitReached": false,
+          "pass12Completed": true,
+          "precisionEntered": false,
+          "precisionShortTakeoff": false,
+          "precisionShortJumpCut": false,
+          "precisionShortGapCleared": false,
+          "precisionLowCeilingCleared": false,
+          "precisionTurnReached": false,
+          "precisionDirectionReversed": false,
+          "precisionLongTakeoff": false,
+          "precisionLongGapCleared": false,
+          "precisionExitReached": false,
+          "pass13Completed": true,
+          "giantCurveEntered": false,
+          "giantCurveUpperTakeoff": false,
+          "giantCurveUpperGapCleared": false,
+          "giantCurveSteepCommitted": false,
+          "giantCurveDropStarted": false,
+          "giantCurveLowerLanded": false,
+          "giantCurveDirectionReversed": false,
+          "giantCurveExitReached": false,
+          "pass14Completed": true,
+          "bridgeEntered": true,
+          "bridgeGapOneCleared": true,
+          "bridgeGapTwoCleared": true,
+          "bridgeGapThreeCleared": true,
+          "bridgeFinalAirDash": false,
+          "bridgeExitReached": true,
+          "bridgeBoulderPlunged": false,
+          "pass15Completed": true,
+          "pass18Entered": true,
+          "pass18Completed": true,
+          "pass18CheckpointActivated": false,
+          "pass19AftershockStarted": false,
+          "pass19Completed": true,
+          "pass19CheckpointStabilized": false,
+          "pass20Entered": false,
+          "pass20SpringReady": false,
+          "pass20SpringLaunched": false,
+          "pass20SpringApexReached": false,
+          "pass20ChasmCleared": false,
+          "pass20SpringLanded": false,
+          "pass20ExitReached": false,
+          "pass20Completed": true,
+          "pass21PacingEngaged": false,
+          "pass21SafetyBandObserved": false,
+          "pass21CruiseBandObserved": false,
+          "pass21CatchupBandObserved": false,
+          "pass21DestructionSlowdowns": 0,
+          "pass21StructuresSlowed": 0,
+          "pass21DestructionSlowdownFrames": 0,
+          "pass21AdaptivePauseFramesSkipped": 0,
+          "pass21MinimumLead": null,
+          "pass21MaximumLead": 0,
+          "pass21MinimumSpeed": null,
+          "pass21MaximumSpeed": 0,
+          "pass21Completed": true,
+          "pass22Entered": true,
+          "pass22FirstLanding": true,
+          "pass22SecondLanding": true,
+          "pass22ExitReached": true,
+          "pass22Completed": true,
+          "pass23Entered": true,
+          "pass23PursuerStarted": true,
+          "pass23PlatformBoarded": true,
+          "pass23PlatformCrossed": true,
+          "pass23CombatStarted": true,
+          "pass23EnemyDefeats": 2,
+          "pass23CombatCleared": true,
+          "pass23AnchorFourUsed": true,
+          "pass23AnchorFiveUsed": true,
+          "pass23GrappleChainCompleted": true,
+          "pass23SpringReady": true,
+          "pass23SpringLaunched": true,
+          "pass23SpringLanded": true,
+          "pass23ExitReached": true,
+          "pass23PursuerEscaped": true,
+          "pass23Completed": true,
+          "chaseWallJumps": 0,
+          "floorsCollapsed": 0,
+          "supportsDestroyed": 0,
+          "internalDirectionChanges": 0,
+          "dashGapClears": 0,
+          "directionChanges": 0,
+          "breakablesDestroyed": 0,
+          "platformRides": 0,
+          "groundJumps": 0,
+          "wallJumps": 0,
+          "ledgeAssists": 0,
+          "dashes": 0,
+          "grappleAttaches": 5,
+          "grappleReleases": 5,
+          "grappleUniqueAnchors": 5,
+          "chaseAirDashes": 0,
+          "precisionShortJumps": 0,
+          "precisionLongJumps": 0,
+          "precisionDirectionChanges": 0,
+          "precisionCeilingBumps": 0,
+          "giantCurveUpperJumps": 0,
+          "giantCurveNaturalDrops": 0,
+          "giantCurveDirectionChanges": 0,
+          "bridgeJumps": 0,
+          "bridgeAirDashes": 0,
+          "pass18NarrowLandings": 0,
+          "pass18Jumps": 0,
+          "pass18ShortCuts": 0,
+          "pass18HeldJumps": 0,
+          "pass18CeilingBumps": 0,
+          "pass19FloorsArmed": 0,
+          "pass19FloorsCollapsed": 0,
+          "pass19DebrisBursts": 0,
+          "pass19PeakPending": 0,
+          "pass20SpringLaunches": 0,
+          "pass20SpringLandings": 0,
+          "pass20PeakHorizontalSpeed": 0,
+          "pass20FlightFrames": 0,
+          "pass23Attacks": 2,
+          "pass23PlatformRides": 1,
+          "pass23GrappleAttaches": 2,
+          "pass23GrappleReleases": 2,
+          "pass23SpringLaunches": 1,
+          "pass23SpringLandings": 1,
+          "pass23FlightFrames": 36,
+          "pass23PursuerActiveFrames": 510,
+          "pass23PursuerContacts": 0
+        },
+        "keys": [],
+        "blueprintVisible": false,
+        "resetCount": 0,
+        "frameCount": 1188
+      },
+      "inputProbe": {
+        "downs": 10,
+        "ups": 10,
+        "lastCode": "KeyB",
+        "usedCodes": [
+          "KeyA",
+          "KeyB",
+          "KeyE",
+          "KeyF"
+        ]
+      }
+    },
+    "debug": {
+      "player": {
+        "x": 24276.877173191806,
+        "y": 12044.612282680819,
+        "vx": -0.06337563666409299,
+        "vy": 0,
+        "grounded": true,
+        "wallSide": 0,
+        "dashAvailable": true,
+        "grappleLaunchFrames": 0,
+        "springLaunchFrames": 0,
+        "standingPlatformId": null,
+        "standingFloorId": "pass23_exit_slope"
+      },
+      "movingPlatforms": [
+        {
+          "id": "shaft_carriage",
+          "x": 11567.250000000031,
+          "y": 3290,
+          "direction": -1
+        },
+        {
+          "id": "pass23_chase_carriage",
+          "x": 27898.000000000084,
+          "y": 11900,
+          "direction": -1
+        }
+      ],
+      "pass23Enemies": [
+        {
+          "id": "pass23_sentinel_a",
+          "health": 0,
+          "defeated": true,
+          "hitFrames": 0
+        },
+        {
+          "id": "pass23_sentinel_b",
+          "health": 0,
+          "defeated": true,
+          "hitFrames": 0
+        }
+      ],
+      "pass23Pursuer": {
+        "active": false,
+        "escaped": true,
+        "delayFrames": 0,
+        "pathDistance": 1377.000000000013,
+        "totalDistance": 5628.71555266161,
+        "x": 28446.483139801803,
+        "y": 11887.094803762388,
+        "minimumGap": 1605.8607870188955
+      },
+      "attackFrames": 0,
+      "breakables": [
+        {
+          "id": "west_braced_gate",
+          "shape": "cross_brace",
+          "destroyed": false
+        },
+        {
+          "id": "middle_lattice_gate",
+          "shape": "lattice",
+          "destroyed": false
+        },
+        {
+          "id": "east_split_gate",
+          "shape": "split_pillar",
+          "destroyed": false
+        }
+      ],
+      "chase": {
+        "triggered": false,
+        "active": false,
+        "sealed": true,
+        "delayFrames": 220,
+        "breachDelayFrames": 220,
+        "breachComplete": false,
+        "internalBreakpointIndex": 0,
+        "internalPauseFrames": 0,
+        "pass14HeadStartFrames": 0,
+        "pass15HeadStartFrames": 0,
+        "activeFrames": 0,
+        "pathDistance": 0,
+        "pathProgress": 0,
+        "pathIndex": 0,
+        "x": 13400,
+        "y": 3900,
+        "speed": 5.6,
+        "basePacedSpeed": 5.6,
+        "targetSpeed": 5.6,
+        "playerPathDistance": 0,
+        "playerPathIndex": 0,
+        "leadDistance": 0,
+        "projectionGap": 0,
+        "destructionSlowdownFrames": 0
+      },
+      "collapsedFloorIds": [],
+      "destroyedSupportIds": [],
+      "grapple": {
+        "active": false,
+        "anchorId": null,
+        "ropeLength": 573.0974246491812,
+        "attachedFrames": 0,
+        "cooldown": 0,
+        "lastAnchorId": "pass23_anchor_five",
+        "usedAnchorIds": [
+          "grapple_anchor_one",
+          "grapple_anchor_two",
+          "grapple_anchor_three",
+          "pass23_anchor_four",
+          "pass23_anchor_five"
+        ]
+      },
+      "precisionJump": {
+        "kind": null,
+        "holdFrames": 0,
+        "cut": false
+      },
+      "pass18Jump": {
+        "active": false,
+        "holdFrames": 0,
+        "cut": false,
+        "recorded": false
+      },
+      "pass18VisitedFloorIds": [],
+      "pass19ArmedFloorIds": [],
+      "pass19DestroyedFloorIds": [],
+      "boulderCatchCount": 0,
+      "debrisCount": 0,
+      "camera": {
+        "x": 23501.347607625965,
+        "y": 11499.177424141408,
+        "zoom": 0.9957424554538999
+      },
+      "progress": {
+        "zone01Reached": true,
+        "firstDropped": false,
+        "firstClimb": false,
+        "secondDropped": false,
+        "secondClimb": false,
+        "completed": false,
+        "zone03Entered": false,
+        "lowerRiseReached": false,
+        "atriumReached": false,
+        "upperGalleryReached": false,
+        "longDescentReached": false,
+        "pass04Completed": false,
+        "zone04Entered": false,
+        "lowTunnelReached": false,
+        "platformBoarded": false,
+        "movingPlatformCrossed": false,
+        "unevenTunnelReached": false,
+        "pass05Completed": false,
+        "zone05Entered": false,
+        "lowerHallReached": false,
+        "highGalleryReached": false,
+        "pass06Completed": false,
+        "zone06Entered": false,
+        "curveCommitted": false,
+        "zone06Dropped": false,
+        "eastDashGapCleared": false,
+        "middleDashGapCleared": false,
+        "westDashGapCleared": false,
+        "pass07Completed": false,
+        "chaseTriggered": false,
+        "boulderStarted": false,
+        "boulderEnteredCurve": false,
+        "boulderRoundedApex": false,
+        "boulderFinished": false,
+        "chaseEscaped": false,
+        "pass08Completed": false,
+        "zone07Entered": false,
+        "zone07UpperDrop": false,
+        "zone07MiddleReturn": false,
+        "zone07MiddleDrop": false,
+        "zone07LowerRun": false,
+        "zone07ExitReached": false,
+        "boulderAtInternalEntry": false,
+        "internalStructureBreached": false,
+        "pass09Completed": false,
+        "zone08Entered": false,
+        "zone08ShaftOneDropped": false,
+        "zone08ShaftOneCleared": false,
+        "zone08ShaftTwoDropped": false,
+        "zone08ShaftTwoCleared": false,
+        "zone08LowerHallReached": false,
+        "zone08ExitReached": false,
+        "pass10Completed": true,
+        "zone09Entered": true,
+        "grappleAnchorOneUsed": true,
+        "grappleAnchorTwoUsed": true,
+        "grappleAnchorThreeUsed": true,
+        "grappleChainCompleted": true,
+        "zone09ExitReached": false,
+        "pass11Completed": true,
+        "dashSpikeEntered": false,
+        "dashSpikeTakeoff": false,
+        "dashSpikeAirDashUsed": false,
+        "dashSpikeCleared": false,
+        "zone09DashExitReached": false,
+        "pass12Completed": true,
+        "precisionEntered": false,
+        "precisionShortTakeoff": false,
+        "precisionShortJumpCut": false,
+        "precisionShortGapCleared": false,
+        "precisionLowCeilingCleared": false,
+        "precisionTurnReached": false,
+        "precisionDirectionReversed": false,
+        "precisionLongTakeoff": false,
+        "precisionLongGapCleared": false,
+        "precisionExitReached": false,
+        "pass13Completed": true,
+        "giantCurveEntered": false,
+        "giantCurveUpperTakeoff": false,
+        "giantCurveUpperGapCleared": false,
+        "giantCurveSteepCommitted": false,
+        "giantCurveDropStarted": false,
+        "giantCurveLowerLanded": false,
+        "giantCurveDirectionReversed": false,
+        "giantCurveExitReached": false,
+        "pass14Completed": true,
+        "bridgeEntered": true,
+        "bridgeGapOneCleared": true,
+        "bridgeGapTwoCleared": true,
+        "bridgeGapThreeCleared": true,
+        "bridgeFinalAirDash": false,
+        "bridgeExitReached": true,
+        "bridgeBoulderPlunged": false,
+        "pass15Completed": true,
+        "pass18Entered": true,
+        "pass18Completed": true,
+        "pass18CheckpointActivated": false,
+        "pass19AftershockStarted": false,
+        "pass19Completed": true,
+        "pass19CheckpointStabilized": false,
+        "pass20Entered": false,
+        "pass20SpringReady": false,
+        "pass20SpringLaunched": false,
+        "pass20SpringApexReached": false,
+        "pass20ChasmCleared": false,
+        "pass20SpringLanded": false,
+        "pass20ExitReached": false,
+        "pass20Completed": true,
+        "pass21PacingEngaged": false,
+        "pass21SafetyBandObserved": false,
+        "pass21CruiseBandObserved": false,
+        "pass21CatchupBandObserved": false,
+        "pass21DestructionSlowdowns": 0,
+        "pass21StructuresSlowed": 0,
+        "pass21DestructionSlowdownFrames": 0,
+        "pass21AdaptivePauseFramesSkipped": 0,
+        "pass21MinimumLead": null,
+        "pass21MaximumLead": 0,
+        "pass21MinimumSpeed": null,
+        "pass21MaximumSpeed": 0,
+        "pass21Completed": true,
+        "pass22Entered": true,
+        "pass22FirstLanding": true,
+        "pass22SecondLanding": true,
+        "pass22ExitReached": true,
+        "pass22Completed": true,
+        "pass23Entered": true,
+        "pass23PursuerStarted": true,
+        "pass23PlatformBoarded": true,
+        "pass23PlatformCrossed": true,
+        "pass23CombatStarted": true,
+        "pass23EnemyDefeats": 2,
+        "pass23CombatCleared": true,
+        "pass23AnchorFourUsed": true,
+        "pass23AnchorFiveUsed": true,
+        "pass23GrappleChainCompleted": true,
+        "pass23SpringReady": true,
+        "pass23SpringLaunched": true,
+        "pass23SpringLanded": true,
+        "pass23ExitReached": true,
+        "pass23PursuerEscaped": true,
+        "pass23Completed": true,
+        "chaseWallJumps": 0,
+        "floorsCollapsed": 0,
+        "supportsDestroyed": 0,
+        "internalDirectionChanges": 0,
+        "dashGapClears": 0,
+        "directionChanges": 0,
+        "breakablesDestroyed": 0,
+        "platformRides": 0,
+        "groundJumps": 0,
+        "wallJumps": 0,
+        "ledgeAssists": 0,
+        "dashes": 0,
+        "grappleAttaches": 5,
+        "grappleReleases": 5,
+        "grappleUniqueAnchors": 5,
+        "chaseAirDashes": 0,
+        "precisionShortJumps": 0,
+        "precisionLongJumps": 0,
+        "precisionDirectionChanges": 0,
+        "precisionCeilingBumps": 0,
+        "giantCurveUpperJumps": 0,
+        "giantCurveNaturalDrops": 0,
+        "giantCurveDirectionChanges": 0,
+        "bridgeJumps": 0,
+        "bridgeAirDashes": 0,
+        "pass18NarrowLandings": 0,
+        "pass18Jumps": 0,
+        "pass18ShortCuts": 0,
+        "pass18HeldJumps": 0,
+        "pass18CeilingBumps": 0,
+        "pass19FloorsArmed": 0,
+        "pass19FloorsCollapsed": 0,
+        "pass19DebrisBursts": 0,
+        "pass19PeakPending": 0,
+        "pass20SpringLaunches": 0,
+        "pass20SpringLandings": 0,
+        "pass20PeakHorizontalSpeed": 0,
+        "pass20FlightFrames": 0,
+        "pass23Attacks": 2,
+        "pass23PlatformRides": 1,
+        "pass23GrappleAttaches": 2,
+        "pass23GrappleReleases": 2,
+        "pass23SpringLaunches": 1,
+        "pass23SpringLandings": 1,
+        "pass23FlightFrames": 36,
+        "pass23PursuerActiveFrames": 510,
+        "pass23PursuerContacts": 0
+      },
+      "keys": [],
+      "blueprintVisible": false,
+      "resetCount": 0,
+      "frameCount": 1188
+    },
+    "validation": {
+      "passed": true,
+      "passedCount": 24,
+      "total": 24,
+      "flightFrames": 36.39371630127576,
+      "projectedLandingX": 24328.51939027576,
+      "checks": [
+        {
+          "id": "zone_in_world",
+          "passed": true
+        },
+        {
+          "id": "camera_in_world",
+          "passed": true
+        },
+        {
+          "id": "entry_matches_pass22",
+          "passed": true
+        },
+        {
+          "id": "exit_lower_than_entry",
+          "passed": true
+        },
+        {
+          "id": "single_leftward_route",
+          "passed": true
+        },
+        {
+          "id": "route_endpoints",
+          "passed": true
+        },
+        {
+          "id": "route_in_world",
+          "passed": true
+        },
+        {
+          "id": "six_floor_segments",
+          "passed": true
+        },
+        {
+          "id": "unique_collision_ids",
+          "passed": true
+        },
+        {
+          "id": "one_moving_platform",
+          "passed": true
+        },
+        {
+          "id": "platform_bridges_gap",
+          "passed": true
+        },
+        {
+          "id": "two_ordered_enemies",
+          "passed": true
+        },
+        {
+          "id": "two_followup_anchors",
+          "passed": true
+        },
+        {
+          "id": "anchors_reachable",
+          "passed": true
+        },
+        {
+          "id": "leftward_spring",
+          "passed": true
+        },
+        {
+          "id": "spring_on_runway",
+          "passed": true
+        },
+        {
+          "id": "spring_projected_landing",
+          "passed": true
+        },
+        {
+          "id": "hazard_covers_escape_gap",
+          "passed": true
+        },
+        {
+          "id": "pursuer_route_leftward",
+          "passed": true
+        },
+        {
+          "id": "pursuer_fair_delay",
+          "passed": true
+        },
+        {
+          "id": "mixed_requirements",
+          "passed": true
+        },
+        {
+          "id": "late_checkpoint_identity",
+          "passed": true
+        },
+        {
+          "id": "level_fills_world",
+          "passed": true
+        },
+        {
+          "id": "palette_complete",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "samples": [
+    {
+      "iteration": 0,
+      "frame": 65,
+      "x": 29140,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 5,
+      "frame": 73,
+      "x": 29119.84,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 10,
+      "frame": 79,
+      "x": 29087.74000000001,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 15,
+      "frame": 86,
+      "x": 29050.29000000002,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 20,
+      "frame": 93,
+      "x": 29012.84000000003,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 25,
+      "frame": 99,
+      "x": 28980.740000000038,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 30,
+      "frame": 106,
+      "x": 28943.290000000048,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 35,
+      "frame": 113,
+      "x": 28905.84000000006,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 40,
+      "frame": 119,
+      "x": 28873.740000000067,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 45,
+      "frame": 126,
+      "x": 28836.290000000077,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 50,
+      "frame": 133,
+      "x": 28798.840000000087,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 55,
+      "frame": 139,
+      "x": 28766.740000000096,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 60,
+      "frame": 146,
+      "x": 28729.290000000106,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 65,
+      "frame": 153,
+      "x": 28691.840000000117,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 70,
+      "frame": 160,
+      "x": 28654.390000000127,
+      "y": 11832,
+      "floor": "pass23_entry_shelf",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 75,
+      "frame": 166,
+      "x": 28622.290000000135,
+      "y": 11842.2,
+      "floor": null,
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 80,
+      "frame": 173,
+      "x": 28584.840000000146,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 85,
+      "frame": 180,
+      "x": 28547.390000000156,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 90,
+      "frame": 186,
+      "x": 28515.290000000165,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 95,
+      "frame": 193,
+      "x": 28477.840000000175,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 100,
+      "frame": 200,
+      "x": 28440.390000000185,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 105,
+      "frame": 207,
+      "x": 28402.940000000195,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 110,
+      "frame": 214,
+      "x": 28365.490000000205,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 115,
+      "frame": 220,
+      "x": 28334.567000000214,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 120,
+      "frame": 227,
+      "x": 28322.370676031514,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 125,
+      "frame": 234,
+      "x": 28320.228322347022,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 130,
+      "frame": 240,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 135,
+      "frame": 247,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 140,
+      "frame": 254,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 145,
+      "frame": 260,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 150,
+      "frame": 267,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 155,
+      "frame": 274,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 160,
+      "frame": 280,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 165,
+      "frame": 287,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 170,
+      "frame": 294,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 175,
+      "frame": 300,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 180,
+      "frame": 307,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 185,
+      "frame": 314,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 190,
+      "frame": 320,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 195,
+      "frame": 327,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 200,
+      "frame": 334,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 205,
+      "frame": 340,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 210,
+      "frame": 347,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 215,
+      "frame": 353,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 220,
+      "frame": 360,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 225,
+      "frame": 367,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 230,
+      "frame": 373,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 235,
+      "frame": 380,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 240,
+      "frame": 387,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 245,
+      "frame": 393,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 250,
+      "frame": 400,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 255,
+      "frame": 407,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 260,
+      "frame": 413,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 265,
+      "frame": 420,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 270,
+      "frame": 426,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 275,
+      "frame": 433,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 280,
+      "frame": 440,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 285,
+      "frame": 446,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 290,
+      "frame": 453,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 295,
+      "frame": 460,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 300,
+      "frame": 466,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 305,
+      "frame": 473,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 310,
+      "frame": 479,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 315,
+      "frame": 486,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 320,
+      "frame": 493,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 325,
+      "frame": 499,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 330,
+      "frame": 506,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 335,
+      "frame": 513,
+      "x": 28319.940793454345,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": null,
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 340,
+      "frame": 519,
+      "x": 28333.94079345434,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 345,
+      "frame": 526,
+      "x": 28353.540793454336,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 350,
+      "frame": 533,
+      "x": 28373.14079345433,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 355,
+      "frame": 539,
+      "x": 28389.940793454327,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 360,
+      "frame": 546,
+      "x": 28409.540793454322,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 365,
+      "frame": 553,
+      "x": 28429.140793454317,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 370,
+      "frame": 559,
+      "x": 28431.940793454498,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 375,
+      "frame": 566,
+      "x": 28412.340793454503,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 380,
+      "frame": 573,
+      "x": 28392.740793454508,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 385,
+      "frame": 579,
+      "x": 28375.940793454512,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 390,
+      "frame": 586,
+      "x": 28356.340793454518,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 395,
+      "frame": 593,
+      "x": 28336.740793454523,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 400,
+      "frame": 600,
+      "x": 28317.140793454528,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 405,
+      "frame": 606,
+      "x": 28300.340793454532,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 410,
+      "frame": 613,
+      "x": 28280.740793454537,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 415,
+      "frame": 620,
+      "x": 28261.140793454542,
+      "y": 11852,
+      "floor": "pass23_platform_departure",
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 420,
+      "frame": 626,
+      "x": 28244.340793454547,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 425,
+      "frame": 633,
+      "x": 28224.74079345455,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 430,
+      "frame": 640,
+      "x": 28205.140793454557,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": false,
+      "pursuerGap": null
+    },
+    {
+      "iteration": 435,
+      "frame": 654,
+      "x": 28165.940793454567,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 440,
+      "frame": 660,
+      "x": 28149.14079345457,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 445,
+      "frame": 667,
+      "x": 28129.540793454576,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 450,
+      "frame": 674,
+      "x": 28109.94079345458,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 455,
+      "frame": 680,
+      "x": 28093.140793454586,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 460,
+      "frame": 687,
+      "x": 28073.54079345459,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 465,
+      "frame": 693,
+      "x": 28056.740793454595,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 470,
+      "frame": 700,
+      "x": 28037.1407934546,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 475,
+      "frame": 707,
+      "x": 28017.540793454606,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 480,
+      "frame": 713,
+      "x": 28000.74079345461,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 485,
+      "frame": 720,
+      "x": 27981.140793454615,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 490,
+      "frame": 727,
+      "x": 27961.54079345462,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 495,
+      "frame": 733,
+      "x": 27944.740793454625,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 500,
+      "frame": 740,
+      "x": 27925.14079345463,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 505,
+      "frame": 746,
+      "x": 27908.340793454634,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 510,
+      "frame": 753,
+      "x": 27888.74079345464,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 515,
+      "frame": 759,
+      "x": 27871.940793454643,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 520,
+      "frame": 766,
+      "x": 27852.34079345465,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 525,
+      "frame": 773,
+      "x": 27832.740793454654,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 0,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 530,
+      "frame": 779,
+      "x": 27815.940793454658,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 535,
+      "frame": 786,
+      "x": 27796.340793454663,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 540,
+      "frame": 793,
+      "x": 27756.58079345467,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 545,
+      "frame": 799,
+      "x": 27707.68079345468,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 550,
+      "frame": 806,
+      "x": 27650.630793454697,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 555,
+      "frame": 812,
+      "x": 27626.93079345452,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 560,
+      "frame": 819,
+      "x": 27609.080793454526,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 565,
+      "frame": 826,
+      "x": 27591.23079345453,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 570,
+      "frame": 832,
+      "x": 27575.930793454536,
+      "y": 11852,
+      "floor": null,
+      "platform": "pass23_chase_carriage",
+      "enemies": 1,
+      "anchors": 0,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 575,
+      "frame": 839,
+      "x": 27552.26856700055,
+      "y": 11856.065120899295,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 580,
+      "frame": 846,
+      "x": 27507.04560275792,
+      "y": 11882,
+      "floor": "pass23_combat_island",
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 585,
+      "frame": 852,
+      "x": 27458.669689105744,
+      "y": 11882,
+      "floor": "pass23_combat_island",
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 590,
+      "frame": 859,
+      "x": 27389.881714011117,
+      "y": 11882,
+      "floor": "pass23_combat_island",
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 595,
+      "frame": 866,
+      "x": 27310.08598162629,
+      "y": 11882,
+      "floor": "pass23_combat_island",
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 600,
+      "frame": 872,
+      "x": 27241.08598162629,
+      "y": 11887.549787353544,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 605,
+      "frame": 879,
+      "x": 27160.58598162629,
+      "y": 11916.978998146395,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 610,
+      "frame": 886,
+      "x": 27080.08598162629,
+      "y": 11967.146130034585,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 615,
+      "frame": 892,
+      "x": 27011.08598162629,
+      "y": 12022.076083224274,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 620,
+      "frame": 899,
+      "x": 26930.58598162629,
+      "y": 12095.16629415499,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 625,
+      "frame": 906,
+      "x": 26850.08598162629,
+      "y": 12173.96441616503,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 630,
+      "frame": 912,
+      "x": 26795.963513337894,
+      "y": 12177.39911109137,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 635,
+      "frame": 919,
+      "x": 26723.387296307144,
+      "y": 12145.608920329314,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 640,
+      "frame": 925,
+      "x": 26642.79229630715,
+      "y": 12106.615153755667,
+      "floor": null,
+      "platform": null,
+      "enemies": 1,
+      "anchors": 1,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 645,
+      "frame": 932,
+      "x": 26558.427296307153,
+      "y": 12083.609382466035,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 650,
+      "frame": 939,
+      "x": 26477.927296307153,
+      "y": 12084.066473298604,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 655,
+      "frame": 946,
+      "x": 26397.427296307153,
+      "y": 12104.989772376324,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 660,
+      "frame": 953,
+      "x": 26316.927296307153,
+      "y": 12142.375521409234,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 665,
+      "frame": 960,
+      "x": 26236.427296307153,
+      "y": 12191.879140942203,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 670,
+      "frame": 967,
+      "x": 26158.158086559342,
+      "y": 12209.425976793425,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 675,
+      "frame": 975,
+      "x": 26066.594008652093,
+      "y": 12184.39144189165,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 680,
+      "frame": 982,
+      "x": 25986.599922406807,
+      "y": 12148.039495703279,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 685,
+      "frame": 989,
+      "x": 25906.849439424597,
+      "y": 12094.996031542985,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 690,
+      "frame": 997,
+      "x": 25818.51185995108,
+      "y": 12007.760903768462,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 695,
+      "frame": 1004,
+      "x": 25762.04293354171,
+      "y": 11924.357101050124,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 700,
+      "frame": 1011,
+      "x": 25724.654645469873,
+      "y": 11842.532280797212,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 705,
+      "frame": 1018,
+      "x": 25701.654350865236,
+      "y": 11761.463069147649,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 710,
+      "frame": 1025,
+      "x": 25647.431554405885,
+      "y": 11677.342387455024,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 715,
+      "frame": 1032,
+      "x": 25591.235945777087,
+      "y": 11617.212105762399,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 720,
+      "frame": 1039,
+      "x": 25533.135546266403,
+      "y": 11581.072224069774,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 725,
+      "frame": 1047,
+      "x": 25471.337690160613,
+      "y": 11572.001502135345,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 730,
+      "frame": 1054,
+      "x": 25432.99531333318,
+      "y": 11599.26482044272,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 735,
+      "frame": 1061,
+      "x": 25395.54531333319,
+      "y": 11659.848138750096,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 740,
+      "frame": 1068,
+      "x": 25358.0953133332,
+      "y": 11753.751457057471,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 745,
+      "frame": 1075,
+      "x": 25320.64531333321,
+      "y": 11862.251457057471,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 750,
+      "frame": 1082,
+      "x": 25283.19531333322,
+      "y": 11970.751457057471,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 755,
+      "frame": 1089,
+      "x": 25245.74531333323,
+      "y": 11972,
+      "floor": "pass23_spring_runway",
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 760,
+      "frame": 1095,
+      "x": 25213.64531333324,
+      "y": 11972,
+      "floor": "pass23_spring_runway",
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 765,
+      "frame": 1102,
+      "x": 25176.19531333325,
+      "y": 11972,
+      "floor": "pass23_spring_runway",
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": false,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 770,
+      "frame": 1109,
+      "x": 25111.454517193255,
+      "y": 11952.04,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": true,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 775,
+      "frame": 1116,
+      "x": 24978.58272910587,
+      "y": 11903.600000000002,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": true,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 780,
+      "frame": 1122,
+      "x": 24864.81029717596,
+      "y": 11888.600000000002,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": true,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 785,
+      "frame": 1129,
+      "x": 24732.211257311166,
+      "y": 11902.04,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": true,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 790,
+      "frame": 1136,
+      "x": 24599.75616799567,
+      "y": 11948.800000000001,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": true,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 795,
+      "frame": 1142,
+      "x": 24486.33628792259,
+      "y": 12015.400000000001,
+      "floor": null,
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": true,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    },
+    {
+      "iteration": 800,
+      "frame": 1149,
+      "x": 24369.203454278337,
+      "y": 12035.379654572167,
+      "floor": "pass23_exit_slope",
+      "platform": null,
+      "enemies": 2,
+      "anchors": 2,
+      "spring": true,
+      "pursuer": true,
+      "pursuerGap": 1605.8607870188955
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": []
+}

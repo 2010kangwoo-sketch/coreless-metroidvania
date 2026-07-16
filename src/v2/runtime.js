@@ -20,14 +20,15 @@ import { PASS19_DESTRUCTION, PASS19_LEVEL, validatePass19Level } from "./pass19-
 import { PASS20_LEVEL, PASS20_ZONE, validatePass20Level } from "./pass20-level.js";
 import { PASS21_PACING, getPass21DestructionMultiplier, getPass21TargetSpeed, validatePass21Pacing } from "./pass21-pacing.js";
 import { PASS22_LEVEL, PASS22_ZONE, validatePass22Level } from "./pass22-level.js";
+import { PASS23_LEVEL, PASS23_ZONE, validatePass23Level } from "./pass23-level.js";
 
-const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
+const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
 const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass22Runtime {
+export class Pass23Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -39,6 +40,8 @@ export class Pass22Runtime {
     this.jumpQueued = false;
     this.dashQueued = false;
     this.grappleQueued = false;
+    this.attackQueued = false;
+    this.attackFrames = 0;
     this.blueprintVisible = false;
     this.resetCount = 0;
     this.boulderCatchCount = 0;
@@ -46,6 +49,8 @@ export class Pass22Runtime {
     this.progress = this.createProgress();
     this.player = this.createPlayer();
     this.movingPlatforms = this.createMovingPlatforms();
+    this.pass23Enemies = this.createPass23Enemies();
+    this.pass23Pursuer = this.createPass23Pursuer();
     this.breakables = this.createBreakables();
     this.debris = [];
     this.chase = this.createChase();
@@ -58,8 +63,8 @@ export class Pass22Runtime {
     this.pass18Jump = this.createPass18Jump();
     this.pass19ArmedFloors = new Map();
     this.pass19DestroyedFloorIds = new Set();
-    this.collisionFloors = Object.freeze([...PASS15_LEVEL.floors, ...PASS18_LEVEL.floors, ...PASS20_LEVEL.floors, ...PASS22_LEVEL.floors]);
-    this.collisionSolids = Object.freeze([...PASS15_LEVEL.solids, ...PASS18_LEVEL.solids, ...PASS20_LEVEL.solids, ...PASS22_LEVEL.solids]);
+    this.collisionFloors = Object.freeze([...PASS15_LEVEL.floors, ...PASS18_LEVEL.floors, ...PASS20_LEVEL.floors, ...PASS22_LEVEL.floors, ...PASS23_LEVEL.floors]);
+    this.collisionSolids = Object.freeze([...PASS15_LEVEL.solids, ...PASS18_LEVEL.solids, ...PASS20_LEVEL.solids, ...PASS22_LEVEL.solids, ...PASS23_LEVEL.solids]);
     this.screenShake = 0;
     this.camera = { x: 0, y: 300, zoom: 1 };
 
@@ -73,6 +78,7 @@ export class Pass22Runtime {
         if (event.code === "Space") this.jumpQueued = true;
         if (event.code === "ShiftLeft" || event.code === "ShiftRight") this.dashQueued = true;
         if (event.code === "KeyE") this.grappleQueued = true;
+        if (event.code === "KeyF") this.attackQueued = true;
         if (event.code === "KeyB") {
           this.blueprintVisible = !this.blueprintVisible;
           document.documentElement.classList.toggle("blueprint-open", this.blueprintVisible);
@@ -228,6 +234,22 @@ export class Pass22Runtime {
       pass22SecondLanding: false,
       pass22ExitReached: false,
       pass22Completed: false,
+      pass23Entered: false,
+      pass23PursuerStarted: false,
+      pass23PlatformBoarded: false,
+      pass23PlatformCrossed: false,
+      pass23CombatStarted: false,
+      pass23EnemyDefeats: 0,
+      pass23CombatCleared: false,
+      pass23AnchorFourUsed: false,
+      pass23AnchorFiveUsed: false,
+      pass23GrappleChainCompleted: false,
+      pass23SpringReady: false,
+      pass23SpringLaunched: false,
+      pass23SpringLanded: false,
+      pass23ExitReached: false,
+      pass23PursuerEscaped: false,
+      pass23Completed: false,
       chaseWallJumps: 0,
       floorsCollapsed: 0,
       supportsDestroyed: 0,
@@ -266,6 +288,15 @@ export class Pass22Runtime {
       pass20SpringLandings: 0,
       pass20PeakHorizontalSpeed: 0,
       pass20FlightFrames: 0,
+      pass23Attacks: 0,
+      pass23PlatformRides: 0,
+      pass23GrappleAttaches: 0,
+      pass23GrappleReleases: 0,
+      pass23SpringLaunches: 0,
+      pass23SpringLandings: 0,
+      pass23FlightFrames: 0,
+      pass23PursuerActiveFrames: 0,
+      pass23PursuerContacts: 0,
     };
   }
 
@@ -291,12 +322,37 @@ export class Pass22Runtime {
   }
 
   createMovingPlatforms() {
-    return PASS15_LEVEL.movingPlatforms.map(item => ({
+    return [...PASS15_LEVEL.movingPlatforms, ...PASS23_LEVEL.movingPlatforms].map(item => ({
       ...item,
       x: item.xMin,
       previousX: item.xMin,
       direction: 1,
     }));
+  }
+
+  createPass23Enemies() {
+    return PASS23_ZONE.enemies.map(item => ({ ...item, health: item.health, defeated: false, hitFrames: 0 }));
+  }
+
+  createPass23Pursuer() {
+    const route = PASS23_ZONE.pursuer.route;
+    const distances = [0];
+    for (let index = 1; index < route.length; index += 1) {
+      distances.push(distances.at(-1) + Math.hypot(route[index].x - route[index - 1].x, route[index].y - route[index - 1].y));
+    }
+    return {
+      active: false,
+      escaped: false,
+      delayFrames: PASS23_ZONE.pursuer.spawnDelayFrames,
+      pathDistance: 0,
+      pathIndex: 0,
+      routeDistances: distances,
+      totalDistance: distances.at(-1),
+      x: route[0].x,
+      y: route[0].y,
+      rotation: 0,
+      minimumGap: null,
+    };
   }
 
   createBreakables() {
@@ -400,6 +456,11 @@ export class Pass22Runtime {
     }
     this.grappleQueued = false;
 
+    if (this.attackQueued) this.performPass23Attack();
+    this.attackQueued = false;
+    if (this.attackFrames > 0) this.attackFrames -= 1;
+    for (const enemy of this.pass23Enemies) enemy.hitFrames = Math.max(0, enemy.hitFrames - 1);
+
     if (this.dashQueued && !this.grapple.active && p.dashAvailable && p.dashCooldown === 0) {
       p.dashFrames = config.dashFrames;
       p.dashAvailable = false;
@@ -467,8 +528,11 @@ export class Pass22Runtime {
       p.springLaunchFrames -= 1;
       p.vx = clamp(p.vx + moveAxis * 0.035, -24, 24) * 0.998;
       p.vy = Math.min(p.vy + config.gravity, config.maxFallSpeed);
-      this.progress.pass20FlightFrames += 1;
-      this.progress.pass20PeakHorizontalSpeed = Math.max(this.progress.pass20PeakHorizontalSpeed, Math.abs(p.vx));
+      if (this.progress.pass23SpringLaunched && !this.progress.pass23SpringLanded) this.progress.pass23FlightFrames += 1;
+      else {
+        this.progress.pass20FlightFrames += 1;
+        this.progress.pass20PeakHorizontalSpeed = Math.max(this.progress.pass20PeakHorizontalSpeed, Math.abs(p.vx));
+      }
     } else if (p.dashFrames > 0) {
       p.dashFrames -= 1;
       p.vy = Math.min(p.vy + config.gravity * 0.2, config.maxFallSpeed);
@@ -488,20 +552,24 @@ export class Pass22Runtime {
     this.moveHorizontal();
     this.moveVertical(wasGrounded);
     this.tryActivatePass20Spring();
+    this.tryActivatePass23Spring();
     if (this.grapple.active) this.constrainGrapple();
     if (p.grounded) p.dashAvailable = true;
-    if (this.checkDashSpikeContact() || this.checkPrecisionHazardContact() || this.checkPass18HazardContact() || this.checkPass20HazardContact()) return;
+    if (this.checkDashSpikeContact() || this.checkPrecisionHazardContact() || this.checkPass18HazardContact() || this.checkPass20HazardContact() || this.checkPass23HazardContact()) return;
     this.updateProgress();
     this.updatePass19Aftershock();
     this.updatePass19Completion();
     this.updatePass20Progress();
     this.updatePass22Progress();
+    this.updatePass23Progress();
+    this.updatePass23Pursuer();
+    if (this.checkPass23PursuerContact()) return;
     this.updateBoulder();
     this.updateChaseCompletion();
     this.updateCamera();
     this.screenShake = Math.max(0, this.screenShake - 0.7);
 
-    if (p.y > PASS20_LEVEL.bounds.y + PASS20_LEVEL.bounds.height + 120 || p.x < -120) {
+    if (p.y > PASS23_LEVEL.bounds.y + PASS23_LEVEL.bounds.height + 120 || p.x < -120) {
       this.resetPlayer(false);
     }
   }
@@ -590,10 +658,131 @@ export class Pass22Runtime {
     }
   }
 
+  performPass23Attack() {
+    if (!this.progress.pass23Entered || this.progress.pass23CombatCleared) return false;
+    const p = this.player;
+    const centerX = p.x + PLAYER_PHYSICS.width * 0.5;
+    const centerY = p.y + PLAYER_PHYSICS.height * 0.5;
+    this.attackFrames = 10;
+    this.progress.pass23Attacks += 1;
+    let hit = false;
+    for (const enemy of this.pass23Enemies) {
+      if (enemy.defeated) continue;
+      const dx = enemy.x - centerX;
+      const dy = enemy.y - centerY;
+      if (Math.abs(dx) > 210 || Math.abs(dy) > 240) continue;
+      enemy.health -= 1;
+      enemy.hitFrames = 12;
+      hit = true;
+      if (enemy.health <= 0) {
+        enemy.defeated = true;
+        this.progress.pass23EnemyDefeats += 1;
+        this.screenShake = Math.max(this.screenShake, 4);
+      }
+    }
+    if (this.progress.pass23EnemyDefeats >= PASS23_ZONE.milestones.requiredEnemyDefeats) this.progress.pass23CombatCleared = true;
+    return hit;
+  }
+
+  tryActivatePass23Spring() {
+    if (!this.progress.pass23CombatCleared || !this.progress.pass23GrappleChainCompleted || this.progress.pass23SpringLaunched) return false;
+    const p = this.player;
+    const spring = PASS23_ZONE.spring;
+    const overlapsPad = p.x + PLAYER_PHYSICS.width > spring.x && p.x < spring.x + spring.width;
+    if (!p.grounded || p.standingFloorId !== "pass23_spring_runway" || !overlapsPad || !this.keys.has(spring.requiredInput)) return false;
+    p.vx = spring.launchVx;
+    p.vy = spring.launchVy;
+    p.facing = -1;
+    p.grounded = false;
+    p.standingFloorId = null;
+    p.springLaunchFrames = spring.preserveFrames;
+    p.dashFrames = 0;
+    this.progress.pass23SpringLaunched = true;
+    this.progress.pass23SpringLaunches += 1;
+    this.screenShake = Math.max(this.screenShake, 8);
+    return true;
+  }
+
+  checkPass23HazardContact() {
+    if (!this.progress.pass23Entered || this.progress.pass23Completed) return false;
+    const p = this.player;
+    const hazard = PASS23_ZONE.hazard;
+    const horizontalOverlap = p.x + PLAYER_PHYSICS.width > hazard.x1 && p.x < hazard.x2;
+    const verticalOverlap = p.y + PLAYER_PHYSICS.height > hazard.tipY && p.y < hazard.baseY;
+    if (!horizontalOverlap || !verticalOverlap) return false;
+    this.resetPlayer(false);
+    return true;
+  }
+
+  updatePass23Progress() {
+    if (!this.progress.pass22Completed) return;
+    const p = this.player;
+    const bottom = p.y + PLAYER_PHYSICS.height;
+    const milestone = PASS23_ZONE.milestones;
+    if (p.x <= milestone.enteredX) this.progress.pass23Entered = true;
+    if (this.progress.pass23PlatformBoarded && p.x <= milestone.combatX) this.progress.pass23PlatformCrossed = true;
+    if (this.progress.pass23PlatformCrossed) this.progress.pass23CombatStarted = true;
+    if (this.progress.pass23CombatCleared && p.x <= milestone.grappleX) this.progress.pass23SpringReady = true;
+    if (!this.progress.pass23SpringLanded && this.progress.pass23SpringLaunched && p.grounded && p.standingFloorId === "pass23_exit_slope" && p.x <= PASS23_ZONE.spring.landingX2) {
+      this.progress.pass23SpringLanded = true;
+      this.progress.pass23SpringLandings += 1;
+      p.springLaunchFrames = 0;
+      this.screenShake = Math.max(this.screenShake, 5);
+    }
+    if (this.progress.pass23SpringLanded && p.grounded && p.standingFloorId === "pass23_exit_slope" && p.x <= milestone.completionX && bottom >= milestone.completionY) {
+      this.progress.pass23ExitReached = true;
+    }
+    if (!this.progress.pass23Completed && this.progress.pass23ExitReached && this.progress.pass23PlatformRides >= milestone.requiredPlatformRides &&
+      this.progress.pass23EnemyDefeats >= milestone.requiredEnemyDefeats && this.progress.pass23GrappleChainCompleted &&
+      this.progress.pass23SpringLaunches >= milestone.requiredSpringLaunches && this.progress.pass23SpringLandings >= milestone.requiredSpringLandings) {
+      this.progress.pass23Completed = true;
+      this.progress.pass23PursuerEscaped = true;
+      this.pass23Pursuer.active = false;
+      this.pass23Pursuer.escaped = true;
+      this.screenShake = Math.max(this.screenShake, 7);
+    }
+  }
+
+  updatePass23Pursuer() {
+    if (!this.progress.pass23PlatformBoarded || this.progress.pass23Completed || this.pass23Pursuer.escaped) return;
+    const pursuer = this.pass23Pursuer;
+    if (!pursuer.active) {
+      pursuer.delayFrames -= 1;
+      if (pursuer.delayFrames > 0) return;
+      pursuer.active = true;
+      this.progress.pass23PursuerStarted = true;
+    }
+    pursuer.pathDistance = Math.min(pursuer.totalDistance, pursuer.pathDistance + PASS23_ZONE.pursuer.speed);
+    while (pursuer.pathIndex < pursuer.routeDistances.length - 2 && pursuer.pathDistance > pursuer.routeDistances[pursuer.pathIndex + 1]) pursuer.pathIndex += 1;
+    const start = PASS23_ZONE.pursuer.route[pursuer.pathIndex];
+    const end = PASS23_ZONE.pursuer.route[pursuer.pathIndex + 1] ?? start;
+    const segmentStart = pursuer.routeDistances[pursuer.pathIndex];
+    const segmentLength = Math.max(1, pursuer.routeDistances[pursuer.pathIndex + 1] - segmentStart);
+    const ratio = clamp((pursuer.pathDistance - segmentStart) / segmentLength, 0, 1);
+    pursuer.x = start.x + (end.x - start.x) * ratio;
+    pursuer.y = start.y + (end.y - start.y) * ratio;
+    pursuer.rotation += PASS23_ZONE.pursuer.speed * 0.025;
+    const gap = Math.hypot((this.player.x + PLAYER_PHYSICS.width * 0.5) - pursuer.x, (this.player.y + PLAYER_PHYSICS.height * 0.5) - pursuer.y);
+    pursuer.minimumGap = pursuer.minimumGap === null ? gap : Math.min(pursuer.minimumGap, gap);
+    this.progress.pass23PursuerActiveFrames += 1;
+  }
+
+  checkPass23PursuerContact() {
+    const pursuer = this.pass23Pursuer;
+    if (!pursuer.active || pursuer.escaped) return false;
+    const centerX = this.player.x + PLAYER_PHYSICS.width * 0.5;
+    const centerY = this.player.y + PLAYER_PHYSICS.height * 0.5;
+    if (Math.hypot(centerX - pursuer.x, centerY - pursuer.y) >= PASS23_ZONE.pursuer.contactRadius) return false;
+    this.progress.pass23PursuerContacts += 1;
+    this.resetPlayer(false);
+    return true;
+  }
+
   tryAttachGrapple() {
     if (!this.progress.pass10Completed || this.grapple.cooldown > 0) return false;
     const nextOrder = this.usedGrappleAnchorIds.size + 1;
-    const anchor = PASS11_ZONE.anchors.find(item => item.order === nextOrder);
+    const anchors = [...PASS11_ZONE.anchors, ...PASS23_ZONE.anchors];
+    const anchor = anchors.find(item => item.order === nextOrder);
     if (!anchor) return false;
     const centerX = this.player.x + PLAYER_PHYSICS.width * 0.5;
     const centerY = this.player.y + PLAYER_PHYSICS.height * 0.5;
@@ -610,9 +799,18 @@ export class Pass22Runtime {
     if (anchor.order === 1) this.progress.grappleAnchorOneUsed = true;
     if (anchor.order === 2) this.progress.grappleAnchorTwoUsed = true;
     if (anchor.order === 3) this.progress.grappleAnchorThreeUsed = true;
+    if (anchor.order === 4) {
+      this.progress.pass23AnchorFourUsed = true;
+      this.progress.pass23GrappleAttaches += 1;
+    }
+    if (anchor.order === 5) {
+      this.progress.pass23AnchorFiveUsed = true;
+      this.progress.pass23GrappleAttaches += 1;
+    }
     if (this.usedGrappleAnchorIds.size === PASS11_ZONE.milestones.minimumUniqueAnchors) {
       this.progress.grappleChainCompleted = true;
     }
+    if (this.progress.pass23AnchorFourUsed && this.progress.pass23AnchorFiveUsed) this.progress.pass23GrappleChainCompleted = true;
     this.player.grounded = false;
     this.player.dashFrames = 0;
     return true;
@@ -629,11 +827,12 @@ export class Pass22Runtime {
     this.grapple.attachedFrames = 0;
     this.grapple.cooldown = 8;
     this.progress.grappleReleases += 1;
+    if (this.grapple.lastAnchorId?.startsWith("pass23_")) this.progress.pass23GrappleReleases += 1;
     return true;
   }
 
   applyGrapplePhysics(moveAxis) {
-    const anchor = PASS11_ZONE.anchors.find(item => item.id === this.grapple.anchorId);
+    const anchor = [...PASS11_ZONE.anchors, ...PASS23_ZONE.anchors].find(item => item.id === this.grapple.anchorId);
     if (!anchor) {
       this.releaseGrapple(moveAxis);
       return;
@@ -659,7 +858,7 @@ export class Pass22Runtime {
   }
 
   constrainGrapple() {
-    const anchor = PASS11_ZONE.anchors.find(item => item.id === this.grapple.anchorId);
+    const anchor = [...PASS11_ZONE.anchors, ...PASS23_ZONE.anchors].find(item => item.id === this.grapple.anchorId);
     if (!anchor) return;
     const p = this.player;
     const centerX = p.x + PLAYER_PHYSICS.width * 0.5;
@@ -1138,7 +1337,10 @@ export class Pass22Runtime {
         p.vy = 0;
         p.grounded = true;
         p.standingPlatformId = platform.id;
-        if (!this.progress.platformBoarded) {
+        if (platform.id === "pass23_chase_carriage" && !this.progress.pass23PlatformBoarded) {
+          this.progress.pass23PlatformBoarded = true;
+          this.progress.pass23PlatformRides += 1;
+        } else if (platform.id !== "pass23_chase_carriage" && !this.progress.platformBoarded) {
           this.progress.platformBoarded = true;
           this.progress.platformRides += 1;
         }
@@ -1192,6 +1394,7 @@ export class Pass22Runtime {
   isFloorActive(item) {
     if (this.collapsedFloorIds.has(item.id)) return false;
     if (item.id === "double_wall_exit_rise" && this.progress.grappleAnchorThreeUsed) return false;
+    if (item.phase === 23) return this.progress.pass22Completed;
     if (item.phase === 20) return this.progress.pass19Completed;
     if (item.phase === 18) return this.progress.pass15Completed;
     if (item.phase === 15) return this.progress.pass14Completed;
@@ -1219,7 +1422,9 @@ export class Pass22Runtime {
   }
 
   isSolidActive(solid) {
+    if (solid.role === "west_retaining_wall" && this.progress.pass22Completed) return false;
     if (solid.role === "pass18_exit_wall") return this.progress.pass15Completed && !this.progress.pass19Completed;
+    if (solid.phase === 23) return this.progress.pass22Completed;
     if (solid.phase === 20) return this.progress.pass19Completed;
     if (solid.phase === 18) return this.progress.pass15Completed;
     if (solid.phase === 15) return this.progress.pass14Completed;
@@ -1480,6 +1685,9 @@ export class Pass22Runtime {
     if (manual || this.frameCount > 0) this.resetCount += 1;
     this.player = this.createPlayer();
     this.movingPlatforms = this.createMovingPlatforms();
+    this.pass23Enemies = this.createPass23Enemies();
+    this.pass23Pursuer = this.createPass23Pursuer();
+    this.attackFrames = 0;
     this.breakables = this.createBreakables();
     this.debris = [];
     this.chase = this.createChase();
@@ -1497,6 +1705,7 @@ export class Pass22Runtime {
     this.jumpQueued = false;
     this.dashQueued = false;
     this.grappleQueued = false;
+    this.attackQueued = false;
     this.keys.clear();
     this.snapCamera();
   }
@@ -1515,7 +1724,10 @@ export class Pass22Runtime {
     const curveOverviewActive = this.progress.pass13Completed && !this.progress.pass14Completed;
     const bridgeFinaleActive = this.progress.pass14Completed && !this.progress.pass15Completed;
     const springFlightActive = this.progress.pass20SpringLaunched && !this.progress.pass20SpringLanded;
-    const desiredZoom = springFlightActive
+    const pass23SpringFlightActive = this.progress.pass23SpringLaunched && !this.progress.pass23SpringLanded;
+    const desiredZoom = pass23SpringFlightActive
+      ? 0.82
+      : springFlightActive
       ? PASS20_ZONE.cameraFlight.zoom
       : curveOverviewActive
       ? PASS14_ZONE.cameraOverview.zoom
@@ -1529,7 +1741,10 @@ export class Pass22Runtime {
     const canFrameTogether = chaseVisible && !curveOverviewActive && !bridgeFinaleActive &&
       Math.abs(p.x - this.chase.x) <= viewWidth - 320 &&
       Math.abs((p.y + 24) - this.chase.y) <= viewHeight - 200;
-    if (springFlightActive) {
+    if (pass23SpringFlightActive) {
+      centerX = 24680;
+      centerY = 11930;
+    } else if (springFlightActive) {
       centerX = PASS20_ZONE.cameraFlight.x;
       centerY = PASS20_ZONE.cameraFlight.y;
     } else if (curveOverviewActive) {
@@ -1585,6 +1800,7 @@ export class Pass22Runtime {
     this.drawPass18Grotto(ctx);
     this.drawPass19Aftershock(ctx);
     this.drawPass20SpringFlight(ctx);
+    this.drawPass23Gauntlet(ctx);
     this.drawChaseSupports(ctx);
     this.drawLevel(ctx);
     this.drawPass20SpringPad(ctx);
@@ -1593,6 +1809,7 @@ export class Pass22Runtime {
     this.drawPrecisionHazards(ctx);
     this.drawPass18Hazards(ctx);
     this.drawPass20Hazard(ctx);
+    this.drawPass23Actors(ctx);
     this.drawMovingPlatforms(ctx);
     this.drawBreakables(ctx);
     this.drawDebris(ctx);
@@ -1842,6 +2059,24 @@ export class Pass22Runtime {
         ctx.stroke();
         continue;
       }
+      if (item.phase === 23) {
+        const palette = PASS23_ZONE.palette;
+        ctx.fillStyle = palette.stone;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.lineTo(item.x2 - 20, item.y2 + 150);
+        ctx.lineTo(item.x1 + 24, item.y1 + 180);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = item.lane === "checkpoint" ? palette.checkpoint : palette.edge;
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
+        continue;
+      }
       const zoneIndex = item.phase === 15 ? 10 : item.zone ?? 1;
       const floorTheme = getPass16Theme(zoneIndex);
       const material = getPass17Material(zoneIndex);
@@ -1890,6 +2125,14 @@ export class Pass22Runtime {
         ctx.fillStyle = PASS22_ZONE.palette.recess;
         ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
         ctx.strokeStyle = PASS22_ZONE.palette.edge;
+        ctx.lineWidth = 6;
+        ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
+        continue;
+      }
+      if (solid.phase === 23) {
+        ctx.fillStyle = PASS23_ZONE.palette.background;
+        ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+        ctx.strokeStyle = PASS23_ZONE.palette.edge;
         ctx.lineWidth = 6;
         ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
         continue;
@@ -2117,6 +2360,111 @@ export class Pass22Runtime {
       ctx.fill();
     }
     ctx.restore();
+  }
+
+  drawPass23Gauntlet(ctx) {
+    if (!this.progress.pass22Completed) return;
+    const zone = PASS23_ZONE;
+    const palette = zone.palette;
+    ctx.save();
+    const gradient = ctx.createLinearGradient(zone.bounds.x, zone.bounds.y, zone.bounds.x, zone.bounds.y + zone.bounds.height);
+    gradient.addColorStop(0, `${palette.background}ee`);
+    gradient.addColorStop(1, "#02070bee");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(zone.bounds.x, zone.bounds.y, zone.bounds.width, zone.bounds.height);
+    ctx.strokeStyle = `${palette.edge}42`;
+    ctx.lineWidth = 7;
+    for (let x = zone.bounds.x + 180; x < zone.bounds.x + zone.bounds.width; x += 520) {
+      ctx.beginPath();
+      ctx.moveTo(x, zone.bounds.y + zone.bounds.height);
+      ctx.quadraticCurveTo(x + 80, zone.bounds.y + 160, x + 210, zone.bounds.y + zone.bounds.height);
+      ctx.stroke();
+    }
+    const checkpoint = zone.checkpoint;
+    ctx.strokeStyle = this.progress.pass23Completed ? palette.checkpoint : `${palette.checkpoint}66`;
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.moveTo(checkpoint.x, checkpoint.y);
+    ctx.lineTo(checkpoint.x, checkpoint.y - 150);
+    ctx.stroke();
+    ctx.fillStyle = this.progress.pass23Completed ? palette.checkpoint : `${palette.checkpoint}55`;
+    ctx.beginPath();
+    ctx.arc(checkpoint.x, checkpoint.y - 170, 20, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  drawPass23Actors(ctx) {
+    if (!this.progress.pass22Completed) return;
+    const palette = PASS23_ZONE.palette;
+    ctx.save();
+    for (const enemy of this.pass23Enemies) {
+      if (enemy.defeated) continue;
+      ctx.fillStyle = enemy.hitFrames > 0 ? "#f5d6b2" : palette.enemy;
+      ctx.strokeStyle = "#f0ae91";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(enemy.x - 42, enemy.y);
+      ctx.lineTo(enemy.x + 42, enemy.y);
+      ctx.moveTo(enemy.x, enemy.y - 42);
+      ctx.lineTo(enemy.x, enemy.y + 42);
+      ctx.stroke();
+    }
+    for (const anchor of PASS23_ZONE.anchors) {
+      const used = this.usedGrappleAnchorIds.has(anchor.id);
+      ctx.strokeStyle = used ? "#b8f2dd" : palette.anchor;
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(anchor.x, anchor.y - 130);
+      ctx.lineTo(anchor.x, anchor.y - 24);
+      ctx.stroke();
+      ctx.fillStyle = used ? "#3d8276" : "#294f51";
+      ctx.beginPath();
+      ctx.arc(anchor.x, anchor.y, 23, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+    const spring = PASS23_ZONE.spring;
+    ctx.strokeStyle = palette.spring;
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.moveTo(spring.x + 16, spring.y + spring.height);
+    for (let index = 0; index <= 6; index += 1) {
+      ctx.lineTo(index % 2 === 0 ? spring.x + 16 : spring.x + spring.width - 16, spring.y + spring.height - index * 8);
+    }
+    ctx.stroke();
+    if (this.pass23Pursuer.active) {
+      ctx.translate(this.pass23Pursuer.x, this.pass23Pursuer.y);
+      ctx.rotate(this.pass23Pursuer.rotation);
+      ctx.fillStyle = `${palette.pursuer}cc`;
+      ctx.strokeStyle = "#f19a78";
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      ctx.arc(0, 0, 46, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-35, -28);
+      ctx.lineTo(28, 34);
+      ctx.moveTo(30, -34);
+      ctx.lineTo(-24, 31);
+      ctx.stroke();
+    }
+    ctx.restore();
+    if (this.attackFrames > 0) {
+      const p = this.player;
+      ctx.save();
+      ctx.strokeStyle = "rgba(210, 246, 228, 0.92)";
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(p.x + PLAYER_PHYSICS.width * 0.5, p.y + PLAYER_PHYSICS.height * 0.5, 68, p.facing > 0 ? -0.9 : Math.PI - 0.9, p.facing > 0 ? 0.9 : Math.PI + 0.9);
+      ctx.stroke();
+      ctx.restore();
+    }
   }
 
   drawBuriedStructure(ctx) {
@@ -2729,7 +3077,7 @@ export class Pass22Runtime {
       ctx.stroke();
     }
     if (this.grapple.active) {
-      const item = PASS11_ZONE.anchors.find(anchorItem => anchorItem.id === this.grapple.anchorId);
+      const item = [...PASS11_ZONE.anchors, ...PASS23_ZONE.anchors].find(anchorItem => anchorItem.id === this.grapple.anchorId);
       if (item) {
         ctx.strokeStyle = "rgba(172, 239, 223, 0.95)";
         ctx.lineWidth = 5;
@@ -2849,8 +3197,9 @@ export class Pass22Runtime {
   drawMovingPlatforms(ctx) {
     ctx.save();
     for (const platform of this.movingPlatforms) {
-      ctx.fillStyle = "#51605f";
-      ctx.strokeStyle = "#dfc487";
+      if (platform.phase === 23 && !this.progress.pass22Completed) continue;
+      ctx.fillStyle = platform.phase === 23 ? PASS23_ZONE.palette.stone : "#51605f";
+      ctx.strokeStyle = platform.phase === 23 ? PASS23_ZONE.palette.carriage : "#dfc487";
       ctx.lineWidth = 4;
       ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
       ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
@@ -3005,6 +3354,13 @@ export class Pass22Runtime {
     ctx.strokeRect(pass22TopLeft.x, pass22TopLeft.y, (PASS22_ZONE.bounds.width / WORLD.width) * frame.width, (PASS22_ZONE.bounds.height / WORLD.height) * frame.height);
     ctx.fillStyle = "#cfe2d9";
     ctx.fillText("13 WINDING RECOVERY SHAFT", pass22TopLeft.x + 6, pass22TopLeft.y + 15);
+    const pass23TopLeft = mapPoint(PASS23_ZONE.bounds);
+    ctx.fillStyle = "rgba(215, 103, 85, 0.13)";
+    ctx.strokeStyle = "rgba(159, 199, 193, 0.88)";
+    ctx.fillRect(pass23TopLeft.x, pass23TopLeft.y, (PASS23_ZONE.bounds.width / WORLD.width) * frame.width, (PASS23_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.strokeRect(pass23TopLeft.x, pass23TopLeft.y, (PASS23_ZONE.bounds.width / WORLD.width) * frame.width, (PASS23_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.fillStyle = "#e1eee8";
+    ctx.fillText("14 CONVERGENCE GAUNTLET", pass23TopLeft.x + 6, pass23TopLeft.y + 15);
     const drawRoute = (points, color, dash) => {
       ctx.strokeStyle = color;
       ctx.lineWidth = dash ? 2 : 3;
@@ -3025,6 +3381,8 @@ export class Pass22Runtime {
     drawRoute(PASS18_ZONE.playerRoute, "#dfc978", false);
     drawRoute(PASS20_ZONE.playerRoute, PASS20_ZONE.palette.spring, false);
     drawRoute(PASS22_ZONE.playerRoute, PASS22_ZONE.palette.guide, false);
+    drawRoute(PASS23_ZONE.playerRoute, PASS23_ZONE.palette.edge, false);
+    drawRoute(PASS23_ZONE.pursuer.route, PASS23_ZONE.palette.pursuer, true);
     drawRoute(PASS15_CHASE.path.points, PALETTE.boulderRoute, true);
     ctx.fillStyle = PASS19_DESTRUCTION.palette.fracture;
     for (const support of PASS19_DESTRUCTION.supports) {
@@ -3041,10 +3399,10 @@ export class Pass22Runtime {
     ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 22 / WINDING RECOVERY SHAFT", 42, 52);
+    ctx.fillText("PASS 23 / CONVERGENCE GAUNTLET", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`LEFTWARD RECOVERY · 3 LANDINGS · EXIT ${PASS22_ZONE.exit.x},${PASS22_ZONE.exit.y}`, 42, 72);
+    ctx.fillText(`PLATFORM + COMBAT + GRAPPLE + SPRING + PURSUIT · EXIT ${PASS23_ZONE.exit.x},${PASS23_ZONE.exit.y}`, 42, 72);
   }
 
   getDebugState() {
@@ -3069,6 +3427,18 @@ export class Pass22Runtime {
         y: item.y,
         direction: item.direction,
       })),
+      pass23Enemies: this.pass23Enemies.map(item => ({ id: item.id, health: item.health, defeated: item.defeated, hitFrames: item.hitFrames })),
+      pass23Pursuer: {
+        active: this.pass23Pursuer.active,
+        escaped: this.pass23Pursuer.escaped,
+        delayFrames: this.pass23Pursuer.delayFrames,
+        pathDistance: this.pass23Pursuer.pathDistance,
+        totalDistance: this.pass23Pursuer.totalDistance,
+        x: this.pass23Pursuer.x,
+        y: this.pass23Pursuer.y,
+        minimumGap: this.pass23Pursuer.minimumGap,
+      },
+      attackFrames: this.attackFrames,
       breakables: this.breakables.map(item => ({
         id: item.id,
         shape: item.shape,
@@ -3149,10 +3519,11 @@ export class Pass22Runtime {
     const pass20 = validatePass20Level();
     const pass21 = validatePass21Pacing();
     const pass22 = validatePass22Level();
+    const pass23 = validatePass23Level();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass22" },
-      { id: "pass_number", passed: BUILD.pass === 22 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass23" },
+      { id: "pass_number", passed: BUILD.pass === 23 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -3180,6 +3551,7 @@ export class Pass22Runtime {
       { id: "pass20_spring_validation", passed: pass20.passed },
       { id: "pass21_pacing_validation", passed: pass21.passed },
       { id: "pass22_shaft_validation", passed: pass22.passed },
+      { id: "pass23_convergence_validation", passed: pass23.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -3210,6 +3582,7 @@ export class Pass22Runtime {
       pass20,
       pass21,
       pass22,
+      pass23,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -3222,8 +3595,8 @@ export class Pass22Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 22 · WINDING RECOVERY SHAFT";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P22 ${audit.pass22.passedCount}/${audit.pass22.total}`;
+    this.statusElements.build.textContent = "PASS 23 · CONVERGENCE GAUNTLET";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P23 ${audit.pass23.passedCount}/${audit.pass23.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
