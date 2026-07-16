@@ -18,6 +18,7 @@ import { PASS17_MATERIALS, PASS17_REINFORCEMENTS, PASS17_SUPPORTS, PASS17_VEGETA
 import { PASS18_LEVEL, PASS18_ZONE, validatePass18Level } from "./pass18-level.js";
 import { PASS19_DESTRUCTION, PASS19_LEVEL, validatePass19Level } from "./pass19-level.js";
 import { PASS20_LEVEL, PASS20_ZONE, validatePass20Level } from "./pass20-level.js";
+import { PASS21_PACING, getPass21DestructionMultiplier, getPass21TargetSpeed, validatePass21Pacing } from "./pass21-pacing.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -25,7 +26,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass20Runtime {
+export class Pass21Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -208,6 +209,19 @@ export class Pass20Runtime {
       pass20SpringLanded: false,
       pass20ExitReached: false,
       pass20Completed: false,
+      pass21PacingEngaged: false,
+      pass21SafetyBandObserved: false,
+      pass21CruiseBandObserved: false,
+      pass21CatchupBandObserved: false,
+      pass21DestructionSlowdowns: 0,
+      pass21StructuresSlowed: 0,
+      pass21DestructionSlowdownFrames: 0,
+      pass21AdaptivePauseFramesSkipped: 0,
+      pass21MinimumLead: null,
+      pass21MaximumLead: 0,
+      pass21MinimumSpeed: null,
+      pass21MaximumSpeed: 0,
+      pass21Completed: false,
       chaseWallJumps: 0,
       floorsCollapsed: 0,
       supportsDestroyed: 0,
@@ -325,6 +339,13 @@ export class Pass20Runtime {
       x: start.x,
       y: start.y,
       speed: PASS15_CHASE.boulder.baseSpeed,
+      basePacedSpeed: PASS15_CHASE.boulder.baseSpeed,
+      targetSpeed: PASS15_CHASE.boulder.baseSpeed,
+      playerPathDistance: 0,
+      playerPathIndex: 0,
+      leadDistance: 0,
+      projectionGap: 0,
+      destructionSlowdownFrames: 0,
       rotation: 0,
     };
   }
@@ -688,19 +709,21 @@ export class Pass20Runtime {
       this.progress.boulderStarted = true;
     }
 
+    this.updatePass21PlayerProjection();
+
     if (chase.pass14HeadStartFrames > 0) {
-      chase.pass14HeadStartFrames -= 1;
+      chase.pass14HeadStartFrames = this.updatePass21PauseFrames(chase.pass14HeadStartFrames);
       return;
     }
     if (chase.pass15HeadStartFrames > 0) {
-      chase.pass15HeadStartFrames -= 1;
+      chase.pass15HeadStartFrames = this.updatePass21PauseFrames(chase.pass15HeadStartFrames);
       return;
     }
 
     if (chase.pathDistance >= PASS15_CHASE.path.pass08EndDistance && !chase.breachComplete) {
       this.progress.boulderAtInternalEntry = true;
       if (chase.breachDelayFrames > 0) {
-        chase.breachDelayFrames -= 1;
+        chase.breachDelayFrames = this.updatePass21PauseFrames(chase.breachDelayFrames);
         if (chase.breachDelayFrames % 36 === 0) this.screenShake = Math.max(this.screenShake, 5);
         return;
       }
@@ -712,14 +735,14 @@ export class Pass20Runtime {
     const internalBreakpoint = config.internalBreakpoints?.[chase.internalBreakpointIndex];
     if (internalBreakpoint && chase.pathDistance >= internalBreakpoint.distance) {
       if (chase.internalPauseFrames === 0) chase.internalPauseFrames = internalBreakpoint.delayFrames;
-      chase.internalPauseFrames -= 1;
+      chase.internalPauseFrames = this.updatePass21PauseFrames(chase.internalPauseFrames);
       if (chase.internalPauseFrames % 24 === 0) this.screenShake = Math.max(this.screenShake, 7);
       if (chase.internalPauseFrames === 0) chase.internalBreakpointIndex += 1;
       return;
     }
 
     chase.activeFrames += 1;
-    chase.speed = Math.min(config.maximumSpeed, config.baseSpeed + chase.activeFrames * config.accelerationPerFrame);
+    this.updatePass21PacingSpeed();
     chase.pathDistance = Math.min(PASS15_CHASE.path.totalDistance, chase.pathDistance + chase.speed);
     this.updateBoulderPosition();
     chase.rotation += chase.speed / config.radius;
@@ -737,19 +760,105 @@ export class Pass20Runtime {
     }
 
     const supportThreshold = chase.pathDistance - config.supportBreakLag;
+    let destroyedThisFrame = 0;
     for (const support of PASS15_CHASE.supportTargets) {
       if (support.triggerDistance > supportThreshold) break;
       if (this.destroyedSupportIds.has(support.id)) continue;
       this.destroyedSupportIds.add(support.id);
       this.progress.supportsDestroyed += 1;
+      destroyedThisFrame += 1;
       this.spawnSupportDebris(support);
       this.screenShake = Math.max(this.screenShake, 8);
     }
+    if (destroyedThisFrame > 0) this.triggerPass21DestructionSlowdown(destroyedThisFrame);
 
     if (chase.pathDistance >= PASS15_CHASE.path.totalDistance) {
       this.progress.boulderFinished = true;
     }
     this.checkBoulderContact();
+  }
+
+  updatePass21PlayerProjection() {
+    const chase = this.chase;
+    const points = PASS15_CHASE.path.points;
+    const distances = PASS15_CHASE.path.cumulativeDistances;
+    const projection = PASS21_PACING.projection;
+    const playerX = this.player.x + PLAYER_PHYSICS.width * 0.5;
+    const playerY = this.player.y + PLAYER_PHYSICS.height * 0.5;
+    const bootstrapping = chase.playerPathDistance === 0;
+    const anchorIndex = bootstrapping ? chase.pathIndex : chase.playerPathIndex;
+    const startIndex = Math.max(chase.pathIndex, anchorIndex - projection.searchBehindSegments);
+    const ahead = bootstrapping ? projection.bootstrapAheadSegments : projection.searchAheadSegments;
+    const endIndex = Math.min(points.length - 2, anchorIndex + ahead);
+    let best = null;
+    for (let index = startIndex; index <= endIndex; index += 1) {
+      const start = points[index];
+      const end = points[index + 1];
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const lengthSquared = dx * dx + dy * dy;
+      const ratio = lengthSquared === 0 ? 0 : clamp(((playerX - start.x) * dx + (playerY - start.y) * dy) / lengthSquared, 0, 1);
+      const nearestX = start.x + dx * ratio;
+      const nearestY = start.y + dy * ratio;
+      const gap = Math.hypot(playerX - nearestX, playerY - nearestY);
+      const pathDistance = distances[index] + Math.sqrt(lengthSquared) * ratio;
+      if (!best || gap < best.gap) best = { gap, pathDistance, index };
+    }
+    if (!best || best.gap > projection.maximumLateralDistance) return;
+    if (best.pathDistance >= chase.playerPathDistance) {
+      chase.playerPathDistance = best.pathDistance;
+      chase.playerPathIndex = best.index;
+    }
+    chase.projectionGap = best.gap;
+    chase.leadDistance = chase.playerPathDistance - chase.pathDistance;
+    const lead = chase.leadDistance;
+    const bands = PASS21_PACING.lead;
+    this.progress.pass21SafetyBandObserved ||= lead <= bands.safety;
+    this.progress.pass21CruiseBandObserved ||= lead > bands.safety && lead <= bands.catchup;
+    this.progress.pass21CatchupBandObserved ||= lead > bands.catchup;
+    this.progress.pass21MinimumLead = this.progress.pass21MinimumLead === null ? lead : Math.min(this.progress.pass21MinimumLead, lead);
+    this.progress.pass21MaximumLead = Math.max(this.progress.pass21MaximumLead, lead);
+  }
+
+  updatePass21PauseFrames(framesRemaining) {
+    const lead = this.chase.leadDistance;
+    const pacing = PASS21_PACING;
+    const decrement = lead >= pacing.lead.maximum
+      ? pacing.pause.maximumDecrement
+      : lead >= pacing.lead.catchup ? pacing.pause.catchupDecrement : 1;
+    this.progress.pass21AdaptivePauseFramesSkipped += Math.max(0, decrement - 1);
+    return Math.max(0, framesRemaining - decrement);
+  }
+
+  updatePass21PacingSpeed() {
+    const chase = this.chase;
+    const pacing = PASS21_PACING;
+    const lead = chase.leadDistance;
+    chase.targetSpeed = getPass21TargetSpeed(lead);
+    const response = chase.targetSpeed < chase.basePacedSpeed ? pacing.speed.brakingResponse : pacing.speed.accelerationResponse;
+    chase.basePacedSpeed = approach(chase.basePacedSpeed, chase.targetSpeed, response);
+    let speed = chase.basePacedSpeed;
+    if (chase.destructionSlowdownFrames > 0) {
+      const multiplier = getPass21DestructionMultiplier(chase.destructionSlowdownFrames);
+      speed = Math.max(pacing.destruction.minimumAbsoluteSpeed, speed * multiplier);
+      chase.destructionSlowdownFrames -= 1;
+      this.progress.pass21DestructionSlowdownFrames += 1;
+    }
+    chase.speed = clamp(speed, pacing.destruction.minimumAbsoluteSpeed, pacing.speed.maximum);
+    this.progress.pass21PacingEngaged = true;
+    this.progress.pass21MinimumSpeed = this.progress.pass21MinimumSpeed === null ? chase.speed : Math.min(this.progress.pass21MinimumSpeed, chase.speed);
+    this.progress.pass21MaximumSpeed = Math.max(this.progress.pass21MaximumSpeed, chase.speed);
+  }
+
+  triggerPass21DestructionSlowdown(destroyedCount) {
+    const destruction = PASS21_PACING.destruction;
+    const frames = destruction.baseSlowdownFrames + (destroyedCount - 1) * destruction.additionalFramesPerSupport;
+    this.chase.destructionSlowdownFrames = Math.min(
+      destruction.maximumSlowdownFrames,
+      Math.max(this.chase.destructionSlowdownFrames, frames),
+    );
+    this.progress.pass21DestructionSlowdowns += 1;
+    this.progress.pass21StructuresSlowed += destroyedCount;
   }
 
   updateBoulderPosition() {
@@ -830,6 +939,7 @@ export class Pass20Runtime {
     this.progress.pass15Completed = true;
     this.chase.active = false;
     this.chase.sealed = true;
+    this.progress.pass21Completed = this.progress.pass21PacingEngaged && this.progress.pass21DestructionSlowdowns > 0;
   }
 
   spawnCollapseDebris(floorId, major) {
@@ -1496,7 +1606,10 @@ export class Pass20Runtime {
     ctx.fillStyle = "#b7c7ca";
     ctx.font = "700 9px Arial, sans-serif";
     ctx.textAlign = "right";
-    ctx.fillText(`${Math.round(progress * 100)}% · GAP ${Math.round(separation)} PX`, x + width - 12, y + 17);
+    const chaseReadout = this.chase.active
+      ? `PACE ${this.chase.speed.toFixed(1)} · LEAD ${Math.max(0, Math.round(this.chase.leadDistance))}`
+      : `GAP ${Math.round(separation)} PX`;
+    ctx.fillText(`${Math.round(progress * 100)}% · ${chaseReadout}`, x + width - 12, y + 17);
     ctx.restore();
   }
 
@@ -2873,10 +2986,10 @@ export class Pass20Runtime {
     ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 20 / CHASE SPRING FLIGHT", 42, 52);
+    ctx.fillText("PASS 21 / BOULDER PACING", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`CHASE ${PASS15_CHASE.path.points.length} POINTS · AFTERSHOCK ${PASS19_DESTRUCTION.collapseFloorIds.length} · SPRING CHASM ${PASS20_ZONE.hazard.x2 - PASS20_ZONE.hazard.x1}px`, 42, 72);
+    ctx.fillText(`LEAD ${PASS21_PACING.lead.safety}–${PASS21_PACING.lead.maximum}px · SPEED ${PASS21_PACING.speed.minimum}–${PASS21_PACING.speed.maximum} · SLOWDOWN ${PASS21_PACING.destruction.baseSlowdownFrames}–${PASS21_PACING.destruction.maximumSlowdownFrames}F`, 42, 72);
   }
 
   getDebugState() {
@@ -2924,6 +3037,13 @@ export class Pass20Runtime {
         x: this.chase.x,
         y: this.chase.y,
         speed: this.chase.speed,
+        basePacedSpeed: this.chase.basePacedSpeed,
+        targetSpeed: this.chase.targetSpeed,
+        playerPathDistance: this.chase.playerPathDistance,
+        playerPathIndex: this.chase.playerPathIndex,
+        leadDistance: this.chase.leadDistance,
+        projectionGap: this.chase.projectionGap,
+        destructionSlowdownFrames: this.chase.destructionSlowdownFrames,
       },
       collapsedFloorIds: Array.from(this.collapsedFloorIds).sort(),
       destroyedSupportIds: Array.from(this.destroyedSupportIds).sort(),
@@ -2972,10 +3092,11 @@ export class Pass20Runtime {
     const pass18 = validatePass18Level();
     const pass19 = validatePass19Level();
     const pass20 = validatePass20Level();
+    const pass21 = validatePass21Pacing();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass20" },
-      { id: "pass_number", passed: BUILD.pass === 20 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass21" },
+      { id: "pass_number", passed: BUILD.pass === 21 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -3001,6 +3122,7 @@ export class Pass20Runtime {
       { id: "pass18_level_validation", passed: pass18.passed },
       { id: "pass19_destruction_validation", passed: pass19.passed },
       { id: "pass20_spring_validation", passed: pass20.passed },
+      { id: "pass21_pacing_validation", passed: pass21.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -3029,6 +3151,7 @@ export class Pass20Runtime {
       pass18,
       pass19,
       pass20,
+      pass21,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -3041,8 +3164,8 @@ export class Pass20Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 20 · CHASE SPRING FLIGHT";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P20 ${audit.pass20.passedCount}/${audit.pass20.total}`;
+    this.statusElements.build.textContent = "PASS 21 · BOULDER PACING";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P21 ${audit.pass21.passedCount}/${audit.pass21.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
