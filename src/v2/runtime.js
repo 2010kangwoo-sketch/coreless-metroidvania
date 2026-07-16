@@ -19,6 +19,7 @@ import { PASS18_LEVEL, PASS18_ZONE, validatePass18Level } from "./pass18-level.j
 import { PASS19_DESTRUCTION, PASS19_LEVEL, validatePass19Level } from "./pass19-level.js";
 import { PASS20_LEVEL, PASS20_ZONE, validatePass20Level } from "./pass20-level.js";
 import { PASS21_PACING, getPass21DestructionMultiplier, getPass21TargetSpeed, validatePass21Pacing } from "./pass21-pacing.js";
+import { PASS22_LEVEL, PASS22_ZONE, validatePass22Level } from "./pass22-level.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -26,7 +27,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass21Runtime {
+export class Pass22Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -57,8 +58,8 @@ export class Pass21Runtime {
     this.pass18Jump = this.createPass18Jump();
     this.pass19ArmedFloors = new Map();
     this.pass19DestroyedFloorIds = new Set();
-    this.collisionFloors = Object.freeze([...PASS15_LEVEL.floors, ...PASS18_LEVEL.floors, ...PASS20_LEVEL.floors]);
-    this.collisionSolids = Object.freeze([...PASS15_LEVEL.solids, ...PASS18_LEVEL.solids, ...PASS20_LEVEL.solids]);
+    this.collisionFloors = Object.freeze([...PASS15_LEVEL.floors, ...PASS18_LEVEL.floors, ...PASS20_LEVEL.floors, ...PASS22_LEVEL.floors]);
+    this.collisionSolids = Object.freeze([...PASS15_LEVEL.solids, ...PASS18_LEVEL.solids, ...PASS20_LEVEL.solids, ...PASS22_LEVEL.solids]);
     this.screenShake = 0;
     this.camera = { x: 0, y: 300, zoom: 1 };
 
@@ -222,6 +223,11 @@ export class Pass21Runtime {
       pass21MinimumSpeed: null,
       pass21MaximumSpeed: 0,
       pass21Completed: false,
+      pass22Entered: false,
+      pass22FirstLanding: false,
+      pass22SecondLanding: false,
+      pass22ExitReached: false,
+      pass22Completed: false,
       chaseWallJumps: 0,
       floorsCollapsed: 0,
       supportsDestroyed: 0,
@@ -489,6 +495,7 @@ export class Pass21Runtime {
     this.updatePass19Aftershock();
     this.updatePass19Completion();
     this.updatePass20Progress();
+    this.updatePass22Progress();
     this.updateBoulder();
     this.updateChaseCompletion();
     this.updateCamera();
@@ -566,6 +573,20 @@ export class Pass21Runtime {
       this.progress.pass20SpringLaunches >= milestone.requiredLaunches && this.progress.pass20SpringLandings >= milestone.requiredLandings) {
       this.progress.pass20Completed = true;
       this.screenShake = Math.max(this.screenShake, 8);
+    }
+  }
+
+  updatePass22Progress() {
+    if (!this.progress.pass20Completed) return;
+    const p = this.player;
+    const bottom = p.y + PLAYER_PHYSICS.height;
+    const milestone = PASS22_ZONE.milestones;
+    if (p.x <= milestone.enteredX) this.progress.pass22Entered = true;
+    if (this.progress.pass22Entered && p.grounded && p.standingFloorId === "pass22_west_step" && p.x <= milestone.firstLandingX + 180) this.progress.pass22FirstLanding = true;
+    if (this.progress.pass22FirstLanding && p.grounded && p.standingFloorId === "pass22_lower_shelf" && p.x <= milestone.secondLandingX + 240) this.progress.pass22SecondLanding = true;
+    if (this.progress.pass22SecondLanding && p.grounded && p.standingFloorId === "pass22_exit_slope" && p.x <= milestone.completionX && bottom >= milestone.completionY) {
+      this.progress.pass22ExitReached = true;
+      this.progress.pass22Completed = true;
     }
   }
 
@@ -1803,6 +1824,24 @@ export class Pass21Runtime {
         ctx.stroke();
         continue;
       }
+      if (item.phase === 22) {
+        const palette = PASS22_ZONE.palette;
+        ctx.fillStyle = palette.stone;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.lineTo(item.x2 - 30, item.y2 + 210);
+        ctx.lineTo(item.x1 + 32, item.y1 + 170);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = item.lane === "checkpoint" ? palette.checkpoint : palette.edge;
+        ctx.lineWidth = 11;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
+        continue;
+      }
       const zoneIndex = item.phase === 15 ? 10 : item.zone ?? 1;
       const floorTheme = getPass16Theme(zoneIndex);
       const material = getPass17Material(zoneIndex);
@@ -1845,6 +1884,14 @@ export class Pass21Runtime {
         ctx.moveTo(solid.x, solid.y);
         ctx.lineTo(solid.x + solid.width, solid.y);
         ctx.stroke();
+        continue;
+      }
+      if (solid.phase === 22) {
+        ctx.fillStyle = PASS22_ZONE.palette.recess;
+        ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+        ctx.strokeStyle = PASS22_ZONE.palette.edge;
+        ctx.lineWidth = 6;
+        ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
         continue;
       }
       if (solid.phase === 18) {
@@ -2951,6 +2998,13 @@ export class Pass21Runtime {
     ctx.strokeRect(pass20TopLeft.x, pass20TopLeft.y, (PASS20_ZONE.bounds.width / WORLD.width) * frame.width, (PASS20_ZONE.bounds.height / WORLD.height) * frame.height);
     ctx.fillStyle = "#f0d39a";
     ctx.fillText("12 CHASE SPRING FLIGHT", pass20TopLeft.x + 6, pass20TopLeft.y + 15);
+    const pass22TopLeft = mapPoint(PASS22_ZONE.bounds);
+    ctx.fillStyle = "rgba(139, 183, 168, 0.16)";
+    ctx.strokeStyle = "rgba(168, 198, 187, 0.82)";
+    ctx.fillRect(pass22TopLeft.x, pass22TopLeft.y, (PASS22_ZONE.bounds.width / WORLD.width) * frame.width, (PASS22_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.strokeRect(pass22TopLeft.x, pass22TopLeft.y, (PASS22_ZONE.bounds.width / WORLD.width) * frame.width, (PASS22_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.fillStyle = "#cfe2d9";
+    ctx.fillText("13 WINDING RECOVERY SHAFT", pass22TopLeft.x + 6, pass22TopLeft.y + 15);
     const drawRoute = (points, color, dash) => {
       ctx.strokeStyle = color;
       ctx.lineWidth = dash ? 2 : 3;
@@ -2970,6 +3024,7 @@ export class Pass21Runtime {
     drawRoute(PASS15_ZONE.playerRoute, PALETTE.route, false);
     drawRoute(PASS18_ZONE.playerRoute, "#dfc978", false);
     drawRoute(PASS20_ZONE.playerRoute, PASS20_ZONE.palette.spring, false);
+    drawRoute(PASS22_ZONE.playerRoute, PASS22_ZONE.palette.guide, false);
     drawRoute(PASS15_CHASE.path.points, PALETTE.boulderRoute, true);
     ctx.fillStyle = PASS19_DESTRUCTION.palette.fracture;
     for (const support of PASS19_DESTRUCTION.supports) {
@@ -2986,10 +3041,10 @@ export class Pass21Runtime {
     ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 21 / BOULDER PACING", 42, 52);
+    ctx.fillText("PASS 22 / WINDING RECOVERY SHAFT", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`LEAD ${PASS21_PACING.lead.safety}–${PASS21_PACING.lead.maximum}px · SPEED ${PASS21_PACING.speed.minimum}–${PASS21_PACING.speed.maximum} · SLOWDOWN ${PASS21_PACING.destruction.baseSlowdownFrames}–${PASS21_PACING.destruction.maximumSlowdownFrames}F`, 42, 72);
+    ctx.fillText(`LEFTWARD RECOVERY · 3 LANDINGS · EXIT ${PASS22_ZONE.exit.x},${PASS22_ZONE.exit.y}`, 42, 72);
   }
 
   getDebugState() {
@@ -3093,10 +3148,11 @@ export class Pass21Runtime {
     const pass19 = validatePass19Level();
     const pass20 = validatePass20Level();
     const pass21 = validatePass21Pacing();
+    const pass22 = validatePass22Level();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass21" },
-      { id: "pass_number", passed: BUILD.pass === 21 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass22" },
+      { id: "pass_number", passed: BUILD.pass === 22 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -3123,6 +3179,7 @@ export class Pass21Runtime {
       { id: "pass19_destruction_validation", passed: pass19.passed },
       { id: "pass20_spring_validation", passed: pass20.passed },
       { id: "pass21_pacing_validation", passed: pass21.passed },
+      { id: "pass22_shaft_validation", passed: pass22.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -3152,6 +3209,7 @@ export class Pass21Runtime {
       pass19,
       pass20,
       pass21,
+      pass22,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -3164,8 +3222,8 @@ export class Pass21Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 21 · BOULDER PACING";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P21 ${audit.pass21.passedCount}/${audit.pass21.total}`;
+    this.statusElements.build.textContent = "PASS 22 · WINDING RECOVERY SHAFT";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P22 ${audit.pass22.passedCount}/${audit.pass22.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
