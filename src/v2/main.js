@@ -21,7 +21,8 @@ import { PASS20_LEVEL, PASS20_ZONE, validatePass20Level } from "./pass20-level.j
 import { PASS21_PACING, getPass21DestructionMultiplier, getPass21TargetSpeed, validatePass21Pacing } from "./pass21-pacing.js";
 import { PASS22_LEVEL, PASS22_ZONE, validatePass22Level } from "./pass22-level.js";
 import { PASS23_LEVEL, PASS23_ZONE, validatePass23Level } from "./pass23-level.js";
-import { Pass23Runtime } from "./runtime.js";
+import { PASS24_INTEGRATION, getPass24IntegrationState, validatePass24Integration } from "./pass24-integration.js";
+import { Pass24Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -31,7 +32,7 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const runtime = new Pass23Runtime(canvas, {
+const runtime = new Pass24Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
 });
@@ -161,6 +162,7 @@ window.__corelessV2 = Object.freeze({
   }),
   pass22: Object.freeze({ level: PASS22_LEVEL, zone: PASS22_ZONE, validate: validatePass22Level }),
   pass23: Object.freeze({ level: PASS23_LEVEL, zone: PASS23_ZONE, validate: validatePass23Level }),
+  pass24: Object.freeze({ integration: PASS24_INTEGRATION, state: getPass24IntegrationState, validate: validatePass24Integration }),
   runtime,
   audit: () => runtime.audit(),
   debug: () => runtime.getDebugState(),

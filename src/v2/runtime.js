@@ -21,6 +21,7 @@ import { PASS20_LEVEL, PASS20_ZONE, validatePass20Level } from "./pass20-level.j
 import { PASS21_PACING, getPass21DestructionMultiplier, getPass21TargetSpeed, validatePass21Pacing } from "./pass21-pacing.js";
 import { PASS22_LEVEL, PASS22_ZONE, validatePass22Level } from "./pass22-level.js";
 import { PASS23_LEVEL, PASS23_ZONE, validatePass23Level } from "./pass23-level.js";
+import { PASS24_INTEGRATION, getPass24IntegrationState, validatePass24Integration } from "./pass24-integration.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -28,7 +29,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass23Runtime {
+export class Pass24Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -51,6 +52,7 @@ export class Pass23Runtime {
     this.movingPlatforms = this.createMovingPlatforms();
     this.pass23Enemies = this.createPass23Enemies();
     this.pass23Pursuer = this.createPass23Pursuer();
+    this.pass24ObjectiveIdsSeen = new Set();
     this.breakables = this.createBreakables();
     this.debris = [];
     this.chase = this.createChase();
@@ -297,6 +299,13 @@ export class Pass23Runtime {
       pass23FlightFrames: 0,
       pass23PursuerActiveFrames: 0,
       pass23PursuerContacts: 0,
+      pass24IntegrationStarted: false,
+      pass24ObjectivesSeen: 0,
+      pass24ObjectivesCompleted: 0,
+      pass24SystemsValidated: 0,
+      pass24LateCheckpointActivated: false,
+      pass24IntegratedCompleted: false,
+      pass24CompletionFrame: null,
     };
   }
 
@@ -564,6 +573,7 @@ export class Pass23Runtime {
     this.updatePass23Progress();
     this.updatePass23Pursuer();
     if (this.checkPass23PursuerContact()) return;
+    this.updatePass24Integration();
     this.updateBoulder();
     this.updateChaseCompletion();
     this.updateCamera();
@@ -776,6 +786,21 @@ export class Pass23Runtime {
     this.progress.pass23PursuerContacts += 1;
     this.resetPlayer(false);
     return true;
+  }
+
+  updatePass24Integration() {
+    const integration = getPass24IntegrationState(this.progress);
+    this.progress.pass24IntegrationStarted = true;
+    if (integration.activeObjective) this.pass24ObjectiveIdsSeen.add(integration.activeObjective.id);
+    this.progress.pass24ObjectivesSeen = this.pass24ObjectiveIdsSeen.size;
+    this.progress.pass24ObjectivesCompleted = integration.completedObjectiveCount;
+    this.progress.pass24SystemsValidated = integration.completedSystemCount;
+    if (!this.progress.pass24IntegratedCompleted && integration.routeComplete && integration.allSystemsComplete) {
+      this.progress.pass24LateCheckpointActivated = true;
+      this.progress.pass24IntegratedCompleted = true;
+      this.progress.pass24CompletionFrame = this.frameCount;
+      this.screenShake = Math.max(this.screenShake, 8);
+    }
   }
 
   tryAttachGrapple() {
@@ -1687,6 +1712,7 @@ export class Pass23Runtime {
     this.movingPlatforms = this.createMovingPlatforms();
     this.pass23Enemies = this.createPass23Enemies();
     this.pass23Pursuer = this.createPass23Pursuer();
+    this.pass24ObjectiveIdsSeen = new Set();
     this.attackFrames = 0;
     this.breakables = this.createBreakables();
     this.debris = [];
@@ -1819,6 +1845,7 @@ export class Pass23Runtime {
     this.drawPlayer(ctx);
     ctx.restore();
     this.drawChaseHud(ctx);
+    this.drawPass24IntegrationHud(ctx);
   }
 
   drawChaseHud(ctx) {
@@ -1848,6 +1875,39 @@ export class Pass23Runtime {
       ? `PACE ${this.chase.speed.toFixed(1)} · LEAD ${Math.max(0, Math.round(this.chase.leadDistance))}`
       : `GAP ${Math.round(separation)} PX`;
     ctx.fillText(`${Math.round(progress * 100)}% · ${chaseReadout}`, x + width - 12, y + 17);
+    ctx.restore();
+  }
+
+  drawPass24IntegrationHud(ctx) {
+    const integration = getPass24IntegrationState(this.progress);
+    const palette = PASS24_INTEGRATION.palette;
+    const width = 410;
+    const x = VIEWPORT.width - width - 20;
+    const y = 20;
+    ctx.save();
+    ctx.fillStyle = palette.panel;
+    ctx.strokeStyle = this.progress.pass24IntegratedCompleted ? palette.complete : palette.edge;
+    ctx.lineWidth = 2;
+    ctx.fillRect(x, y, width, 76);
+    ctx.strokeRect(x, y, width, 76);
+    ctx.fillStyle = this.progress.pass24IntegratedCompleted ? palette.complete : palette.active;
+    ctx.font = "800 11px Arial, sans-serif";
+    ctx.fillText(this.progress.pass24IntegratedCompleted ? "LATE CHECKPOINT STABLE" : `INTEGRATION ROUTE ${integration.completedObjectiveCount}/${integration.objectiveCount}`, x + 14, y + 18);
+    ctx.fillStyle = "#e9f2ef";
+    ctx.font = "800 13px Arial, sans-serif";
+    const objectiveLabel = integration.activeObjective?.label ?? "START → GOAL VERIFIED";
+    ctx.fillText(objectiveLabel, x + 14, y + 38);
+    ctx.fillStyle = "#9fb2b5";
+    ctx.font = "700 9px Arial, sans-serif";
+    ctx.fillText(integration.activeObjective?.hint ?? `ALL ${integration.systemCount} SYSTEMS INTEGRATED`, x + 14, y + 54);
+    const cellWidth = 52;
+    for (const [index, system] of integration.systems.entries()) {
+      const cellX = x + 14 + index * cellWidth;
+      ctx.fillStyle = system.complete ? palette.complete : palette.muted;
+      ctx.fillRect(cellX, y + 62, 42, 3);
+      ctx.font = "700 7px Arial, sans-serif";
+      ctx.fillText(system.label, cellX, y + 73);
+    }
     ctx.restore();
   }
 
@@ -3399,10 +3459,10 @@ export class Pass23Runtime {
     ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 23 / CONVERGENCE GAUNTLET", 42, 52);
+    ctx.fillText("PASS 24 / SYSTEMS INTEGRATION RUN", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`PLATFORM + COMBAT + GRAPPLE + SPRING + PURSUIT · EXIT ${PASS23_ZONE.exit.x},${PASS23_ZONE.exit.y}`, 42, 72);
+    ctx.fillText(`14 ZONES · 7 SYSTEMS · START ${PASS24_INTEGRATION.route.start.x},${PASS24_INTEGRATION.route.start.y} → GOAL ${PASS24_INTEGRATION.route.goal.x},${PASS24_INTEGRATION.route.goal.y}`, 42, 72);
   }
 
   getDebugState() {
@@ -3439,6 +3499,8 @@ export class Pass23Runtime {
         minimumGap: this.pass23Pursuer.minimumGap,
       },
       attackFrames: this.attackFrames,
+      pass24Integration: getPass24IntegrationState(this.progress),
+      pass24ObjectiveIdsSeen: Array.from(this.pass24ObjectiveIdsSeen),
       breakables: this.breakables.map(item => ({
         id: item.id,
         shape: item.shape,
@@ -3520,10 +3582,11 @@ export class Pass23Runtime {
     const pass21 = validatePass21Pacing();
     const pass22 = validatePass22Level();
     const pass23 = validatePass23Level();
+    const pass24 = validatePass24Integration();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass23" },
-      { id: "pass_number", passed: BUILD.pass === 23 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass24" },
+      { id: "pass_number", passed: BUILD.pass === 24 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -3552,6 +3615,7 @@ export class Pass23Runtime {
       { id: "pass21_pacing_validation", passed: pass21.passed },
       { id: "pass22_shaft_validation", passed: pass22.passed },
       { id: "pass23_convergence_validation", passed: pass23.passed },
+      { id: "pass24_integration_validation", passed: pass24.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -3583,6 +3647,7 @@ export class Pass23Runtime {
       pass21,
       pass22,
       pass23,
+      pass24,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -3595,8 +3660,8 @@ export class Pass23Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 23 · CONVERGENCE GAUNTLET";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P23 ${audit.pass23.passedCount}/${audit.pass23.total}`;
+    this.statusElements.build.textContent = "PASS 24 · SYSTEMS INTEGRATION RUN";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P24 ${audit.pass24.passedCount}/${audit.pass24.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
