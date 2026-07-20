@@ -49,7 +49,7 @@ export const PASS29_MODULE_ASSETS = freezeList([
 ]);
 
 export const PASS29_MODULE_PLACEMENTS = freezeList([
-  { id: "far_vaults_main", assetId: "far_vaults", layer: "far_background", x: -80, y: -24, width: 1360, height: 728, cameraRatio: 0.14, opacity: 1 },
+  { id: "far_vaults_main", assetId: "far_vaults", layer: "far_background", x: -80, y: -48, width: 1450, height: 780, cameraRatio: 0.14, opacity: 1 },
   { id: "arch_main", assetId: "broken_arch", layer: "midground", x: 32, y: 56, width: 760, height: 475, cameraRatio: 0.48, opacity: 0.88 },
   { id: "pylon_rear", assetId: "foundry_pylon", layer: "midground", x: 70, y: 176, width: 172, height: 302, cameraRatio: 0.38, opacity: 0.34 },
   { id: "pylon_main", assetId: "foundry_pylon", layer: "midground", x: 840, y: 72, width: 295, height: 518, cameraRatio: 0.63, opacity: 0.92 },

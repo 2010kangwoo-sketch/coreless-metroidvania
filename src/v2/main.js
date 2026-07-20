@@ -27,7 +27,8 @@ import { PASS26_TERRAIN, validatePass26Terrain } from "./pass26-terrain.js";
 import { PASS27_STRUCTURE_PLAN, validatePass27Structures } from "./pass27-structures.js";
 import { PASS28_ART_DIRECTION, PASS28_ART_LAYERS, PASS28_RASTER_ASSETS, loadPass28RasterAssets, validatePass28ArtDirection } from "./pass28-art-direction.js";
 import { PASS29_MODULAR_PLAN, PASS29_MODULE_ASSETS, PASS29_MODULE_PLACEMENTS, loadPass29ModuleAssets, validatePass29ModularArt } from "./pass29-modular-art.js";
-import { Pass29Runtime } from "./runtime.js";
+import { PASS30_CAMERA_SAMPLES, PASS30_QUALITY_GATE, validatePass30QualityGate } from "./pass30-quality-gate.js";
+import { Pass30Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -38,7 +39,7 @@ if (!(canvas instanceof HTMLCanvasElement)) {
 }
 
 const [pass28AssetState, pass29AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets()]);
-const runtime = new Pass29Runtime(canvas, {
+const runtime = new Pass30Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
 }, pass28AssetState, pass29AssetState);
@@ -185,6 +186,11 @@ window.__corelessV2 = Object.freeze({
     placements: PASS29_MODULE_PLACEMENTS,
     assetState: pass29AssetState,
     validate: validatePass29ModularArt,
+  }),
+  pass30: Object.freeze({
+    gate: PASS30_QUALITY_GATE,
+    cameraSamples: PASS30_CAMERA_SAMPLES,
+    validate: validatePass30QualityGate,
   }),
   runtime,
   audit: () => runtime.audit(),

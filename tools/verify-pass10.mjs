@@ -11,6 +11,7 @@ try {
 }
 
 const targetPass = Number(process.env.CORELESS_VERIFY_PASS ?? 10);
+const verifyPass30 = targetPass >= 30;
 const verifyPass29 = targetPass >= 29;
 const verifyPass28 = targetPass >= 28;
 const verifyPass27 = targetPass >= 27;
@@ -30,8 +31,8 @@ const verifyPass14 = targetPass >= 14;
 const verifyPass13 = targetPass >= 13;
 const verifyPass12 = targetPass >= 12;
 const verifyPass11 = targetPass >= 11;
-const artifactPass = verifyPass29 ? 'pass29' : verifyPass28 ? 'pass28' : verifyPass27 ? 'pass27' : verifyPass26 ? 'pass26' : verifyPass25 ? 'pass25' : verifyPass24 ? 'pass24' : verifyPass23 ? 'pass23' : verifyPass22 ? 'pass22' : verifyPass21 ? 'pass21' : verifyPass20 ? 'pass20' : verifyPass19 ? 'pass19' : verifyPass18 ? 'pass18' : verifyPass17 ? 'pass17' : verifyPass16 ? 'pass16' : verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
-const port = verifyPass29 ? 4212 : verifyPass28 ? 4210 : verifyPass27 ? 4208 : verifyPass26 ? 4206 : verifyPass25 ? 4204 : verifyPass24 ? 4202 : verifyPass23 ? 4200 : verifyPass22 ? 4198 : verifyPass21 ? 4196 : verifyPass20 ? 4194 : verifyPass19 ? 4192 : verifyPass18 ? 4191 : verifyPass17 ? 4188 : verifyPass16 ? 4186 : verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
+const artifactPass = verifyPass30 ? 'pass30' : verifyPass29 ? 'pass29' : verifyPass28 ? 'pass28' : verifyPass27 ? 'pass27' : verifyPass26 ? 'pass26' : verifyPass25 ? 'pass25' : verifyPass24 ? 'pass24' : verifyPass23 ? 'pass23' : verifyPass22 ? 'pass22' : verifyPass21 ? 'pass21' : verifyPass20 ? 'pass20' : verifyPass19 ? 'pass19' : verifyPass18 ? 'pass18' : verifyPass17 ? 'pass17' : verifyPass16 ? 'pass16' : verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
+const port = verifyPass30 ? 4214 : verifyPass29 ? 4212 : verifyPass28 ? 4210 : verifyPass27 ? 4208 : verifyPass26 ? 4206 : verifyPass25 ? 4204 : verifyPass24 ? 4202 : verifyPass23 ? 4200 : verifyPass22 ? 4198 : verifyPass21 ? 4196 : verifyPass20 ? 4194 : verifyPass19 ? 4192 : verifyPass18 ? 4191 : verifyPass17 ? 4188 : verifyPass16 ? 4186 : verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
 
 const server = spawn('python3', ['-m', 'http.server', String(port)], {
   cwd: process.cwd(),
@@ -838,7 +839,7 @@ const deterministicChecks = {
   title: state.title === `Coreless · Rebuild V2 · Pass ${targetPass}`,
   canvas: state.canvas?.width === 1200 && state.canvas?.height === 680,
   focused: state.activeElement === 'gameCanvas',
-  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass29 ? 42 : verifyPass28 ? 39 : verifyPass27 ? 36 : verifyPass26 ? 35 : verifyPass25 ? 34 : verifyPass24 ? 33 : verifyPass23 ? 32 : verifyPass22 ? 31 : verifyPass21 ? 30 : verifyPass20 ? 29 : verifyPass19 ? 28 : verifyPass18 ? 27 : verifyPass17 ? 26 : verifyPass16 ? 25 : verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
+  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass30 ? 45 : verifyPass29 ? 42 : verifyPass28 ? 39 : verifyPass27 ? 36 : verifyPass26 ? 35 : verifyPass25 ? 34 : verifyPass24 ? 33 : verifyPass23 ? 32 : verifyPass22 ? 31 : verifyPass21 ? 30 : verifyPass20 ? 29 : verifyPass19 ? 28 : verifyPass18 ? 27 : verifyPass17 ? 26 : verifyPass16 ? 25 : verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
   blueprintAudit: state.audit?.blueprint?.passed === true && state.audit?.blueprint?.passedCount === 18,
   pass03Audit: state.audit?.pass03?.passed === true && state.audit?.pass03?.passedCount === 20,
   pass04Audit: state.audit?.pass04?.passed === true && state.audit?.pass04?.passedCount === 22,
@@ -871,6 +872,9 @@ const deterministicChecks = {
   pass29Audit: !verifyPass29 || (state.audit?.pass29?.passed === true && state.audit?.pass29?.passedCount === 43),
   pass29AssetsLoaded: !verifyPass29 || (state.audit?.pass29Assets?.loadedCount === 5 && state.audit?.pass29Assets?.failedCount === 0),
   pass29AssetDimensions: !verifyPass29 || state.audit?.pass29Assets?.dimensionsValid === true,
+  pass30Audit: !verifyPass30 || (state.audit?.pass30?.passed === true && state.audit?.pass30?.passedCount === 41),
+  pass30RepresentativeApproved: !verifyPass30 || state.audit?.pass30?.checks?.some(check => check.id === 'representative_approved' && check.passed === true),
+  pass30ZeroCollisionChanges: !verifyPass30 || state.audit?.pass30?.checks?.some(check => check.id === 'zero_collision_changes' && check.passed === true),
   firstDrop: state.debug?.progress?.firstDropped === true,
   firstClimb: state.debug?.progress?.firstClimb === true,
   secondDrop: state.debug?.progress?.secondDropped === true,
@@ -1117,7 +1121,9 @@ const passed = !traversalFailure && Object.values(deterministicChecks).every(Boo
 const result = {
   version: `rebuild-v2-${artifactPass}`,
   testedWith: 'Chromium + Playwright actual keyboard events',
-  actualKeyboardRoute: verifyPass29
+  actualKeyboardRoute: verifyPass30
+    ? 'START slope -> retained fourteen-zone integrated route -> approved five-sample foundry raster slice -> final late checkpoint GOAL'
+    : verifyPass29
     ? 'START slope -> retained fourteen-zone integrated route -> modular foundry raster layers -> final late checkpoint GOAL'
     : verifyPass24
     ? 'START slope -> fourteen integrated zones -> movement -> platform -> pursuit -> destruction -> grapple -> spring -> combat -> stabilized late checkpoint GOAL'
@@ -1157,6 +1163,7 @@ const result = {
   consoleErrors,
   pageErrors,
   limitations: [
+    verifyPass30 ? 'Pass 30 approves the representative foundry slice across five playable camera samples; this authorizes route-wide raster expansion but does not claim that the remaining mega-room route already has final art.' :
     verifyPass29 ? 'Pass 29 proves five reusable raster modules, six static placements, three independent parallax depths and a collision-aligned route girder in the foundry slice; pass 30 remains the explicit visual approval gate before route-wide art expansion.' :
     verifyPass28 ? 'Pass 28 proves the raster-art pipeline in one foundry quality-gate slice; passes 29 and 30 must modularize and align the full playable terrain before route-wide art expansion.' :
     verifyPass27 ? 'Pass 27 adds 28 monumental non-collision structures across 14 retained scenes; props, depth layers and final lighting remain later passes.' :

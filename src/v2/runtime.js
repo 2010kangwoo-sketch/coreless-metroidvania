@@ -40,6 +40,7 @@ import { PASS26_TERRAIN, getPass26FloorSkin, getPass26SolidSkin, validatePass26T
 import { PASS27_PALETTES, PASS27_STRUCTURES, validatePass27Structures } from "./pass27-structures.js";
 import { PASS28_RASTER_ASSETS, validatePass28ArtDirection } from "./pass28-art-direction.js";
 import { PASS29_MODULAR_PLAN, PASS29_MODULE_ASSETS, PASS29_MODULE_PLACEMENTS, getPass29ScreenPlacement, isPass29CameraActive, validatePass29ModularArt } from "./pass29-modular-art.js";
+import { PASS30_QUALITY_GATE, validatePass30QualityGate } from "./pass30-quality-gate.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -47,7 +48,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass29Runtime {
+export class Pass30Runtime {
   constructor(canvas, statusElements, pass28AssetState, pass29AssetState) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -2061,18 +2062,19 @@ export class Pass29Runtime {
 
   drawPass28RouteEdges(ctx) {
     const asset = PASS28_RASTER_ASSETS[0];
-    const minX = asset.x;
-    const maxX = asset.x + asset.width;
-    const minY = asset.y;
-    const maxY = asset.y + asset.height;
+    const girderRecord = isPass29CameraActive(this.camera) ? this.pass29AssetState?.byId?.get("route_girder") : null;
+    const useRasterGirder = Boolean(girderRecord?.loaded && girderRecord.image);
+    const routeBounds = useRasterGirder ? PASS30_QUALITY_GATE.renderContract.approvedRouteBounds : asset;
+    const minX = routeBounds.x;
+    const maxX = routeBounds.x + routeBounds.width;
+    const minY = routeBounds.y;
+    const maxY = routeBounds.y + routeBounds.height;
     ctx.save();
     ctx.beginPath();
-    ctx.rect(minX, minY, asset.width, asset.height);
+    ctx.rect(minX, minY, routeBounds.width, routeBounds.height);
     ctx.clip();
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
-    const girderRecord = isPass29CameraActive(this.camera) ? this.pass29AssetState?.byId?.get("route_girder") : null;
-    const useRasterGirder = Boolean(girderRecord?.loaded && girderRecord.image);
     for (const floor of this.collisionFloors) {
       if (this.collapsedFloorIds.has(floor.id)) continue;
       const floorMinX = Math.min(floor.x1, floor.x2);
@@ -4414,10 +4416,10 @@ export class Pass29Runtime {
     ctx.fillRect(rasterTopLeft.x, rasterTopLeft.y, (rasterGate.width / WORLD.width) * frame.width, (rasterGate.height / WORLD.height) * frame.height);
     ctx.strokeRect(rasterTopLeft.x, rasterTopLeft.y, (rasterGate.width / WORLD.width) * frame.width, (rasterGate.height / WORLD.height) * frame.height);
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 29 / MODULAR RASTER DEPTH", 42, 52);
+    ctx.fillText("PASS 30 / RASTER QUALITY APPROVAL", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`${PASS29_MODULAR_PLAN.moduleCount} MODULES · ${PASS29_MODULAR_PLAN.placementCount} PLACEMENTS · ${PASS29_MODULAR_PLAN.layerOrder.length} PARALLAX LAYERS · PASS 30 APPROVAL GATE`, 42, 72);
+    ctx.fillText(`${PASS29_MODULAR_PLAN.moduleCount} MODULES · ${PASS29_MODULAR_PLAN.placementCount} PLACEMENTS · ${PASS29_MODULAR_PLAN.layerOrder.length} PARALLAX LAYERS · REPRESENTATIVE SLICE APPROVED`, 42, 72);
   }
 
   getDebugState() {
@@ -4543,10 +4545,11 @@ export class Pass29Runtime {
     const pass27 = validatePass27Structures();
     const pass28 = validatePass28ArtDirection();
     const pass29 = validatePass29ModularArt();
+    const pass30 = validatePass30QualityGate();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass29" },
-      { id: "pass_number", passed: BUILD.pass === 29 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass30" },
+      { id: "pass_number", passed: BUILD.pass === 30 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -4585,6 +4588,9 @@ export class Pass29Runtime {
       { id: "pass29_modular_art_validation", passed: pass29.passed },
       { id: "pass29_module_assets_loaded", passed: this.pass29AssetState?.loadedCount === PASS29_MODULE_ASSETS.length },
       { id: "pass29_module_dimensions", passed: this.pass29AssetState?.dimensionsValid === true },
+      { id: "pass30_quality_gate_validation", passed: pass30.passed },
+      { id: "pass30_representative_approved", passed: PASS30_QUALITY_GATE.representativeSliceApproved === true },
+      { id: "pass30_zero_collision_changes", passed: PASS30_QUALITY_GATE.collisionChanges === 0 },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -4622,6 +4628,7 @@ export class Pass29Runtime {
       pass27,
       pass28,
       pass29,
+      pass30,
       pass28Assets: Object.freeze({
         loadedCount: this.pass28AssetState?.loadedCount ?? 0,
         failedCount: this.pass28AssetState?.failedCount ?? PASS28_RASTER_ASSETS.length,
@@ -4644,8 +4651,8 @@ export class Pass29Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 29 · MODULAR RASTER DEPTH";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P29 ${audit.pass29.passedCount}/${audit.pass29.total}`;
+    this.statusElements.build.textContent = "PASS 30 · RASTER QUALITY APPROVAL";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P30 ${audit.pass30.passedCount}/${audit.pass30.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
