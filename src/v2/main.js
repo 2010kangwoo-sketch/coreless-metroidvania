@@ -29,7 +29,8 @@ import { PASS28_ART_DIRECTION, PASS28_ART_LAYERS, PASS28_RASTER_ASSETS, loadPass
 import { PASS29_MODULAR_PLAN, PASS29_MODULE_ASSETS, PASS29_MODULE_PLACEMENTS, loadPass29ModuleAssets, validatePass29ModularArt } from "./pass29-modular-art.js";
 import { PASS30_CAMERA_SAMPLES, PASS30_QUALITY_GATE, validatePass30QualityGate } from "./pass30-quality-gate.js";
 import { PASS31_CAMERA_SAMPLES, PASS31_ENTRANCE_ASSETS, PASS31_ENTRANCE_PLAN, PASS31_ENTRANCE_PLACEMENTS, PASS31_ENTRANCE_SCENES, loadPass31EntranceAssets, validatePass31EntranceArt } from "./pass31-entrance-art.js";
-import { Pass31Runtime } from "./runtime.js";
+import { PASS32_BURIED_ASSETS, PASS32_BURIED_PLAN, PASS32_BURIED_PLACEMENTS, PASS32_BURIED_SCENES, PASS32_CAMERA_SAMPLES, loadPass32BuriedAssets, validatePass32BuriedRiseArt } from "./pass32-buried-rise-art.js";
+import { Pass32Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -39,11 +40,11 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const [pass28AssetState, pass29AssetState, pass31AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets()]);
-const runtime = new Pass31Runtime(canvas, {
+const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets()]);
+const runtime = new Pass32Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
-}, pass28AssetState, pass29AssetState, pass31AssetState);
+}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState);
 
 runtime.start();
 
@@ -201,6 +202,15 @@ window.__corelessV2 = Object.freeze({
     cameraSamples: PASS31_CAMERA_SAMPLES,
     assetState: pass31AssetState,
     validate: validatePass31EntranceArt,
+  }),
+  pass32: Object.freeze({
+    plan: PASS32_BURIED_PLAN,
+    assets: PASS32_BURIED_ASSETS,
+    scenes: PASS32_BURIED_SCENES,
+    placements: PASS32_BURIED_PLACEMENTS,
+    cameraSamples: PASS32_CAMERA_SAMPLES,
+    assetState: pass32AssetState,
+    validate: validatePass32BuriedRiseArt,
   }),
   runtime,
   audit: () => runtime.audit(),
