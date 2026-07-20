@@ -35,7 +35,7 @@ jobs:
           python3 -m http.server 4173 >/tmp/coreless-v2-http.log 2>&1 &
           sleep 2
 
-      - name: Verify pass 27
+      - name: Verify pass 28
         run: |
           mkdir -p browser-artifacts
           node --input-type=module <<'NODE'
@@ -67,23 +67,23 @@ jobs:
           result.consoleErrors = consoleErrors;
           result.pageErrors = pageErrors;
 
-          fs.writeFileSync('browser-artifacts/pass27-results.json', JSON.stringify(result, null, 2));
+          fs.writeFileSync('browser-artifacts/pass28-results.json', JSON.stringify(result, null, 2));
           await page.evaluate(() => {
             const runtime = window.__corelessV2.runtime;
             const draw = runtime.draw.bind(runtime);
             runtime.draw = () => {};
             draw();
           });
-          await page.screenshot({ path: 'browser-artifacts/pass27-mega-structures.png', fullPage: true });
+          await page.screenshot({ path: 'browser-artifacts/pass28-raster-art-gate.png', fullPage: true });
           await browser.close();
 
           const required = ['KeyA', 'KeyB', 'KeyD', 'KeyE', 'KeyF', 'ShiftLeft', 'Space'];
           const used = result.audit?.inputProbe?.usedCodes ?? [];
           if (
-            result.title !== 'Coreless · Rebuild V2 · Pass 27' ||
+            result.title !== 'Coreless · Rebuild V2 · Pass 28' ||
             result.activeElement !== 'gameCanvas' ||
             result.audit?.passed !== true ||
-            result.audit?.passedCount !== 36 ||
+            result.audit?.passedCount !== 39 ||
             result.audit?.blueprint?.passed !== true ||
             result.audit?.blueprint?.passedCount !== 18 ||
             result.audit?.pass03?.passed !== true ||
@@ -136,6 +136,11 @@ jobs:
             result.audit?.pass26?.passedCount !== 34 ||
             result.audit?.pass27?.passed !== true ||
             result.audit?.pass27?.passedCount !== 36 ||
+            result.audit?.pass28?.passed !== true ||
+            result.audit?.pass28?.passedCount !== 38 ||
+            result.audit?.pass28Assets?.loadedCount !== 1 ||
+            result.audit?.pass28Assets?.failedCount !== 0 ||
+            result.audit?.pass28Assets?.dimensionsValid !== true ||
             result.audit?.gameplay?.blueprintVisible !== false ||
             !required.every(code => used.includes(code)) ||
             consoleErrors.length ||
@@ -150,6 +155,6 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: rebuild-v2-pass27-browser
+          name: rebuild-v2-pass28-browser
           path: browser-artifacts
           if-no-files-found: error

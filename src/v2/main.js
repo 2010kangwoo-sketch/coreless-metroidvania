@@ -25,7 +25,8 @@ import { PASS24_INTEGRATION, getPass24IntegrationState, validatePass24Integratio
 import { PASS25_VISUAL_SLICE, validatePass25Visuals } from "./pass25-visuals.js";
 import { PASS26_TERRAIN, validatePass26Terrain } from "./pass26-terrain.js";
 import { PASS27_STRUCTURE_PLAN, validatePass27Structures } from "./pass27-structures.js";
-import { Pass27Runtime } from "./runtime.js";
+import { PASS28_ART_DIRECTION, PASS28_ART_LAYERS, PASS28_RASTER_ASSETS, loadPass28RasterAssets, validatePass28ArtDirection } from "./pass28-art-direction.js";
+import { Pass28Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -35,10 +36,11 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const runtime = new Pass27Runtime(canvas, {
+const pass28AssetState = await loadPass28RasterAssets();
+const runtime = new Pass28Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
-});
+}, pass28AssetState);
 
 runtime.start();
 
@@ -169,6 +171,13 @@ window.__corelessV2 = Object.freeze({
   pass25: Object.freeze({ visuals: PASS25_VISUAL_SLICE, validate: validatePass25Visuals }),
   pass26: Object.freeze({ terrain: PASS26_TERRAIN, validate: validatePass26Terrain }),
   pass27: Object.freeze({ structures: PASS27_STRUCTURE_PLAN, validate: validatePass27Structures }),
+  pass28: Object.freeze({
+    direction: PASS28_ART_DIRECTION,
+    layers: PASS28_ART_LAYERS,
+    assets: PASS28_RASTER_ASSETS,
+    assetState: pass28AssetState,
+    validate: validatePass28ArtDirection,
+  }),
   runtime,
   audit: () => runtime.audit(),
   debug: () => runtime.getDebugState(),

@@ -37,7 +37,8 @@ import {
   validatePass25Visuals,
 } from "./pass25-visuals.js";
 import { PASS26_TERRAIN, getPass26FloorSkin, getPass26SolidSkin, validatePass26Terrain } from "./pass26-terrain.js";
-import { PASS27_PALETTES, PASS27_STRUCTURE_PLAN, PASS27_STRUCTURES, validatePass27Structures } from "./pass27-structures.js";
+import { PASS27_PALETTES, PASS27_STRUCTURES, validatePass27Structures } from "./pass27-structures.js";
+import { PASS28_ART_DIRECTION, PASS28_RASTER_ASSETS, validatePass28ArtDirection } from "./pass28-art-direction.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -45,11 +46,12 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass27Runtime {
-  constructor(canvas, statusElements) {
+export class Pass28Runtime {
+  constructor(canvas, statusElements, pass28AssetState) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
     this.statusElements = statusElements;
+    this.pass28AssetState = pass28AssetState;
     this.frameHandle = 0;
     this.frameCount = 0;
     this.running = false;
@@ -1851,6 +1853,8 @@ export class Pass27Runtime {
     this.drawPass25BuriedSurface(ctx);
     this.drawPass20SpringPad(ctx);
     this.drawAuthoredTerrainDetails(ctx);
+    this.drawPass28RasterBackplates(ctx);
+    this.drawPass28RouteEdges(ctx);
     this.drawDashSpikes(ctx);
     this.drawPrecisionHazards(ctx);
     this.drawPass18Hazards(ctx);
@@ -1998,6 +2002,59 @@ export class Pass27Runtime {
       fog.addColorStop(1, `${theme.midground}46`);
       ctx.fillStyle = fog;
       ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+    ctx.restore();
+  }
+
+  drawPass28RasterBackplates(ctx) {
+    const padding = 80;
+    const view = {
+      x: this.camera.x - padding,
+      y: this.camera.y - padding,
+      width: VIEWPORT.width / this.camera.zoom + padding * 2,
+      height: VIEWPORT.height / this.camera.zoom + padding * 2,
+    };
+    for (const asset of PASS28_RASTER_ASSETS) {
+      if (asset.x > view.x + view.width || asset.x + asset.width < view.x || asset.y > view.y + view.height || asset.y + asset.height < view.y) continue;
+      const record = this.pass28AssetState?.byId?.get(asset.id);
+      if (!record?.loaded || !record.image) continue;
+      ctx.save();
+      ctx.globalAlpha = asset.opacity;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(record.image, asset.x, asset.y, asset.width, asset.height);
+      const topFade = ctx.createLinearGradient(asset.x, asset.y, asset.x, asset.y + 150);
+      topFade.addColorStop(0, "rgba(2, 8, 10, 0.72)");
+      topFade.addColorStop(1, "rgba(2, 8, 10, 0)");
+      ctx.fillStyle = topFade;
+      ctx.fillRect(asset.x, asset.y, asset.width, 150);
+      ctx.restore();
+    }
+  }
+
+  drawPass28RouteEdges(ctx) {
+    const asset = PASS28_RASTER_ASSETS[0];
+    const minX = asset.x;
+    const maxX = asset.x + asset.width;
+    const minY = asset.y;
+    const maxY = asset.y + asset.height;
+    ctx.save();
+    ctx.strokeStyle = "rgba(176, 222, 218, 0.62)";
+    ctx.shadowColor = "rgba(52, 117, 116, 0.82)";
+    ctx.shadowBlur = 7;
+    ctx.lineWidth = 2.5;
+    ctx.lineCap = "round";
+    for (const floor of this.collisionFloors) {
+      if (this.collapsedFloorIds.has(floor.id)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < minX || floorMinX > maxX || floorMaxY < minY || floorMinY > maxY) continue;
+      ctx.beginPath();
+      ctx.moveTo(floor.x1, floor.y1);
+      ctx.lineTo(floor.x2, floor.y2);
+      ctx.stroke();
     }
     ctx.restore();
   }
@@ -4294,11 +4351,18 @@ export class Pass27Runtime {
     ctx.beginPath();
     ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
     ctx.fill();
+    const rasterGate = PASS28_RASTER_ASSETS[0];
+    const rasterTopLeft = mapPoint(rasterGate);
+    ctx.fillStyle = "rgba(141, 203, 208, 0.16)";
+    ctx.strokeStyle = "#8dcbd0";
+    ctx.lineWidth = 2;
+    ctx.fillRect(rasterTopLeft.x, rasterTopLeft.y, (rasterGate.width / WORLD.width) * frame.width, (rasterGate.height / WORLD.height) * frame.height);
+    ctx.strokeRect(rasterTopLeft.x, rasterTopLeft.y, (rasterGate.width / WORLD.width) * frame.width, (rasterGate.height / WORLD.height) * frame.height);
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 27 / MONUMENTAL STRUCTURE GRAPHICS", 42, 52);
+    ctx.fillText("PASS 28 / RASTER ART QUALITY GATE", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`${PASS27_STRUCTURE_PLAN.scenes.length} SCENES · ${PASS27_STRUCTURE_PLAN.structures.length} LANDMARKS · COLLISION RETAINED`, 42, 72);
+    ctx.fillText(`${PASS28_ART_DIRECTION.assetCount} TARGET SLICE · 5 DEPTH LAYERS · PASS 30 APPROVAL GATE`, 42, 72);
   }
 
   getDebugState() {
@@ -4422,10 +4486,11 @@ export class Pass27Runtime {
     const pass25 = validatePass25Visuals();
     const pass26 = validatePass26Terrain();
     const pass27 = validatePass27Structures();
+    const pass28 = validatePass28ArtDirection();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass27" },
-      { id: "pass_number", passed: BUILD.pass === 27 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass28" },
+      { id: "pass_number", passed: BUILD.pass === 28 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -4458,6 +4523,9 @@ export class Pass27Runtime {
       { id: "pass25_visual_validation", passed: pass25.passed },
       { id: "pass26_terrain_validation", passed: pass26.passed },
       { id: "pass27_structure_validation", passed: pass27.passed },
+      { id: "pass28_art_direction_validation", passed: pass28.passed },
+      { id: "pass28_raster_asset_loaded", passed: this.pass28AssetState?.loadedCount === PASS28_RASTER_ASSETS.length },
+      { id: "pass28_raster_asset_dimensions", passed: this.pass28AssetState?.dimensionsValid === true },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -4493,6 +4561,12 @@ export class Pass27Runtime {
       pass25,
       pass26,
       pass27,
+      pass28,
+      pass28Assets: Object.freeze({
+        loadedCount: this.pass28AssetState?.loadedCount ?? 0,
+        failedCount: this.pass28AssetState?.failedCount ?? PASS28_RASTER_ASSETS.length,
+        dimensionsValid: this.pass28AssetState?.dimensionsValid === true,
+      }),
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -4505,8 +4579,8 @@ export class Pass27Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 27 · MONUMENTAL STRUCTURE GRAPHICS";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P27 ${audit.pass27.passedCount}/${audit.pass27.total}`;
+    this.statusElements.build.textContent = "PASS 28 · RASTER ART QUALITY GATE";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P28 ${audit.pass28.passedCount}/${audit.pass28.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }

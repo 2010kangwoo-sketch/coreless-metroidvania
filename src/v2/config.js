@@ -1,9 +1,9 @@
 export const BUILD = Object.freeze({
-  id: "rebuild-v2-pass27",
-  pass: 27,
+  id: "rebuild-v2-pass28",
+  pass: 28,
   branch: "rebuild/mega-room-40pass",
   draftPullRequest: 1,
-  previousBaselineSha: "bcce7fa",
+  previousBaselineSha: "d694e84",
 });
 
 export const VIEWPORT = Object.freeze({
