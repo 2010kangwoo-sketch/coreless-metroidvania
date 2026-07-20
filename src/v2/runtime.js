@@ -37,6 +37,7 @@ import {
   validatePass25Visuals,
 } from "./pass25-visuals.js";
 import { PASS26_TERRAIN, getPass26FloorSkin, getPass26SolidSkin, validatePass26Terrain } from "./pass26-terrain.js";
+import { PASS27_PALETTES, PASS27_STRUCTURE_PLAN, PASS27_STRUCTURES, validatePass27Structures } from "./pass27-structures.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -44,7 +45,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass26Runtime {
+export class Pass27Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -1828,6 +1829,7 @@ export class Pass26Runtime {
     this.drawVisualWorld(ctx);
     this.drawPass25BuriedDepth(ctx);
     this.drawAtmosphericDepth(ctx);
+    this.drawPass27Structures(ctx);
     this.drawPass25BuriedArchitecture(ctx);
     this.drawBuriedStructure(ctx);
     this.drawUnevenTunnelStructure(ctx);
@@ -1996,6 +1998,291 @@ export class Pass26Runtime {
       fog.addColorStop(1, `${theme.midground}46`);
       ctx.fillStyle = fog;
       ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+    ctx.restore();
+  }
+
+  drawPass27Structures(ctx) {
+    const padding = 460;
+    const view = {
+      x: this.camera.x - padding,
+      y: this.camera.y - padding,
+      width: VIEWPORT.width / this.camera.zoom + padding * 2,
+      height: VIEWPORT.height / this.camera.zoom + padding * 2,
+    };
+    for (const item of PASS27_STRUCTURES) {
+      if (item.x > view.x + view.width || item.x + item.width < view.x || item.y > view.y + view.height || item.y + item.height < view.y) continue;
+      this.drawPass27Structure(ctx, item);
+    }
+  }
+
+  drawPass27Structure(ctx, item) {
+    const palette = PASS27_PALETTES[item.palette];
+    const x = item.x;
+    const y = item.y;
+    const w = item.width;
+    const h = item.height;
+    ctx.save();
+    ctx.globalAlpha = item.depth;
+    const mass = ctx.createLinearGradient(x, y, x, y + h);
+    mass.addColorStop(0, palette.mass);
+    mass.addColorStop(1, palette.shadow);
+    ctx.fillStyle = mass;
+    ctx.strokeStyle = palette.edge;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+
+    if (item.kind === "portal") {
+      const column = Math.max(70, w * 0.12);
+      const shoulder = y + h * 0.34;
+      ctx.fillRect(x, shoulder, column, h * 0.66);
+      ctx.fillRect(x + w - column, shoulder, column, h * 0.66);
+      ctx.lineWidth = Math.max(34, w * 0.055);
+      ctx.beginPath();
+      ctx.moveTo(x + column * 0.5, y + h);
+      ctx.lineTo(x + column * 0.5, shoulder);
+      ctx.quadraticCurveTo(x + w * 0.5, y - h * 0.08, x + w - column * 0.5, shoulder);
+      ctx.lineTo(x + w - column * 0.5, y + h);
+      ctx.stroke();
+      ctx.strokeStyle = `${palette.accent}52`;
+      ctx.lineWidth = 7;
+      ctx.stroke();
+      ctx.fillStyle = `${palette.accent}78`;
+      for (const px of [x + column * 0.5, x + w - column * 0.5]) {
+        for (let py = shoulder + 90; py < y + h; py += 150) ctx.fillRect(px - column * 0.32, py, column * 0.64, 18);
+      }
+    } else if (item.kind === "aqueduct") {
+      ctx.fillStyle = mass;
+      ctx.fillRect(x, y, w, h * 0.18);
+      const count = Math.max(3, Math.floor(w / 620));
+      const cell = w / count;
+      for (let index = 0; index < count; index += 1) {
+        const left = x + index * cell;
+        const pillar = cell * 0.16;
+        ctx.fillRect(left, y + h * 0.18, pillar, h * 0.82);
+        ctx.strokeStyle = palette.edge;
+        ctx.lineWidth = Math.max(22, pillar * 0.5);
+        ctx.beginPath();
+        ctx.moveTo(left + pillar * 0.5, y + h);
+        ctx.lineTo(left + pillar * 0.5, y + h * 0.48);
+        ctx.quadraticCurveTo(left + cell * 0.5, y + h * 0.14, left + cell - pillar * 0.5, y + h * 0.48);
+        ctx.lineTo(left + cell - pillar * 0.5, y + h);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `${palette.accent}55`;
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.moveTo(x, y + h * 0.18);
+      ctx.lineTo(x + w, y + h * 0.18);
+      ctx.stroke();
+    } else if (item.kind === "tower" || item.kind === "descent_spine") {
+      const taper = item.kind === "descent_spine" ? w * 0.16 : w * 0.08;
+      ctx.beginPath();
+      ctx.moveTo(x + taper, y);
+      ctx.lineTo(x + w - taper, y);
+      ctx.lineTo(x + w, y + h);
+      ctx.lineTo(x, y + h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = item.kind === "descent_spine" ? 20 : 14;
+      ctx.stroke();
+      const bands = item.kind === "descent_spine" ? 8 : 5;
+      for (let index = 1; index < bands; index += 1) {
+        const py = y + (h * index) / bands;
+        ctx.fillStyle = `${palette.edge}42`;
+        ctx.fillRect(x + 12, py, w - 24, 24);
+        ctx.fillStyle = `${palette.accent}44`;
+        const windowCount = item.kind === "descent_spine" ? 3 : 2;
+        for (let slot = 0; slot < windowCount; slot += 1) {
+          const slotW = w * 0.14;
+          ctx.fillRect(x + w * (0.2 + slot * 0.26), py - h / bands * 0.58, slotW, h / bands * 0.28);
+        }
+      }
+      if (item.kind === "descent_spine") {
+        ctx.strokeStyle = `${palette.accent}52`;
+        ctx.lineWidth = 13;
+        for (const side of [-1, 1]) {
+          ctx.beginPath();
+          ctx.moveTo(x + w * 0.5, y + h * 0.08);
+          ctx.lineTo(x + w * (side < 0 ? 0.05 : 0.95), y + h * 0.34);
+          ctx.lineTo(x + w * 0.5, y + h * 0.58);
+          ctx.lineTo(x + w * (side < 0 ? 0.02 : 0.98), y + h * 0.84);
+          ctx.stroke();
+        }
+      }
+    } else if (item.kind === "crown") {
+      const cx = x + w * 0.5;
+      const cy = y + h * 0.48;
+      const radius = Math.min(w * 0.26, h * 0.42);
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 42;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.lineWidth = 18;
+      for (let index = 0; index < 9; index += 1) {
+        const ratio = index / 8;
+        const px = x + w * ratio;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - radius * 0.4);
+        ctx.lineTo(px, y + (index % 2 ? h * 0.02 : h * 0.12));
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `${palette.accent}60`;
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius * 0.7, 0, Math.PI * 2);
+      ctx.stroke();
+    } else if (item.kind === "foundry_press") {
+      const column = w * 0.16;
+      ctx.fillRect(x, y, column, h);
+      ctx.fillRect(x + w - column, y, column, h);
+      ctx.fillRect(x, y, w, h * 0.16);
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 18;
+      ctx.strokeRect(x + 8, y + 8, w - 16, h - 16);
+      ctx.fillStyle = palette.mass;
+      ctx.fillRect(x + w * 0.36, y + h * 0.12, w * 0.28, h * 0.48);
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.26, y + h * 0.62);
+      ctx.lineTo(x + w * 0.74, y + h * 0.62);
+      ctx.lineTo(x + w * 0.63, y + h * 0.82);
+      ctx.lineTo(x + w * 0.37, y + h * 0.82);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = `${palette.accent}68`;
+      ctx.lineWidth = 10;
+      for (let py = y + h * 0.24; py < y + h * 0.9; py += h * 0.18) {
+        ctx.beginPath();
+        ctx.moveTo(x + column * 0.2, py);
+        ctx.lineTo(x + column * 0.8, py - 18);
+        ctx.moveTo(x + w - column * 0.8, py - 18);
+        ctx.lineTo(x + w - column * 0.2, py);
+        ctx.stroke();
+      }
+    } else if (item.kind === "furnace") {
+      ctx.fillRect(x, y + h * 0.12, w, h * 0.88);
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 22;
+      ctx.strokeRect(x + 10, y + h * 0.12 + 10, w - 20, h * 0.88 - 20);
+      const cx = x + w * 0.5;
+      const cy = y + h * 0.58;
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.34);
+      glow.addColorStop(0, `${palette.glow}b8`);
+      glow.addColorStop(0.45, `${palette.glow}5c`);
+      glow.addColorStop(1, `${palette.glow}00`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(cx, cy, w * 0.34, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = palette.shadow;
+      ctx.beginPath();
+      ctx.arc(cx, cy, Math.min(w, h) * 0.19, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = palette.accent;
+      ctx.lineWidth = 18;
+      ctx.stroke();
+      for (let index = 0; index < 6; index += 1) {
+        ctx.fillStyle = `${palette.edge}80`;
+        ctx.fillRect(x + w * (0.08 + index * 0.16), y, w * 0.08, h * 0.22);
+      }
+    } else if (item.kind === "gear") {
+      const cx = x + w * 0.5;
+      const cy = y + h * 0.5;
+      const outer = Math.min(w, h) * 0.46;
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = Math.max(30, outer * 0.11);
+      ctx.beginPath();
+      ctx.arc(cx, cy, outer * 0.82, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.lineWidth = Math.max(14, outer * 0.045);
+      ctx.beginPath();
+      ctx.arc(cx, cy, outer * 0.42, 0, Math.PI * 2);
+      ctx.stroke();
+      for (let index = 0; index < 12; index += 1) {
+        const angle = (index / 12) * Math.PI * 2;
+        ctx.strokeStyle = index % 3 === 0 ? palette.accent : palette.edge;
+        ctx.lineWidth = index % 3 === 0 ? 20 : 12;
+        ctx.beginPath();
+        ctx.moveTo(cx + Math.cos(angle) * outer * 0.22, cy + Math.sin(angle) * outer * 0.22);
+        ctx.lineTo(cx + Math.cos(angle) * outer * 0.75, cy + Math.sin(angle) * outer * 0.75);
+        ctx.stroke();
+      }
+    } else if (item.kind === "truss") {
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = Math.max(18, h * 0.045);
+      ctx.strokeRect(x + 8, y + 8, w - 16, h - 16);
+      const bays = Math.max(3, Math.floor(w / 760));
+      const bay = w / bays;
+      for (let index = 0; index < bays; index += 1) {
+        const left = x + index * bay;
+        ctx.beginPath();
+        ctx.moveTo(left, y + h);
+        ctx.lineTo(left + bay * 0.5, y);
+        ctx.lineTo(left + bay, y + h);
+        ctx.moveTo(left, y);
+        ctx.lineTo(left + bay * 0.5, y + h);
+        ctx.lineTo(left + bay, y);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `${palette.accent}56`;
+      ctx.lineWidth = 7;
+      ctx.strokeRect(x + 24, y + 24, w - 48, h - 48);
+    } else if (item.kind === "gallery") {
+      const bays = Math.max(4, Math.floor(w / 720));
+      const bay = w / bays;
+      ctx.fillRect(x, y, w, h * 0.14);
+      for (let index = 0; index < bays; index += 1) {
+        const left = x + index * bay;
+        ctx.strokeStyle = palette.edge;
+        ctx.lineWidth = Math.max(18, bay * 0.06);
+        ctx.beginPath();
+        ctx.moveTo(left + bay * 0.12, y + h);
+        ctx.lineTo(left + bay * 0.12, y + h * 0.42);
+        ctx.quadraticCurveTo(left + bay * 0.5, y + h * 0.08, left + bay * 0.88, y + h * 0.42);
+        ctx.lineTo(left + bay * 0.88, y + h);
+        ctx.stroke();
+      }
+    } else if (item.kind === "bridge_pylon") {
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.26, y);
+      ctx.lineTo(x + w * 0.74, y);
+      ctx.lineTo(x + w, y + h);
+      ctx.lineTo(x, y + h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 16;
+      ctx.stroke();
+      ctx.fillStyle = palette.shadow;
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.39, y + h * 0.95);
+      ctx.lineTo(x + w * 0.39, y + h * 0.46);
+      ctx.quadraticCurveTo(x + w * 0.5, y + h * 0.28, x + w * 0.61, y + h * 0.46);
+      ctx.lineTo(x + w * 0.61, y + h * 0.95);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = `${palette.accent}62`;
+      for (let py = y + h * 0.18; py < y + h * 0.86; py += h * 0.18) ctx.fillRect(x + w * 0.18, py, w * 0.64, 16);
+    } else if (item.kind === "spring_frame") {
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 28;
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.1, y + h);
+      ctx.lineTo(x + w * 0.28, y + h * 0.08);
+      ctx.lineTo(x + w * 0.72, y + h * 0.08);
+      ctx.lineTo(x + w * 0.9, y + h);
+      ctx.stroke();
+      ctx.strokeStyle = palette.accent;
+      ctx.lineWidth = 12;
+      for (let index = 0; index < 5; index += 1) {
+        const py = y + h * (0.24 + index * 0.12);
+        ctx.beginPath();
+        ctx.moveTo(x + w * 0.3, py);
+        ctx.quadraticCurveTo(x + w * 0.5, py - h * 0.1, x + w * 0.7, py);
+        ctx.stroke();
+      }
     }
     ctx.restore();
   }
@@ -4008,10 +4295,10 @@ export class Pass26Runtime {
     ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 26 / VISUAL TERRAIN SEPARATION", 42, 52);
+    ctx.fillText("PASS 27 / MONUMENTAL STRUCTURE GRAPHICS", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`${PASS26_TERRAIN.floorSkins.length} FLOOR SHELLS · ${PASS26_TERRAIN.solidSkins.length} WALL SHELLS · COLLISION RETAINED`, 42, 72);
+    ctx.fillText(`${PASS27_STRUCTURE_PLAN.scenes.length} SCENES · ${PASS27_STRUCTURE_PLAN.structures.length} LANDMARKS · COLLISION RETAINED`, 42, 72);
   }
 
   getDebugState() {
@@ -4134,10 +4421,11 @@ export class Pass26Runtime {
     const pass24 = validatePass24Integration();
     const pass25 = validatePass25Visuals();
     const pass26 = validatePass26Terrain();
+    const pass27 = validatePass27Structures();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass26" },
-      { id: "pass_number", passed: BUILD.pass === 26 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass27" },
+      { id: "pass_number", passed: BUILD.pass === 27 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -4169,6 +4457,7 @@ export class Pass26Runtime {
       { id: "pass24_integration_validation", passed: pass24.passed },
       { id: "pass25_visual_validation", passed: pass25.passed },
       { id: "pass26_terrain_validation", passed: pass26.passed },
+      { id: "pass27_structure_validation", passed: pass27.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -4203,6 +4492,7 @@ export class Pass26Runtime {
       pass24,
       pass25,
       pass26,
+      pass27,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -4215,8 +4505,8 @@ export class Pass26Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 26 · VISUAL TERRAIN SEPARATION";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P26 ${audit.pass26.passedCount}/${audit.pass26.total}`;
+    this.statusElements.build.textContent = "PASS 27 · MONUMENTAL STRUCTURE GRAPHICS";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P27 ${audit.pass27.passedCount}/${audit.pass27.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
