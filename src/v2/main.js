@@ -31,7 +31,8 @@ import { PASS30_CAMERA_SAMPLES, PASS30_QUALITY_GATE, validatePass30QualityGate }
 import { PASS31_CAMERA_SAMPLES, PASS31_ENTRANCE_ASSETS, PASS31_ENTRANCE_PLAN, PASS31_ENTRANCE_PLACEMENTS, PASS31_ENTRANCE_SCENES, loadPass31EntranceAssets, validatePass31EntranceArt } from "./pass31-entrance-art.js";
 import { PASS32_BURIED_ASSETS, PASS32_BURIED_PLAN, PASS32_BURIED_PLACEMENTS, PASS32_BURIED_SCENES, PASS32_CAMERA_SAMPLES, loadPass32BuriedAssets, validatePass32BuriedRiseArt } from "./pass32-buried-rise-art.js";
 import { PASS33_CAMERA_SAMPLES, PASS33_TUNNEL_ASSETS, PASS33_TUNNEL_PLAN, PASS33_TUNNEL_PLACEMENTS, PASS33_TUNNEL_SCENES, loadPass33TunnelAssets, validatePass33UnevenTunnelArt } from "./pass33-uneven-tunnel-art.js";
-import { Pass33Runtime } from "./runtime.js";
+import { PASS34_CAMERA_SAMPLES, PASS34_DESTRUCTION_ASSETS, PASS34_DESTRUCTION_PLAN, PASS34_DESTRUCTION_PLACEMENTS, PASS34_DESTRUCTION_SCENES, PASS34_GATE_SPRITES, loadPass34DestructionAssets, validatePass34DestructionMazeArt } from "./pass34-destruction-maze-art.js";
+import { Pass34Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -41,11 +42,11 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets(), loadPass33TunnelAssets()]);
-const runtime = new Pass33Runtime(canvas, {
+const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets(), loadPass33TunnelAssets(), loadPass34DestructionAssets()]);
+const runtime = new Pass34Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
-}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState);
+}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState);
 
 runtime.start();
 
@@ -221,6 +222,16 @@ window.__corelessV2 = Object.freeze({
     cameraSamples: PASS33_CAMERA_SAMPLES,
     assetState: pass33AssetState,
     validate: validatePass33UnevenTunnelArt,
+  }),
+  pass34: Object.freeze({
+    plan: PASS34_DESTRUCTION_PLAN,
+    assets: PASS34_DESTRUCTION_ASSETS,
+    scenes: PASS34_DESTRUCTION_SCENES,
+    placements: PASS34_DESTRUCTION_PLACEMENTS,
+    gateSprites: PASS34_GATE_SPRITES,
+    cameraSamples: PASS34_CAMERA_SAMPLES,
+    assetState: pass34AssetState,
+    validate: validatePass34DestructionMazeArt,
   }),
   runtime,
   audit: () => runtime.audit(),

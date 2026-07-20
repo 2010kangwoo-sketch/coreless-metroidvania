@@ -44,6 +44,7 @@ import { PASS30_QUALITY_GATE, validatePass30QualityGate } from "./pass30-quality
 import { PASS31_ENTRANCE_ASSETS, PASS31_ENTRANCE_PLAN, PASS31_ENTRANCE_PLACEMENTS, PASS31_ENTRANCE_SCENES, getPass31ActiveScene, getPass31SceneBlend, getPass31ScreenPlacement, validatePass31EntranceArt } from "./pass31-entrance-art.js";
 import { PASS32_BURIED_ASSETS, PASS32_BURIED_PLAN, PASS32_BURIED_PLACEMENTS, PASS32_BURIED_SCENES, getPass32ActiveScene, getPass32EntryOpacity, getPass32SceneBlend, getPass32ScreenPlacement, validatePass32BuriedRiseArt } from "./pass32-buried-rise-art.js";
 import { PASS33_TUNNEL_ASSETS, PASS33_TUNNEL_PLAN, PASS33_TUNNEL_PLACEMENTS, PASS33_TUNNEL_SCENES, getPass33ActiveScene, getPass33EntryOpacity, getPass33SceneBlend, getPass33ScreenPlacement, validatePass33UnevenTunnelArt } from "./pass33-uneven-tunnel-art.js";
+import { PASS34_DESTRUCTION_ASSETS, PASS34_DESTRUCTION_PLAN, PASS34_DESTRUCTION_PLACEMENTS, PASS34_DESTRUCTION_SCENES, PASS34_GATE_SPRITES, getPass34ActiveScene, getPass34EntryOpacity, getPass34SceneBlend, getPass34ScreenPlacement, validatePass34DestructionMazeArt } from "./pass34-destruction-maze-art.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -51,8 +52,8 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass33Runtime {
-  constructor(canvas, statusElements, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState) {
+export class Pass34Runtime {
+  constructor(canvas, statusElements, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
     this.statusElements = statusElements;
@@ -61,6 +62,7 @@ export class Pass33Runtime {
     this.pass31AssetState = pass31AssetState;
     this.pass32AssetState = pass32AssetState;
     this.pass33AssetState = pass33AssetState;
+    this.pass34AssetState = pass34AssetState;
     this.frameHandle = 0;
     this.frameCount = 0;
     this.running = false;
@@ -1865,6 +1867,7 @@ export class Pass33Runtime {
     const pass31Candidate = getPass31ActiveScene(this.camera);
     const pass32Candidate = getPass32ActiveScene(this.camera);
     const pass33Candidate = getPass33ActiveScene(this.camera);
+    const pass34Candidate = getPass34ActiveScene(this.camera);
     const retainPass31ForEntryBlend = Boolean(pass31Candidate && pass32Candidate && this.camera.x < PASS32_BURIED_PLAN.entryTransition.endX);
     const pass31EntranceScene = pass31Candidate && (!pass32Candidate || retainPass31ForEntryBlend)
       ? this.drawPass31EntranceLayers(ctx, ["far_background", "midground"], pass31Candidate)
@@ -1874,15 +1877,21 @@ export class Pass33Runtime {
     const pass32BuriedScene = pass32Candidate && (!pass33Candidate || retainPass32ForEntryBlend)
       ? this.drawPass32BuriedLayers(ctx, ["far_background", "midground"], pass32Candidate, pass32MasterOpacity)
       : null;
+    const retainPass33ForEntryBlend = Boolean(pass33Candidate && pass34Candidate && this.camera.x < PASS34_DESTRUCTION_PLAN.entryTransition.endX);
     const pass33MasterOpacity = pass33Candidate ? getPass33EntryOpacity(this.camera) : 0;
-    const pass33TunnelScene = pass33Candidate
+    const pass33TunnelScene = pass33Candidate && (!pass34Candidate || retainPass33ForEntryBlend)
       ? this.drawPass33TunnelLayers(ctx, ["far_background", "depth_background", "midground"], pass33Candidate, pass33MasterOpacity)
       : null;
-    const pass29ModularScene = pass31EntranceScene || pass32BuriedScene || pass33TunnelScene ? false : this.drawPass29ModuleLayers(ctx, ["far_background", "midground"]);
-    if (!pass31EntranceScene && !pass32BuriedScene && !pass33TunnelScene && !pass29ModularScene) this.drawPass28RasterBackplates(ctx);
+    const pass34MasterOpacity = pass34Candidate ? getPass34EntryOpacity(this.camera) : 0;
+    const pass34DestructionScene = pass34Candidate
+      ? this.drawPass34DestructionLayers(ctx, ["far_background", "depth_background", "midground"], pass34Candidate, pass34MasterOpacity)
+      : null;
+    const pass29ModularScene = pass31EntranceScene || pass32BuriedScene || pass33TunnelScene || pass34DestructionScene ? false : this.drawPass29ModuleLayers(ctx, ["far_background", "midground"]);
+    if (!pass31EntranceScene && !pass32BuriedScene && !pass33TunnelScene && !pass34DestructionScene && !pass29ModularScene) this.drawPass28RasterBackplates(ctx);
     if (pass31EntranceScene) this.drawPass31RouteSurfaces(ctx, pass31EntranceScene);
     if (pass32BuriedScene) this.drawPass32RouteSurfaces(ctx, pass32BuriedScene);
     if (pass33TunnelScene) this.drawPass33RouteSurfaces(ctx, pass33TunnelScene);
+    if (pass34DestructionScene) this.drawPass34RouteSurfaces(ctx, pass34DestructionScene);
     this.drawPass28RouteEdges(ctx);
     this.drawDashSpikes(ctx);
     this.drawPrecisionHazards(ctx);
@@ -1900,6 +1909,7 @@ export class Pass33Runtime {
     if (pass31EntranceScene) this.drawPass31EntranceLayers(ctx, ["foreground"], pass31EntranceScene);
     if (pass32BuriedScene) this.drawPass32BuriedLayers(ctx, ["foreground"], pass32BuriedScene, pass32MasterOpacity);
     if (pass33TunnelScene) this.drawPass33TunnelLayers(ctx, ["foreground"], pass33TunnelScene, pass33MasterOpacity);
+    if (pass34DestructionScene) this.drawPass34DestructionLayers(ctx, ["foreground"], pass34DestructionScene, pass34MasterOpacity);
     if (pass29ModularScene) this.drawPass29ModuleLayers(ctx, ["foreground"]);
     this.drawPlayer(ctx);
     ctx.restore();
@@ -2342,6 +2352,101 @@ export class Pass33Runtime {
       ctx.strokeStyle = "rgba(167, 215, 199, 0.7)";
       ctx.lineWidth = 2;
       ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
+    }
+    ctx.restore();
+  }
+
+  drawPass34DestructionLayers(ctx, layers, forcedScene = null, masterOpacity = 1) {
+    const scene = forcedScene ?? getPass34ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass34AssetState?.loadedCount !== PASS34_DESTRUCTION_ASSETS.length || this.pass34AssetState?.dimensionsValid !== true) return null;
+    if (masterOpacity <= 0) return scene;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass34SceneBlend(this.camera)) {
+      for (const layer of PASS34_DESTRUCTION_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS34_DESTRUCTION_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.minCameraX !== undefined && this.camera.x < placement.minCameraX) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass34AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass34ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity * masterOpacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const depthShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      depthShade.addColorStop(0, "rgba(1, 5, 8, 0.38)");
+      depthShade.addColorStop(0.38, "rgba(4, 20, 24, 0.04)");
+      depthShade.addColorStop(0.7, "rgba(5, 18, 21, 0.12)");
+      depthShade.addColorStop(1, "rgba(0, 3, 5, 0.56)");
+      ctx.globalAlpha = masterOpacity;
+      ctx.fillStyle = depthShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const furnaceWash = ctx.createRadialGradient(VIEWPORT.width * 0.72, VIEWPORT.height * 0.46, 20, VIEWPORT.width * 0.72, VIEWPORT.height * 0.46, 390);
+      furnaceWash.addColorStop(0, "rgba(205, 113, 56, 0.12)");
+      furnaceWash.addColorStop(0.45, "rgba(38, 96, 91, 0.035)");
+      furnaceWash.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = furnaceWash;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(1, 4, 7, 0.35)");
+      sideShade.addColorStop(0.43, "rgba(1, 4, 7, 0)");
+      sideShade.addColorStop(0.62, "rgba(1, 4, 7, 0)");
+      sideShade.addColorStop(1, "rgba(1, 4, 7, 0.36)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass34RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass34AssetState?.byId?.get(PASS34_DESTRUCTION_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS34_DESTRUCTION_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const floor of PASS06_ZONE.floors) {
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.13, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.92)";
+      ctx.shadowBlur = 13;
+      ctx.shadowOffsetY = 12;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = "rgba(78, 171, 155, 0.56)";
+      ctx.shadowBlur = 5;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(180, 224, 201, 0.78)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
     }
     ctx.restore();
   }
@@ -4478,6 +4583,26 @@ export class Pass33Runtime {
     ctx.save();
     for (const gate of this.breakables) {
       if (gate.destroyed) continue;
+      const pass34Sprite = PASS34_GATE_SPRITES[gate.shape];
+      const gateRecord = this.pass34AssetState?.byId?.get(PASS34_DESTRUCTION_PLAN.gateAssetId);
+      if (pass34Sprite && gateRecord?.loaded && gateRecord.image) {
+        const visualX = gate.x - pass34Sprite.visualInsetX;
+        const visualY = gate.y - pass34Sprite.visualInsetY;
+        const visualWidth = gate.width + pass34Sprite.visualInsetX * 2;
+        const visualHeight = gate.height + pass34Sprite.visualInsetY + 30;
+        ctx.save();
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.shadowColor = "rgba(214, 126, 59, 0.55)";
+        ctx.shadowBlur = 12;
+        ctx.drawImage(gateRecord.image, pass34Sprite.sx, pass34Sprite.sy, pass34Sprite.sw, pass34Sprite.sh, visualX, visualY, visualWidth, visualHeight);
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "rgba(224, 170, 101, 0.48)";
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(gate.x, gate.y, gate.width, gate.height);
+        ctx.restore();
+        continue;
+      }
       ctx.fillStyle = "#5b4b3e";
       ctx.strokeStyle = "#e0b26f";
       ctx.lineWidth = 4;
@@ -4790,11 +4915,19 @@ export class Pass33Runtime {
       ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
       ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
     }
+    for (const scene of PASS34_DESTRUCTION_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(220, 137, 76, 0.17)";
+      ctx.strokeStyle = "#dc894c";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 33 / UNEVEN TUNNEL PARALLAX DEPTH", 42, 52);
+    ctx.fillText("PASS 34 / DESTRUCTION MAZE PARALLAX DEPTH", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`${PASS33_TUNNEL_PLAN.sceneCount} TUNNEL SCENES · PARALLAX ${PASS33_TUNNEL_PLAN.parallaxRatios.far.toFixed(2)}–${PASS33_TUNNEL_PLAN.parallaxRatios.foreground.toFixed(2)} · SUPPORTS CONTINUE BELOW VIEW`, 42, 72);
+    ctx.fillText(`${PASS34_DESTRUCTION_PLAN.sceneCount} MAZE SCENES · PARALLAX ${PASS34_DESTRUCTION_PLAN.parallaxRatios.far.toFixed(2)}–${PASS34_DESTRUCTION_PLAN.parallaxRatios.foreground.toFixed(2)} · SUPPORTS CONTINUE BELOW VIEW`, 42, 72);
   }
 
   getDebugState() {
@@ -4924,10 +5057,11 @@ export class Pass33Runtime {
     const pass31 = validatePass31EntranceArt();
     const pass32 = validatePass32BuriedRiseArt();
     const pass33 = validatePass33UnevenTunnelArt();
+    const pass34 = validatePass34DestructionMazeArt();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass33" },
-      { id: "pass_number", passed: BUILD.pass === 33 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass34" },
+      { id: "pass_number", passed: BUILD.pass === 34 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -4984,6 +5118,11 @@ export class Pass33Runtime {
       { id: "pass33_asset_dimensions", passed: this.pass33AssetState?.dimensionsValid === true },
       { id: "pass33_three_scene_scope", passed: PASS33_TUNNEL_PLAN.scope === "uneven_tunnel_and_lift_shaft_only" },
       { id: "pass33_zero_collision_changes", passed: PASS33_TUNNEL_PLAN.collisionChanges === 0 },
+      { id: "pass34_destruction_art_validation", passed: pass34.passed },
+      { id: "pass34_assets_loaded", passed: this.pass34AssetState?.loadedCount === PASS34_DESTRUCTION_ASSETS.length },
+      { id: "pass34_asset_dimensions", passed: this.pass34AssetState?.dimensionsValid === true },
+      { id: "pass34_four_scene_scope", passed: PASS34_DESTRUCTION_PLAN.scope === "destruction_maze_only" },
+      { id: "pass34_zero_collision_changes", passed: PASS34_DESTRUCTION_PLAN.collisionChanges === 0 },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -5025,6 +5164,7 @@ export class Pass33Runtime {
       pass31,
       pass32,
       pass33,
+      pass34,
       pass28Assets: Object.freeze({
         loadedCount: this.pass28AssetState?.loadedCount ?? 0,
         failedCount: this.pass28AssetState?.failedCount ?? PASS28_RASTER_ASSETS.length,
@@ -5050,6 +5190,11 @@ export class Pass33Runtime {
         failedCount: this.pass33AssetState?.failedCount ?? PASS33_TUNNEL_ASSETS.length,
         dimensionsValid: this.pass33AssetState?.dimensionsValid === true,
       }),
+      pass34Assets: Object.freeze({
+        loadedCount: this.pass34AssetState?.loadedCount ?? 0,
+        failedCount: this.pass34AssetState?.failedCount ?? PASS34_DESTRUCTION_ASSETS.length,
+        dimensionsValid: this.pass34AssetState?.dimensionsValid === true,
+      }),
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -5062,8 +5207,8 @@ export class Pass33Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 33 · UNEVEN TUNNEL PARALLAX DEPTH";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P33 ${audit.pass33.passedCount}/${audit.pass33.total}`;
+    this.statusElements.build.textContent = "PASS 34 · DESTRUCTION MAZE PARALLAX DEPTH";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P34 ${audit.pass34.passedCount}/${audit.pass34.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
