@@ -30,7 +30,8 @@ import { PASS29_MODULAR_PLAN, PASS29_MODULE_ASSETS, PASS29_MODULE_PLACEMENTS, lo
 import { PASS30_CAMERA_SAMPLES, PASS30_QUALITY_GATE, validatePass30QualityGate } from "./pass30-quality-gate.js";
 import { PASS31_CAMERA_SAMPLES, PASS31_ENTRANCE_ASSETS, PASS31_ENTRANCE_PLAN, PASS31_ENTRANCE_PLACEMENTS, PASS31_ENTRANCE_SCENES, loadPass31EntranceAssets, validatePass31EntranceArt } from "./pass31-entrance-art.js";
 import { PASS32_BURIED_ASSETS, PASS32_BURIED_PLAN, PASS32_BURIED_PLACEMENTS, PASS32_BURIED_SCENES, PASS32_CAMERA_SAMPLES, loadPass32BuriedAssets, validatePass32BuriedRiseArt } from "./pass32-buried-rise-art.js";
-import { Pass32Runtime } from "./runtime.js";
+import { PASS33_CAMERA_SAMPLES, PASS33_TUNNEL_ASSETS, PASS33_TUNNEL_PLAN, PASS33_TUNNEL_PLACEMENTS, PASS33_TUNNEL_SCENES, loadPass33TunnelAssets, validatePass33UnevenTunnelArt } from "./pass33-uneven-tunnel-art.js";
+import { Pass33Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -40,11 +41,11 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets()]);
-const runtime = new Pass32Runtime(canvas, {
+const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets(), loadPass33TunnelAssets()]);
+const runtime = new Pass33Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
-}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState);
+}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState);
 
 runtime.start();
 
@@ -211,6 +212,15 @@ window.__corelessV2 = Object.freeze({
     cameraSamples: PASS32_CAMERA_SAMPLES,
     assetState: pass32AssetState,
     validate: validatePass32BuriedRiseArt,
+  }),
+  pass33: Object.freeze({
+    plan: PASS33_TUNNEL_PLAN,
+    assets: PASS33_TUNNEL_ASSETS,
+    scenes: PASS33_TUNNEL_SCENES,
+    placements: PASS33_TUNNEL_PLACEMENTS,
+    cameraSamples: PASS33_CAMERA_SAMPLES,
+    assetState: pass33AssetState,
+    validate: validatePass33UnevenTunnelArt,
   }),
   runtime,
   audit: () => runtime.audit(),
