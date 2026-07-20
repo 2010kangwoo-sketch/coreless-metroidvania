@@ -36,6 +36,7 @@ import {
   PASS25_VISUAL_SLICE,
   validatePass25Visuals,
 } from "./pass25-visuals.js";
+import { PASS26_TERRAIN, getPass26FloorSkin, getPass26SolidSkin, validatePass26Terrain } from "./pass26-terrain.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -43,7 +44,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass25Runtime {
+export class Pass26Runtime {
   constructor(canvas, statusElements) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -2336,18 +2337,228 @@ export class Pass25Runtime {
     ctx.restore();
   }
 
+  drawPass26FloorSkin(ctx, floor, skin) {
+    const sample = ratio => ({
+      x: floor.x1 + (floor.x2 - floor.x1) * ratio,
+      y: floor.y1 + (floor.y2 - floor.y1) * ratio,
+    });
+    const top = [0, 1 / 3, 2 / 3, 1].map((ratio, index) => {
+      const point = sample(ratio);
+      return { x: point.x, y: point.y + skin.topOffsets[index] };
+    });
+    const bottom = [0.08, 0.5, 0.92].map((ratio, index) => {
+      const point = sample(ratio);
+      return { x: point.x, y: point.y + skin.depth + skin.bottomOffsets[index] };
+    });
+    const traceBody = () => {
+      ctx.beginPath();
+      ctx.moveTo(top[0].x, top[0].y);
+      for (const point of top.slice(1)) ctx.lineTo(point.x, point.y);
+      ctx.lineTo(floor.x2, floor.y2 + skin.depth * 0.82);
+      for (const point of bottom.slice().reverse()) ctx.lineTo(point.x, point.y);
+      ctx.lineTo(floor.x1, floor.y1 + skin.depth * 0.78);
+      ctx.closePath();
+    };
+
+    ctx.save();
+    const mass = ctx.createLinearGradient(0, Math.min(floor.y1, floor.y2), 0, Math.max(floor.y1, floor.y2) + skin.depth);
+    mass.addColorStop(0, skin.base);
+    mass.addColorStop(0.55, skin.base);
+    mass.addColorStop(1, skin.dark);
+    ctx.fillStyle = mass;
+    traceBody();
+    ctx.fill();
+
+    ctx.save();
+    traceBody();
+    ctx.clip();
+    const length = Math.max(1, floor.x2 - floor.x1);
+    if (skin.mode === "timber") {
+      const plankWidth = length / skin.detailCount;
+      ctx.strokeStyle = `${skin.seam}d0`;
+      ctx.lineWidth = 4;
+      for (let index = 1; index < skin.detailCount; index += 1) {
+        const ratio = index / skin.detailCount;
+        const point = sample(ratio);
+        ctx.beginPath();
+        ctx.moveTo(point.x, point.y + 5);
+        ctx.lineTo(point.x - 7 + (index % 3) * 7, point.y + skin.depth * 0.78);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `${skin.accent}46`;
+      ctx.lineWidth = 2;
+      for (let index = 0; index < skin.detailCount; index += 1) {
+        const x = floor.x1 + plankWidth * (index + 0.18);
+        const point = sample((index + 0.18) / skin.detailCount);
+        ctx.beginPath();
+        ctx.moveTo(x, point.y + 22);
+        ctx.quadraticCurveTo(x + plankWidth * 0.32, point.y + 13, x + plankWidth * 0.65, point.y + 27);
+        ctx.stroke();
+      }
+    } else if (skin.mode === "machine") {
+      const panelWidth = length / skin.detailCount;
+      ctx.strokeStyle = `${skin.seam}a8`;
+      ctx.lineWidth = 5;
+      for (let index = 0; index < skin.detailCount; index += 1) {
+        const ratio = (index + 0.5) / skin.detailCount;
+        const point = sample(ratio);
+        const x = floor.x1 + panelWidth * index + 7;
+        ctx.strokeRect(x, point.y + 31, Math.max(22, panelWidth - 14), Math.min(86, skin.depth * 0.42));
+        ctx.fillStyle = `${skin.accent}9c`;
+        ctx.beginPath();
+        ctx.arc(x + 12, point.y + 45, 3.5, 0, Math.PI * 2);
+        ctx.arc(x + Math.max(22, panelWidth - 26), point.y + 45, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (skin.mode === "masonry") {
+      const blockWidth = Math.max(58, length / skin.detailCount);
+      ctx.strokeStyle = `${skin.seam}82`;
+      ctx.lineWidth = 4;
+      for (let row = 0; row < 3; row += 1) {
+        const yOffset = 34 + row * Math.min(70, skin.depth * 0.25);
+        ctx.beginPath();
+        ctx.moveTo(floor.x1, floor.y1 + yOffset);
+        ctx.lineTo(floor.x2, floor.y2 + yOffset - row * 5);
+        ctx.stroke();
+        const offset = row % 2 ? blockWidth * 0.5 : 0;
+        for (let x = floor.x1 + offset; x < floor.x2; x += blockWidth) {
+          const ratio = (x - floor.x1) / length;
+          const point = sample(ratio);
+          ctx.beginPath();
+          ctx.moveTo(x, point.y + yOffset);
+          ctx.lineTo(x + 7, point.y + yOffset + Math.min(66, skin.depth * 0.23));
+          ctx.stroke();
+        }
+      }
+    } else {
+      ctx.strokeStyle = `${skin.seam}8a`;
+      ctx.lineWidth = 5;
+      for (let index = 0; index < skin.detailCount; index += 1) {
+        const ratio = (index + 0.4) / skin.detailCount;
+        const point = sample(Math.min(1, ratio));
+        const width = 28 + ((skin.sourceIndex + index * 11) % 52);
+        const drop = 38 + ((skin.sourceIndex * 7 + index * 13) % Math.max(42, Math.floor(skin.depth * 0.56)));
+        ctx.beginPath();
+        ctx.moveTo(point.x - width, point.y + drop);
+        ctx.lineTo(point.x + width * 0.25, point.y + drop - 15);
+        ctx.lineTo(point.x + width, point.y + drop + 6);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+
+    ctx.strokeStyle = skin.cap;
+    ctx.lineWidth = skin.mode === "timber" ? 9 : 11;
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    ctx.moveTo(top[0].x, top[0].y);
+    for (const point of top.slice(1)) ctx.lineTo(point.x, point.y);
+    ctx.stroke();
+    ctx.strokeStyle = `${skin.accent}72`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    if (skin.mode !== "timber" && skin.sourceIndex % 3 === 0 && floor.x2 - floor.x1 > 150) {
+      const center = sample(0.5);
+      ctx.strokeStyle = `${skin.seam}b0`;
+      ctx.lineWidth = 13;
+      ctx.beginPath();
+      ctx.moveTo(center.x - 58, center.y + skin.depth * 0.86);
+      ctx.lineTo(center.x, center.y + skin.depth * 0.52);
+      ctx.lineTo(center.x + 58, center.y + skin.depth * 0.86);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPass26CollapsedSkin(ctx, floor, skin) {
+    ctx.save();
+    for (let index = 0; index < 5; index += 1) {
+      const ratio = (index + 0.5) / 5;
+      const x = floor.x1 + (floor.x2 - floor.x1) * ratio;
+      const y = floor.y1 + (floor.y2 - floor.y1) * ratio + 28 + (index % 3) * 24;
+      const size = 18 + ((skin.sourceIndex + index * 9) % 22);
+      ctx.fillStyle = index % 2 ? skin.dark : skin.base;
+      ctx.strokeStyle = `${skin.cap}70`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(x - size, y);
+      ctx.lineTo(x - size * 0.2, y - size * 0.5);
+      ctx.lineTo(x + size, y + size * 0.15);
+      ctx.lineTo(x + size * 0.1, y + size * 0.72);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPass26SolidSkin(ctx, solid, skin) {
+    const c = skin.chamfer;
+    const trace = () => {
+      ctx.beginPath();
+      ctx.moveTo(solid.x + c, solid.y);
+      ctx.lineTo(solid.x + solid.width - c, solid.y);
+      ctx.lineTo(solid.x + solid.width, solid.y + c);
+      ctx.lineTo(solid.x + solid.width, solid.y + solid.height - c);
+      ctx.lineTo(solid.x + solid.width - c, solid.y + solid.height);
+      ctx.lineTo(solid.x + c, solid.y + solid.height);
+      ctx.lineTo(solid.x, solid.y + solid.height - c);
+      ctx.lineTo(solid.x, solid.y + c);
+      ctx.closePath();
+    };
+    ctx.save();
+    const gradient = ctx.createLinearGradient(solid.x, solid.y, solid.x + solid.width, solid.y + solid.height);
+    gradient.addColorStop(0, skin.base);
+    gradient.addColorStop(1, skin.dark);
+    ctx.fillStyle = gradient;
+    trace();
+    ctx.fill();
+    ctx.strokeStyle = `${skin.cap}a8`;
+    ctx.lineWidth = 7;
+    ctx.stroke();
+    ctx.save();
+    trace();
+    ctx.clip();
+    ctx.strokeStyle = `${skin.seam}9a`;
+    ctx.lineWidth = 4;
+    const horizontal = solid.width >= solid.height;
+    for (let index = 1; index < skin.detailCount; index += 1) {
+      const ratio = index / skin.detailCount;
+      ctx.beginPath();
+      if (horizontal) {
+        const x = solid.x + solid.width * ratio;
+        ctx.moveTo(x, solid.y + 7);
+        ctx.lineTo(x - 9, solid.y + solid.height - 7);
+      } else {
+        const y = solid.y + solid.height * ratio;
+        ctx.moveTo(solid.x + 7, y);
+        ctx.lineTo(solid.x + solid.width - 7, y - 9);
+      }
+      ctx.stroke();
+    }
+    if (skin.mode === "machine") {
+      ctx.fillStyle = `${skin.cap}b8`;
+      for (const [x, y] of [[solid.x + 13, solid.y + 13], [solid.x + solid.width - 13, solid.y + 13], [solid.x + 13, solid.y + solid.height - 13], [solid.x + solid.width - 13, solid.y + solid.height - 13]]) {
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+    ctx.restore();
+  }
+
   drawLevel(ctx) {
     ctx.save();
     for (const item of this.collisionFloors) {
+      const pass26Skin = getPass26FloorSkin(item.id);
       if (this.collapsedFloorIds.has(item.id)) {
-        ctx.strokeStyle = "rgba(185, 105, 73, 0.42)";
-        ctx.lineWidth = 5;
-        ctx.setLineDash([22, 24]);
-        ctx.beginPath();
-        ctx.moveTo(item.x1, item.y1 + 18);
-        ctx.lineTo(item.x2, item.y2 + 72);
-        ctx.stroke();
-        ctx.setLineDash([]);
+        if (pass26Skin) this.drawPass26CollapsedSkin(ctx, item, pass26Skin);
+        continue;
+      }
+      if (pass26Skin) {
+        this.drawPass26FloorSkin(ctx, item, pass26Skin);
         continue;
       }
       if (item.phase === 15) {
@@ -2479,6 +2690,11 @@ export class Pass25Runtime {
     }
     for (const solid of this.collisionSolids) {
       if (!this.isSolidActive(solid)) continue;
+      const pass26Skin = getPass26SolidSkin(solid.id);
+      if (pass26Skin) {
+        this.drawPass26SolidSkin(ctx, solid, pass26Skin);
+        continue;
+      }
       if (solid.phase === 20) {
         ctx.fillStyle = "#1b3033";
         ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
@@ -3792,10 +4008,10 @@ export class Pass25Runtime {
     ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
     ctx.fill();
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 25 / BURIED MEGA-ROOM VISUAL SLICE", 42, 52);
+    ctx.fillText("PASS 26 / VISUAL TERRAIN SEPARATION", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`7 DEPTH LAYERS · 3 MATERIAL PLANES · VISUAL-ONLY · ROUTE AND COLLISION RETAINED`, 42, 72);
+    ctx.fillText(`${PASS26_TERRAIN.floorSkins.length} FLOOR SHELLS · ${PASS26_TERRAIN.solidSkins.length} WALL SHELLS · COLLISION RETAINED`, 42, 72);
   }
 
   getDebugState() {
@@ -3917,10 +4133,11 @@ export class Pass25Runtime {
     const pass23 = validatePass23Level();
     const pass24 = validatePass24Integration();
     const pass25 = validatePass25Visuals();
+    const pass26 = validatePass26Terrain();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass25" },
-      { id: "pass_number", passed: BUILD.pass === 25 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass26" },
+      { id: "pass_number", passed: BUILD.pass === 26 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -3951,6 +4168,7 @@ export class Pass25Runtime {
       { id: "pass23_convergence_validation", passed: pass23.passed },
       { id: "pass24_integration_validation", passed: pass24.passed },
       { id: "pass25_visual_validation", passed: pass25.passed },
+      { id: "pass26_terrain_validation", passed: pass26.passed },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -3984,6 +4202,7 @@ export class Pass25Runtime {
       pass23,
       pass24,
       pass25,
+      pass26,
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -3996,8 +4215,8 @@ export class Pass25Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 25 · BURIED MEGA-ROOM VISUAL SLICE";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P25 ${audit.pass25.passedCount}/${audit.pass25.total}`;
+    this.statusElements.build.textContent = "PASS 26 · VISUAL TERRAIN SEPARATION";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P26 ${audit.pass26.passedCount}/${audit.pass26.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
