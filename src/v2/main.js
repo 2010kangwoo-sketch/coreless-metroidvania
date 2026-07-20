@@ -28,7 +28,8 @@ import { PASS27_STRUCTURE_PLAN, validatePass27Structures } from "./pass27-struct
 import { PASS28_ART_DIRECTION, PASS28_ART_LAYERS, PASS28_RASTER_ASSETS, loadPass28RasterAssets, validatePass28ArtDirection } from "./pass28-art-direction.js";
 import { PASS29_MODULAR_PLAN, PASS29_MODULE_ASSETS, PASS29_MODULE_PLACEMENTS, loadPass29ModuleAssets, validatePass29ModularArt } from "./pass29-modular-art.js";
 import { PASS30_CAMERA_SAMPLES, PASS30_QUALITY_GATE, validatePass30QualityGate } from "./pass30-quality-gate.js";
-import { Pass30Runtime } from "./runtime.js";
+import { PASS31_CAMERA_SAMPLES, PASS31_ENTRANCE_ASSETS, PASS31_ENTRANCE_PLAN, PASS31_ENTRANCE_PLACEMENTS, PASS31_ENTRANCE_SCENES, loadPass31EntranceAssets, validatePass31EntranceArt } from "./pass31-entrance-art.js";
+import { Pass31Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -38,11 +39,11 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const [pass28AssetState, pass29AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets()]);
-const runtime = new Pass30Runtime(canvas, {
+const [pass28AssetState, pass29AssetState, pass31AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets()]);
+const runtime = new Pass31Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
-}, pass28AssetState, pass29AssetState);
+}, pass28AssetState, pass29AssetState, pass31AssetState);
 
 runtime.start();
 
@@ -191,6 +192,15 @@ window.__corelessV2 = Object.freeze({
     gate: PASS30_QUALITY_GATE,
     cameraSamples: PASS30_CAMERA_SAMPLES,
     validate: validatePass30QualityGate,
+  }),
+  pass31: Object.freeze({
+    plan: PASS31_ENTRANCE_PLAN,
+    assets: PASS31_ENTRANCE_ASSETS,
+    scenes: PASS31_ENTRANCE_SCENES,
+    placements: PASS31_ENTRANCE_PLACEMENTS,
+    cameraSamples: PASS31_CAMERA_SAMPLES,
+    assetState: pass31AssetState,
+    validate: validatePass31EntranceArt,
   }),
   runtime,
   audit: () => runtime.audit(),

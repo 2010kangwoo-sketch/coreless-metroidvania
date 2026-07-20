@@ -41,6 +41,7 @@ import { PASS27_PALETTES, PASS27_STRUCTURES, validatePass27Structures } from "./
 import { PASS28_RASTER_ASSETS, validatePass28ArtDirection } from "./pass28-art-direction.js";
 import { PASS29_MODULAR_PLAN, PASS29_MODULE_ASSETS, PASS29_MODULE_PLACEMENTS, getPass29ScreenPlacement, isPass29CameraActive, validatePass29ModularArt } from "./pass29-modular-art.js";
 import { PASS30_QUALITY_GATE, validatePass30QualityGate } from "./pass30-quality-gate.js";
+import { PASS31_ENTRANCE_ASSETS, PASS31_ENTRANCE_PLAN, PASS31_ENTRANCE_PLACEMENTS, PASS31_ENTRANCE_SCENES, getPass31ActiveScene, getPass31SceneBlend, getPass31ScreenPlacement, validatePass31EntranceArt } from "./pass31-entrance-art.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -48,13 +49,14 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass30Runtime {
-  constructor(canvas, statusElements, pass28AssetState, pass29AssetState) {
+export class Pass31Runtime {
+  constructor(canvas, statusElements, pass28AssetState, pass29AssetState, pass31AssetState) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
     this.statusElements = statusElements;
     this.pass28AssetState = pass28AssetState;
     this.pass29AssetState = pass29AssetState;
+    this.pass31AssetState = pass31AssetState;
     this.frameHandle = 0;
     this.frameCount = 0;
     this.running = false;
@@ -1856,8 +1858,10 @@ export class Pass30Runtime {
     this.drawPass25BuriedSurface(ctx);
     this.drawPass20SpringPad(ctx);
     this.drawAuthoredTerrainDetails(ctx);
-    const pass29ModularScene = this.drawPass29ModuleLayers(ctx, ["far_background", "midground"]);
-    if (!pass29ModularScene) this.drawPass28RasterBackplates(ctx);
+    const pass31EntranceScene = this.drawPass31EntranceLayers(ctx, ["far_background", "midground"]);
+    const pass29ModularScene = pass31EntranceScene ? false : this.drawPass29ModuleLayers(ctx, ["far_background", "midground"]);
+    if (!pass31EntranceScene && !pass29ModularScene) this.drawPass28RasterBackplates(ctx);
+    if (pass31EntranceScene) this.drawPass31RouteSurfaces(ctx, pass31EntranceScene);
     this.drawPass28RouteEdges(ctx);
     this.drawDashSpikes(ctx);
     this.drawPrecisionHazards(ctx);
@@ -1872,6 +1876,7 @@ export class Pass30Runtime {
     this.drawGrappleAnchors(ctx);
     this.drawPass25BuriedAtmosphere(ctx);
     this.drawPass25BuriedForeground(ctx);
+    if (pass31EntranceScene) this.drawPass31EntranceLayers(ctx, ["foreground"], pass31EntranceScene);
     if (pass29ModularScene) this.drawPass29ModuleLayers(ctx, ["foreground"]);
     this.drawPlayer(ctx);
     ctx.restore();
@@ -2035,6 +2040,103 @@ export class Pass30Runtime {
       ctx.fillRect(asset.x, asset.y, asset.width, 150);
       ctx.restore();
     }
+  }
+
+  drawPass31EntranceLayers(ctx, layers, forcedScene = null) {
+    const scene = forcedScene ?? getPass31ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass31AssetState?.loadedCount !== PASS31_ENTRANCE_ASSETS.length || this.pass31AssetState?.dimensionsValid !== true) return null;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass31SceneBlend(this.camera)) {
+      for (const layer of PASS31_ENTRANCE_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS31_ENTRANCE_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          const record = this.pass31AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass31ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const shade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      shade.addColorStop(0, "rgba(2, 8, 10, 0.28)");
+      shade.addColorStop(0.48, "rgba(2, 8, 10, 0.02)");
+      shade.addColorStop(1, "rgba(2, 8, 10, 0.32)");
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = shade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass31RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass31AssetState?.byId?.get(PASS31_ENTRANCE_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const minX = bounds.x;
+    const maxX = bounds.x + bounds.width;
+    const minY = bounds.y;
+    const maxY = bounds.y + bounds.height;
+    const contract = PASS31_ENTRANCE_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const floor of this.collisionFloors) {
+      if (this.collapsedFloorIds.has(floor.id)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < minX || floorMinX > maxX || floorMaxY < minY || floorMinY > maxY) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.12, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.strokeStyle = "rgba(181, 220, 202, 0.78)";
+      ctx.shadowColor = "rgba(75, 160, 145, 0.55)";
+      ctx.shadowBlur = 5;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    for (const solid of this.collisionSolids) {
+      if (!this.isSolidActive(solid)) continue;
+      if (solid.x + solid.width < minX || solid.x > maxX || solid.y + solid.height < minY || solid.y > maxY) continue;
+      ctx.fillStyle = "rgba(8, 18, 18, 0.96)";
+      ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+      if (solid.role === "ledge") {
+        ctx.drawImage(routeRecord.image, solid.x - 6, solid.y + contract.surfaceTopOffsetPx, solid.width + 12, Math.max(contract.surfaceMinHeightPx, solid.height + 12));
+      } else {
+        ctx.save();
+        ctx.translate(solid.x + contract.surfaceTopOffsetPx, solid.y + solid.height);
+        ctx.rotate(-Math.PI / 2);
+        ctx.drawImage(routeRecord.image, -6, 0, solid.height + 12, Math.max(contract.solidEdgeMinWidthPx, solid.width + 14));
+        ctx.restore();
+      }
+      ctx.strokeStyle = "rgba(181, 220, 202, 0.74)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
+    }
+    ctx.restore();
   }
 
   drawPass29ModuleLayers(ctx, layers) {
@@ -4415,11 +4517,19 @@ export class Pass30Runtime {
     ctx.lineWidth = 2;
     ctx.fillRect(rasterTopLeft.x, rasterTopLeft.y, (rasterGate.width / WORLD.width) * frame.width, (rasterGate.height / WORLD.height) * frame.height);
     ctx.strokeRect(rasterTopLeft.x, rasterTopLeft.y, (rasterGate.width / WORLD.width) * frame.width, (rasterGate.height / WORLD.height) * frame.height);
+    for (const scene of PASS31_ENTRANCE_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(108, 191, 170, 0.18)";
+      ctx.strokeStyle = "#7bc9b4";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 30 / RASTER QUALITY APPROVAL", 42, 52);
+    ctx.fillText("PASS 31 / ENTRANCE RASTER EXPANSION", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`${PASS29_MODULAR_PLAN.moduleCount} MODULES · ${PASS29_MODULAR_PLAN.placementCount} PLACEMENTS · ${PASS29_MODULAR_PLAN.layerOrder.length} PARALLAX LAYERS · REPRESENTATIVE SLICE APPROVED`, 42, 72);
+    ctx.fillText(`${PASS31_ENTRANCE_PLAN.sceneCount} ENTRANCE SCENES · ${PASS31_ENTRANCE_PLAN.assetCount} RASTER ASSETS · ${PASS31_ENTRANCE_PLAN.placementCount} PLACEMENTS · START + DOUBLE WALL ONLY`, 42, 72);
   }
 
   getDebugState() {
@@ -4546,10 +4656,11 @@ export class Pass30Runtime {
     const pass28 = validatePass28ArtDirection();
     const pass29 = validatePass29ModularArt();
     const pass30 = validatePass30QualityGate();
+    const pass31 = validatePass31EntranceArt();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass30" },
-      { id: "pass_number", passed: BUILD.pass === 30 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass31" },
+      { id: "pass_number", passed: BUILD.pass === 31 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -4591,6 +4702,11 @@ export class Pass30Runtime {
       { id: "pass30_quality_gate_validation", passed: pass30.passed },
       { id: "pass30_representative_approved", passed: PASS30_QUALITY_GATE.representativeSliceApproved === true },
       { id: "pass30_zero_collision_changes", passed: PASS30_QUALITY_GATE.collisionChanges === 0 },
+      { id: "pass31_entrance_art_validation", passed: pass31.passed },
+      { id: "pass31_assets_loaded", passed: this.pass31AssetState?.loadedCount === PASS31_ENTRANCE_ASSETS.length },
+      { id: "pass31_asset_dimensions", passed: this.pass31AssetState?.dimensionsValid === true },
+      { id: "pass31_two_scene_scope", passed: PASS31_ENTRANCE_PLAN.scope === "start_slope_and_double_wall_only" },
+      { id: "pass31_zero_collision_changes", passed: PASS31_ENTRANCE_PLAN.collisionChanges === 0 },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -4629,6 +4745,7 @@ export class Pass30Runtime {
       pass28,
       pass29,
       pass30,
+      pass31,
       pass28Assets: Object.freeze({
         loadedCount: this.pass28AssetState?.loadedCount ?? 0,
         failedCount: this.pass28AssetState?.failedCount ?? PASS28_RASTER_ASSETS.length,
@@ -4638,6 +4755,11 @@ export class Pass30Runtime {
         loadedCount: this.pass29AssetState?.loadedCount ?? 0,
         failedCount: this.pass29AssetState?.failedCount ?? PASS29_MODULE_ASSETS.length,
         dimensionsValid: this.pass29AssetState?.dimensionsValid === true,
+      }),
+      pass31Assets: Object.freeze({
+        loadedCount: this.pass31AssetState?.loadedCount ?? 0,
+        failedCount: this.pass31AssetState?.failedCount ?? PASS31_ENTRANCE_ASSETS.length,
+        dimensionsValid: this.pass31AssetState?.dimensionsValid === true,
       }),
       gameplay: this.getDebugState(),
       inputProbe: {
@@ -4651,8 +4773,8 @@ export class Pass30Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 30 · RASTER QUALITY APPROVAL";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P30 ${audit.pass30.passedCount}/${audit.pass30.total}`;
+    this.statusElements.build.textContent = "PASS 31 · ENTRANCE RASTER EXPANSION";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P31 ${audit.pass31.passedCount}/${audit.pass31.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
