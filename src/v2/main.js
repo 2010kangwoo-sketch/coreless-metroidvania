@@ -34,7 +34,8 @@ import { PASS33_CAMERA_SAMPLES, PASS33_TUNNEL_ASSETS, PASS33_TUNNEL_PLAN, PASS33
 import { PASS34_CAMERA_SAMPLES, PASS34_DESTRUCTION_ASSETS, PASS34_DESTRUCTION_PLAN, PASS34_DESTRUCTION_PLACEMENTS, PASS34_DESTRUCTION_SCENES, PASS34_GATE_SPRITES, loadPass34DestructionAssets, validatePass34DestructionMazeArt } from "./pass34-destruction-maze-art.js";
 import { PASS35_CAMERA_SAMPLES, PASS35_CURVE_ASSETS, PASS35_CURVE_PLAN, PASS35_CURVE_PLACEMENTS, PASS35_CURVE_SCENES, PASS35_DASH_GAP_SPRITES, loadPass35CurveAssets, validatePass35GiantCurveArt } from "./pass35-giant-curve-art.js";
 import { PASS36_CAMERA_SAMPLES, PASS36_INTERNAL_ASSETS, PASS36_INTERNAL_PLAN, PASS36_INTERNAL_PLACEMENTS, PASS36_INTERNAL_SCENES, PASS36_WALL_FACES, loadPass36InternalAssets, validatePass36InternalChaseArt } from "./pass36-internal-chase-art.js";
-import { Pass36Runtime } from "./runtime.js";
+import { PASS37_CAMERA_SAMPLES, PASS37_GRAPPLE_ASSETS, PASS37_GRAPPLE_PLAN, PASS37_GRAPPLE_PLACEMENTS, PASS37_GRAPPLE_SCENES, loadPass37GrappleAssets, validatePass37GrappleDashArt } from "./pass37-grapple-dash-art.js";
+import { Pass37Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -44,11 +45,11 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets(), loadPass33TunnelAssets(), loadPass34DestructionAssets(), loadPass35CurveAssets(), loadPass36InternalAssets()]);
-const runtime = new Pass36Runtime(canvas, {
+const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets(), loadPass33TunnelAssets(), loadPass34DestructionAssets(), loadPass35CurveAssets(), loadPass36InternalAssets(), loadPass37GrappleAssets()]);
+const runtime = new Pass37Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
-}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState);
+}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState);
 
 runtime.start();
 
@@ -254,6 +255,15 @@ window.__corelessV2 = Object.freeze({
     cameraSamples: PASS36_CAMERA_SAMPLES,
     assetState: pass36AssetState,
     validate: validatePass36InternalChaseArt,
+  }),
+  pass37: Object.freeze({
+    plan: PASS37_GRAPPLE_PLAN,
+    assets: PASS37_GRAPPLE_ASSETS,
+    scenes: PASS37_GRAPPLE_SCENES,
+    placements: PASS37_GRAPPLE_PLACEMENTS,
+    cameraSamples: PASS37_CAMERA_SAMPLES,
+    assetState: pass37AssetState,
+    validate: validatePass37GrappleDashArt,
   }),
   runtime,
   audit: () => runtime.audit(),

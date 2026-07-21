@@ -11,6 +11,7 @@ try {
 }
 
 const targetPass = Number(process.env.CORELESS_VERIFY_PASS ?? 10);
+const verifyPass37 = targetPass >= 37;
 const verifyPass36 = targetPass >= 36;
 const verifyPass35 = targetPass >= 35;
 const verifyPass34 = targetPass >= 34;
@@ -37,8 +38,8 @@ const verifyPass14 = targetPass >= 14;
 const verifyPass13 = targetPass >= 13;
 const verifyPass12 = targetPass >= 12;
 const verifyPass11 = targetPass >= 11;
-const artifactPass = verifyPass36 ? 'pass36' : verifyPass35 ? 'pass35' : verifyPass34 ? 'pass34' : verifyPass33 ? 'pass33' : verifyPass32 ? 'pass32' : verifyPass31 ? 'pass31' : verifyPass30 ? 'pass30' : verifyPass29 ? 'pass29' : verifyPass28 ? 'pass28' : verifyPass27 ? 'pass27' : verifyPass26 ? 'pass26' : verifyPass25 ? 'pass25' : verifyPass24 ? 'pass24' : verifyPass23 ? 'pass23' : verifyPass22 ? 'pass22' : verifyPass21 ? 'pass21' : verifyPass20 ? 'pass20' : verifyPass19 ? 'pass19' : verifyPass18 ? 'pass18' : verifyPass17 ? 'pass17' : verifyPass16 ? 'pass16' : verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
-const port = verifyPass36 ? 4236 : verifyPass35 ? 4232 : verifyPass34 ? 4228 : verifyPass33 ? 4224 : verifyPass32 ? 4222 : verifyPass31 ? 4218 : verifyPass30 ? 4214 : verifyPass29 ? 4212 : verifyPass28 ? 4210 : verifyPass27 ? 4208 : verifyPass26 ? 4206 : verifyPass25 ? 4204 : verifyPass24 ? 4202 : verifyPass23 ? 4200 : verifyPass22 ? 4198 : verifyPass21 ? 4196 : verifyPass20 ? 4194 : verifyPass19 ? 4192 : verifyPass18 ? 4191 : verifyPass17 ? 4188 : verifyPass16 ? 4186 : verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
+const artifactPass = verifyPass37 ? 'pass37' : verifyPass36 ? 'pass36' : verifyPass35 ? 'pass35' : verifyPass34 ? 'pass34' : verifyPass33 ? 'pass33' : verifyPass32 ? 'pass32' : verifyPass31 ? 'pass31' : verifyPass30 ? 'pass30' : verifyPass29 ? 'pass29' : verifyPass28 ? 'pass28' : verifyPass27 ? 'pass27' : verifyPass26 ? 'pass26' : verifyPass25 ? 'pass25' : verifyPass24 ? 'pass24' : verifyPass23 ? 'pass23' : verifyPass22 ? 'pass22' : verifyPass21 ? 'pass21' : verifyPass20 ? 'pass20' : verifyPass19 ? 'pass19' : verifyPass18 ? 'pass18' : verifyPass17 ? 'pass17' : verifyPass16 ? 'pass16' : verifyPass15 ? 'pass15' : verifyPass14 ? 'pass14' : verifyPass13 ? 'pass13' : verifyPass12 ? 'pass12' : verifyPass11 ? 'pass11' : 'pass10';
+const port = verifyPass37 ? 4240 : verifyPass36 ? 4236 : verifyPass35 ? 4232 : verifyPass34 ? 4228 : verifyPass33 ? 4224 : verifyPass32 ? 4222 : verifyPass31 ? 4218 : verifyPass30 ? 4214 : verifyPass29 ? 4212 : verifyPass28 ? 4210 : verifyPass27 ? 4208 : verifyPass26 ? 4206 : verifyPass25 ? 4204 : verifyPass24 ? 4202 : verifyPass23 ? 4200 : verifyPass22 ? 4198 : verifyPass21 ? 4196 : verifyPass20 ? 4194 : verifyPass19 ? 4192 : verifyPass18 ? 4191 : verifyPass17 ? 4188 : verifyPass16 ? 4186 : verifyPass15 ? 4185 : verifyPass14 ? 4184 : verifyPass13 ? 4183 : verifyPass12 ? 4182 : verifyPass11 ? 4181 : 4180;
 
 const server = spawn('python3', ['-m', 'http.server', String(port)], {
   cwd: process.cwd(),
@@ -845,7 +846,7 @@ const deterministicChecks = {
   title: state.title === `Coreless · Rebuild V2 · Pass ${targetPass}`,
   canvas: state.canvas?.width === 1200 && state.canvas?.height === 680,
   focused: state.activeElement === 'gameCanvas',
-  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass36 ? 75 : verifyPass35 ? 70 : verifyPass34 ? 65 : verifyPass33 ? 60 : verifyPass32 ? 55 : verifyPass31 ? 50 : verifyPass30 ? 45 : verifyPass29 ? 42 : verifyPass28 ? 39 : verifyPass27 ? 36 : verifyPass26 ? 35 : verifyPass25 ? 34 : verifyPass24 ? 33 : verifyPass23 ? 32 : verifyPass22 ? 31 : verifyPass21 ? 30 : verifyPass20 ? 29 : verifyPass19 ? 28 : verifyPass18 ? 27 : verifyPass17 ? 26 : verifyPass16 ? 25 : verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
+  runtimeAudit: state.audit?.passed === true && state.audit?.passedCount === (verifyPass37 ? 80 : verifyPass36 ? 75 : verifyPass35 ? 70 : verifyPass34 ? 65 : verifyPass33 ? 60 : verifyPass32 ? 55 : verifyPass31 ? 50 : verifyPass30 ? 45 : verifyPass29 ? 42 : verifyPass28 ? 39 : verifyPass27 ? 36 : verifyPass26 ? 35 : verifyPass25 ? 34 : verifyPass24 ? 33 : verifyPass23 ? 32 : verifyPass22 ? 31 : verifyPass21 ? 30 : verifyPass20 ? 29 : verifyPass19 ? 28 : verifyPass18 ? 27 : verifyPass17 ? 26 : verifyPass16 ? 25 : verifyPass15 ? 24 : verifyPass14 ? 23 : verifyPass13 ? 22 : verifyPass12 ? 21 : 20),
   blueprintAudit: state.audit?.blueprint?.passed === true && state.audit?.blueprint?.passedCount === 18,
   pass03Audit: state.audit?.pass03?.passed === true && state.audit?.pass03?.passedCount === 20,
   pass04Audit: state.audit?.pass04?.passed === true && state.audit?.pass04?.passedCount === 22,
@@ -923,6 +924,14 @@ const deterministicChecks = {
   pass36SupportContinuation: !verifyPass36 || state.audit?.pass36?.checks?.some(check => check.id === 'supports_extend_below_viewport' && check.passed === true),
   pass36WallFaceContract: !verifyPass36 || state.audit?.pass36?.checks?.some(check => check.id === 'wall_faces_unique' && check.passed === true),
   pass36ZeroCollisionChanges: !verifyPass36 || state.audit?.pass36?.checks?.some(check => check.id === 'zero_collision_changes' && check.passed === true),
+  pass37Audit: !verifyPass37 || (state.audit?.pass37?.passed === true && state.audit?.pass37?.passedCount === 44),
+  pass37AssetsLoaded: !verifyPass37 || (state.audit?.pass37Assets?.loadedCount === 8 && state.audit?.pass37Assets?.failedCount === 0),
+  pass37AssetDimensions: !verifyPass37 || state.audit?.pass37Assets?.dimensionsValid === true,
+  pass37ExplicitScope: !verifyPass37 || state.audit?.pass37?.checks?.some(check => check.id === 'scope_explicit' && check.passed === true),
+  pass37ParallaxContract: !verifyPass37 || state.audit?.pass37?.checks?.some(check => check.id === 'visible_parallax_separation' && check.passed === true),
+  pass37SupportContinuation: !verifyPass37 || state.audit?.pass37?.checks?.some(check => check.id === 'supports_extend_below_viewport' && check.passed === true),
+  pass37GrappleRasterContract: !verifyPass37 || state.audit?.pass37?.checks?.some(check => check.id === 'grapple_sprite_exists' && check.passed === true),
+  pass37ZeroCollisionChanges: !verifyPass37 || state.audit?.pass37?.checks?.some(check => check.id === 'zero_collision_changes' && check.passed === true),
   firstDrop: state.debug?.progress?.firstDropped === true,
   firstClimb: state.debug?.progress?.firstClimb === true,
   secondDrop: state.debug?.progress?.secondDropped === true,
@@ -1169,7 +1178,9 @@ const passed = !traversalFailure && Object.values(deterministicChecks).every(Boo
 const result = {
   version: `rebuild-v2-${artifactPass}`,
   testedWith: 'Chromium + Playwright actual keyboard events',
-  actualKeyboardRoute: verifyPass36
+  actualKeyboardRoute: verifyPass37
+    ? 'START rooted sanctuary raster entrance -> internal descent -> detailed triple grapple nave -> raster air-dash spike trench -> retained integrated route -> final late checkpoint GOAL'
+    : verifyPass36
     ? 'START rooted sanctuary raster entrance -> giant curve dash run -> nine-scene internal descent and double-wall chase depth -> retained integrated route -> final late checkpoint GOAL'
     : verifyPass35
     ? 'START rooted sanctuary raster entrance -> buried rise -> uneven tunnel -> destruction maze -> giant curve plunge -> three raster dash gaps -> wave gallery -> retained integrated route -> final late checkpoint GOAL'
@@ -1223,6 +1234,7 @@ const result = {
   consoleErrors,
   pageErrors,
   limitations: [
+    verifyPass37 ? 'Pass 37 expands approved raster art through the triple-grapple chase chamber and air-dash spike corridor; later mega-room route scenes still require passes 38 through 40.' :
     verifyPass36 ? 'Pass 36 expands approved raster art through the first internal descent, both forced wall-jump shafts and the lower chase hall; later mega-room route scenes still require passes 37 through 40.' :
     verifyPass35 ? 'Pass 35 expands approved raster art through the giant curve and six-scene reverse dash run with three rasterized broken bridge gaps; the internal descent and remaining mega-room route still require later scene sets.' :
     verifyPass34 ? 'Pass 34 expands approved raster art through the four-scene destruction maze and replaces its three graybox dash gates; the giant curve and remaining mega-room route still require later scene sets.' :
