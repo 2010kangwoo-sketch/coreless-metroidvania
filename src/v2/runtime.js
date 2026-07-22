@@ -48,6 +48,7 @@ import { PASS34_DESTRUCTION_ASSETS, PASS34_DESTRUCTION_PLAN, PASS34_DESTRUCTION_
 import { PASS35_CURVE_ASSETS, PASS35_CURVE_PLAN, PASS35_CURVE_PLACEMENTS, PASS35_CURVE_SCENES, PASS35_DASH_GAP_SPRITES, getPass35ActiveScene, getPass35EntryOpacity, getPass35SceneBlend, getPass35ScreenPlacement, validatePass35GiantCurveArt } from "./pass35-giant-curve-art.js";
 import { PASS36_INTERNAL_ASSETS, PASS36_INTERNAL_PLAN, PASS36_INTERNAL_PLACEMENTS, PASS36_INTERNAL_SCENES, PASS36_WALL_FACES, getPass36ActiveScene, getPass36SceneBlend, getPass36ScreenPlacement, validatePass36InternalChaseArt } from "./pass36-internal-chase-art.js";
 import { PASS37_GRAPPLE_ASSETS, PASS37_GRAPPLE_PLAN, PASS37_GRAPPLE_PLACEMENTS, PASS37_GRAPPLE_SCENES, getPass37ActiveScene, getPass37SceneBlend, getPass37ScreenPlacement, validatePass37GrappleDashArt } from "./pass37-grapple-dash-art.js";
+import { PASS38_PRECISION_ASSETS, PASS38_PRECISION_PLAN, PASS38_PRECISION_PLACEMENTS, PASS38_PRECISION_SCENES, getPass38ActiveScene, getPass38SceneBlend, getPass38ScreenPlacement, validatePass38PrecisionCurveArt } from "./pass38-precision-curve-art.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -55,8 +56,8 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass37Runtime {
-  constructor(canvas, statusElements, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState) {
+export class Pass38Runtime {
+  constructor(canvas, statusElements, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
     this.statusElements = statusElements;
@@ -69,6 +70,7 @@ export class Pass37Runtime {
     this.pass35AssetState = pass35AssetState;
     this.pass36AssetState = pass36AssetState;
     this.pass37AssetState = pass37AssetState;
+    this.pass38AssetState = pass38AssetState;
     this.frameHandle = 0;
     this.frameCount = 0;
     this.running = false;
@@ -1877,6 +1879,7 @@ export class Pass37Runtime {
     const pass35Candidate = getPass35ActiveScene(this.camera);
     const pass36Candidate = this.progress.zone07Entered ? getPass36ActiveScene(this.camera) : null;
     const pass37Candidate = this.progress.pass10Completed ? getPass37ActiveScene(this.camera) : null;
+    const pass38Candidate = this.progress.pass12Completed ? getPass38ActiveScene(this.camera, this.progress) : null;
     const retainPass31ForEntryBlend = Boolean(pass31Candidate && pass32Candidate && this.camera.x < PASS32_BURIED_PLAN.entryTransition.endX);
     const pass31EntranceScene = pass31Candidate && (!pass32Candidate || retainPass31ForEntryBlend)
       ? this.drawPass31EntranceLayers(ctx, ["far_background", "midground"], pass31Candidate)
@@ -1900,14 +1903,17 @@ export class Pass37Runtime {
     const pass35CurveScene = pass35Candidate && !pass36Candidate
       ? this.drawPass35CurveLayers(ctx, ["far_background", "depth_background", "midground"], pass35Candidate, pass35MasterOpacity)
       : null;
-    const pass36InternalScene = pass36Candidate && !pass37Candidate
+    const pass36InternalScene = pass36Candidate && !pass37Candidate && !pass38Candidate
       ? this.drawPass36InternalLayers(ctx, ["far_background", "depth_background", "midground"], pass36Candidate)
       : null;
-    const pass37GrappleScene = pass37Candidate
+    const pass37GrappleScene = pass37Candidate && !pass38Candidate
       ? this.drawPass37GrappleLayers(ctx, ["far_background", "depth_background", "midground"], pass37Candidate)
       : null;
-    const pass29ModularScene = pass31EntranceScene || pass32BuriedScene || pass33TunnelScene || pass34DestructionScene || pass35CurveScene || pass36InternalScene || pass37GrappleScene ? false : this.drawPass29ModuleLayers(ctx, ["far_background", "midground"]);
-    if (!pass31EntranceScene && !pass32BuriedScene && !pass33TunnelScene && !pass34DestructionScene && !pass35CurveScene && !pass36InternalScene && !pass37GrappleScene && !pass29ModularScene) this.drawPass28RasterBackplates(ctx);
+    const pass38PrecisionScene = pass38Candidate
+      ? this.drawPass38PrecisionLayers(ctx, ["far_background", "depth_background", "midground"], pass38Candidate)
+      : null;
+    const pass29ModularScene = pass31EntranceScene || pass32BuriedScene || pass33TunnelScene || pass34DestructionScene || pass35CurveScene || pass36InternalScene || pass37GrappleScene || pass38PrecisionScene ? false : this.drawPass29ModuleLayers(ctx, ["far_background", "midground"]);
+    if (!pass31EntranceScene && !pass32BuriedScene && !pass33TunnelScene && !pass34DestructionScene && !pass35CurveScene && !pass36InternalScene && !pass37GrappleScene && !pass38PrecisionScene && !pass29ModularScene) this.drawPass28RasterBackplates(ctx);
     if (pass31EntranceScene) this.drawPass31RouteSurfaces(ctx, pass31EntranceScene);
     if (pass32BuriedScene) this.drawPass32RouteSurfaces(ctx, pass32BuriedScene);
     if (pass33TunnelScene) this.drawPass33RouteSurfaces(ctx, pass33TunnelScene);
@@ -1917,6 +1923,7 @@ export class Pass37Runtime {
     if (pass36InternalScene) this.drawPass36RouteSurfaces(ctx, pass36InternalScene);
     if (pass36InternalScene) this.drawPass36WallFaces(ctx);
     if (pass37GrappleScene) this.drawPass37RouteSurfaces(ctx, pass37GrappleScene);
+    if (pass38PrecisionScene) this.drawPass38RouteSurfaces(ctx, pass38PrecisionScene);
     this.drawPass28RouteEdges(ctx);
     this.drawDashSpikes(ctx);
     this.drawPrecisionHazards(ctx);
@@ -1938,6 +1945,7 @@ export class Pass37Runtime {
     if (pass35CurveScene) this.drawPass35CurveLayers(ctx, ["foreground"], pass35CurveScene, pass35MasterOpacity);
     if (pass36InternalScene) this.drawPass36InternalLayers(ctx, ["foreground"], pass36InternalScene);
     if (pass37GrappleScene) this.drawPass37GrappleLayers(ctx, ["foreground"], pass37GrappleScene);
+    if (pass38PrecisionScene) this.drawPass38PrecisionLayers(ctx, ["foreground"], pass38PrecisionScene);
     if (pass29ModularScene) this.drawPass29ModuleLayers(ctx, ["foreground"]);
     this.drawPlayer(ctx);
     ctx.restore();
@@ -2768,6 +2776,96 @@ export class Pass37Runtime {
     ctx.imageSmoothingEnabled = true;
     ctx.imageSmoothingQuality = "high";
     const floors = [...PASS11_ZONE.floors, ...PASS12_ZONE.floors];
+    for (const floor of floors) {
+      if (!this.isFloorActive(floor)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.13, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.94)";
+      ctx.shadowBlur = 13;
+      ctx.shadowOffsetY = 12;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = "rgba(69, 184, 169, 0.62)";
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(182, 228, 207, 0.82)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawPass38PrecisionLayers(ctx, layers, forcedScene = null) {
+    const scene = forcedScene ?? getPass38ActiveScene(this.camera, this.progress);
+    if (!scene) return null;
+    if (this.pass38AssetState?.loadedCount !== PASS38_PRECISION_ASSETS.length || this.pass38AssetState?.dimensionsValid !== true) return null;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass38SceneBlend(this.camera, this.progress)) {
+      for (const layer of PASS38_PRECISION_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS38_PRECISION_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.minCameraX !== undefined && this.camera.x < placement.minCameraX) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass38AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass38ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const verticalShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      verticalShade.addColorStop(0, "rgba(1, 4, 7, 0.34)");
+      verticalShade.addColorStop(0.36, "rgba(2, 15, 20, 0.02)");
+      verticalShade.addColorStop(0.72, "rgba(1, 9, 13, 0.16)");
+      verticalShade.addColorStop(1, "rgba(0, 2, 4, 0.6)");
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = verticalShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(0, 3, 6, 0.38)");
+      sideShade.addColorStop(0.34, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(0.66, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(1, "rgba(0, 3, 6, 0.42)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass38RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass38AssetState?.byId?.get(PASS38_PRECISION_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS38_PRECISION_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    const floors = [...PASS13_ZONE.floors, ...PASS14_ZONE.floors];
     for (const floor of floors) {
       if (!this.isFloorActive(floor)) continue;
       const floorMinX = Math.min(floor.x1, floor.x2);
@@ -4824,11 +4922,25 @@ export class Pass37Runtime {
 
   drawPrecisionHazards(ctx) {
     ctx.save();
+    const pass38Active = this.progress.pass12Completed && Boolean(getPass38ActiveScene(this.camera, this.progress));
     for (const hazard of PASS15_LEVEL.zone09PrecisionHazards) {
       const width = (hazard.x2 - hazard.x1) / hazard.teeth;
-      ctx.fillStyle = "rgba(164, 79, 69, 0.88)";
-      ctx.strokeStyle = "rgba(238, 151, 111, 0.92)";
-      ctx.lineWidth = 3;
+      if (pass38Active) {
+        const metal = ctx.createLinearGradient(0, hazard.tipY, 0, hazard.baseY);
+        metal.addColorStop(0, "rgba(210, 232, 224, 0.98)");
+        metal.addColorStop(0.22, "rgba(55, 77, 80, 0.98)");
+        metal.addColorStop(0.72, "rgba(8, 14, 18, 0.99)");
+        metal.addColorStop(1, "rgba(112, 58, 39, 0.98)");
+        ctx.fillStyle = metal;
+        ctx.strokeStyle = "rgba(226, 142, 77, 0.92)";
+        ctx.shadowColor = "rgba(219, 72, 39, 0.62)";
+        ctx.shadowBlur = 8;
+        ctx.lineWidth = 2;
+      } else {
+        ctx.fillStyle = "rgba(164, 79, 69, 0.88)";
+        ctx.strokeStyle = "rgba(238, 151, 111, 0.92)";
+        ctx.lineWidth = 3;
+      }
       ctx.beginPath();
       ctx.moveTo(hazard.x1, hazard.baseY);
       for (let index = 0; index < hazard.teeth; index += 1) {
@@ -5329,11 +5441,19 @@ export class Pass37Runtime {
       ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
       ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
     }
+    for (const scene of PASS38_PRECISION_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(88, 197, 183, 0.17)";
+      ctx.strokeStyle = "#78d1c4";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 37 / TRIPLE GRAPPLE + AIR DASH DEPTH", 42, 52);
+    ctx.fillText("PASS 38 / PRECISION PARKOUR + COLOSSAL U-TURN DEPTH", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`${PASS37_GRAPPLE_PLAN.sceneCount} GRAPPLE + DASH SCENES · PARALLAX ${PASS37_GRAPPLE_PLAN.parallaxRatios.far.toFixed(2)}–${PASS37_GRAPPLE_PLAN.parallaxRatios.foreground.toFixed(2)} · SUPPORTS CONTINUE BELOW VIEW`, 42, 72);
+    ctx.fillText(`${PASS38_PRECISION_PLAN.sceneCount} PRECISION + TURN SCENES · PARALLAX ${PASS38_PRECISION_PLAN.parallaxRatios.far.toFixed(2)}–${PASS38_PRECISION_PLAN.parallaxRatios.foreground.toFixed(2)} · SUPPORTS CONTINUE BELOW VIEW`, 42, 72);
   }
 
   getDebugState() {
@@ -5467,10 +5587,11 @@ export class Pass37Runtime {
     const pass35 = validatePass35GiantCurveArt();
     const pass36 = validatePass36InternalChaseArt();
     const pass37 = validatePass37GrappleDashArt();
+    const pass38 = validatePass38PrecisionCurveArt();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass37" },
-      { id: "pass_number", passed: BUILD.pass === 37 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass38" },
+      { id: "pass_number", passed: BUILD.pass === 38 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -5547,6 +5668,11 @@ export class Pass37Runtime {
       { id: "pass37_asset_dimensions", passed: this.pass37AssetState?.dimensionsValid === true },
       { id: "pass37_seven_scene_scope", passed: PASS37_GRAPPLE_PLAN.scope === "triple_grapple_and_air_dash_spike_corridor_only" },
       { id: "pass37_zero_collision_changes", passed: PASS37_GRAPPLE_PLAN.collisionChanges === 0 },
+      { id: "pass38_precision_curve_art_validation", passed: pass38.passed },
+      { id: "pass38_assets_loaded", passed: this.pass38AssetState?.loadedCount === PASS38_PRECISION_ASSETS.length },
+      { id: "pass38_asset_dimensions", passed: this.pass38AssetState?.dimensionsValid === true },
+      { id: "pass38_five_scene_scope", passed: PASS38_PRECISION_PLAN.scope === "precision_parkour_and_giant_direction_turn_only" },
+      { id: "pass38_zero_collision_changes", passed: PASS38_PRECISION_PLAN.collisionChanges === 0 },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -5592,6 +5718,7 @@ export class Pass37Runtime {
       pass35,
       pass36,
       pass37,
+      pass38,
       pass28Assets: Object.freeze({
         loadedCount: this.pass28AssetState?.loadedCount ?? 0,
         failedCount: this.pass28AssetState?.failedCount ?? PASS28_RASTER_ASSETS.length,
@@ -5637,6 +5764,11 @@ export class Pass37Runtime {
         failedCount: this.pass37AssetState?.failedCount ?? PASS37_GRAPPLE_ASSETS.length,
         dimensionsValid: this.pass37AssetState?.dimensionsValid === true,
       }),
+      pass38Assets: Object.freeze({
+        loadedCount: this.pass38AssetState?.loadedCount ?? 0,
+        failedCount: this.pass38AssetState?.failedCount ?? PASS38_PRECISION_ASSETS.length,
+        dimensionsValid: this.pass38AssetState?.dimensionsValid === true,
+      }),
       gameplay: this.getDebugState(),
       inputProbe: {
         downs: this.inputProbe.downs,
@@ -5649,8 +5781,8 @@ export class Pass37Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 37 · TRIPLE GRAPPLE + AIR DASH DEPTH";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P37 ${audit.pass37.passedCount}/${audit.pass37.total}`;
+    this.statusElements.build.textContent = "PASS 38 · PRECISION PARKOUR + COLOSSAL U-TURN DEPTH";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P38 ${audit.pass38.passedCount}/${audit.pass38.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }
