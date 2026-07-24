@@ -1,0 +1,83 @@
+const freezeList = items => Object.freeze(items.map(item => Object.freeze(item)));
+
+export const PASS40_RELEASE_PLAN = Object.freeze({
+  id: "pass40_full_integration_site_release",
+  title: "FULL INTEGRATION + DIRECT-ENTRY SITE RELEASE",
+  baselineSha: "c5ab950",
+  scope: "full_game_direct_entry_and_site_readiness",
+  completedPasses: 40,
+  directEntryPath: "index.html",
+  hostedEntryPath: "/game/index.html",
+  autoStart: true,
+  autoFocusCanvas: true,
+  responsiveCanvas: true,
+  loadingSurface: true,
+  visibleBootFailure: true,
+  externalRuntimeDependencies: 0,
+  startupAssetGroups: 11,
+  runtimeAssetFiles: 60,
+  runtimeAssetFormat: "image/webp",
+  originalRuntimeAssetBytes: 73116142,
+  optimizedRuntimeAssetBytes: 16009222,
+  maximumRuntimeAssetBytes: 16777216,
+  minimumByteReductionRatio: 0.7,
+  requiredInputCodes: freezeList(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "ShiftLeft", "Space"]),
+  requiredDomIds: freezeList(["gameCanvas", "buildStatus", "auditStatus", "loadingPanel", "loadingProgress", "loadingBar"]),
+  deploymentIncludes: freezeList(["index.html", "style.css", "src/v2", "assets/v2"]),
+  deploymentExcludes: freezeList(["docs", "browser-artifacts", ".git"]),
+  collisionChanges: 0,
+  gameplayChanges: 0,
+  visualStyleChanges: 0,
+  postReleasePolish: Object.freeze({
+    timing: "after_pass40_release",
+    status: "deferred",
+    operations: freezeList(["subtle_background_blur", "shape_simplification", "character_environment_style_unification"]),
+  }),
+});
+
+export function validatePass40Release() {
+  const plan = PASS40_RELEASE_PLAN;
+  const reductionRatio = 1 - plan.optimizedRuntimeAssetBytes / plan.originalRuntimeAssetBytes;
+  const checks = [
+    ["plan_id", plan.id === "pass40_full_integration_site_release"],
+    ["baseline_sha", plan.baselineSha === "c5ab950"],
+    ["scope_explicit", plan.scope === "full_game_direct_entry_and_site_readiness"],
+    ["forty_passes_complete", plan.completedPasses === 40],
+    ["direct_entry_declared", plan.directEntryPath === "index.html"],
+    ["hosted_entry_declared", plan.hostedEntryPath === "/game/index.html"],
+    ["auto_start", plan.autoStart === true],
+    ["canvas_auto_focus", plan.autoFocusCanvas === true],
+    ["responsive_canvas", plan.responsiveCanvas === true],
+    ["loading_surface", plan.loadingSurface === true],
+    ["visible_boot_failure", plan.visibleBootFailure === true],
+    ["no_external_runtime_dependencies", plan.externalRuntimeDependencies === 0],
+    ["eleven_asset_groups", plan.startupAssetGroups === 11],
+    ["sixty_runtime_assets", plan.runtimeAssetFiles === 60],
+    ["webp_runtime_format", plan.runtimeAssetFormat === "image/webp"],
+    ["runtime_asset_budget", plan.optimizedRuntimeAssetBytes <= plan.maximumRuntimeAssetBytes],
+    ["runtime_asset_reduction", reductionRatio >= plan.minimumByteReductionRatio],
+    ["seven_required_inputs", plan.requiredInputCodes.length === 7],
+    ["required_inputs_unique", new Set(plan.requiredInputCodes).size === plan.requiredInputCodes.length],
+    ["six_required_dom_ids", plan.requiredDomIds.length === 6],
+    ["required_dom_ids_unique", new Set(plan.requiredDomIds).size === plan.requiredDomIds.length],
+    ["deployment_core_included", plan.deploymentIncludes.includes("index.html") && plan.deploymentIncludes.includes("src/v2") && plan.deploymentIncludes.includes("assets/v2")],
+    ["deployment_evidence_excluded", plan.deploymentExcludes.includes("docs") && plan.deploymentExcludes.includes("browser-artifacts")],
+    ["git_metadata_excluded", plan.deploymentExcludes.includes(".git")],
+    ["zero_collision_changes", plan.collisionChanges === 0],
+    ["zero_gameplay_changes", plan.gameplayChanges === 0],
+    ["zero_visual_style_changes", plan.visualStyleChanges === 0],
+    ["polish_deferred", plan.postReleasePolish.status === "deferred"],
+    ["polish_after_release", plan.postReleasePolish.timing === "after_pass40_release"],
+    ["three_polish_operations", plan.postReleasePolish.operations.length === 3],
+    ["optimized_smaller_than_original", plan.optimizedRuntimeAssetBytes < plan.originalRuntimeAssetBytes],
+    ["budget_below_sixteen_mib", plan.maximumRuntimeAssetBytes === 16 * 1024 * 1024],
+  ].map(([id, passed]) => Object.freeze({ id, passed }));
+
+  return Object.freeze({
+    passed: checks.every(check => check.passed),
+    passedCount: checks.filter(check => check.passed).length,
+    total: checks.length,
+    reductionRatio,
+    checks: Object.freeze(checks),
+  });
+}

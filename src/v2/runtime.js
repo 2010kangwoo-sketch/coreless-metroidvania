@@ -1,0 +1,5953 @@
+import { BUILD, PALETTE, STAGE_SEQUENCE, VIEWPORT } from "./config.js";
+import { CHASE_FEATURES, PLAYER_ROUTE, WORLD, ZONES, validateBlueprint } from "./blueprint.js";
+import { PASS03_LEVEL, PLAYER_PHYSICS, validatePass03Level } from "./pass03-level.js";
+import { PASS04_ZONE, validatePass04Level } from "./pass04-level.js";
+import { PASS05_ZONE, validatePass05Level } from "./pass05-level.js";
+import { PASS06_ZONE, validatePass06Level } from "./pass06-level.js";
+import { PASS07_ZONE, validatePass07Level } from "./pass07-level.js";
+import { PASS08_CHASE, PASS08_LEVEL, validatePass08Level } from "./pass08-level.js";
+import { PASS09_CHASE, PASS09_LEVEL, PASS09_ZONE, validatePass09Level } from "./pass09-level.js";
+import { PASS10_CHASE, PASS10_ZONE, validatePass10Level } from "./pass10-level.js";
+import { PASS11_CHASE, PASS11_LEVEL, PASS11_ZONE, validatePass11Level } from "./pass11-level.js";
+import { PASS12_CHASE, PASS12_LEVEL, PASS12_ZONE, validatePass12Level } from "./pass12-level.js";
+import { PASS13_CHASE, PASS13_ZONE, validatePass13Level } from "./pass13-level.js";
+import { PASS14_CHASE, PASS14_ZONE, validatePass14Level } from "./pass14-level.js";
+import { PASS15_CHASE, PASS15_LEVEL, PASS15_ZONE, validatePass15Level } from "./pass15-level.js";
+import { PASS16_LIGHTS, PASS16_THEMES, getPass16Theme, validatePass16Visuals } from "./pass16-visuals.js";
+import { PASS17_MATERIALS, PASS17_REINFORCEMENTS, PASS17_SUPPORTS, PASS17_VEGETATION, getPass17Material, validatePass17Art } from "./pass17-art.js";
+import { PASS18_LEVEL, PASS18_ZONE, validatePass18Level } from "./pass18-level.js";
+import { PASS19_DESTRUCTION, PASS19_LEVEL, validatePass19Level } from "./pass19-level.js";
+import { PASS20_LEVEL, PASS20_ZONE, validatePass20Level } from "./pass20-level.js";
+import { PASS21_PACING, getPass21DestructionMultiplier, getPass21TargetSpeed, validatePass21Pacing } from "./pass21-pacing.js";
+import { PASS22_LEVEL, PASS22_ZONE, validatePass22Level } from "./pass22-level.js";
+import { PASS23_LEVEL, PASS23_ZONE, validatePass23Level } from "./pass23-level.js";
+import { PASS24_INTEGRATION, getPass24IntegrationState, validatePass24Integration } from "./pass24-integration.js";
+import {
+  PASS25_BUTTRESSES,
+  PASS25_CHAINS,
+  PASS25_DUST,
+  PASS25_FAR_VAULTS,
+  PASS25_FOREGROUND,
+  PASS25_LIGHT_SHAFTS,
+  PASS25_PALETTE,
+  PASS25_RIBS,
+  PASS25_ROUTE_LANTERNS,
+  PASS25_SURFACE_MARKS,
+  PASS25_VISUAL_SLICE,
+  validatePass25Visuals,
+} from "./pass25-visuals.js";
+import { PASS26_TERRAIN, getPass26FloorSkin, getPass26SolidSkin, validatePass26Terrain } from "./pass26-terrain.js";
+import { PASS27_PALETTES, PASS27_STRUCTURES, validatePass27Structures } from "./pass27-structures.js";
+import { PASS28_RASTER_ASSETS, validatePass28ArtDirection } from "./pass28-art-direction.js";
+import { PASS29_MODULAR_PLAN, PASS29_MODULE_ASSETS, PASS29_MODULE_PLACEMENTS, getPass29ScreenPlacement, isPass29CameraActive, validatePass29ModularArt } from "./pass29-modular-art.js";
+import { PASS30_QUALITY_GATE, validatePass30QualityGate } from "./pass30-quality-gate.js";
+import { PASS31_ENTRANCE_ASSETS, PASS31_ENTRANCE_PLAN, PASS31_ENTRANCE_PLACEMENTS, PASS31_ENTRANCE_SCENES, getPass31ActiveScene, getPass31SceneBlend, getPass31ScreenPlacement, validatePass31EntranceArt } from "./pass31-entrance-art.js";
+import { PASS32_BURIED_ASSETS, PASS32_BURIED_PLAN, PASS32_BURIED_PLACEMENTS, PASS32_BURIED_SCENES, getPass32ActiveScene, getPass32EntryOpacity, getPass32SceneBlend, getPass32ScreenPlacement, validatePass32BuriedRiseArt } from "./pass32-buried-rise-art.js";
+import { PASS33_TUNNEL_ASSETS, PASS33_TUNNEL_PLAN, PASS33_TUNNEL_PLACEMENTS, PASS33_TUNNEL_SCENES, getPass33ActiveScene, getPass33EntryOpacity, getPass33SceneBlend, getPass33ScreenPlacement, validatePass33UnevenTunnelArt } from "./pass33-uneven-tunnel-art.js";
+import { PASS34_DESTRUCTION_ASSETS, PASS34_DESTRUCTION_PLAN, PASS34_DESTRUCTION_PLACEMENTS, PASS34_DESTRUCTION_SCENES, PASS34_GATE_SPRITES, getPass34ActiveScene, getPass34EntryOpacity, getPass34SceneBlend, getPass34ScreenPlacement, validatePass34DestructionMazeArt } from "./pass34-destruction-maze-art.js";
+import { PASS35_CURVE_ASSETS, PASS35_CURVE_PLAN, PASS35_CURVE_PLACEMENTS, PASS35_CURVE_SCENES, PASS35_DASH_GAP_SPRITES, getPass35ActiveScene, getPass35EntryOpacity, getPass35SceneBlend, getPass35ScreenPlacement, validatePass35GiantCurveArt } from "./pass35-giant-curve-art.js";
+import { PASS36_INTERNAL_ASSETS, PASS36_INTERNAL_PLAN, PASS36_INTERNAL_PLACEMENTS, PASS36_INTERNAL_SCENES, PASS36_WALL_FACES, getPass36ActiveScene, getPass36SceneBlend, getPass36ScreenPlacement, validatePass36InternalChaseArt } from "./pass36-internal-chase-art.js";
+import { PASS37_GRAPPLE_ASSETS, PASS37_GRAPPLE_PLAN, PASS37_GRAPPLE_PLACEMENTS, PASS37_GRAPPLE_SCENES, getPass37ActiveScene, getPass37SceneBlend, getPass37ScreenPlacement, validatePass37GrappleDashArt } from "./pass37-grapple-dash-art.js";
+import { PASS38_PRECISION_ASSETS, PASS38_PRECISION_PLAN, PASS38_PRECISION_PLACEMENTS, PASS38_PRECISION_SCENES, getPass38ActiveScene, getPass38SceneBlend, getPass38ScreenPlacement, validatePass38PrecisionCurveArt } from "./pass38-precision-curve-art.js";
+import { PASS39_BRIDGE_ASSETS, PASS39_BRIDGE_PLAN, PASS39_BRIDGE_PLACEMENTS, PASS39_BRIDGE_SCENES, getPass39ActiveScene, getPass39SceneBlend, getPass39ScreenPlacement, validatePass39BridgeAftershockArt } from "./pass39-bridge-aftershock-art.js";
+import { PASS40_RELEASE_PLAN, validatePass40Release } from "./pass40-release.js";
+
+const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+const approach = (value, target, amount) => value < target
+  ? Math.min(value + amount, target)
+  : Math.max(value - amount, target);
+
+export class Pass40Runtime {
+  constructor(canvas, statusElements, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState, pass39AssetState) {
+    this.canvas = canvas;
+    this.context = canvas.getContext("2d");
+    this.statusElements = statusElements;
+    this.pass28AssetState = pass28AssetState;
+    this.pass29AssetState = pass29AssetState;
+    this.pass31AssetState = pass31AssetState;
+    this.pass32AssetState = pass32AssetState;
+    this.pass33AssetState = pass33AssetState;
+    this.pass34AssetState = pass34AssetState;
+    this.pass35AssetState = pass35AssetState;
+    this.pass36AssetState = pass36AssetState;
+    this.pass37AssetState = pass37AssetState;
+    this.pass38AssetState = pass38AssetState;
+    this.pass39AssetState = pass39AssetState;
+    this.frameHandle = 0;
+    this.frameCount = 0;
+    this.running = false;
+    this.keys = new Set();
+    this.jumpQueued = false;
+    this.dashQueued = false;
+    this.grappleQueued = false;
+    this.attackQueued = false;
+    this.attackFrames = 0;
+    this.blueprintVisible = false;
+    this.resetCount = 0;
+    this.boulderCatchCount = 0;
+    this.inputProbe = { downs: 0, ups: 0, lastCode: null, usedCodes: new Set() };
+    this.progress = this.createProgress();
+    this.player = this.createPlayer();
+    this.movingPlatforms = this.createMovingPlatforms();
+    this.pass23Enemies = this.createPass23Enemies();
+    this.pass23Pursuer = this.createPass23Pursuer();
+    this.pass24ObjectiveIdsSeen = new Set();
+    this.breakables = this.createBreakables();
+    this.debris = [];
+    this.chase = this.createChase();
+    this.grapple = this.createGrapple();
+    this.precisionJump = this.createPrecisionJump();
+    this.collapsedFloorIds = new Set();
+    this.destroyedSupportIds = new Set();
+    this.usedGrappleAnchorIds = new Set();
+    this.pass18VisitedFloorIds = new Set();
+    this.pass18Jump = this.createPass18Jump();
+    this.pass19ArmedFloors = new Map();
+    this.pass19DestroyedFloorIds = new Set();
+    this.collisionFloors = Object.freeze([...PASS15_LEVEL.floors, ...PASS18_LEVEL.floors, ...PASS20_LEVEL.floors, ...PASS22_LEVEL.floors, ...PASS23_LEVEL.floors]);
+    this.collisionSolids = Object.freeze([...PASS15_LEVEL.solids, ...PASS18_LEVEL.solids, ...PASS20_LEVEL.solids, ...PASS22_LEVEL.solids, ...PASS23_LEVEL.solids]);
+    this.screenShake = 0;
+    this.camera = { x: 0, y: 300, zoom: 1 };
+
+    this.onKeyDown = event => {
+      if (!CONTROL_CODES.has(event.code)) return;
+      event.preventDefault();
+      if (!event.repeat) {
+        this.inputProbe.downs += 1;
+        this.inputProbe.lastCode = event.code;
+        this.inputProbe.usedCodes.add(event.code);
+        if (event.code === "Space") this.jumpQueued = true;
+        if (event.code === "ShiftLeft" || event.code === "ShiftRight") this.dashQueued = true;
+        if (event.code === "KeyE") this.grappleQueued = true;
+        if (event.code === "KeyF") this.attackQueued = true;
+        if (event.code === "KeyB") {
+          this.blueprintVisible = !this.blueprintVisible;
+          document.documentElement.classList.toggle("blueprint-open", this.blueprintVisible);
+        }
+        if (event.code === "KeyR") this.resetPlayer(true);
+      }
+      this.keys.add(event.code);
+    };
+
+    this.onKeyUp = event => {
+      if (!CONTROL_CODES.has(event.code)) return;
+      event.preventDefault();
+      this.inputProbe.ups += 1;
+      this.keys.delete(event.code);
+      if (event.code === "Space" && this.player.vy < -5) {
+        if (this.precisionJump.kind) this.precisionJump.cut = true;
+        if (this.precisionJump.kind === "short") this.progress.precisionShortJumpCut = true;
+        this.player.vy *= PLAYER_PHYSICS.jumpCutMultiplier;
+      }
+      if (event.code === "Space" && this.pass18Jump.active && !this.pass18Jump.cut) {
+        this.pass18Jump.cut = true;
+      }
+    };
+
+    this.onPointerDown = () => this.canvas.focus();
+  }
+
+  createProgress() {
+    return {
+      zone01Reached: false,
+      firstDropped: false,
+      firstClimb: false,
+      secondDropped: false,
+      secondClimb: false,
+      completed: false,
+      zone03Entered: false,
+      lowerRiseReached: false,
+      atriumReached: false,
+      upperGalleryReached: false,
+      longDescentReached: false,
+      pass04Completed: false,
+      zone04Entered: false,
+      lowTunnelReached: false,
+      platformBoarded: false,
+      movingPlatformCrossed: false,
+      unevenTunnelReached: false,
+      pass05Completed: false,
+      zone05Entered: false,
+      lowerHallReached: false,
+      highGalleryReached: false,
+      pass06Completed: false,
+      zone06Entered: false,
+      curveCommitted: false,
+      zone06Dropped: false,
+      eastDashGapCleared: false,
+      middleDashGapCleared: false,
+      westDashGapCleared: false,
+      pass07Completed: false,
+      chaseTriggered: false,
+      boulderStarted: false,
+      boulderEnteredCurve: false,
+      boulderRoundedApex: false,
+      boulderFinished: false,
+      chaseEscaped: false,
+      pass08Completed: false,
+      zone07Entered: false,
+      zone07UpperDrop: false,
+      zone07MiddleReturn: false,
+      zone07MiddleDrop: false,
+      zone07LowerRun: false,
+      zone07ExitReached: false,
+      boulderAtInternalEntry: false,
+      internalStructureBreached: false,
+      pass09Completed: false,
+      zone08Entered: false,
+      zone08ShaftOneDropped: false,
+      zone08ShaftOneCleared: false,
+      zone08ShaftTwoDropped: false,
+      zone08ShaftTwoCleared: false,
+      zone08LowerHallReached: false,
+      zone08ExitReached: false,
+      pass10Completed: false,
+      zone09Entered: false,
+      grappleAnchorOneUsed: false,
+      grappleAnchorTwoUsed: false,
+      grappleAnchorThreeUsed: false,
+      grappleChainCompleted: false,
+      zone09ExitReached: false,
+      pass11Completed: false,
+      dashSpikeEntered: false,
+      dashSpikeTakeoff: false,
+      dashSpikeAirDashUsed: false,
+      dashSpikeCleared: false,
+      zone09DashExitReached: false,
+      pass12Completed: false,
+      precisionEntered: false,
+      precisionShortTakeoff: false,
+      precisionShortJumpCut: false,
+      precisionShortGapCleared: false,
+      precisionLowCeilingCleared: false,
+      precisionTurnReached: false,
+      precisionDirectionReversed: false,
+      precisionLongTakeoff: false,
+      precisionLongGapCleared: false,
+      precisionExitReached: false,
+      pass13Completed: false,
+      giantCurveEntered: false,
+      giantCurveUpperTakeoff: false,
+      giantCurveUpperGapCleared: false,
+      giantCurveSteepCommitted: false,
+      giantCurveDropStarted: false,
+      giantCurveLowerLanded: false,
+      giantCurveDirectionReversed: false,
+      giantCurveExitReached: false,
+      pass14Completed: false,
+      bridgeEntered: false,
+      bridgeGapOneCleared: false,
+      bridgeGapTwoCleared: false,
+      bridgeGapThreeCleared: false,
+      bridgeFinalAirDash: false,
+      bridgeExitReached: false,
+      bridgeBoulderPlunged: false,
+      pass15Completed: false,
+      pass18Entered: false,
+      pass18Completed: false,
+      pass18CheckpointActivated: false,
+      pass19AftershockStarted: false,
+      pass19Completed: false,
+      pass19CheckpointStabilized: false,
+      pass20Entered: false,
+      pass20SpringReady: false,
+      pass20SpringLaunched: false,
+      pass20SpringApexReached: false,
+      pass20ChasmCleared: false,
+      pass20SpringLanded: false,
+      pass20ExitReached: false,
+      pass20Completed: false,
+      pass21PacingEngaged: false,
+      pass21SafetyBandObserved: false,
+      pass21CruiseBandObserved: false,
+      pass21CatchupBandObserved: false,
+      pass21DestructionSlowdowns: 0,
+      pass21StructuresSlowed: 0,
+      pass21DestructionSlowdownFrames: 0,
+      pass21AdaptivePauseFramesSkipped: 0,
+      pass21MinimumLead: null,
+      pass21MaximumLead: 0,
+      pass21MinimumSpeed: null,
+      pass21MaximumSpeed: 0,
+      pass21Completed: false,
+      pass22Entered: false,
+      pass22FirstLanding: false,
+      pass22SecondLanding: false,
+      pass22ExitReached: false,
+      pass22Completed: false,
+      pass23Entered: false,
+      pass23PursuerStarted: false,
+      pass23PlatformBoarded: false,
+      pass23PlatformCrossed: false,
+      pass23CombatStarted: false,
+      pass23EnemyDefeats: 0,
+      pass23CombatCleared: false,
+      pass23AnchorFourUsed: false,
+      pass23AnchorFiveUsed: false,
+      pass23GrappleChainCompleted: false,
+      pass23SpringReady: false,
+      pass23SpringLaunched: false,
+      pass23SpringLanded: false,
+      pass23ExitReached: false,
+      pass23PursuerEscaped: false,
+      pass23Completed: false,
+      chaseWallJumps: 0,
+      floorsCollapsed: 0,
+      supportsDestroyed: 0,
+      internalDirectionChanges: 0,
+      dashGapClears: 0,
+      directionChanges: 0,
+      breakablesDestroyed: 0,
+      platformRides: 0,
+      groundJumps: 0,
+      wallJumps: 0,
+      ledgeAssists: 0,
+      dashes: 0,
+      grappleAttaches: 0,
+      grappleReleases: 0,
+      grappleUniqueAnchors: 0,
+      chaseAirDashes: 0,
+      precisionShortJumps: 0,
+      precisionLongJumps: 0,
+      precisionDirectionChanges: 0,
+      precisionCeilingBumps: 0,
+      giantCurveUpperJumps: 0,
+      giantCurveNaturalDrops: 0,
+      giantCurveDirectionChanges: 0,
+      bridgeJumps: 0,
+      bridgeAirDashes: 0,
+      pass18NarrowLandings: 0,
+      pass18Jumps: 0,
+      pass18ShortCuts: 0,
+      pass18HeldJumps: 0,
+      pass18CeilingBumps: 0,
+      pass19FloorsArmed: 0,
+      pass19FloorsCollapsed: 0,
+      pass19DebrisBursts: 0,
+      pass19PeakPending: 0,
+      pass20SpringLaunches: 0,
+      pass20SpringLandings: 0,
+      pass20PeakHorizontalSpeed: 0,
+      pass20FlightFrames: 0,
+      pass23Attacks: 0,
+      pass23PlatformRides: 0,
+      pass23GrappleAttaches: 0,
+      pass23GrappleReleases: 0,
+      pass23SpringLaunches: 0,
+      pass23SpringLandings: 0,
+      pass23FlightFrames: 0,
+      pass23PursuerActiveFrames: 0,
+      pass23PursuerContacts: 0,
+      pass24IntegrationStarted: false,
+      pass24ObjectivesSeen: 0,
+      pass24ObjectivesCompleted: 0,
+      pass24SystemsValidated: 0,
+      pass24LateCheckpointActivated: false,
+      pass24IntegratedCompleted: false,
+      pass24CompletionFrame: null,
+    };
+  }
+
+  createPlayer() {
+    return {
+      x: PASS15_LEVEL.spawn.x,
+      y: PASS15_LEVEL.spawn.y,
+      previousX: PASS15_LEVEL.spawn.x,
+      previousY: PASS15_LEVEL.spawn.y,
+      vx: 0,
+      vy: 0,
+      facing: 1,
+      grounded: false,
+      wallSide: 0,
+      dashAvailable: true,
+      dashFrames: 0,
+      dashCooldown: 0,
+      grappleLaunchFrames: 0,
+      springLaunchFrames: 0,
+      standingPlatformId: null,
+      standingFloorId: null,
+    };
+  }
+
+  createMovingPlatforms() {
+    return [...PASS15_LEVEL.movingPlatforms, ...PASS23_LEVEL.movingPlatforms].map(item => ({
+      ...item,
+      x: item.xMin,
+      previousX: item.xMin,
+      direction: 1,
+    }));
+  }
+
+  createPass23Enemies() {
+    return PASS23_ZONE.enemies.map(item => ({ ...item, health: item.health, defeated: false, hitFrames: 0 }));
+  }
+
+  createPass23Pursuer() {
+    const route = PASS23_ZONE.pursuer.route;
+    const distances = [0];
+    for (let index = 1; index < route.length; index += 1) {
+      distances.push(distances.at(-1) + Math.hypot(route[index].x - route[index - 1].x, route[index].y - route[index - 1].y));
+    }
+    return {
+      active: false,
+      escaped: false,
+      delayFrames: PASS23_ZONE.pursuer.spawnDelayFrames,
+      pathDistance: 0,
+      pathIndex: 0,
+      routeDistances: distances,
+      totalDistance: distances.at(-1),
+      x: route[0].x,
+      y: route[0].y,
+      rotation: 0,
+      minimumGap: null,
+    };
+  }
+
+  createBreakables() {
+    return PASS15_LEVEL.breakables.map(item => ({ ...item, destroyed: false }));
+  }
+
+  createGrapple() {
+    return {
+      active: false,
+      anchorId: null,
+      ropeLength: 0,
+      attachedFrames: 0,
+      cooldown: 0,
+      lastAnchorId: null,
+    };
+  }
+
+  createPrecisionJump() {
+    return {
+      kind: null,
+      holdFrames: 0,
+      cut: false,
+    };
+  }
+
+  createPass18Jump() {
+    return { active: false, holdFrames: 0, cut: false, recorded: false };
+  }
+
+  createChase() {
+    const start = PASS15_CHASE.path.points[0];
+    return {
+      triggered: false,
+      active: false,
+      sealed: false,
+      delayFrames: PASS15_CHASE.boulder.spawnDelayFrames,
+      breachDelayFrames: PASS15_CHASE.boulder.breachDelayFrames,
+      breachComplete: false,
+      internalBreakpointIndex: 0,
+      internalPauseFrames: 0,
+      pass14HeadStartFrames: 0,
+      pass15HeadStartFrames: 0,
+      activeFrames: 0,
+      pathDistance: 0,
+      pathIndex: 0,
+      x: start.x,
+      y: start.y,
+      speed: PASS15_CHASE.boulder.baseSpeed,
+      basePacedSpeed: PASS15_CHASE.boulder.baseSpeed,
+      targetSpeed: PASS15_CHASE.boulder.baseSpeed,
+      playerPathDistance: 0,
+      playerPathIndex: 0,
+      leadDistance: 0,
+      projectionGap: 0,
+      destructionSlowdownFrames: 0,
+      rotation: 0,
+    };
+  }
+
+  start() {
+    if (this.running) return;
+    this.running = true;
+    window.addEventListener("keydown", this.onKeyDown, { passive: false });
+    window.addEventListener("keyup", this.onKeyUp, { passive: false });
+    this.canvas.addEventListener("pointerdown", this.onPointerDown);
+    this.canvas.focus();
+    this.snapCamera();
+    this.frameHandle = requestAnimationFrame(() => this.frame());
+  }
+
+  frame() {
+    if (!this.running) return;
+    this.frameCount += 1;
+    if (!this.blueprintVisible) this.step();
+    this.draw();
+    this.frameHandle = requestAnimationFrame(() => this.frame());
+  }
+
+  step() {
+    const p = this.player;
+    const config = PLAYER_PHYSICS;
+    this.updateMovingPlatforms();
+    this.updateDebris();
+    p.previousX = p.x;
+    p.previousY = p.y;
+    const wasGrounded = p.grounded;
+    const previousWall = p.wallSide;
+    p.grounded = false;
+    p.wallSide = 0;
+    p.standingPlatformId = null;
+    p.standingFloorId = null;
+
+    const moveAxis = (this.keys.has("KeyD") ? 1 : 0) - (this.keys.has("KeyA") ? 1 : 0);
+    if (moveAxis !== 0) p.facing = moveAxis;
+    if (this.precisionJump.kind && this.keys.has("Space") && !wasGrounded) this.precisionJump.holdFrames += 1;
+    if (this.pass18Jump.active && this.keys.has("Space") && !wasGrounded) this.pass18Jump.holdFrames += 1;
+
+    if (this.grappleQueued) {
+      if (this.grapple.active) this.releaseGrapple(moveAxis);
+      else this.tryAttachGrapple();
+    }
+    this.grappleQueued = false;
+
+    if (this.attackQueued) this.performPass23Attack();
+    this.attackQueued = false;
+    if (this.attackFrames > 0) this.attackFrames -= 1;
+    for (const enemy of this.pass23Enemies) enemy.hitFrames = Math.max(0, enemy.hitFrames - 1);
+
+    if (this.dashQueued && !this.grapple.active && p.dashAvailable && p.dashCooldown === 0) {
+      p.dashFrames = config.dashFrames;
+      p.dashAvailable = false;
+      p.dashCooldown = config.dashCooldownFrames;
+      p.vx = (moveAxis || p.facing) * config.dashSpeed;
+      p.vy = wasGrounded ? 0 : Math.min(p.vy, 0);
+      this.progress.dashes += 1;
+      const centerX = p.x + PLAYER_PHYSICS.width * 0.5;
+      const spike = PASS12_ZONE.spikeBed;
+      if (this.progress.dashSpikeEntered && !wasGrounded && centerX >= spike.x1 - 70 && centerX <= spike.x2 + 70) {
+        this.progress.dashSpikeAirDashUsed = true;
+        this.progress.chaseAirDashes += 1;
+      }
+      if (this.progress.pass14Completed && !this.progress.bridgeGapThreeCleared && !wasGrounded && centerX >= 23340 && centerX <= 23620) {
+        this.progress.bridgeFinalAirDash = true;
+        this.progress.bridgeAirDashes += 1;
+      }
+    }
+    this.dashQueued = false;
+
+    if (this.jumpQueued && !this.grapple.active) {
+      if (wasGrounded) {
+        p.vy = -config.jumpSpeed;
+        p.grounded = false;
+        this.progress.groundJumps += 1;
+        const centerX = p.x + PLAYER_PHYSICS.width * 0.5;
+        if (this.progress.pass12Completed && !this.progress.precisionShortGapCleared && centerX >= 19820 && centerX <= 19935) {
+          this.precisionJump = { kind: "short", holdFrames: 0, cut: false };
+          this.progress.precisionShortTakeoff = true;
+          this.progress.precisionShortJumps += 1;
+        } else if (this.progress.precisionTurnReached && !this.progress.precisionLongGapCleared && centerX >= 18710 && centerX <= 19025 && p.facing > 0) {
+          this.precisionJump = { kind: "long", holdFrames: 0, cut: false };
+          this.progress.precisionLongTakeoff = true;
+          this.progress.precisionLongJumps += 1;
+        } else if (this.progress.pass13Completed && !this.progress.giantCurveUpperGapCleared && centerX >= 18920 && centerX <= 19020 && p.facing < 0) {
+          this.progress.giantCurveUpperTakeoff = true;
+          this.progress.giantCurveUpperJumps += 1;
+        } else if (this.progress.pass14Completed && !this.progress.pass15Completed && p.facing > 0 &&
+          PASS15_ZONE.gaps.some(gap => centerX >= gap.x1 - 90 && centerX <= gap.x1 + 30)) {
+          this.progress.bridgeJumps += 1;
+        }
+        if (this.progress.pass15Completed && centerX >= PASS18_ZONE.bounds.x) {
+          this.pass18Jump = { active: true, holdFrames: 0, cut: false, recorded: false };
+          this.progress.pass18Jumps += 1;
+        }
+      } else if (previousWall !== 0) {
+        p.vx = -previousWall * config.wallJumpX;
+        p.vy = -config.wallJumpY;
+        p.facing = -previousWall;
+        this.progress.wallJumps += 1;
+        if (this.progress.pass09Completed && !this.progress.pass10Completed) this.progress.chaseWallJumps += 1;
+      }
+    }
+    this.jumpQueued = false;
+
+    if (this.grapple.active) {
+      p.dashFrames = 0;
+      p.vy = Math.min(p.vy + config.gravity * 0.28, config.maxFallSpeed);
+      this.applyGrapplePhysics(moveAxis);
+    } else if (p.grappleLaunchFrames > 0) {
+      p.grappleLaunchFrames -= 1;
+      p.vx = clamp(p.vx + moveAxis * 0.08, -13.5, 13.5) * 0.995;
+      p.vy = Math.min(p.vy + config.gravity * 0.72, config.maxFallSpeed);
+    } else if (p.springLaunchFrames > 0) {
+      p.springLaunchFrames -= 1;
+      p.vx = clamp(p.vx + moveAxis * 0.035, -24, 24) * 0.998;
+      p.vy = Math.min(p.vy + config.gravity, config.maxFallSpeed);
+      if (this.progress.pass23SpringLaunched && !this.progress.pass23SpringLanded) this.progress.pass23FlightFrames += 1;
+      else {
+        this.progress.pass20FlightFrames += 1;
+        this.progress.pass20PeakHorizontalSpeed = Math.max(this.progress.pass20PeakHorizontalSpeed, Math.abs(p.vx));
+      }
+    } else if (p.dashFrames > 0) {
+      p.dashFrames -= 1;
+      p.vy = Math.min(p.vy + config.gravity * 0.2, config.maxFallSpeed);
+    } else {
+      const acceleration = wasGrounded ? config.groundAcceleration : config.airAcceleration;
+      if (moveAxis !== 0) p.vx = approach(p.vx, moveAxis * config.runSpeed, acceleration);
+      else p.vx *= wasGrounded ? config.groundFriction : config.airFriction;
+      if (Math.abs(p.vx) < 0.04) p.vx = 0;
+      p.vy = Math.min(p.vy + config.gravity, config.maxFallSpeed);
+      if (previousWall !== 0 && p.vy > config.wallSlideSpeed && moveAxis === previousWall) {
+        p.vy = config.wallSlideSpeed;
+      }
+    }
+
+    if (p.dashCooldown > 0) p.dashCooldown -= 1;
+    if (this.grapple.cooldown > 0) this.grapple.cooldown -= 1;
+    this.moveHorizontal();
+    this.moveVertical(wasGrounded);
+    this.tryActivatePass20Spring();
+    this.tryActivatePass23Spring();
+    if (this.grapple.active) this.constrainGrapple();
+    if (p.grounded) p.dashAvailable = true;
+    if (this.checkDashSpikeContact() || this.checkPrecisionHazardContact() || this.checkPass18HazardContact() || this.checkPass20HazardContact() || this.checkPass23HazardContact()) return;
+    this.updateProgress();
+    this.updatePass19Aftershock();
+    this.updatePass19Completion();
+    this.updatePass20Progress();
+    this.updatePass22Progress();
+    this.updatePass23Progress();
+    this.updatePass23Pursuer();
+    if (this.checkPass23PursuerContact()) return;
+    this.updatePass24Integration();
+    this.updateBoulder();
+    this.updateChaseCompletion();
+    this.updateCamera();
+    this.screenShake = Math.max(0, this.screenShake - 0.7);
+
+    if (p.y > PASS23_LEVEL.bounds.y + PASS23_LEVEL.bounds.height + 120 || p.x < -120) {
+      this.resetPlayer(false);
+    }
+  }
+
+  checkPass18HazardContact() {
+    if (!this.progress.pass15Completed || this.progress.pass18Completed) return false;
+    const p = this.player;
+    for (const hazard of PASS18_LEVEL.hazards) {
+      const horizontalOverlap = p.x + PLAYER_PHYSICS.width > hazard.x1 && p.x < hazard.x2;
+      const verticalOverlap = p.y + PLAYER_PHYSICS.height > hazard.tipY && p.y < hazard.baseY;
+      if (!horizontalOverlap || !verticalOverlap) continue;
+      this.resetPlayer(false);
+      return true;
+    }
+    return false;
+  }
+
+  tryActivatePass20Spring() {
+    if (!this.progress.pass19Completed || this.progress.pass20SpringLaunched) return false;
+    const p = this.player;
+    const spring = PASS20_ZONE.spring;
+    const overlapsPad = p.x + PLAYER_PHYSICS.width > spring.x && p.x < spring.x + spring.width;
+    if (!p.grounded || p.standingFloorId !== "pass20_spring_runway" || !overlapsPad || !this.keys.has(spring.requiredInput)) return false;
+    p.vx = spring.launchVx;
+    p.vy = spring.launchVy;
+    p.facing = 1;
+    p.grounded = false;
+    p.standingFloorId = null;
+    p.springLaunchFrames = spring.preserveFrames;
+    p.dashFrames = 0;
+    this.progress.pass20SpringLaunched = true;
+    this.progress.pass20SpringLaunches += 1;
+    this.progress.pass20PeakHorizontalSpeed = spring.launchVx;
+    this.screenShake = Math.max(this.screenShake, 11);
+    return true;
+  }
+
+  checkPass20HazardContact() {
+    if (!this.progress.pass19Completed || this.progress.pass20Completed) return false;
+    const p = this.player;
+    const hazard = PASS20_ZONE.hazard;
+    const horizontalOverlap = p.x + PLAYER_PHYSICS.width > hazard.x1 && p.x < hazard.x2;
+    const verticalOverlap = p.y + PLAYER_PHYSICS.height > hazard.tipY && p.y < hazard.baseY;
+    if (!horizontalOverlap || !verticalOverlap) return false;
+    this.resetPlayer(false);
+    return true;
+  }
+
+  updatePass20Progress() {
+    if (!this.progress.pass19Completed) return;
+    const p = this.player;
+    const bottom = p.y + PLAYER_PHYSICS.height;
+    const milestone = PASS20_ZONE.milestones;
+    if (p.x >= milestone.enteredX) this.progress.pass20Entered = true;
+    if (this.progress.pass20Entered && p.x >= milestone.readyX) this.progress.pass20SpringReady = true;
+    if (this.progress.pass20SpringLaunched && bottom <= milestone.apexBottomY) this.progress.pass20SpringApexReached = true;
+    if (this.progress.pass20SpringLaunched && p.x + PLAYER_PHYSICS.width >= milestone.chasmClearX) this.progress.pass20ChasmCleared = true;
+    if (!this.progress.pass20SpringLanded && this.progress.pass20ChasmCleared && p.grounded &&
+      p.standingFloorId === "pass20_landing_basin" && p.x + PLAYER_PHYSICS.width >= milestone.landingX1 && p.x <= milestone.landingX2) {
+      this.progress.pass20SpringLanded = true;
+      this.progress.pass20SpringLandings += 1;
+      p.springLaunchFrames = 0;
+      this.screenShake = Math.max(this.screenShake, 6);
+    }
+    if (this.progress.pass20SpringLanded && p.grounded && p.x >= milestone.completionX && bottom >= milestone.completionY) {
+      this.progress.pass20ExitReached = true;
+    }
+    if (!this.progress.pass20Completed && this.progress.pass20ExitReached && this.progress.pass20SpringApexReached &&
+      this.progress.pass20SpringLaunches >= milestone.requiredLaunches && this.progress.pass20SpringLandings >= milestone.requiredLandings) {
+      this.progress.pass20Completed = true;
+      this.screenShake = Math.max(this.screenShake, 8);
+    }
+  }
+
+  updatePass22Progress() {
+    if (!this.progress.pass20Completed) return;
+    const p = this.player;
+    const bottom = p.y + PLAYER_PHYSICS.height;
+    const milestone = PASS22_ZONE.milestones;
+    if (p.x <= milestone.enteredX) this.progress.pass22Entered = true;
+    if (this.progress.pass22Entered && p.grounded && p.standingFloorId === "pass22_west_step" && p.x <= milestone.firstLandingX + 180) this.progress.pass22FirstLanding = true;
+    if (this.progress.pass22FirstLanding && p.grounded && p.standingFloorId === "pass22_lower_shelf" && p.x <= milestone.secondLandingX + 240) this.progress.pass22SecondLanding = true;
+    if (this.progress.pass22SecondLanding && p.grounded && p.standingFloorId === "pass22_exit_slope" && p.x <= milestone.completionX && bottom >= milestone.completionY) {
+      this.progress.pass22ExitReached = true;
+      this.progress.pass22Completed = true;
+    }
+  }
+
+  performPass23Attack() {
+    if (!this.progress.pass23Entered || this.progress.pass23CombatCleared) return false;
+    const p = this.player;
+    const centerX = p.x + PLAYER_PHYSICS.width * 0.5;
+    const centerY = p.y + PLAYER_PHYSICS.height * 0.5;
+    this.attackFrames = 10;
+    this.progress.pass23Attacks += 1;
+    let hit = false;
+    for (const enemy of this.pass23Enemies) {
+      if (enemy.defeated) continue;
+      const dx = enemy.x - centerX;
+      const dy = enemy.y - centerY;
+      if (Math.abs(dx) > 210 || Math.abs(dy) > 240) continue;
+      enemy.health -= 1;
+      enemy.hitFrames = 12;
+      hit = true;
+      if (enemy.health <= 0) {
+        enemy.defeated = true;
+        this.progress.pass23EnemyDefeats += 1;
+        this.screenShake = Math.max(this.screenShake, 4);
+      }
+    }
+    if (this.progress.pass23EnemyDefeats >= PASS23_ZONE.milestones.requiredEnemyDefeats) this.progress.pass23CombatCleared = true;
+    return hit;
+  }
+
+  tryActivatePass23Spring() {
+    if (!this.progress.pass23CombatCleared || !this.progress.pass23GrappleChainCompleted || this.progress.pass23SpringLaunched) return false;
+    const p = this.player;
+    const spring = PASS23_ZONE.spring;
+    const overlapsPad = p.x + PLAYER_PHYSICS.width > spring.x && p.x < spring.x + spring.width;
+    if (!p.grounded || p.standingFloorId !== "pass23_spring_runway" || !overlapsPad || !this.keys.has(spring.requiredInput)) return false;
+    p.vx = spring.launchVx;
+    p.vy = spring.launchVy;
+    p.facing = -1;
+    p.grounded = false;
+    p.standingFloorId = null;
+    p.springLaunchFrames = spring.preserveFrames;
+    p.dashFrames = 0;
+    this.progress.pass23SpringLaunched = true;
+    this.progress.pass23SpringLaunches += 1;
+    this.screenShake = Math.max(this.screenShake, 8);
+    return true;
+  }
+
+  checkPass23HazardContact() {
+    if (!this.progress.pass23Entered || this.progress.pass23Completed) return false;
+    const p = this.player;
+    const hazard = PASS23_ZONE.hazard;
+    const horizontalOverlap = p.x + PLAYER_PHYSICS.width > hazard.x1 && p.x < hazard.x2;
+    const verticalOverlap = p.y + PLAYER_PHYSICS.height > hazard.tipY && p.y < hazard.baseY;
+    if (!horizontalOverlap || !verticalOverlap) return false;
+    this.resetPlayer(false);
+    return true;
+  }
+
+  updatePass23Progress() {
+    if (!this.progress.pass22Completed) return;
+    const p = this.player;
+    const bottom = p.y + PLAYER_PHYSICS.height;
+    const milestone = PASS23_ZONE.milestones;
+    if (p.x <= milestone.enteredX) this.progress.pass23Entered = true;
+    if (this.progress.pass23PlatformBoarded && p.x <= milestone.combatX) this.progress.pass23PlatformCrossed = true;
+    if (this.progress.pass23PlatformCrossed) this.progress.pass23CombatStarted = true;
+    if (this.progress.pass23CombatCleared && p.x <= milestone.grappleX) this.progress.pass23SpringReady = true;
+    if (!this.progress.pass23SpringLanded && this.progress.pass23SpringLaunched && p.grounded && p.standingFloorId === "pass23_exit_slope" && p.x <= PASS23_ZONE.spring.landingX2) {
+      this.progress.pass23SpringLanded = true;
+      this.progress.pass23SpringLandings += 1;
+      p.springLaunchFrames = 0;
+      this.screenShake = Math.max(this.screenShake, 5);
+    }
+    if (this.progress.pass23SpringLanded && p.grounded && p.standingFloorId === "pass23_exit_slope" && p.x <= milestone.completionX && bottom >= milestone.completionY) {
+      this.progress.pass23ExitReached = true;
+    }
+    if (!this.progress.pass23Completed && this.progress.pass23ExitReached && this.progress.pass23PlatformRides >= milestone.requiredPlatformRides &&
+      this.progress.pass23EnemyDefeats >= milestone.requiredEnemyDefeats && this.progress.pass23GrappleChainCompleted &&
+      this.progress.pass23SpringLaunches >= milestone.requiredSpringLaunches && this.progress.pass23SpringLandings >= milestone.requiredSpringLandings) {
+      this.progress.pass23Completed = true;
+      this.progress.pass23PursuerEscaped = true;
+      this.pass23Pursuer.active = false;
+      this.pass23Pursuer.escaped = true;
+      this.screenShake = Math.max(this.screenShake, 7);
+    }
+  }
+
+  updatePass23Pursuer() {
+    if (!this.progress.pass23PlatformBoarded || this.progress.pass23Completed || this.pass23Pursuer.escaped) return;
+    const pursuer = this.pass23Pursuer;
+    if (!pursuer.active) {
+      pursuer.delayFrames -= 1;
+      if (pursuer.delayFrames > 0) return;
+      pursuer.active = true;
+      this.progress.pass23PursuerStarted = true;
+    }
+    pursuer.pathDistance = Math.min(pursuer.totalDistance, pursuer.pathDistance + PASS23_ZONE.pursuer.speed);
+    while (pursuer.pathIndex < pursuer.routeDistances.length - 2 && pursuer.pathDistance > pursuer.routeDistances[pursuer.pathIndex + 1]) pursuer.pathIndex += 1;
+    const start = PASS23_ZONE.pursuer.route[pursuer.pathIndex];
+    const end = PASS23_ZONE.pursuer.route[pursuer.pathIndex + 1] ?? start;
+    const segmentStart = pursuer.routeDistances[pursuer.pathIndex];
+    const segmentLength = Math.max(1, pursuer.routeDistances[pursuer.pathIndex + 1] - segmentStart);
+    const ratio = clamp((pursuer.pathDistance - segmentStart) / segmentLength, 0, 1);
+    pursuer.x = start.x + (end.x - start.x) * ratio;
+    pursuer.y = start.y + (end.y - start.y) * ratio;
+    pursuer.rotation += PASS23_ZONE.pursuer.speed * 0.025;
+    const gap = Math.hypot((this.player.x + PLAYER_PHYSICS.width * 0.5) - pursuer.x, (this.player.y + PLAYER_PHYSICS.height * 0.5) - pursuer.y);
+    pursuer.minimumGap = pursuer.minimumGap === null ? gap : Math.min(pursuer.minimumGap, gap);
+    this.progress.pass23PursuerActiveFrames += 1;
+  }
+
+  checkPass23PursuerContact() {
+    const pursuer = this.pass23Pursuer;
+    if (!pursuer.active || pursuer.escaped) return false;
+    const centerX = this.player.x + PLAYER_PHYSICS.width * 0.5;
+    const centerY = this.player.y + PLAYER_PHYSICS.height * 0.5;
+    if (Math.hypot(centerX - pursuer.x, centerY - pursuer.y) >= PASS23_ZONE.pursuer.contactRadius) return false;
+    this.progress.pass23PursuerContacts += 1;
+    this.resetPlayer(false);
+    return true;
+  }
+
+  updatePass24Integration() {
+    const integration = getPass24IntegrationState(this.progress);
+    this.progress.pass24IntegrationStarted = true;
+    if (integration.activeObjective) this.pass24ObjectiveIdsSeen.add(integration.activeObjective.id);
+    this.progress.pass24ObjectivesSeen = this.pass24ObjectiveIdsSeen.size;
+    this.progress.pass24ObjectivesCompleted = integration.completedObjectiveCount;
+    this.progress.pass24SystemsValidated = integration.completedSystemCount;
+    if (!this.progress.pass24IntegratedCompleted && integration.routeComplete && integration.allSystemsComplete) {
+      this.progress.pass24LateCheckpointActivated = true;
+      this.progress.pass24IntegratedCompleted = true;
+      this.progress.pass24CompletionFrame = this.frameCount;
+      this.screenShake = Math.max(this.screenShake, 8);
+    }
+  }
+
+  tryAttachGrapple() {
+    if (!this.progress.pass10Completed || this.grapple.cooldown > 0) return false;
+    const nextOrder = this.usedGrappleAnchorIds.size + 1;
+    const anchors = [...PASS11_ZONE.anchors, ...PASS23_ZONE.anchors];
+    const anchor = anchors.find(item => item.order === nextOrder);
+    if (!anchor) return false;
+    const centerX = this.player.x + PLAYER_PHYSICS.width * 0.5;
+    const centerY = this.player.y + PLAYER_PHYSICS.height * 0.5;
+    const distance = Math.hypot(anchor.x - centerX, anchor.y - centerY);
+    if (distance > anchor.attachRadius) return false;
+    this.grapple.active = true;
+    this.grapple.anchorId = anchor.id;
+    this.grapple.ropeLength = Math.max(anchor.ropeLength, distance);
+    this.grapple.attachedFrames = 0;
+    this.grapple.lastAnchorId = anchor.id;
+    this.usedGrappleAnchorIds.add(anchor.id);
+    this.progress.grappleAttaches += 1;
+    this.progress.grappleUniqueAnchors = this.usedGrappleAnchorIds.size;
+    if (anchor.order === 1) this.progress.grappleAnchorOneUsed = true;
+    if (anchor.order === 2) this.progress.grappleAnchorTwoUsed = true;
+    if (anchor.order === 3) this.progress.grappleAnchorThreeUsed = true;
+    if (anchor.order === 4) {
+      this.progress.pass23AnchorFourUsed = true;
+      this.progress.pass23GrappleAttaches += 1;
+    }
+    if (anchor.order === 5) {
+      this.progress.pass23AnchorFiveUsed = true;
+      this.progress.pass23GrappleAttaches += 1;
+    }
+    if (this.usedGrappleAnchorIds.size === PASS11_ZONE.milestones.minimumUniqueAnchors) {
+      this.progress.grappleChainCompleted = true;
+    }
+    if (this.progress.pass23AnchorFourUsed && this.progress.pass23AnchorFiveUsed) this.progress.pass23GrappleChainCompleted = true;
+    this.player.grounded = false;
+    this.player.dashFrames = 0;
+    return true;
+  }
+
+  releaseGrapple(moveAxis = 0) {
+    if (!this.grapple.active) return false;
+    const direction = moveAxis || this.player.facing || -1;
+    this.player.vx = clamp(this.player.vx + direction * 5.2, -13.5, 13.5);
+    this.player.vy = Math.min(this.player.vy - 2.4, -1.2);
+    this.player.grappleLaunchFrames = 24;
+    this.grapple.active = false;
+    this.grapple.anchorId = null;
+    this.grapple.attachedFrames = 0;
+    this.grapple.cooldown = 8;
+    this.progress.grappleReleases += 1;
+    if (this.grapple.lastAnchorId?.startsWith("pass23_")) this.progress.pass23GrappleReleases += 1;
+    return true;
+  }
+
+  applyGrapplePhysics(moveAxis) {
+    const anchor = [...PASS11_ZONE.anchors, ...PASS23_ZONE.anchors].find(item => item.id === this.grapple.anchorId);
+    if (!anchor) {
+      this.releaseGrapple(moveAxis);
+      return;
+    }
+    const p = this.player;
+    const centerX = p.x + PLAYER_PHYSICS.width * 0.5;
+    const centerY = p.y + PLAYER_PHYSICS.height * 0.5;
+    const dx = anchor.x - centerX;
+    const dy = anchor.y - centerY;
+    const distance = Math.max(1, Math.hypot(dx, dy));
+    const tangentX = -dy / distance;
+    const tangentY = dx / distance;
+    const tangentDirection = moveAxis === 0 ? 0 : Math.sign(tangentX * moveAxis || moveAxis);
+    p.vx += tangentX * tangentDirection * 0.52;
+    p.vy += tangentY * tangentDirection * 0.52;
+    const stretch = Math.max(0, distance - this.grapple.ropeLength);
+    const pull = Math.min(1.6, stretch * 0.026);
+    p.vx += (dx / distance) * pull;
+    p.vy += (dy / distance) * pull;
+    p.vx = clamp(p.vx, -11.5, 11.5);
+    p.vy = clamp(p.vy, -11.5, PLAYER_PHYSICS.maxFallSpeed);
+    this.grapple.attachedFrames += 1;
+  }
+
+  constrainGrapple() {
+    const anchor = [...PASS11_ZONE.anchors, ...PASS23_ZONE.anchors].find(item => item.id === this.grapple.anchorId);
+    if (!anchor) return;
+    const p = this.player;
+    const centerX = p.x + PLAYER_PHYSICS.width * 0.5;
+    const centerY = p.y + PLAYER_PHYSICS.height * 0.5;
+    const fromAnchorX = centerX - anchor.x;
+    const fromAnchorY = centerY - anchor.y;
+    const distance = Math.max(1, Math.hypot(fromAnchorX, fromAnchorY));
+    if (distance <= this.grapple.ropeLength) return;
+    const nx = fromAnchorX / distance;
+    const ny = fromAnchorY / distance;
+    const excess = distance - this.grapple.ropeLength;
+    p.x -= nx * excess;
+    p.y -= ny * excess;
+    const outwardVelocity = p.vx * nx + p.vy * ny;
+    if (outwardVelocity > 0) {
+      p.vx -= outwardVelocity * nx;
+      p.vy -= outwardVelocity * ny;
+    }
+  }
+
+  checkDashSpikeContact() {
+    if (!this.progress.pass11Completed) return false;
+    const spike = PASS12_ZONE.spikeBed;
+    const p = this.player;
+    const horizontalOverlap = p.x + PLAYER_PHYSICS.width > spike.x1 && p.x < spike.x2;
+    const verticalOverlap = p.y + PLAYER_PHYSICS.height > spike.tipY && p.y < spike.baseY;
+    if (!horizontalOverlap || !verticalOverlap) return false;
+    this.resetPlayer(false);
+    return true;
+  }
+
+  checkPrecisionHazardContact() {
+    if (!this.progress.pass12Completed || this.progress.pass13Completed) return false;
+    const p = this.player;
+    for (const hazard of PASS13_ZONE.hazards) {
+      const horizontalOverlap = p.x + PLAYER_PHYSICS.width > hazard.x1 && p.x < hazard.x2;
+      const verticalOverlap = p.y + PLAYER_PHYSICS.height > hazard.tipY && p.y < hazard.baseY;
+      if (!horizontalOverlap || !verticalOverlap) continue;
+      this.resetPlayer(false);
+      return true;
+    }
+    return false;
+  }
+
+  updateDebris() {
+    for (const piece of this.debris) {
+      piece.x += piece.vx;
+      piece.y += piece.vy;
+      piece.vy += 0.34;
+      piece.rotation += piece.spin;
+      piece.life -= 1;
+    }
+    this.debris = this.debris.filter(piece => piece.life > 0);
+  }
+
+  updateBoulder() {
+    const chase = this.chase;
+    const config = PASS15_CHASE.boulder;
+    if (!chase.triggered && this.progress.zone05Entered) {
+      chase.triggered = true;
+      this.progress.chaseTriggered = true;
+    }
+    if (!chase.triggered || chase.sealed) return;
+    if (!chase.active) {
+      chase.delayFrames -= 1;
+      if (chase.delayFrames > 0) return;
+      chase.active = true;
+      this.progress.boulderStarted = true;
+    }
+
+    this.updatePass21PlayerProjection();
+
+    if (chase.pass14HeadStartFrames > 0) {
+      chase.pass14HeadStartFrames = this.updatePass21PauseFrames(chase.pass14HeadStartFrames);
+      return;
+    }
+    if (chase.pass15HeadStartFrames > 0) {
+      chase.pass15HeadStartFrames = this.updatePass21PauseFrames(chase.pass15HeadStartFrames);
+      return;
+    }
+
+    if (chase.pathDistance >= PASS15_CHASE.path.pass08EndDistance && !chase.breachComplete) {
+      this.progress.boulderAtInternalEntry = true;
+      if (chase.breachDelayFrames > 0) {
+        chase.breachDelayFrames = this.updatePass21PauseFrames(chase.breachDelayFrames);
+        if (chase.breachDelayFrames % 36 === 0) this.screenShake = Math.max(this.screenShake, 5);
+        return;
+      }
+      chase.breachComplete = true;
+      this.progress.internalStructureBreached = true;
+      this.screenShake = Math.max(this.screenShake, 12);
+    }
+
+    const internalBreakpoint = config.internalBreakpoints?.[chase.internalBreakpointIndex];
+    if (internalBreakpoint && chase.pathDistance >= internalBreakpoint.distance) {
+      if (chase.internalPauseFrames === 0) chase.internalPauseFrames = internalBreakpoint.delayFrames;
+      chase.internalPauseFrames = this.updatePass21PauseFrames(chase.internalPauseFrames);
+      if (chase.internalPauseFrames % 24 === 0) this.screenShake = Math.max(this.screenShake, 7);
+      if (chase.internalPauseFrames === 0) chase.internalBreakpointIndex += 1;
+      return;
+    }
+
+    chase.activeFrames += 1;
+    this.updatePass21PacingSpeed();
+    chase.pathDistance = Math.min(PASS15_CHASE.path.totalDistance, chase.pathDistance + chase.speed);
+    this.updateBoulderPosition();
+    chase.rotation += chase.speed / config.radius;
+
+    if (chase.pathDistance >= PASS15_CHASE.path.zone05EndDistance) this.progress.boulderEnteredCurve = true;
+    if (chase.pathDistance >= PASS15_CHASE.path.curveApexDistance) this.progress.boulderRoundedApex = true;
+
+    const floorThreshold = chase.pathDistance - config.floorCollapseLag;
+    for (const panel of PASS15_CHASE.collapsePanels) {
+      if (panel.triggerDistance > floorThreshold) break;
+      if (this.collapsedFloorIds.has(panel.floorId)) continue;
+      this.collapsedFloorIds.add(panel.floorId);
+      this.progress.floorsCollapsed += 1;
+      this.spawnCollapseDebris(panel.floorId, false);
+    }
+
+    const supportThreshold = chase.pathDistance - config.supportBreakLag;
+    let destroyedThisFrame = 0;
+    for (const support of PASS15_CHASE.supportTargets) {
+      if (support.triggerDistance > supportThreshold) break;
+      if (this.destroyedSupportIds.has(support.id)) continue;
+      this.destroyedSupportIds.add(support.id);
+      this.progress.supportsDestroyed += 1;
+      destroyedThisFrame += 1;
+      this.spawnSupportDebris(support);
+      this.screenShake = Math.max(this.screenShake, 8);
+    }
+    if (destroyedThisFrame > 0) this.triggerPass21DestructionSlowdown(destroyedThisFrame);
+
+    if (chase.pathDistance >= PASS15_CHASE.path.totalDistance) {
+      this.progress.boulderFinished = true;
+    }
+    this.checkBoulderContact();
+  }
+
+  updatePass21PlayerProjection() {
+    const chase = this.chase;
+    const points = PASS15_CHASE.path.points;
+    const distances = PASS15_CHASE.path.cumulativeDistances;
+    const projection = PASS21_PACING.projection;
+    const playerX = this.player.x + PLAYER_PHYSICS.width * 0.5;
+    const playerY = this.player.y + PLAYER_PHYSICS.height * 0.5;
+    const bootstrapping = chase.playerPathDistance === 0;
+    const anchorIndex = bootstrapping ? chase.pathIndex : chase.playerPathIndex;
+    const startIndex = Math.max(chase.pathIndex, anchorIndex - projection.searchBehindSegments);
+    const ahead = bootstrapping ? projection.bootstrapAheadSegments : projection.searchAheadSegments;
+    const endIndex = Math.min(points.length - 2, anchorIndex + ahead);
+    let best = null;
+    for (let index = startIndex; index <= endIndex; index += 1) {
+      const start = points[index];
+      const end = points[index + 1];
+      const dx = end.x - start.x;
+      const dy = end.y - start.y;
+      const lengthSquared = dx * dx + dy * dy;
+      const ratio = lengthSquared === 0 ? 0 : clamp(((playerX - start.x) * dx + (playerY - start.y) * dy) / lengthSquared, 0, 1);
+      const nearestX = start.x + dx * ratio;
+      const nearestY = start.y + dy * ratio;
+      const gap = Math.hypot(playerX - nearestX, playerY - nearestY);
+      const pathDistance = distances[index] + Math.sqrt(lengthSquared) * ratio;
+      if (!best || gap < best.gap) best = { gap, pathDistance, index };
+    }
+    if (!best || best.gap > projection.maximumLateralDistance) return;
+    if (best.pathDistance >= chase.playerPathDistance) {
+      chase.playerPathDistance = best.pathDistance;
+      chase.playerPathIndex = best.index;
+    }
+    chase.projectionGap = best.gap;
+    chase.leadDistance = chase.playerPathDistance - chase.pathDistance;
+    const lead = chase.leadDistance;
+    const bands = PASS21_PACING.lead;
+    this.progress.pass21SafetyBandObserved ||= lead <= bands.safety;
+    this.progress.pass21CruiseBandObserved ||= lead > bands.safety && lead <= bands.catchup;
+    this.progress.pass21CatchupBandObserved ||= lead > bands.catchup;
+    this.progress.pass21MinimumLead = this.progress.pass21MinimumLead === null ? lead : Math.min(this.progress.pass21MinimumLead, lead);
+    this.progress.pass21MaximumLead = Math.max(this.progress.pass21MaximumLead, lead);
+  }
+
+  updatePass21PauseFrames(framesRemaining) {
+    const lead = this.chase.leadDistance;
+    const pacing = PASS21_PACING;
+    const decrement = lead >= pacing.lead.maximum
+      ? pacing.pause.maximumDecrement
+      : lead >= pacing.lead.catchup ? pacing.pause.catchupDecrement : 1;
+    this.progress.pass21AdaptivePauseFramesSkipped += Math.max(0, decrement - 1);
+    return Math.max(0, framesRemaining - decrement);
+  }
+
+  updatePass21PacingSpeed() {
+    const chase = this.chase;
+    const pacing = PASS21_PACING;
+    const lead = chase.leadDistance;
+    chase.targetSpeed = getPass21TargetSpeed(lead);
+    const response = chase.targetSpeed < chase.basePacedSpeed ? pacing.speed.brakingResponse : pacing.speed.accelerationResponse;
+    chase.basePacedSpeed = approach(chase.basePacedSpeed, chase.targetSpeed, response);
+    let speed = chase.basePacedSpeed;
+    if (chase.destructionSlowdownFrames > 0) {
+      const multiplier = getPass21DestructionMultiplier(chase.destructionSlowdownFrames);
+      speed = Math.max(pacing.destruction.minimumAbsoluteSpeed, speed * multiplier);
+      chase.destructionSlowdownFrames -= 1;
+      this.progress.pass21DestructionSlowdownFrames += 1;
+    }
+    chase.speed = clamp(speed, pacing.destruction.minimumAbsoluteSpeed, pacing.speed.maximum);
+    this.progress.pass21PacingEngaged = true;
+    this.progress.pass21MinimumSpeed = this.progress.pass21MinimumSpeed === null ? chase.speed : Math.min(this.progress.pass21MinimumSpeed, chase.speed);
+    this.progress.pass21MaximumSpeed = Math.max(this.progress.pass21MaximumSpeed, chase.speed);
+  }
+
+  triggerPass21DestructionSlowdown(destroyedCount) {
+    const destruction = PASS21_PACING.destruction;
+    const frames = destruction.baseSlowdownFrames + (destroyedCount - 1) * destruction.additionalFramesPerSupport;
+    this.chase.destructionSlowdownFrames = Math.min(
+      destruction.maximumSlowdownFrames,
+      Math.max(this.chase.destructionSlowdownFrames, frames),
+    );
+    this.progress.pass21DestructionSlowdowns += 1;
+    this.progress.pass21StructuresSlowed += destroyedCount;
+  }
+
+  updateBoulderPosition() {
+    const chase = this.chase;
+    const distances = PASS15_CHASE.path.cumulativeDistances;
+    const points = PASS15_CHASE.path.points;
+    while (chase.pathIndex < distances.length - 2 && chase.pathDistance > distances[chase.pathIndex + 1]) {
+      chase.pathIndex += 1;
+    }
+    const start = points[chase.pathIndex];
+    const end = points[chase.pathIndex + 1] ?? start;
+    const segmentStart = distances[chase.pathIndex];
+    const segmentLength = Math.max(1, (distances[chase.pathIndex + 1] ?? segmentStart) - segmentStart);
+    const ratio = clamp((chase.pathDistance - segmentStart) / segmentLength, 0, 1);
+    chase.x = start.x + (end.x - start.x) * ratio;
+    chase.y = start.y + (end.y - start.y) * ratio;
+  }
+
+  checkBoulderContact() {
+    if (!this.chase.active || this.chase.sealed) return;
+    const p = this.player;
+    const nearestX = clamp(this.chase.x, p.x, p.x + PLAYER_PHYSICS.width);
+    const nearestY = clamp(this.chase.y, p.y, p.y + PLAYER_PHYSICS.height);
+    const contactRadius = PASS15_CHASE.boulder.radius + PASS15_CHASE.boulder.contactPadding;
+    if (Math.hypot(this.chase.x - nearestX, this.chase.y - nearestY) >= contactRadius) return;
+    this.boulderCatchCount += 1;
+    this.resetPlayer(false);
+  }
+
+  updateChaseCompletion() {
+    if (!this.chase.active) return;
+    if (!this.progress.pass08Completed && this.progress.pass07Completed) {
+      const pass08Progress = this.chase.pathDistance / PASS08_CHASE.path.totalDistance;
+      if (pass08Progress >= PASS08_CHASE.completion.minimumBoulderProgress) this.progress.pass08Completed = true;
+    }
+    if (!this.progress.pass09Completed && this.progress.zone07ExitReached) {
+      const pass09Progress = this.chase.pathDistance / PASS09_CHASE.path.totalDistance;
+      if (pass09Progress >= PASS09_CHASE.completion.minimumBoulderProgress) this.progress.pass09Completed = true;
+    }
+    if (!this.progress.pass10Completed && this.progress.zone08ExitReached) {
+      const pass10Progress = this.chase.pathDistance / PASS10_CHASE.path.totalDistance;
+      if (pass10Progress >= PASS10_CHASE.completion.minimumBoulderProgress) this.progress.pass10Completed = true;
+    }
+    if (!this.progress.pass11Completed && this.progress.zone09ExitReached && this.progress.grappleChainCompleted) {
+      const pass11Progress = this.chase.pathDistance / PASS11_CHASE.path.totalDistance;
+      if (pass11Progress >= PASS11_CHASE.completion.minimumBoulderProgress) this.progress.pass11Completed = true;
+    }
+    if (!this.progress.pass12Completed && this.progress.zone09DashExitReached && this.progress.dashSpikeCleared) {
+      const pass12Progress = this.chase.pathDistance / PASS12_CHASE.path.totalDistance;
+      if (pass12Progress >= PASS12_CHASE.completion.minimumBoulderProgress) this.progress.pass12Completed = true;
+    }
+    if (!this.progress.pass13Completed && this.progress.precisionExitReached && this.progress.precisionShortGapCleared &&
+      this.progress.precisionLowCeilingCleared && this.progress.precisionDirectionReversed && this.progress.precisionLongGapCleared) {
+      const pass13Progress = this.chase.pathDistance / PASS13_CHASE.path.totalDistance;
+      if (pass13Progress >= PASS13_CHASE.completion.minimumBoulderProgress &&
+        this.progress.precisionCeilingBumps <= PASS13_ZONE.milestones.maximumCeilingBumps) {
+        this.progress.pass13Completed = true;
+        this.chase.pass14HeadStartFrames = 180;
+      }
+    }
+    if (!this.progress.pass14Completed && this.progress.pass13Completed && this.progress.giantCurveUpperGapCleared &&
+      this.progress.giantCurveSteepCommitted && this.progress.giantCurveDropStarted && this.progress.giantCurveLowerLanded &&
+      this.progress.giantCurveDirectionReversed && this.progress.giantCurveExitReached) {
+      const pass14Progress = this.chase.pathDistance / PASS14_CHASE.path.totalDistance;
+      if (pass14Progress >= PASS14_CHASE.completion.minimumBoulderProgress) {
+        this.progress.pass14Completed = true;
+        this.chase.pass15HeadStartFrames = PASS15_ZONE.headStartFrames;
+      }
+    }
+    if (this.progress.pass15Completed || !this.progress.pass14Completed || !this.progress.bridgeGapOneCleared ||
+      !this.progress.bridgeGapTwoCleared || !this.progress.bridgeGapThreeCleared || !this.progress.bridgeFinalAirDash ||
+      !this.progress.bridgeExitReached) return;
+    const pass15Progress = this.chase.pathDistance / PASS15_CHASE.path.totalDistance;
+    if (pass15Progress < PASS15_CHASE.completion.minimumBoulderProgress) return;
+    this.progress.bridgeBoulderPlunged = this.chase.pathDistance >= PASS15_CHASE.path.bridgePlungeDistance;
+    if (!this.progress.bridgeBoulderPlunged) return;
+    this.progress.chaseEscaped = true;
+    this.progress.pass15Completed = true;
+    this.chase.active = false;
+    this.chase.sealed = true;
+    this.progress.pass21Completed = this.progress.pass21PacingEngaged && this.progress.pass21DestructionSlowdowns > 0;
+  }
+
+  spawnCollapseDebris(floorId, major) {
+    const item = PASS15_LEVEL.floors.find(floorItem => floorItem.id === floorId);
+    if (!item) return;
+    const centerX = (item.x1 + item.x2) * 0.5;
+    const centerY = (item.y1 + item.y2) * 0.5;
+    const pieces = major ? 16 : 7;
+    for (let index = 0; index < pieces; index += 1) {
+      this.debris.push({
+        kind: "chase",
+        x: centerX + (index - pieces * 0.5) * 13,
+        y: centerY + (index % 3) * 5,
+        width: 12 + (index % 3) * 5,
+        height: 7 + (index % 2) * 4,
+        vx: (index - pieces * 0.5) * 0.22,
+        vy: -2.8 - (index % 4) * 0.35,
+        rotation: index * 0.28,
+        spin: (index % 2 ? 1 : -1) * 0.055,
+        life: 86,
+      });
+    }
+  }
+
+  spawnSupportDebris(support) {
+    for (let index = 0; index < 14; index += 1) {
+      this.debris.push({
+        kind: "support",
+        x: support.x + support.width * (0.2 + (index % 4) * 0.2),
+        y: support.y + support.height * (0.15 + Math.floor(index / 4) * 0.2),
+        width: 10 + (index % 3) * 7,
+        height: 12 + (index % 4) * 8,
+        vx: (index % 4 - 1.5) * 1.4,
+        vy: -4.2 + Math.floor(index / 4) * 0.55,
+        rotation: index * 0.18,
+        spin: (index % 2 ? 1 : -1) * 0.07,
+        life: 105,
+      });
+    }
+  }
+
+  updateMovingPlatforms() {
+    const p = this.player;
+    for (const platform of this.movingPlatforms) {
+      platform.previousX = platform.x;
+      platform.x += platform.direction * platform.speed;
+      if (platform.x >= platform.xMax) {
+        platform.x = platform.xMax;
+        platform.direction = -1;
+      } else if (platform.x <= platform.xMin) {
+        platform.x = platform.xMin;
+        platform.direction = 1;
+      }
+      if (p.standingPlatformId === platform.id) {
+        p.x += platform.x - platform.previousX;
+      }
+    }
+  }
+
+  moveHorizontal() {
+    const p = this.player;
+    p.x += p.vx;
+    for (const solid of this.collisionSolids) {
+      if (!this.isSolidActive(solid)) continue;
+      if (solid.role === "ledge" || solid.role.endsWith("_ledge")) continue;
+      const bottom = p.y + PLAYER_PHYSICS.height;
+      const previousBottom = p.previousY + PLAYER_PHYSICS.height;
+      if (previousBottom <= solid.y + 4 && bottom <= solid.y + 12) continue;
+      if (!this.overlaps(p, solid)) continue;
+      if (p.vx > 0) {
+        const canAssist = (solid.role === "wall" || solid.role.endsWith("_wall")) &&
+          this.keys.has("KeyD") &&
+          bottom > solid.y && bottom <= solid.y + 72 &&
+          p.vy <= 8;
+        if (canAssist) {
+          p.x = solid.x + solid.width + 2;
+          p.y = solid.y - PLAYER_PHYSICS.height;
+          p.vx = Math.max(2.4, p.vx * 0.5);
+          p.vy = 0;
+          this.progress.ledgeAssists += 1;
+          continue;
+        }
+        p.x = solid.x - PLAYER_PHYSICS.width;
+        p.wallSide = 1;
+      } else if (p.vx < 0) {
+        p.x = solid.x + solid.width;
+        p.wallSide = -1;
+      }
+      p.vx = 0;
+    }
+    for (const gate of this.breakables) {
+      if (gate.destroyed || !this.overlaps(p, gate)) continue;
+      if (p.dashFrames > 0) {
+        this.destroyBreakable(gate);
+        continue;
+      }
+      if (p.vx > 0) {
+        p.x = gate.x - PLAYER_PHYSICS.width;
+        p.wallSide = 1;
+      } else if (p.vx < 0) {
+        p.x = gate.x + gate.width;
+        p.wallSide = -1;
+      }
+      p.vx = 0;
+    }
+    p.x = clamp(p.x, PASS18_LEVEL.bounds.x, PASS18_LEVEL.bounds.x + PASS18_LEVEL.bounds.width - PLAYER_PHYSICS.width);
+  }
+
+  destroyBreakable(gate) {
+    if (gate.destroyed) return;
+    gate.destroyed = true;
+    this.progress.breakablesDestroyed += 1;
+    const columns = 3;
+    const rows = 5;
+    for (let row = 0; row < rows; row += 1) {
+      for (let column = 0; column < columns; column += 1) {
+        this.debris.push({
+          x: gate.x + (column + 0.5) * gate.width / columns,
+          y: gate.y + (row + 0.5) * gate.height / rows,
+          width: gate.width / columns - 2,
+          height: gate.height / rows - 3,
+          vx: (column - 1) * 1.8 + this.player.facing * 2.4,
+          vy: -4.6 + row * 0.55,
+          rotation: 0,
+          spin: (column - 1) * 0.045,
+          life: 70,
+        });
+      }
+    }
+  }
+
+  moveVertical(wasGrounded) {
+    const p = this.player;
+    const previousBottom = p.y + PLAYER_PHYSICS.height;
+    p.y += p.vy;
+
+    for (const solid of this.collisionSolids) {
+      if (!this.isSolidActive(solid)) continue;
+      if (!this.overlaps(p, solid)) continue;
+      if (p.vy >= 0 && previousBottom <= solid.y + 8) {
+        p.y = solid.y - PLAYER_PHYSICS.height;
+        p.vy = 0;
+        p.grounded = true;
+      } else if (p.vy < 0 && p.previousY >= solid.y + solid.height - 8) {
+        p.y = solid.y + solid.height;
+        p.vy = 0;
+        if (solid.role === "zone09_precision_ceiling") {
+          this.progress.precisionCeilingBumps += 1;
+          this.screenShake = Math.max(this.screenShake, 3);
+        }
+        if (solid.role === "pass18_low_ceiling") {
+          this.progress.pass18CeilingBumps += 1;
+          this.screenShake = Math.max(this.screenShake, 2);
+        }
+      }
+    }
+
+    for (const gate of this.breakables) {
+      if (gate.destroyed || !this.overlaps(p, gate)) continue;
+      if (p.vy >= 0 && previousBottom <= gate.y + 8) {
+        p.y = gate.y - PLAYER_PHYSICS.height;
+        p.vy = 0;
+        p.grounded = true;
+      } else if (p.vy < 0 && p.previousY >= gate.y + gate.height - 8) {
+        p.y = gate.y + gate.height;
+        p.vy = 0;
+      }
+    }
+
+    for (const platform of this.movingPlatforms) {
+      const horizontalOverlap = p.x + PLAYER_PHYSICS.width > platform.x && p.x < platform.x + platform.width;
+      const bottom = p.y + PLAYER_PHYSICS.height;
+      if (horizontalOverlap && p.vy >= 0 && previousBottom <= platform.y + 7 && bottom >= platform.y) {
+        p.y = platform.y - PLAYER_PHYSICS.height;
+        p.vy = 0;
+        p.grounded = true;
+        p.standingPlatformId = platform.id;
+        if (platform.id === "pass23_chase_carriage" && !this.progress.pass23PlatformBoarded) {
+          this.progress.pass23PlatformBoarded = true;
+          this.progress.pass23PlatformRides += 1;
+        } else if (platform.id !== "pass23_chase_carriage" && !this.progress.platformBoarded) {
+          this.progress.platformBoarded = true;
+          this.progress.platformRides += 1;
+        }
+      }
+    }
+
+    const centerX = p.x + PLAYER_PHYSICS.width / 2;
+    let bestFloor = null;
+    for (const item of this.collisionFloors) {
+      if (!this.isFloorActive(item)) continue;
+      const bodyOverlap = p.x + PLAYER_PHYSICS.width >= item.x1 && p.x <= item.x2;
+      if (item.phase >= 13 ? !bodyOverlap : centerX < item.x1 || centerX > item.x2) continue;
+      const sampleX = item.phase >= 13 ? clamp(centerX, item.x1, item.x2) : centerX;
+      const ratio = (sampleX - item.x1) / (item.x2 - item.x1);
+      const floorY = item.y1 + (item.y2 - item.y1) * ratio;
+      const bottom = p.y + PLAYER_PHYSICS.height;
+      const crossed = p.vy >= 0 && previousBottom <= floorY + 6 && bottom >= floorY;
+      const following = wasGrounded && p.vy >= 0 && bottom >= floorY - 18 && bottom <= floorY + 28;
+      if ((crossed || following) && (bestFloor === null || floorY < bestFloor.y)) bestFloor = { y: floorY, item };
+    }
+    if (bestFloor !== null) {
+      p.y = bestFloor.y - PLAYER_PHYSICS.height;
+      p.vy = 0;
+      p.grounded = true;
+      p.standingFloorId = bestFloor.item.id;
+      if (bestFloor.item.phase === 18 && bestFloor.item.lane === "narrow" && !this.pass18VisitedFloorIds.has(bestFloor.item.id)) {
+        this.pass18VisitedFloorIds.add(bestFloor.item.id);
+        this.progress.pass18NarrowLandings = this.pass18VisitedFloorIds.size;
+        if (PASS19_DESTRUCTION.collapseFloorIds.includes(bestFloor.item.id) && !this.pass19ArmedFloors.has(bestFloor.item.id)) {
+          this.pass19ArmedFloors.set(bestFloor.item.id, {
+            armedFrame: this.frameCount,
+            leftFrame: null,
+          });
+          this.progress.pass19FloorsArmed = this.pass19ArmedFloors.size;
+          this.progress.pass19AftershockStarted = true;
+        }
+      }
+    }
+
+    if (!p.grounded && p.wallSide === 0) {
+      for (const solid of this.collisionSolids) {
+        if (!this.isSolidActive(solid)) continue;
+        const verticalOverlap = p.y + PLAYER_PHYSICS.height > solid.y + 2 && p.y < solid.y + solid.height - 2;
+        if (!verticalOverlap) continue;
+        if (Math.abs(p.x + PLAYER_PHYSICS.width - solid.x) <= 1.5) p.wallSide = 1;
+        if (Math.abs(p.x - (solid.x + solid.width)) <= 1.5) p.wallSide = -1;
+      }
+    }
+  }
+
+  isFloorActive(item) {
+    if (this.collapsedFloorIds.has(item.id)) return false;
+    if (item.id === "double_wall_exit_rise" && this.progress.grappleAnchorThreeUsed) return false;
+    if (item.phase === 23) return this.progress.pass22Completed;
+    if (item.phase === 20) return this.progress.pass19Completed;
+    if (item.phase === 18) return this.progress.pass15Completed;
+    if (item.phase === 15) return this.progress.pass14Completed;
+    if (item.phase === 14) {
+      if (item.lane === "lower_return" || item.lane === "bridge_handoff") return this.progress.pass13Completed && this.progress.giantCurveDropStarted;
+      return this.progress.pass13Completed;
+    }
+    if (item.phase === 13) return this.progress.pass12Completed;
+    if (item.phase === 12) return this.progress.pass11Completed;
+    if (item.zone === 9) return this.progress.pass10Completed;
+    if (item.zone === 8) return this.progress.pass09Completed;
+    if (item.zone === 7) {
+      if (!this.progress.pass08Completed) return false;
+      if (item.lane === "upper") return !this.progress.zone07UpperDrop;
+      if (item.lane === "middle") return this.progress.zone07Entered && !this.progress.zone07MiddleDrop;
+      return this.progress.zone07UpperDrop;
+    }
+    if (item.zone === 6) {
+      if (this.progress.pass08Completed) return false;
+      if (item.lane === "lower") return this.progress.curveCommitted;
+      return !this.progress.zone06Dropped;
+    }
+    if (this.progress.zone06Dropped && item.zone <= 5) return false;
+    return true;
+  }
+
+  isSolidActive(solid) {
+    if (solid.role === "west_retaining_wall" && this.progress.pass22Completed) return false;
+    if (solid.role === "pass18_exit_wall") return this.progress.pass15Completed && !this.progress.pass19Completed;
+    if (solid.phase === 23) return this.progress.pass22Completed;
+    if (solid.phase === 20) return this.progress.pass19Completed;
+    if (solid.phase === 18) return this.progress.pass15Completed;
+    if (solid.phase === 15) return this.progress.pass14Completed;
+    if (solid.phase === 14) return this.progress.pass13Completed;
+    if (solid.phase === 13) return this.progress.pass12Completed;
+    if (solid.phase === 12) return this.progress.pass11Completed;
+    if (solid.role === "zone07_ceiling") return this.progress.pass08Completed;
+    if (solid.role.startsWith("zone08_")) return this.progress.pass09Completed;
+    if (solid.role.startsWith("zone09_")) return this.progress.pass10Completed;
+    return true;
+  }
+
+  overlaps(player, solid) {
+    return player.x < solid.x + solid.width &&
+      player.x + PLAYER_PHYSICS.width > solid.x &&
+      player.y < solid.y + solid.height &&
+      player.y + PLAYER_PHYSICS.height > solid.y;
+  }
+
+  updateProgress() {
+    const p = this.player;
+    const bottom = p.y + PLAYER_PHYSICS.height;
+    const gates = PASS15_LEVEL.gates;
+    if (p.x >= PASS15_LEVEL.zone01Exit.x - 30) this.progress.zone01Reached = true;
+    if (bottom >= gates.firstDropY && p.x < gates.firstExitX) this.progress.firstDropped = true;
+    if (this.progress.firstDropped && p.x >= gates.firstExitX && bottom <= gates.firstExitY) this.progress.firstClimb = true;
+    if (this.progress.firstClimb && bottom >= gates.secondDropY && p.x < gates.secondExitX) this.progress.secondDropped = true;
+    if (this.progress.secondDropped && p.x >= gates.secondExitX && bottom <= gates.secondExitY) this.progress.secondClimb = true;
+    if (this.progress.secondClimb && p.x >= gates.completionX && bottom >= gates.completionY) this.progress.completed = true;
+    const zone03 = PASS04_ZONE.milestones;
+    if (this.progress.completed && p.x >= zone03.enteredX) this.progress.zone03Entered = true;
+    if (this.progress.zone03Entered && p.x >= zone03.lowerRiseX && bottom <= 2600) this.progress.lowerRiseReached = true;
+    if (this.progress.lowerRiseReached && p.x >= zone03.atriumX && bottom <= 2100) this.progress.atriumReached = true;
+    if (this.progress.atriumReached && p.x >= zone03.upperGalleryX && bottom <= 1700) this.progress.upperGalleryReached = true;
+    if (this.progress.upperGalleryReached && p.x >= zone03.descentX) this.progress.longDescentReached = true;
+    if (this.progress.longDescentReached && p.x >= zone03.completionX && bottom >= zone03.completionY) this.progress.pass04Completed = true;
+    const zone04 = PASS05_ZONE.milestones;
+    if (this.progress.pass04Completed && p.x >= zone04.enteredX) this.progress.zone04Entered = true;
+    if (this.progress.zone04Entered && p.x >= zone04.compressionX) this.progress.lowTunnelReached = true;
+    if (this.progress.platformBoarded && p.x >= zone04.shaftExitX) this.progress.movingPlatformCrossed = true;
+    if (this.progress.movingPlatformCrossed && p.x >= zone04.unevenX) this.progress.unevenTunnelReached = true;
+    if (this.progress.unevenTunnelReached && p.x >= zone04.completionX && bottom >= zone04.completionY) this.progress.pass05Completed = true;
+    const zone05 = PASS06_ZONE.milestones;
+    if (this.progress.pass05Completed && p.x >= zone05.enteredX) this.progress.zone05Entered = true;
+    if (this.progress.zone05Entered && p.x >= zone05.lowerHallX) this.progress.lowerHallReached = true;
+    if (this.progress.lowerHallReached && p.x >= zone05.highGalleryX) this.progress.highGalleryReached = true;
+    if (this.progress.highGalleryReached && this.progress.breakablesDestroyed === 3 && p.x >= zone05.completionX && bottom >= zone05.completionY) this.progress.pass06Completed = true;
+    const zone06 = PASS07_ZONE.milestones;
+    if (this.progress.pass06Completed && p.x >= zone06.enteredX) this.progress.zone06Entered = true;
+    if (this.progress.zone06Entered && p.x >= zone06.curveCommittedX) this.progress.curveCommitted = true;
+    if (this.progress.curveCommitted && !this.progress.zone06Dropped && bottom >= zone06.landingY) {
+      this.progress.zone06Dropped = true;
+      this.progress.directionChanges += 1;
+    }
+    if (this.progress.zone06Dropped && !this.progress.eastDashGapCleared && p.x <= zone06.eastGapX) {
+      this.progress.eastDashGapCleared = true;
+      this.progress.dashGapClears += 1;
+    }
+    if (this.progress.eastDashGapCleared && !this.progress.middleDashGapCleared && p.x <= zone06.middleGapX) {
+      this.progress.middleDashGapCleared = true;
+      this.progress.dashGapClears += 1;
+    }
+    if (this.progress.middleDashGapCleared && !this.progress.westDashGapCleared && p.x <= zone06.westGapX) {
+      this.progress.westDashGapCleared = true;
+      this.progress.dashGapClears += 1;
+    }
+    if (this.progress.westDashGapCleared && p.x <= zone06.completionX && bottom >= zone06.completionY) this.progress.pass07Completed = true;
+    const zone07 = PASS09_ZONE.milestones;
+    if (this.progress.pass08Completed && p.x >= zone07.enteredX) this.progress.zone07Entered = true;
+    if (this.progress.zone07Entered && !this.progress.zone07UpperDrop && p.x >= zone07.upperTurnX && bottom >= zone07.firstLandingY) {
+      this.progress.zone07UpperDrop = true;
+      this.progress.internalDirectionChanges += 1;
+    }
+    if (this.progress.zone07UpperDrop && p.x <= zone07.upperTurnX - 240) this.progress.zone07MiddleReturn = true;
+    if (this.progress.zone07MiddleReturn && !this.progress.zone07MiddleDrop && p.x <= zone07.middleTurnX && bottom >= zone07.secondLandingY) {
+      this.progress.zone07MiddleDrop = true;
+      this.progress.internalDirectionChanges += 1;
+    }
+    if (this.progress.zone07MiddleDrop && p.x >= zone07.lowerRunX) this.progress.zone07LowerRun = true;
+    if (this.progress.zone07LowerRun && p.x >= zone07.completionX && bottom >= zone07.completionY) this.progress.zone07ExitReached = true;
+    const zone08 = PASS10_ZONE.milestones;
+    if (this.progress.pass09Completed && p.x >= zone08.enteredX) this.progress.zone08Entered = true;
+    if (this.progress.zone08Entered && !this.progress.zone08ShaftOneDropped && bottom >= zone08.shaftOneDropY && p.x < zone08.shaftOneExitX) {
+      this.progress.zone08ShaftOneDropped = true;
+    }
+    if (this.progress.zone08ShaftOneDropped && !this.progress.zone08ShaftOneCleared && p.x >= zone08.shaftOneExitX && bottom <= zone08.shaftOneExitY) {
+      this.progress.zone08ShaftOneCleared = true;
+    }
+    if (this.progress.zone08ShaftOneCleared && !this.progress.zone08ShaftTwoDropped && bottom >= zone08.shaftTwoDropY && p.x < zone08.shaftTwoExitX) {
+      this.progress.zone08ShaftTwoDropped = true;
+    }
+    if (this.progress.zone08ShaftTwoDropped && !this.progress.zone08ShaftTwoCleared && p.x >= zone08.shaftTwoExitX && bottom <= zone08.shaftTwoExitY) {
+      this.progress.zone08ShaftTwoCleared = true;
+    }
+    if (this.progress.zone08ShaftTwoCleared && p.x >= zone08.lowerHallX) this.progress.zone08LowerHallReached = true;
+    if (this.progress.zone08LowerHallReached && p.x >= zone08.completionX && bottom >= zone08.completionY) this.progress.zone08ExitReached = true;
+    const zone09 = PASS11_ZONE.milestones;
+    if (this.progress.pass10Completed && p.x >= zone09.enteredX) this.progress.zone09Entered = true;
+    if (this.progress.zone09Entered && this.progress.grappleChainCompleted && p.grounded && p.x <= zone09.completionX && bottom >= zone09.completionY) {
+      this.progress.zone09ExitReached = true;
+    }
+    const dashSpikes = PASS12_ZONE.milestones;
+    if (this.progress.pass11Completed && p.x <= dashSpikes.enteredX) this.progress.dashSpikeEntered = true;
+    if (this.progress.dashSpikeEntered && !p.grounded && p.x <= dashSpikes.takeoffX) this.progress.dashSpikeTakeoff = true;
+    if (this.progress.dashSpikeTakeoff && this.progress.dashSpikeAirDashUsed && p.grounded && p.x <= dashSpikes.landingX) {
+      this.progress.dashSpikeCleared = true;
+    }
+    if (this.progress.dashSpikeCleared && p.grounded && p.x <= dashSpikes.completionX && bottom >= dashSpikes.completionY) {
+      this.progress.zone09DashExitReached = true;
+    }
+    const precision = PASS13_ZONE.milestones;
+    if (this.progress.pass12Completed && p.x <= precision.enteredX) this.progress.precisionEntered = true;
+    if (this.precisionJump.kind === "short" && p.grounded) {
+      const landedOnShortFloor = p.x <= precision.shortLandingX && p.x + PLAYER_PHYSICS.width >= 19460 && Math.abs(bottom - 7310) <= 8;
+      if (landedOnShortFloor && this.precisionJump.cut && this.progress.precisionCeilingBumps === 0) {
+        this.progress.precisionShortGapCleared = true;
+        this.progress.precisionLowCeilingCleared = true;
+      }
+      this.precisionJump = this.createPrecisionJump();
+    }
+    if (this.progress.precisionShortGapCleared && !this.progress.precisionTurnReached && p.grounded && p.x <= precision.turnX && bottom >= 7420) {
+      this.progress.precisionTurnReached = true;
+      const collapseId = "precision_turn_descent";
+      if (!this.collapsedFloorIds.has(collapseId)) {
+        this.collapsedFloorIds.add(collapseId);
+        this.progress.floorsCollapsed += 1;
+        this.spawnCollapseDebris(collapseId, true);
+        this.screenShake = Math.max(this.screenShake, 8);
+      }
+    }
+    if (this.progress.precisionTurnReached && !this.progress.precisionDirectionReversed && p.facing > 0 && p.vx > 1) {
+      this.progress.precisionDirectionReversed = true;
+      this.progress.precisionDirectionChanges += 1;
+    }
+    if (this.precisionJump.kind === "long" && p.grounded) {
+      const landedOnLongFloor = p.x + PLAYER_PHYSICS.width >= precision.longLandingX && p.x <= 19590 && Math.abs(bottom - 7500) <= 8;
+      if (landedOnLongFloor && !this.precisionJump.cut && this.precisionJump.holdFrames >= 8 && this.progress.precisionDirectionReversed) {
+        this.progress.precisionLongGapCleared = true;
+      }
+      this.precisionJump = this.createPrecisionJump();
+    }
+    if (this.progress.precisionLongGapCleared && p.grounded && p.x >= precision.completionX && bottom >= precision.completionY) {
+      this.progress.precisionExitReached = true;
+    }
+    const giantCurve = PASS14_ZONE.milestones;
+    if (this.progress.pass13Completed && p.x <= giantCurve.enteredX) this.progress.giantCurveEntered = true;
+    if (this.progress.giantCurveUpperTakeoff && !this.progress.giantCurveUpperGapCleared && p.grounded &&
+      p.x <= giantCurve.upperGapLandingX && p.x + PLAYER_PHYSICS.width >= 18000 && bottom >= 7790 && bottom <= 8150) {
+      this.progress.giantCurveUpperGapCleared = true;
+    }
+    if (this.progress.giantCurveUpperGapCleared && p.grounded && p.x <= giantCurve.steepCommitX && bottom >= 8370) {
+      this.progress.giantCurveSteepCommitted = true;
+    }
+    if (this.progress.giantCurveSteepCommitted && !this.progress.giantCurveDropStarted && !p.grounded &&
+      p.x <= giantCurve.dropLipX && bottom >= 8550) {
+      this.progress.giantCurveDropStarted = true;
+      this.progress.giantCurveNaturalDrops += 1;
+    }
+    if (this.progress.giantCurveDropStarted && !this.progress.giantCurveLowerLanded && p.grounded &&
+      p.x <= giantCurve.lowerLandingX && bottom >= giantCurve.lowerLandingY) {
+      this.progress.giantCurveLowerLanded = true;
+    }
+    if (this.progress.giantCurveLowerLanded && !this.progress.giantCurveDirectionReversed && p.facing > 0 && p.vx > 1) {
+      this.progress.giantCurveDirectionReversed = true;
+      this.progress.giantCurveDirectionChanges += 1;
+    }
+    if (this.progress.giantCurveDirectionReversed && p.grounded && p.x >= giantCurve.completionX && bottom >= giantCurve.completionY) {
+      this.progress.giantCurveExitReached = true;
+    }
+    const bridge = PASS15_ZONE.milestones;
+    if (this.progress.pass14Completed && p.x >= bridge.enteredX) this.progress.bridgeEntered = true;
+    if (this.progress.bridgeEntered && p.grounded && p.x + PLAYER_PHYSICS.width >= bridge.gapLandings[0]) this.progress.bridgeGapOneCleared = true;
+    if (this.progress.bridgeGapOneCleared && p.grounded && p.x + PLAYER_PHYSICS.width >= bridge.gapLandings[1]) this.progress.bridgeGapTwoCleared = true;
+    if (this.progress.bridgeGapTwoCleared && p.grounded && p.x + PLAYER_PHYSICS.width >= bridge.gapLandings[2]) this.progress.bridgeGapThreeCleared = true;
+    if (this.progress.bridgeGapThreeCleared && p.grounded && p.x >= bridge.completionX && bottom >= bridge.completionY) {
+      this.progress.bridgeExitReached = true;
+    }
+    if (this.progress.pass15Completed && p.x >= PASS18_ZONE.milestones.enteredX) this.progress.pass18Entered = true;
+    if (this.pass18Jump.active && p.grounded && !this.pass18Jump.recorded && p.standingFloorId?.startsWith("pass18_")) {
+      this.pass18Jump.recorded = true;
+      if (this.pass18Jump.holdFrames >= 8) this.progress.pass18HeldJumps += 1;
+      else if (this.pass18Jump.cut) this.progress.pass18ShortCuts += 1;
+      this.pass18Jump.active = false;
+    }
+    const pass18 = PASS18_ZONE.milestones;
+    if (!this.progress.pass18Completed && this.progress.pass18Entered && p.grounded &&
+      p.x >= pass18.completionX && bottom >= pass18.completionY &&
+      this.progress.pass18NarrowLandings >= pass18.requiredNarrowLandings &&
+      this.progress.pass18ShortCuts >= pass18.requiredShortCuts &&
+      this.progress.pass18HeldJumps >= pass18.requiredHeldJumps &&
+      this.progress.pass18CeilingBumps <= pass18.maximumCeilingBumps) {
+      this.progress.pass18Completed = true;
+      this.progress.pass18CheckpointActivated = true;
+    }
+  }
+
+  updatePass19Aftershock() {
+    if (!this.progress.pass19AftershockStarted || this.progress.pass19Completed) return;
+    const currentFloorId = this.player.standingFloorId;
+    const timing = PASS19_DESTRUCTION.timing;
+    for (const [floorId, state] of this.pass19ArmedFloors) {
+      if (this.pass19DestroyedFloorIds.has(floorId)) continue;
+      if (currentFloorId === floorId) {
+        state.leftFrame = null;
+        continue;
+      }
+      if (state.leftFrame === null) state.leftFrame = this.frameCount;
+      const support = PASS19_DESTRUCTION.supports.find(item => item.floorId === floorId);
+      const delay = timing.leaveDelayFrames + (support?.delayOffset ?? 0) * timing.pulseIntervalFrames;
+      if (this.frameCount - state.leftFrame < delay) continue;
+      this.pass19DestroyedFloorIds.add(floorId);
+      this.collapsedFloorIds.add(floorId);
+      this.progress.pass19FloorsCollapsed = this.pass19DestroyedFloorIds.size;
+      this.progress.pass19DebrisBursts += 1;
+      this.spawnPass19Debris(floorId);
+      this.screenShake = Math.max(this.screenShake, 5.5);
+    }
+    const pending = this.pass19ArmedFloors.size - this.pass19DestroyedFloorIds.size;
+    this.progress.pass19PeakPending = Math.max(this.progress.pass19PeakPending, pending);
+  }
+
+  spawnPass19Debris(floorId) {
+    const floor = PASS18_ZONE.floors.find(item => item.id === floorId);
+    if (!floor) return;
+    const width = floor.x2 - floor.x1;
+    const centerY = (floor.y1 + floor.y2) * 0.5;
+    for (let index = 0; index < 7; index += 1) {
+      const ratio = (index + 0.5) / 7;
+      this.debris.push({
+        x: floor.x1 + width * ratio,
+        y: centerY + 8,
+        width: 12 + (index % 3) * 5,
+        height: 10 + ((index + 1) % 3) * 6,
+        vx: -1.8 + index * 0.6,
+        vy: -2.8 - (index % 2) * 1.2,
+        rotation: index * 0.2,
+        spin: -0.08 + index * 0.025,
+        life: 92,
+      });
+    }
+  }
+
+  updatePass19Completion() {
+    if (this.progress.pass19Completed || !this.progress.pass18Completed) return;
+    const milestone = PASS19_DESTRUCTION.milestones;
+    const bottom = this.player.y + PLAYER_PHYSICS.height;
+    if (this.player.grounded && this.player.x >= milestone.completionX && bottom >= milestone.completionY &&
+      this.progress.pass19FloorsArmed >= milestone.requiredArmedFloors &&
+      this.progress.pass19FloorsCollapsed >= milestone.requiredCollapsedFloors &&
+      this.progress.pass19DebrisBursts >= milestone.requiredDebrisBursts) {
+      this.progress.pass19Completed = true;
+      this.progress.pass19CheckpointStabilized = true;
+      this.screenShake = Math.max(this.screenShake, 8);
+    }
+  }
+
+  resetPlayer(manual) {
+    if (manual || this.frameCount > 0) this.resetCount += 1;
+    this.player = this.createPlayer();
+    this.movingPlatforms = this.createMovingPlatforms();
+    this.pass23Enemies = this.createPass23Enemies();
+    this.pass23Pursuer = this.createPass23Pursuer();
+    this.pass24ObjectiveIdsSeen = new Set();
+    this.attackFrames = 0;
+    this.breakables = this.createBreakables();
+    this.debris = [];
+    this.chase = this.createChase();
+    this.grapple = this.createGrapple();
+    this.precisionJump = this.createPrecisionJump();
+    this.collapsedFloorIds = new Set();
+    this.destroyedSupportIds = new Set();
+    this.usedGrappleAnchorIds = new Set();
+    this.pass18VisitedFloorIds = new Set();
+    this.pass18Jump = this.createPass18Jump();
+    this.pass19ArmedFloors = new Map();
+    this.pass19DestroyedFloorIds = new Set();
+    this.screenShake = 0;
+    this.progress = this.createProgress();
+    this.jumpQueued = false;
+    this.dashQueued = false;
+    this.grappleQueued = false;
+    this.attackQueued = false;
+    this.keys.clear();
+    this.snapCamera();
+  }
+
+  snapCamera() {
+    const p = this.player;
+    this.camera.zoom = 1;
+    this.camera.x = clamp(p.x - 310, PASS20_LEVEL.cameraBounds.x, PASS20_LEVEL.cameraBounds.x + PASS20_LEVEL.cameraBounds.width - VIEWPORT.width);
+    this.camera.y = clamp(p.y - 260, PASS20_LEVEL.cameraBounds.y, PASS20_LEVEL.cameraBounds.y + PASS20_LEVEL.cameraBounds.height - VIEWPORT.height);
+  }
+
+  updateCamera() {
+    const p = this.player;
+    const chaseVisible = this.chase.active && !this.chase.sealed;
+    const separation = chaseVisible ? Math.hypot(p.x - this.chase.x, (p.y + 24) - this.chase.y) : 0;
+    const curveOverviewActive = this.progress.pass13Completed && !this.progress.pass14Completed;
+    const bridgeFinaleActive = this.progress.pass14Completed && !this.progress.pass15Completed;
+    const springFlightActive = this.progress.pass20SpringLaunched && !this.progress.pass20SpringLanded;
+    const pass23SpringFlightActive = this.progress.pass23SpringLaunched && !this.progress.pass23SpringLanded;
+    const desiredZoom = pass23SpringFlightActive
+      ? 0.82
+      : springFlightActive
+      ? PASS20_ZONE.cameraFlight.zoom
+      : curveOverviewActive
+      ? PASS14_ZONE.cameraOverview.zoom
+      : bridgeFinaleActive ? PASS15_ZONE.cameraFinale.zoom
+      : chaseVisible ? clamp(1180 / Math.max(1180, separation + 420), 0.62, 1) : 1;
+    this.camera.zoom += (desiredZoom - this.camera.zoom) * (chaseVisible ? 0.045 : 0.11);
+    const viewWidth = VIEWPORT.width / this.camera.zoom;
+    const viewHeight = VIEWPORT.height / this.camera.zoom;
+    let centerX;
+    let centerY;
+    const canFrameTogether = chaseVisible && !curveOverviewActive && !bridgeFinaleActive &&
+      Math.abs(p.x - this.chase.x) <= viewWidth - 320 &&
+      Math.abs((p.y + 24) - this.chase.y) <= viewHeight - 200;
+    if (pass23SpringFlightActive) {
+      centerX = 24680;
+      centerY = 11930;
+    } else if (springFlightActive) {
+      centerX = PASS20_ZONE.cameraFlight.x;
+      centerY = PASS20_ZONE.cameraFlight.y;
+    } else if (curveOverviewActive) {
+      centerX = PASS14_ZONE.cameraOverview.x;
+      centerY = PASS14_ZONE.cameraOverview.y;
+    } else if (bridgeFinaleActive) {
+      centerX = p.x + viewWidth * 0.16;
+      centerY = (p.y + 24) * 0.7 + this.chase.y * 0.3;
+    } else if (canFrameTogether) {
+      centerX = p.x * 0.56 + this.chase.x * 0.44;
+      centerY = (p.y + 24) * 0.62 + this.chase.y * 0.38;
+    } else {
+      const lookAhead = p.facing > 0 ? viewWidth * 0.32 : viewWidth * 0.68;
+      centerX = p.x + viewWidth * 0.5 - lookAhead;
+      centerY = p.y + 24;
+    }
+    const targetX = clamp(centerX - viewWidth * 0.5, PASS20_LEVEL.cameraBounds.x, PASS20_LEVEL.cameraBounds.x + PASS20_LEVEL.cameraBounds.width - viewWidth);
+    const targetY = clamp(centerY - viewHeight * 0.5, PASS20_LEVEL.cameraBounds.y, PASS20_LEVEL.cameraBounds.y + PASS20_LEVEL.cameraBounds.height - viewHeight);
+    this.camera.x += (targetX - this.camera.x) * 0.075;
+    this.camera.y += (targetY - this.camera.y) * 0.085;
+  }
+
+  draw() {
+    if (this.blueprintVisible) {
+      this.drawBlueprint();
+      return;
+    }
+    const ctx = this.context;
+    const gradient = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+    gradient.addColorStop(0, "#0a1b22");
+    gradient.addColorStop(1, "#02070a");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    this.drawParallax(ctx);
+    ctx.save();
+    const shakeX = this.screenShake > 0 ? Math.sin(this.frameCount * 1.7) * this.screenShake : 0;
+    const shakeY = this.screenShake > 0 ? Math.cos(this.frameCount * 1.3) * this.screenShake * 0.55 : 0;
+    ctx.scale(this.camera.zoom, this.camera.zoom);
+    ctx.translate(-this.camera.x + shakeX, -this.camera.y + shakeY);
+    this.drawVisualWorld(ctx);
+    this.drawPass25BuriedDepth(ctx);
+    this.drawAtmosphericDepth(ctx);
+    this.drawPass27Structures(ctx);
+    this.drawPass25BuriedArchitecture(ctx);
+    this.drawBuriedStructure(ctx);
+    this.drawUnevenTunnelStructure(ctx);
+    this.drawDestructionMazeStructure(ctx);
+    this.drawGiantCurveStructure(ctx);
+    this.drawFirstInternalDescent(ctx);
+    this.drawDoubleWallChase(ctx);
+    this.drawGrappleChamber(ctx);
+    this.drawDashSpikeChamber(ctx);
+    this.drawPrecisionParkourChamber(ctx);
+    this.drawGiantDirectionTurn(ctx);
+    this.drawCollapsingBridge(ctx);
+    this.drawPass18Grotto(ctx);
+    this.drawPass19Aftershock(ctx);
+    this.drawPass20SpringFlight(ctx);
+    this.drawPass23Gauntlet(ctx);
+    this.drawChaseSupports(ctx);
+    this.drawLevel(ctx);
+    this.drawPass25BuriedSurface(ctx);
+    this.drawPass20SpringPad(ctx);
+    this.drawAuthoredTerrainDetails(ctx);
+    const pass31Candidate = getPass31ActiveScene(this.camera);
+    const pass32Candidate = getPass32ActiveScene(this.camera);
+    const pass33Candidate = getPass33ActiveScene(this.camera);
+    const pass34Candidate = getPass34ActiveScene(this.camera);
+    const pass35Candidate = getPass35ActiveScene(this.camera);
+    const pass36Candidate = this.progress.zone07Entered ? getPass36ActiveScene(this.camera) : null;
+    const pass37Candidate = this.progress.pass10Completed ? getPass37ActiveScene(this.camera) : null;
+    const pass38Candidate = this.progress.pass12Completed ? getPass38ActiveScene(this.camera, this.progress) : null;
+    const pass39Candidate = this.progress.pass14Completed ? getPass39ActiveScene(this.camera, this.progress) : null;
+    const retainPass31ForEntryBlend = Boolean(pass31Candidate && pass32Candidate && this.camera.x < PASS32_BURIED_PLAN.entryTransition.endX);
+    const pass31EntranceScene = pass31Candidate && (!pass32Candidate || retainPass31ForEntryBlend)
+      ? this.drawPass31EntranceLayers(ctx, ["far_background", "midground"], pass31Candidate)
+      : null;
+    const retainPass32ForEntryBlend = Boolean(pass32Candidate && pass33Candidate && this.camera.x < PASS33_TUNNEL_PLAN.entryTransition.endX);
+    const pass32MasterOpacity = pass32Candidate ? getPass32EntryOpacity(this.camera) : 0;
+    const pass32BuriedScene = pass32Candidate && (!pass33Candidate || retainPass32ForEntryBlend)
+      ? this.drawPass32BuriedLayers(ctx, ["far_background", "midground"], pass32Candidate, pass32MasterOpacity)
+      : null;
+    const retainPass33ForEntryBlend = Boolean(pass33Candidate && pass34Candidate && this.camera.x < PASS34_DESTRUCTION_PLAN.entryTransition.endX);
+    const pass33MasterOpacity = pass33Candidate ? getPass33EntryOpacity(this.camera) : 0;
+    const pass33TunnelScene = pass33Candidate && (!pass34Candidate || retainPass33ForEntryBlend)
+      ? this.drawPass33TunnelLayers(ctx, ["far_background", "depth_background", "midground"], pass33Candidate, pass33MasterOpacity)
+      : null;
+    const retainPass34ForEntryBlend = Boolean(pass34Candidate && pass35Candidate && this.camera.y < PASS35_CURVE_PLAN.entryTransition.endY);
+    const pass34MasterOpacity = pass34Candidate ? getPass34EntryOpacity(this.camera) : 0;
+    const pass34DestructionScene = pass34Candidate && (!pass35Candidate || retainPass34ForEntryBlend)
+      ? this.drawPass34DestructionLayers(ctx, ["far_background", "depth_background", "midground"], pass34Candidate, pass34MasterOpacity)
+      : null;
+    const pass35MasterOpacity = pass35Candidate ? getPass35EntryOpacity(this.camera) : 0;
+    const pass35CurveScene = pass35Candidate && !pass36Candidate
+      ? this.drawPass35CurveLayers(ctx, ["far_background", "depth_background", "midground"], pass35Candidate, pass35MasterOpacity)
+      : null;
+    const pass36InternalScene = pass36Candidate && !pass37Candidate && !pass38Candidate && !pass39Candidate
+      ? this.drawPass36InternalLayers(ctx, ["far_background", "depth_background", "midground"], pass36Candidate)
+      : null;
+    const pass37GrappleScene = pass37Candidate && !pass38Candidate && !pass39Candidate
+      ? this.drawPass37GrappleLayers(ctx, ["far_background", "depth_background", "midground"], pass37Candidate)
+      : null;
+    const pass38PrecisionScene = pass38Candidate && !pass39Candidate
+      ? this.drawPass38PrecisionLayers(ctx, ["far_background", "depth_background", "midground"], pass38Candidate)
+      : null;
+    const pass39BridgeScene = pass39Candidate
+      ? this.drawPass39BridgeLayers(ctx, ["far_background", "depth_background", "midground"], pass39Candidate)
+      : null;
+    const pass29ModularScene = pass31EntranceScene || pass32BuriedScene || pass33TunnelScene || pass34DestructionScene || pass35CurveScene || pass36InternalScene || pass37GrappleScene || pass38PrecisionScene || pass39BridgeScene ? false : this.drawPass29ModuleLayers(ctx, ["far_background", "midground"]);
+    if (!pass31EntranceScene && !pass32BuriedScene && !pass33TunnelScene && !pass34DestructionScene && !pass35CurveScene && !pass36InternalScene && !pass37GrappleScene && !pass38PrecisionScene && !pass39BridgeScene && !pass29ModularScene) this.drawPass28RasterBackplates(ctx);
+    if (pass31EntranceScene) this.drawPass31RouteSurfaces(ctx, pass31EntranceScene);
+    if (pass32BuriedScene) this.drawPass32RouteSurfaces(ctx, pass32BuriedScene);
+    if (pass33TunnelScene) this.drawPass33RouteSurfaces(ctx, pass33TunnelScene);
+    if (pass34DestructionScene) this.drawPass34RouteSurfaces(ctx, pass34DestructionScene);
+    if (pass35CurveScene) this.drawPass35RouteSurfaces(ctx, pass35CurveScene);
+    if (pass35CurveScene) this.drawPass35DashGapEnds(ctx);
+    if (pass36InternalScene) this.drawPass36RouteSurfaces(ctx, pass36InternalScene);
+    if (pass36InternalScene) this.drawPass36WallFaces(ctx);
+    if (pass37GrappleScene) this.drawPass37RouteSurfaces(ctx, pass37GrappleScene);
+    if (pass38PrecisionScene) this.drawPass38RouteSurfaces(ctx, pass38PrecisionScene);
+    if (pass39BridgeScene) this.drawPass39RouteSurfaces(ctx, pass39BridgeScene);
+    this.drawPass28RouteEdges(ctx);
+    this.drawDashSpikes(ctx);
+    this.drawPrecisionHazards(ctx);
+    this.drawPass18Hazards(ctx);
+    this.drawPass20Hazard(ctx);
+    this.drawPass23Actors(ctx);
+    this.drawMovingPlatforms(ctx);
+    this.drawBreakables(ctx);
+    this.drawDebris(ctx);
+    this.drawBoulder(ctx);
+    this.drawMarkers(ctx);
+    this.drawGrappleAnchors(ctx);
+    this.drawPass25BuriedAtmosphere(ctx);
+    this.drawPass25BuriedForeground(ctx);
+    if (pass31EntranceScene) this.drawPass31EntranceLayers(ctx, ["foreground"], pass31EntranceScene);
+    if (pass32BuriedScene) this.drawPass32BuriedLayers(ctx, ["foreground"], pass32BuriedScene, pass32MasterOpacity);
+    if (pass33TunnelScene) this.drawPass33TunnelLayers(ctx, ["foreground"], pass33TunnelScene, pass33MasterOpacity);
+    if (pass34DestructionScene) this.drawPass34DestructionLayers(ctx, ["foreground"], pass34DestructionScene, pass34MasterOpacity);
+    if (pass35CurveScene) this.drawPass35CurveLayers(ctx, ["foreground"], pass35CurveScene, pass35MasterOpacity);
+    if (pass36InternalScene) this.drawPass36InternalLayers(ctx, ["foreground"], pass36InternalScene);
+    if (pass37GrappleScene) this.drawPass37GrappleLayers(ctx, ["foreground"], pass37GrappleScene);
+    if (pass38PrecisionScene) this.drawPass38PrecisionLayers(ctx, ["foreground"], pass38PrecisionScene);
+    if (pass39BridgeScene) this.drawPass39BridgeLayers(ctx, ["foreground"], pass39BridgeScene);
+    if (pass29ModularScene) this.drawPass29ModuleLayers(ctx, ["foreground"]);
+    this.drawPlayer(ctx);
+    ctx.restore();
+    this.drawChaseHud(ctx);
+    this.drawPass24IntegrationHud(ctx);
+  }
+
+  drawChaseHud(ctx) {
+    if (!this.chase.triggered) return;
+    const progress = this.chase.pathDistance / PASS15_CHASE.path.totalDistance;
+    const separation = Math.hypot(this.player.x - this.chase.x, (this.player.y + 24) - this.chase.y);
+    const x = 20;
+    const y = VIEWPORT.height - 72;
+    const width = 330;
+    ctx.save();
+    ctx.fillStyle = "rgba(3, 9, 13, 0.88)";
+    ctx.strokeStyle = this.chase.sealed ? "rgba(140, 224, 186, 0.72)" : "rgba(224, 145, 87, 0.82)";
+    ctx.lineWidth = 2;
+    ctx.fillRect(x, y, width, 50);
+    ctx.strokeRect(x, y, width, 50);
+    ctx.fillStyle = this.chase.sealed ? "#8ce0ba" : "#e7a06d";
+    ctx.font = "800 11px Arial, sans-serif";
+    ctx.fillText(this.chase.sealed ? "CHASE SEALED" : this.chase.active ? "BOULDER ACTIVE" : "STRUCTURE RUMBLING", x + 12, y + 17);
+    ctx.fillStyle = "rgba(154, 183, 184, 0.32)";
+    ctx.fillRect(x + 12, y + 27, width - 24, 9);
+    ctx.fillStyle = this.chase.sealed ? "#8ce0ba" : "#d9825b";
+    ctx.fillRect(x + 12, y + 27, (width - 24) * clamp(progress, 0, 1), 9);
+    ctx.fillStyle = "#b7c7ca";
+    ctx.font = "700 9px Arial, sans-serif";
+    ctx.textAlign = "right";
+    const chaseReadout = this.chase.active
+      ? `PACE ${this.chase.speed.toFixed(1)} · LEAD ${Math.max(0, Math.round(this.chase.leadDistance))}`
+      : `GAP ${Math.round(separation)} PX`;
+    ctx.fillText(`${Math.round(progress * 100)}% · ${chaseReadout}`, x + width - 12, y + 17);
+    ctx.restore();
+  }
+
+  drawPass24IntegrationHud(ctx) {
+    const integration = getPass24IntegrationState(this.progress);
+    const palette = PASS24_INTEGRATION.palette;
+    const width = 410;
+    const x = VIEWPORT.width - width - 20;
+    const y = 20;
+    ctx.save();
+    ctx.fillStyle = palette.panel;
+    ctx.strokeStyle = this.progress.pass24IntegratedCompleted ? palette.complete : palette.edge;
+    ctx.lineWidth = 2;
+    ctx.fillRect(x, y, width, 76);
+    ctx.strokeRect(x, y, width, 76);
+    ctx.fillStyle = this.progress.pass24IntegratedCompleted ? palette.complete : palette.active;
+    ctx.font = "800 11px Arial, sans-serif";
+    ctx.fillText(this.progress.pass24IntegratedCompleted ? "LATE CHECKPOINT STABLE" : `INTEGRATION ROUTE ${integration.completedObjectiveCount}/${integration.objectiveCount}`, x + 14, y + 18);
+    ctx.fillStyle = "#e9f2ef";
+    ctx.font = "800 13px Arial, sans-serif";
+    const objectiveLabel = integration.activeObjective?.label ?? "START → GOAL VERIFIED";
+    ctx.fillText(objectiveLabel, x + 14, y + 38);
+    ctx.fillStyle = "#9fb2b5";
+    ctx.font = "700 9px Arial, sans-serif";
+    ctx.fillText(integration.activeObjective?.hint ?? `ALL ${integration.systemCount} SYSTEMS INTEGRATED`, x + 14, y + 54);
+    const cellWidth = 52;
+    for (const [index, system] of integration.systems.entries()) {
+      const cellX = x + 14 + index * cellWidth;
+      ctx.fillStyle = system.complete ? palette.complete : palette.muted;
+      ctx.fillRect(cellX, y + 62, 42, 3);
+      ctx.font = "700 7px Arial, sans-serif";
+      ctx.fillText(system.label, cellX, y + 73);
+    }
+    ctx.restore();
+  }
+
+  drawParallax(ctx) {
+    const offsetX = -(this.camera.x * 0.16) % 260;
+    ctx.save();
+    ctx.fillStyle = "rgba(25, 54, 62, 0.42)";
+    for (let x = offsetX - 260; x < VIEWPORT.width + 260; x += 260) {
+      const height = 230 + ((Math.abs(Math.round(x / 260)) % 3) * 55);
+      ctx.fillRect(x, VIEWPORT.height - height, 92, height);
+      ctx.beginPath();
+      ctx.moveTo(x - 12, VIEWPORT.height - height);
+      ctx.lineTo(x + 46, VIEWPORT.height - height - 38);
+      ctx.lineTo(x + 104, VIEWPORT.height - height);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  drawVisualWorld(ctx) {
+    ctx.save();
+    for (const [index, zone] of ZONES.entries()) {
+      const theme = PASS16_THEMES[index];
+      const bounds = zone.bounds;
+      ctx.fillStyle = `${theme.background}b8`;
+      ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+      ctx.fillStyle = `${theme.midground}88`;
+      const columnWidth = 150 + (index % 3) * 35;
+      const spacing = 520 + (index % 2) * 110;
+      for (let x = bounds.x + 120; x < bounds.x + bounds.width; x += spacing) {
+        const height = Math.min(bounds.height * 0.72, 420 + ((Math.round(x / spacing) + index) % 4) * 130);
+        ctx.fillRect(x, bounds.y + bounds.height - height, columnWidth, height);
+        ctx.beginPath();
+        ctx.arc(x + columnWidth * 0.5, bounds.y + bounds.height - height, columnWidth * 0.5, Math.PI, 0);
+        ctx.fill();
+      }
+
+      ctx.strokeStyle = `${theme.edge}38`;
+      ctx.lineWidth = 12;
+      ctx.strokeRect(bounds.x + 18, bounds.y + 18, bounds.width - 36, bounds.height - 36);
+    }
+
+    ctx.globalCompositeOperation = "screen";
+    for (const light of PASS16_LIGHTS) {
+      const gradient = ctx.createRadialGradient(light.x, light.y, 0, light.x, light.y, light.radius);
+      gradient.addColorStop(0, `${light.color}52`);
+      gradient.addColorStop(0.35, `${light.color}1f`);
+      gradient.addColorStop(1, `${light.color}00`);
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.arc(light.x, light.y, light.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  drawAtmosphericDepth(ctx) {
+    ctx.save();
+    for (const [index, zone] of ZONES.entries()) {
+      const theme = PASS16_THEMES[index];
+      const bounds = zone.bounds;
+      const fog = ctx.createLinearGradient(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
+      fog.addColorStop(0, `${theme.background}00`);
+      fog.addColorStop(0.58, `${theme.background}18`);
+      fog.addColorStop(1, `${theme.midground}46`);
+      ctx.fillStyle = fog;
+      ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+    }
+    ctx.restore();
+  }
+
+  drawPass28RasterBackplates(ctx) {
+    const padding = 80;
+    const view = {
+      x: this.camera.x - padding,
+      y: this.camera.y - padding,
+      width: VIEWPORT.width / this.camera.zoom + padding * 2,
+      height: VIEWPORT.height / this.camera.zoom + padding * 2,
+    };
+    for (const asset of PASS28_RASTER_ASSETS) {
+      if (asset.x > view.x + view.width || asset.x + asset.width < view.x || asset.y > view.y + view.height || asset.y + asset.height < view.y) continue;
+      const record = this.pass28AssetState?.byId?.get(asset.id);
+      if (!record?.loaded || !record.image) continue;
+      ctx.save();
+      ctx.globalAlpha = asset.opacity;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(record.image, asset.x, asset.y, asset.width, asset.height);
+      const topFade = ctx.createLinearGradient(asset.x, asset.y, asset.x, asset.y + 150);
+      topFade.addColorStop(0, "rgba(2, 8, 10, 0.72)");
+      topFade.addColorStop(1, "rgba(2, 8, 10, 0)");
+      ctx.fillStyle = topFade;
+      ctx.fillRect(asset.x, asset.y, asset.width, 150);
+      ctx.restore();
+    }
+  }
+
+  drawPass31EntranceLayers(ctx, layers, forcedScene = null) {
+    const scene = forcedScene ?? getPass31ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass31AssetState?.loadedCount !== PASS31_ENTRANCE_ASSETS.length || this.pass31AssetState?.dimensionsValid !== true) return null;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass31SceneBlend(this.camera)) {
+      for (const layer of PASS31_ENTRANCE_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS31_ENTRANCE_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          const record = this.pass31AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass31ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const shade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      shade.addColorStop(0, "rgba(2, 8, 10, 0.28)");
+      shade.addColorStop(0.48, "rgba(2, 8, 10, 0.02)");
+      shade.addColorStop(1, "rgba(2, 8, 10, 0.32)");
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = shade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass31RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass31AssetState?.byId?.get(PASS31_ENTRANCE_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const minX = bounds.x;
+    const maxX = bounds.x + bounds.width;
+    const minY = bounds.y;
+    const maxY = bounds.y + bounds.height;
+    const contract = PASS31_ENTRANCE_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const floor of this.collisionFloors) {
+      if (this.collapsedFloorIds.has(floor.id)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < minX || floorMinX > maxX || floorMaxY < minY || floorMinY > maxY) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.12, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.strokeStyle = "rgba(181, 220, 202, 0.78)";
+      ctx.shadowColor = "rgba(75, 160, 145, 0.55)";
+      ctx.shadowBlur = 5;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    for (const solid of this.collisionSolids) {
+      if (!this.isSolidActive(solid)) continue;
+      if (solid.x + solid.width < minX || solid.x > maxX || solid.y + solid.height < minY || solid.y > maxY) continue;
+      ctx.fillStyle = "rgba(8, 18, 18, 0.96)";
+      ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+      if (solid.role === "ledge") {
+        ctx.drawImage(routeRecord.image, solid.x - 6, solid.y + contract.surfaceTopOffsetPx, solid.width + 12, Math.max(contract.surfaceMinHeightPx, solid.height + 12));
+      } else {
+        ctx.save();
+        ctx.translate(solid.x + contract.surfaceTopOffsetPx, solid.y + solid.height);
+        ctx.rotate(-Math.PI / 2);
+        ctx.drawImage(routeRecord.image, -6, 0, solid.height + 12, Math.max(contract.solidEdgeMinWidthPx, solid.width + 14));
+        ctx.restore();
+      }
+      ctx.strokeStyle = "rgba(181, 220, 202, 0.74)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
+    }
+    ctx.restore();
+  }
+
+  drawPass32BuriedLayers(ctx, layers, forcedScene = null, masterOpacity = 1) {
+    const scene = forcedScene ?? getPass32ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass32AssetState?.loadedCount !== PASS32_BURIED_ASSETS.length || this.pass32AssetState?.dimensionsValid !== true) return null;
+    if (masterOpacity <= 0) return scene;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass32SceneBlend(this.camera)) {
+      for (const layer of PASS32_BURIED_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS32_BURIED_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          const record = this.pass32AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass32ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity * masterOpacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const shade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      shade.addColorStop(0, "rgba(2, 8, 10, 0.3)");
+      shade.addColorStop(0.5, "rgba(2, 8, 10, 0.01)");
+      shade.addColorStop(1, "rgba(2, 8, 10, 0.3)");
+      ctx.globalAlpha = masterOpacity;
+      ctx.fillStyle = shade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass32RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass32AssetState?.byId?.get(PASS32_BURIED_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const minX = bounds.x;
+    const maxX = bounds.x + bounds.width;
+    const minY = bounds.y;
+    const maxY = bounds.y + bounds.height;
+    const contract = PASS32_BURIED_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const floor of this.collisionFloors) {
+      if (this.collapsedFloorIds.has(floor.id)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < minX || floorMinX > maxX || floorMaxY < minY || floorMinY > maxY) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.12, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.strokeStyle = "rgba(181, 220, 202, 0.78)";
+      ctx.shadowColor = "rgba(75, 160, 145, 0.55)";
+      ctx.shadowBlur = 5;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawPass33TunnelLayers(ctx, layers, forcedScene = null, masterOpacity = 1) {
+    const scene = forcedScene ?? getPass33ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass33AssetState?.loadedCount !== PASS33_TUNNEL_ASSETS.length || this.pass33AssetState?.dimensionsValid !== true) return null;
+    if (masterOpacity <= 0) return scene;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass33SceneBlend(this.camera)) {
+      for (const layer of PASS33_TUNNEL_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS33_TUNNEL_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass33AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass33ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity * masterOpacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const depthShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      depthShade.addColorStop(0, "rgba(1, 6, 9, 0.34)");
+      depthShade.addColorStop(0.42, "rgba(4, 20, 24, 0.03)");
+      depthShade.addColorStop(0.76, "rgba(1, 9, 13, 0.18)");
+      depthShade.addColorStop(1, "rgba(0, 3, 6, 0.52)");
+      ctx.globalAlpha = masterOpacity;
+      ctx.fillStyle = depthShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(1, 5, 8, 0.32)");
+      sideShade.addColorStop(0.45, "rgba(1, 5, 8, 0)");
+      sideShade.addColorStop(0.58, "rgba(1, 5, 8, 0)");
+      sideShade.addColorStop(1, "rgba(1, 5, 8, 0.34)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass33RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass33AssetState?.byId?.get(PASS33_TUNNEL_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS33_TUNNEL_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const floor of PASS05_ZONE.floors) {
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.14, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 3, 5, 0.9)";
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetY = 11;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = "rgba(75, 172, 160, 0.6)";
+      ctx.shadowBlur = 5;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(180, 226, 207, 0.8)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    for (const solid of PASS05_ZONE.ceilings) {
+      if (solid.x + solid.width < bounds.x || solid.x > bounds.x + bounds.width || solid.y + solid.height < bounds.y || solid.y > bounds.y + bounds.height) continue;
+      ctx.fillStyle = "rgba(3, 9, 11, 0.97)";
+      ctx.shadowColor = "rgba(0, 2, 4, 0.95)";
+      ctx.shadowBlur = 12;
+      ctx.shadowOffsetY = 9;
+      ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+      ctx.globalAlpha = 0.95;
+      ctx.drawImage(routeRecord.image, solid.x - 5, solid.y, solid.width + 10, Math.max(solid.height, contract.ceilingSkinDepthPx));
+      ctx.shadowColor = "rgba(76, 165, 154, 0.55)";
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(167, 215, 199, 0.7)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
+    }
+    ctx.restore();
+  }
+
+  drawPass34DestructionLayers(ctx, layers, forcedScene = null, masterOpacity = 1) {
+    const scene = forcedScene ?? getPass34ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass34AssetState?.loadedCount !== PASS34_DESTRUCTION_ASSETS.length || this.pass34AssetState?.dimensionsValid !== true) return null;
+    if (masterOpacity <= 0) return scene;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass34SceneBlend(this.camera)) {
+      for (const layer of PASS34_DESTRUCTION_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS34_DESTRUCTION_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.minCameraX !== undefined && this.camera.x < placement.minCameraX) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass34AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass34ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity * masterOpacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const depthShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      depthShade.addColorStop(0, "rgba(1, 5, 8, 0.38)");
+      depthShade.addColorStop(0.38, "rgba(4, 20, 24, 0.04)");
+      depthShade.addColorStop(0.7, "rgba(5, 18, 21, 0.12)");
+      depthShade.addColorStop(1, "rgba(0, 3, 5, 0.56)");
+      ctx.globalAlpha = masterOpacity;
+      ctx.fillStyle = depthShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const furnaceWash = ctx.createRadialGradient(VIEWPORT.width * 0.72, VIEWPORT.height * 0.46, 20, VIEWPORT.width * 0.72, VIEWPORT.height * 0.46, 390);
+      furnaceWash.addColorStop(0, "rgba(205, 113, 56, 0.12)");
+      furnaceWash.addColorStop(0.45, "rgba(38, 96, 91, 0.035)");
+      furnaceWash.addColorStop(1, "rgba(0, 0, 0, 0)");
+      ctx.fillStyle = furnaceWash;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(1, 4, 7, 0.35)");
+      sideShade.addColorStop(0.43, "rgba(1, 4, 7, 0)");
+      sideShade.addColorStop(0.62, "rgba(1, 4, 7, 0)");
+      sideShade.addColorStop(1, "rgba(1, 4, 7, 0.36)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass34RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass34AssetState?.byId?.get(PASS34_DESTRUCTION_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS34_DESTRUCTION_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const floor of PASS06_ZONE.floors) {
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.13, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.92)";
+      ctx.shadowBlur = 13;
+      ctx.shadowOffsetY = 12;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = "rgba(78, 171, 155, 0.56)";
+      ctx.shadowBlur = 5;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(180, 224, 201, 0.78)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawPass35CurveLayers(ctx, layers, forcedScene = null, masterOpacity = 1) {
+    const scene = forcedScene ?? getPass35ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass35AssetState?.loadedCount !== PASS35_CURVE_ASSETS.length || this.pass35AssetState?.dimensionsValid !== true) return null;
+    if (masterOpacity <= 0) return scene;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass35SceneBlend(this.camera)) {
+      for (const layer of PASS35_CURVE_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS35_CURVE_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.minCameraX !== undefined && this.camera.x < placement.minCameraX) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass35AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass35ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity * masterOpacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const depthShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      depthShade.addColorStop(0, "rgba(1, 5, 8, 0.4)");
+      depthShade.addColorStop(0.42, "rgba(3, 19, 24, 0.04)");
+      depthShade.addColorStop(0.75, "rgba(1, 10, 14, 0.18)");
+      depthShade.addColorStop(1, "rgba(0, 3, 5, 0.58)");
+      ctx.globalAlpha = masterOpacity;
+      ctx.fillStyle = depthShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(1, 4, 7, 0.34)");
+      sideShade.addColorStop(0.43, "rgba(1, 4, 7, 0)");
+      sideShade.addColorStop(0.62, "rgba(1, 4, 7, 0)");
+      sideShade.addColorStop(1, "rgba(1, 4, 7, 0.38)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass35RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass35AssetState?.byId?.get(PASS35_CURVE_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS35_CURVE_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const floor of [...PASS07_ZONE.upperFloors, ...PASS07_ZONE.lowerFloors]) {
+      if (!this.isFloorActive(floor)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.13, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.92)";
+      ctx.shadowBlur = 13;
+      ctx.shadowOffsetY = 12;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = "rgba(72, 175, 161, 0.58)";
+      ctx.shadowBlur = 5;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(181, 226, 205, 0.8)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawPass35DashGapEnds(ctx) {
+    const record = this.pass35AssetState?.byId?.get(PASS35_CURVE_PLAN.dashGapAssetId);
+    if (!record?.loaded || !record.image || !this.progress.curveCommitted) return;
+    const floorYByGap = { west_dash_gap: 4850, middle_dash_gap: 4750, east_dash_gap: 4800 };
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const sprite of PASS35_DASH_GAP_SPRITES) {
+      const gap = PASS07_ZONE.dashGaps.find(item => item.id === sprite.gapId);
+      if (!gap) continue;
+      const y = floorYByGap[gap.id] - 4;
+      const width = 180;
+      ctx.shadowColor = "rgba(0, 3, 5, 0.9)";
+      ctx.shadowBlur = 8;
+      ctx.drawImage(record.image, sprite.left.sx, sprite.left.sy, sprite.left.sw, sprite.left.sh, gap.fromX - width + 12, y, width, sprite.height);
+      ctx.drawImage(record.image, sprite.right.sx, sprite.right.sy, sprite.right.sw, sprite.right.sh, gap.toX - 12, y, width, sprite.height);
+    }
+    ctx.restore();
+  }
+
+  drawPass36InternalLayers(ctx, layers, forcedScene = null) {
+    const scene = forcedScene ?? getPass36ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass36AssetState?.loadedCount !== PASS36_INTERNAL_ASSETS.length || this.pass36AssetState?.dimensionsValid !== true) return null;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass36SceneBlend(this.camera)) {
+      for (const layer of PASS36_INTERNAL_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS36_INTERNAL_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.minCameraX !== undefined && this.camera.x < placement.minCameraX) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass36AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass36ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const verticalShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      verticalShade.addColorStop(0, "rgba(1, 4, 7, 0.34)");
+      verticalShade.addColorStop(0.36, "rgba(2, 15, 20, 0.03)");
+      verticalShade.addColorStop(0.72, "rgba(1, 9, 13, 0.2)");
+      verticalShade.addColorStop(1, "rgba(0, 2, 4, 0.62)");
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = verticalShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(0, 3, 6, 0.38)");
+      sideShade.addColorStop(0.38, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(0.64, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(1, "rgba(0, 3, 6, 0.42)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass36RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass36AssetState?.byId?.get(PASS36_INTERNAL_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS36_INTERNAL_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    const floors = [...PASS09_ZONE.upperFloors, ...PASS09_ZONE.middleFloors, ...PASS09_ZONE.lowerFloors, ...PASS10_ZONE.floors];
+    for (const floor of floors) {
+      if (!this.isFloorActive(floor)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.13, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.94)";
+      ctx.shadowBlur = 13;
+      ctx.shadowOffsetY = 12;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = "rgba(69, 184, 169, 0.62)";
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(182, 228, 207, 0.82)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawPass36WallFaces(ctx) {
+    const routeRecord = this.pass36AssetState?.byId?.get(PASS36_INTERNAL_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const width = PASS36_INTERNAL_PLAN.renderContract.wallFaceWidthPx;
+    ctx.save();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const face of PASS36_WALL_FACES) {
+      const solid = PASS10_ZONE.solids.find(item => item.id === face.solidId);
+      if (!solid || !this.isSolidActive(solid)) continue;
+      const x = face.edge === "right" ? solid.x + solid.width - width * 0.5 : solid.x - width * 0.5;
+      ctx.save();
+      ctx.translate(x, solid.y);
+      ctx.rotate(Math.PI / 2);
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.9)";
+      ctx.shadowBlur = 8;
+      ctx.drawImage(routeRecord.image, 0, 0, solid.height, width);
+      ctx.restore();
+      const edgeX = face.edge === "right" ? solid.x + solid.width : solid.x;
+      ctx.shadowColor = "rgba(73, 185, 171, 0.58)";
+      ctx.shadowBlur = 5;
+      ctx.strokeStyle = "rgba(183, 226, 205, 0.8)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(edgeX, solid.y);
+      ctx.lineTo(edgeX, solid.y + solid.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPass37GrappleLayers(ctx, layers, forcedScene = null) {
+    const scene = forcedScene ?? getPass37ActiveScene(this.camera);
+    if (!scene) return null;
+    if (this.pass37AssetState?.loadedCount !== PASS37_GRAPPLE_ASSETS.length || this.pass37AssetState?.dimensionsValid !== true) return null;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass37SceneBlend(this.camera)) {
+      for (const layer of PASS37_GRAPPLE_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS37_GRAPPLE_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.minCameraX !== undefined && this.camera.x < placement.minCameraX) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass37AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass37ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const verticalShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      verticalShade.addColorStop(0, "rgba(1, 4, 7, 0.3)");
+      verticalShade.addColorStop(0.38, "rgba(2, 15, 20, 0.02)");
+      verticalShade.addColorStop(0.74, "rgba(1, 9, 13, 0.17)");
+      verticalShade.addColorStop(1, "rgba(0, 2, 4, 0.58)");
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = verticalShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(0, 3, 6, 0.35)");
+      sideShade.addColorStop(0.36, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(0.66, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(1, "rgba(0, 3, 6, 0.4)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass37RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass37AssetState?.byId?.get(PASS37_GRAPPLE_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS37_GRAPPLE_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    const floors = [...PASS11_ZONE.floors, ...PASS12_ZONE.floors];
+    for (const floor of floors) {
+      if (!this.isFloorActive(floor)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.13, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.94)";
+      ctx.shadowBlur = 13;
+      ctx.shadowOffsetY = 12;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = "rgba(69, 184, 169, 0.62)";
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(182, 228, 207, 0.82)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawPass38PrecisionLayers(ctx, layers, forcedScene = null) {
+    const scene = forcedScene ?? getPass38ActiveScene(this.camera, this.progress);
+    if (!scene) return null;
+    if (this.pass38AssetState?.loadedCount !== PASS38_PRECISION_ASSETS.length || this.pass38AssetState?.dimensionsValid !== true) return null;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass38SceneBlend(this.camera, this.progress)) {
+      for (const layer of PASS38_PRECISION_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS38_PRECISION_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.minCameraX !== undefined && this.camera.x < placement.minCameraX) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass38AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass38ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const verticalShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      verticalShade.addColorStop(0, "rgba(1, 4, 7, 0.34)");
+      verticalShade.addColorStop(0.36, "rgba(2, 15, 20, 0.02)");
+      verticalShade.addColorStop(0.72, "rgba(1, 9, 13, 0.16)");
+      verticalShade.addColorStop(1, "rgba(0, 2, 4, 0.6)");
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = verticalShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(0, 3, 6, 0.38)");
+      sideShade.addColorStop(0.34, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(0.66, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(1, "rgba(0, 3, 6, 0.42)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass38RouteSurfaces(ctx, scene) {
+    const routeRecord = this.pass38AssetState?.byId?.get(PASS38_PRECISION_PLAN.playableSurfaceAssetId);
+    if (!routeRecord?.loaded || !routeRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS38_PRECISION_PLAN.renderContract;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    const floors = [...PASS13_ZONE.floors, ...PASS14_ZONE.floors];
+    for (const floor of floors) {
+      if (!this.isFloorActive(floor)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.13, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.98;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.94)";
+      ctx.shadowBlur = 13;
+      ctx.shadowOffsetY = 12;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = "rgba(69, 184, 169, 0.62)";
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = "rgba(182, 228, 207, 0.82)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawPass39BridgeLayers(ctx, layers, forcedScene = null) {
+    const scene = forcedScene ?? getPass39ActiveScene(this.camera, this.progress);
+    if (!scene) return null;
+    if (this.pass39AssetState?.loadedCount !== PASS39_BRIDGE_ASSETS.length || this.pass39AssetState?.dimensionsValid !== true) return null;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const blend of getPass39SceneBlend(this.camera, this.progress)) {
+      for (const layer of PASS39_BRIDGE_PLAN.layerOrder) {
+        if (!requestedLayers.has(layer)) continue;
+        for (const placement of PASS39_BRIDGE_PLACEMENTS) {
+          if (placement.sceneId !== blend.scene.id || placement.layer !== layer) continue;
+          if (placement.minCameraX !== undefined && this.camera.x < placement.minCameraX) continue;
+          if (placement.maxCameraX !== undefined && this.camera.x > placement.maxCameraX) continue;
+          const record = this.pass39AssetState.byId.get(placement.assetId);
+          if (!record?.loaded || !record.image) continue;
+          const screen = getPass39ScreenPlacement(blend.scene, placement, this.camera);
+          ctx.globalAlpha = placement.opacity * blend.opacity;
+          ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+        }
+      }
+    }
+    if (requestedLayers.has("far_background")) {
+      const verticalShade = ctx.createLinearGradient(0, 0, 0, VIEWPORT.height);
+      verticalShade.addColorStop(0, "rgba(1, 4, 7, 0.36)");
+      verticalShade.addColorStop(0.38, "rgba(2, 15, 20, 0.01)");
+      verticalShade.addColorStop(0.72, "rgba(1, 9, 13, 0.14)");
+      verticalShade.addColorStop(1, "rgba(0, 2, 4, 0.62)");
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = verticalShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+      const sideShade = ctx.createLinearGradient(0, 0, VIEWPORT.width, 0);
+      sideShade.addColorStop(0, "rgba(0, 3, 6, 0.42)");
+      sideShade.addColorStop(0.3, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(0.7, "rgba(0, 3, 6, 0)");
+      sideShade.addColorStop(1, "rgba(0, 3, 6, 0.44)");
+      ctx.fillStyle = sideShade;
+      ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    }
+    ctx.restore();
+    return scene;
+  }
+
+  drawPass39RouteSurfaces(ctx, scene) {
+    const bridgeRecord = this.pass39AssetState?.byId?.get(PASS39_BRIDGE_PLAN.bridgeSurfaceAssetId);
+    const grottoRecord = this.pass39AssetState?.byId?.get(PASS39_BRIDGE_PLAN.grottoSurfaceAssetId);
+    if (!bridgeRecord?.loaded || !bridgeRecord.image || !grottoRecord?.loaded || !grottoRecord.image) return;
+    const bounds = scene.routeBounds;
+    const contract = PASS39_BRIDGE_PLAN.renderContract;
+    const floors = scene.phase === "bridge" ? PASS15_ZONE.floors : PASS18_ZONE.floors;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const floor of floors) {
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < bounds.x || floorMinX > bounds.x + bounds.width || floorMaxY < bounds.y || floorMinY > bounds.y + bounds.height) continue;
+      if (!this.isFloorActive(floor)) {
+        const voidShade = ctx.createLinearGradient(0, floorMinY - 18, 0, floorMaxY + 210);
+        voidShade.addColorStop(0, "rgba(1, 6, 9, 0.96)");
+        voidShade.addColorStop(0.45, "rgba(1, 5, 8, 0.9)");
+        voidShade.addColorStop(1, "rgba(1, 5, 8, 0)");
+        ctx.fillStyle = voidShade;
+        ctx.fillRect(floorMinX - 22, floorMinY - 18, floorMaxX - floorMinX + 44, 230);
+        continue;
+      }
+      const dx = floor.x2 - floor.x1;
+      const dy = floor.y2 - floor.y1;
+      const length = Math.hypot(dx, dy);
+      const height = clamp(length * 0.13, contract.surfaceMinHeightPx, contract.surfaceMaxHeightPx);
+      const routeRecord = scene.phase === "bridge" && floor.lane !== "final_landing" ? bridgeRecord : grottoRecord;
+      ctx.save();
+      ctx.translate(floor.x1, floor.y1);
+      ctx.rotate(Math.atan2(dy, dx));
+      ctx.globalAlpha = 0.99;
+      ctx.shadowColor = "rgba(0, 2, 4, 0.96)";
+      ctx.shadowBlur = 13;
+      ctx.shadowOffsetY = 12;
+      ctx.drawImage(routeRecord.image, -8, contract.surfaceTopOffsetPx, length + 16, height);
+      ctx.shadowColor = scene.phase === "bridge" ? "rgba(215, 151, 82, 0.5)" : "rgba(69, 184, 169, 0.62)";
+      ctx.shadowBlur = 6;
+      ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = scene.phase === "bridge" ? "rgba(225, 183, 118, 0.82)" : "rgba(182, 228, 207, 0.82)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(length, 0);
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawPass29ModuleLayers(ctx, layers) {
+    if (!isPass29CameraActive(this.camera)) return false;
+    if (this.pass29AssetState?.loadedCount !== PASS29_MODULE_ASSETS.length || this.pass29AssetState?.dimensionsValid !== true) return false;
+    const requestedLayers = new Set(layers);
+    ctx.save();
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.imageSmoothingEnabled = true;
+    ctx.imageSmoothingQuality = "high";
+    for (const layer of PASS29_MODULAR_PLAN.layerOrder) {
+      if (!requestedLayers.has(layer)) continue;
+      for (const placement of PASS29_MODULE_PLACEMENTS) {
+        if (placement.layer !== layer) continue;
+        const record = this.pass29AssetState.byId.get(placement.assetId);
+        if (!record?.loaded || !record.image) continue;
+        const screen = getPass29ScreenPlacement(placement, this.camera);
+        ctx.globalAlpha = placement.opacity;
+        ctx.drawImage(record.image, screen.x, screen.y, screen.width, screen.height);
+      }
+    }
+    ctx.restore();
+    return true;
+  }
+
+  drawPass28RouteEdges(ctx) {
+    const asset = PASS28_RASTER_ASSETS[0];
+    const girderRecord = isPass29CameraActive(this.camera) ? this.pass29AssetState?.byId?.get("route_girder") : null;
+    const useRasterGirder = Boolean(girderRecord?.loaded && girderRecord.image);
+    const routeBounds = useRasterGirder ? PASS30_QUALITY_GATE.renderContract.approvedRouteBounds : asset;
+    const minX = routeBounds.x;
+    const maxX = routeBounds.x + routeBounds.width;
+    const minY = routeBounds.y;
+    const maxY = routeBounds.y + routeBounds.height;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(minX, minY, routeBounds.width, routeBounds.height);
+    ctx.clip();
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
+    for (const floor of this.collisionFloors) {
+      if (this.collapsedFloorIds.has(floor.id)) continue;
+      const floorMinX = Math.min(floor.x1, floor.x2);
+      const floorMaxX = Math.max(floor.x1, floor.x2);
+      const floorMinY = Math.min(floor.y1, floor.y2);
+      const floorMaxY = Math.max(floor.y1, floor.y2);
+      if (floorMaxX < minX || floorMinX > maxX || floorMaxY < minY || floorMinY > maxY) continue;
+      ctx.beginPath();
+      ctx.moveTo(floor.x1, floor.y1);
+      ctx.lineTo(floor.x2, floor.y2);
+      if (useRasterGirder) {
+        const dx = floor.x2 - floor.x1;
+        const dy = floor.y2 - floor.y1;
+        const length = Math.hypot(dx, dy);
+        const height = clamp(length * 0.105, 56, 88);
+        ctx.save();
+        ctx.translate(floor.x1, floor.y1);
+        ctx.rotate(Math.atan2(dy, dx));
+        ctx.globalAlpha = 0.94;
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.drawImage(girderRecord.image, -8, -3, length + 16, height);
+        ctx.restore();
+      } else {
+        ctx.strokeStyle = "rgba(4, 10, 11, 0.92)";
+        ctx.shadowBlur = 0;
+        ctx.lineWidth = 18;
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(30, 57, 58, 0.96)";
+        ctx.lineWidth = 10;
+        ctx.stroke();
+      }
+      ctx.strokeStyle = "rgba(150, 207, 202, 0.78)";
+      ctx.shadowColor = "rgba(52, 117, 116, 0.72)";
+      ctx.shadowBlur = 5;
+      ctx.lineWidth = 1.75;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPass27Structures(ctx) {
+    const padding = 460;
+    const view = {
+      x: this.camera.x - padding,
+      y: this.camera.y - padding,
+      width: VIEWPORT.width / this.camera.zoom + padding * 2,
+      height: VIEWPORT.height / this.camera.zoom + padding * 2,
+    };
+    for (const item of PASS27_STRUCTURES) {
+      if (item.x > view.x + view.width || item.x + item.width < view.x || item.y > view.y + view.height || item.y + item.height < view.y) continue;
+      this.drawPass27Structure(ctx, item);
+    }
+  }
+
+  drawPass27Structure(ctx, item) {
+    const palette = PASS27_PALETTES[item.palette];
+    const x = item.x;
+    const y = item.y;
+    const w = item.width;
+    const h = item.height;
+    ctx.save();
+    ctx.globalAlpha = item.depth;
+    const mass = ctx.createLinearGradient(x, y, x, y + h);
+    mass.addColorStop(0, palette.mass);
+    mass.addColorStop(1, palette.shadow);
+    ctx.fillStyle = mass;
+    ctx.strokeStyle = palette.edge;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+
+    if (item.kind === "portal") {
+      const column = Math.max(70, w * 0.12);
+      const shoulder = y + h * 0.34;
+      ctx.fillRect(x, shoulder, column, h * 0.66);
+      ctx.fillRect(x + w - column, shoulder, column, h * 0.66);
+      ctx.lineWidth = Math.max(34, w * 0.055);
+      ctx.beginPath();
+      ctx.moveTo(x + column * 0.5, y + h);
+      ctx.lineTo(x + column * 0.5, shoulder);
+      ctx.quadraticCurveTo(x + w * 0.5, y - h * 0.08, x + w - column * 0.5, shoulder);
+      ctx.lineTo(x + w - column * 0.5, y + h);
+      ctx.stroke();
+      ctx.strokeStyle = `${palette.accent}52`;
+      ctx.lineWidth = 7;
+      ctx.stroke();
+      ctx.fillStyle = `${palette.accent}78`;
+      for (const px of [x + column * 0.5, x + w - column * 0.5]) {
+        for (let py = shoulder + 90; py < y + h; py += 150) ctx.fillRect(px - column * 0.32, py, column * 0.64, 18);
+      }
+    } else if (item.kind === "aqueduct") {
+      ctx.fillStyle = mass;
+      ctx.fillRect(x, y, w, h * 0.18);
+      const count = Math.max(3, Math.floor(w / 620));
+      const cell = w / count;
+      for (let index = 0; index < count; index += 1) {
+        const left = x + index * cell;
+        const pillar = cell * 0.16;
+        ctx.fillRect(left, y + h * 0.18, pillar, h * 0.82);
+        ctx.strokeStyle = palette.edge;
+        ctx.lineWidth = Math.max(22, pillar * 0.5);
+        ctx.beginPath();
+        ctx.moveTo(left + pillar * 0.5, y + h);
+        ctx.lineTo(left + pillar * 0.5, y + h * 0.48);
+        ctx.quadraticCurveTo(left + cell * 0.5, y + h * 0.14, left + cell - pillar * 0.5, y + h * 0.48);
+        ctx.lineTo(left + cell - pillar * 0.5, y + h);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `${palette.accent}55`;
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.moveTo(x, y + h * 0.18);
+      ctx.lineTo(x + w, y + h * 0.18);
+      ctx.stroke();
+    } else if (item.kind === "tower" || item.kind === "descent_spine") {
+      const taper = item.kind === "descent_spine" ? w * 0.16 : w * 0.08;
+      ctx.beginPath();
+      ctx.moveTo(x + taper, y);
+      ctx.lineTo(x + w - taper, y);
+      ctx.lineTo(x + w, y + h);
+      ctx.lineTo(x, y + h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = item.kind === "descent_spine" ? 20 : 14;
+      ctx.stroke();
+      const bands = item.kind === "descent_spine" ? 8 : 5;
+      for (let index = 1; index < bands; index += 1) {
+        const py = y + (h * index) / bands;
+        ctx.fillStyle = `${palette.edge}42`;
+        ctx.fillRect(x + 12, py, w - 24, 24);
+        ctx.fillStyle = `${palette.accent}44`;
+        const windowCount = item.kind === "descent_spine" ? 3 : 2;
+        for (let slot = 0; slot < windowCount; slot += 1) {
+          const slotW = w * 0.14;
+          ctx.fillRect(x + w * (0.2 + slot * 0.26), py - h / bands * 0.58, slotW, h / bands * 0.28);
+        }
+      }
+      if (item.kind === "descent_spine") {
+        ctx.strokeStyle = `${palette.accent}52`;
+        ctx.lineWidth = 13;
+        for (const side of [-1, 1]) {
+          ctx.beginPath();
+          ctx.moveTo(x + w * 0.5, y + h * 0.08);
+          ctx.lineTo(x + w * (side < 0 ? 0.05 : 0.95), y + h * 0.34);
+          ctx.lineTo(x + w * 0.5, y + h * 0.58);
+          ctx.lineTo(x + w * (side < 0 ? 0.02 : 0.98), y + h * 0.84);
+          ctx.stroke();
+        }
+      }
+    } else if (item.kind === "crown") {
+      const cx = x + w * 0.5;
+      const cy = y + h * 0.48;
+      const radius = Math.min(w * 0.26, h * 0.42);
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 42;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.lineWidth = 18;
+      for (let index = 0; index < 9; index += 1) {
+        const ratio = index / 8;
+        const px = x + w * ratio;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy - radius * 0.4);
+        ctx.lineTo(px, y + (index % 2 ? h * 0.02 : h * 0.12));
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `${palette.accent}60`;
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius * 0.7, 0, Math.PI * 2);
+      ctx.stroke();
+    } else if (item.kind === "foundry_press") {
+      const column = w * 0.16;
+      ctx.fillRect(x, y, column, h);
+      ctx.fillRect(x + w - column, y, column, h);
+      ctx.fillRect(x, y, w, h * 0.16);
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 18;
+      ctx.strokeRect(x + 8, y + 8, w - 16, h - 16);
+      ctx.fillStyle = palette.mass;
+      ctx.fillRect(x + w * 0.36, y + h * 0.12, w * 0.28, h * 0.48);
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.26, y + h * 0.62);
+      ctx.lineTo(x + w * 0.74, y + h * 0.62);
+      ctx.lineTo(x + w * 0.63, y + h * 0.82);
+      ctx.lineTo(x + w * 0.37, y + h * 0.82);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = `${palette.accent}68`;
+      ctx.lineWidth = 10;
+      for (let py = y + h * 0.24; py < y + h * 0.9; py += h * 0.18) {
+        ctx.beginPath();
+        ctx.moveTo(x + column * 0.2, py);
+        ctx.lineTo(x + column * 0.8, py - 18);
+        ctx.moveTo(x + w - column * 0.8, py - 18);
+        ctx.lineTo(x + w - column * 0.2, py);
+        ctx.stroke();
+      }
+    } else if (item.kind === "furnace") {
+      ctx.fillRect(x, y + h * 0.12, w, h * 0.88);
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 22;
+      ctx.strokeRect(x + 10, y + h * 0.12 + 10, w - 20, h * 0.88 - 20);
+      const cx = x + w * 0.5;
+      const cy = y + h * 0.58;
+      const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, w * 0.34);
+      glow.addColorStop(0, `${palette.glow}b8`);
+      glow.addColorStop(0.45, `${palette.glow}5c`);
+      glow.addColorStop(1, `${palette.glow}00`);
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(cx, cy, w * 0.34, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = palette.shadow;
+      ctx.beginPath();
+      ctx.arc(cx, cy, Math.min(w, h) * 0.19, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = palette.accent;
+      ctx.lineWidth = 18;
+      ctx.stroke();
+      for (let index = 0; index < 6; index += 1) {
+        ctx.fillStyle = `${palette.edge}80`;
+        ctx.fillRect(x + w * (0.08 + index * 0.16), y, w * 0.08, h * 0.22);
+      }
+    } else if (item.kind === "gear") {
+      const cx = x + w * 0.5;
+      const cy = y + h * 0.5;
+      const outer = Math.min(w, h) * 0.46;
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = Math.max(30, outer * 0.11);
+      ctx.beginPath();
+      ctx.arc(cx, cy, outer * 0.82, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.lineWidth = Math.max(14, outer * 0.045);
+      ctx.beginPath();
+      ctx.arc(cx, cy, outer * 0.42, 0, Math.PI * 2);
+      ctx.stroke();
+      for (let index = 0; index < 12; index += 1) {
+        const angle = (index / 12) * Math.PI * 2;
+        ctx.strokeStyle = index % 3 === 0 ? palette.accent : palette.edge;
+        ctx.lineWidth = index % 3 === 0 ? 20 : 12;
+        ctx.beginPath();
+        ctx.moveTo(cx + Math.cos(angle) * outer * 0.22, cy + Math.sin(angle) * outer * 0.22);
+        ctx.lineTo(cx + Math.cos(angle) * outer * 0.75, cy + Math.sin(angle) * outer * 0.75);
+        ctx.stroke();
+      }
+    } else if (item.kind === "truss") {
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = Math.max(18, h * 0.045);
+      ctx.strokeRect(x + 8, y + 8, w - 16, h - 16);
+      const bays = Math.max(3, Math.floor(w / 760));
+      const bay = w / bays;
+      for (let index = 0; index < bays; index += 1) {
+        const left = x + index * bay;
+        ctx.beginPath();
+        ctx.moveTo(left, y + h);
+        ctx.lineTo(left + bay * 0.5, y);
+        ctx.lineTo(left + bay, y + h);
+        ctx.moveTo(left, y);
+        ctx.lineTo(left + bay * 0.5, y + h);
+        ctx.lineTo(left + bay, y);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `${palette.accent}56`;
+      ctx.lineWidth = 7;
+      ctx.strokeRect(x + 24, y + 24, w - 48, h - 48);
+    } else if (item.kind === "gallery") {
+      const bays = Math.max(4, Math.floor(w / 720));
+      const bay = w / bays;
+      ctx.fillRect(x, y, w, h * 0.14);
+      for (let index = 0; index < bays; index += 1) {
+        const left = x + index * bay;
+        ctx.strokeStyle = palette.edge;
+        ctx.lineWidth = Math.max(18, bay * 0.06);
+        ctx.beginPath();
+        ctx.moveTo(left + bay * 0.12, y + h);
+        ctx.lineTo(left + bay * 0.12, y + h * 0.42);
+        ctx.quadraticCurveTo(left + bay * 0.5, y + h * 0.08, left + bay * 0.88, y + h * 0.42);
+        ctx.lineTo(left + bay * 0.88, y + h);
+        ctx.stroke();
+      }
+    } else if (item.kind === "bridge_pylon") {
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.26, y);
+      ctx.lineTo(x + w * 0.74, y);
+      ctx.lineTo(x + w, y + h);
+      ctx.lineTo(x, y + h);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 16;
+      ctx.stroke();
+      ctx.fillStyle = palette.shadow;
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.39, y + h * 0.95);
+      ctx.lineTo(x + w * 0.39, y + h * 0.46);
+      ctx.quadraticCurveTo(x + w * 0.5, y + h * 0.28, x + w * 0.61, y + h * 0.46);
+      ctx.lineTo(x + w * 0.61, y + h * 0.95);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = `${palette.accent}62`;
+      for (let py = y + h * 0.18; py < y + h * 0.86; py += h * 0.18) ctx.fillRect(x + w * 0.18, py, w * 0.64, 16);
+    } else if (item.kind === "spring_frame") {
+      ctx.strokeStyle = palette.edge;
+      ctx.lineWidth = 28;
+      ctx.beginPath();
+      ctx.moveTo(x + w * 0.1, y + h);
+      ctx.lineTo(x + w * 0.28, y + h * 0.08);
+      ctx.lineTo(x + w * 0.72, y + h * 0.08);
+      ctx.lineTo(x + w * 0.9, y + h);
+      ctx.stroke();
+      ctx.strokeStyle = palette.accent;
+      ctx.lineWidth = 12;
+      for (let index = 0; index < 5; index += 1) {
+        const py = y + h * (0.24 + index * 0.12);
+        ctx.beginPath();
+        ctx.moveTo(x + w * 0.3, py);
+        ctx.quadraticCurveTo(x + w * 0.5, py - h * 0.1, x + w * 0.7, py);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  drawPass25BuriedDepth(ctx) {
+    const bounds = PASS25_VISUAL_SLICE.bounds;
+    const palette = PASS25_PALETTE;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+
+    const deepGradient = ctx.createLinearGradient(bounds.x, bounds.y, bounds.x, bounds.y + bounds.height);
+    deepGradient.addColorStop(0, palette.void);
+    deepGradient.addColorStop(0.46, "#0d1718");
+    deepGradient.addColorStop(1, "#182322");
+    ctx.fillStyle = deepGradient;
+    ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+
+    for (const vault of PASS25_FAR_VAULTS) {
+      const shoulderY = vault.y + vault.width * 0.52;
+      ctx.fillStyle = `rgba(26, 39, 39, ${0.48 + vault.depth})`;
+      ctx.beginPath();
+      ctx.moveTo(vault.x, vault.y + vault.height);
+      ctx.lineTo(vault.x, shoulderY);
+      ctx.quadraticCurveTo(vault.x + vault.width * 0.5, vault.y - vault.width * 0.22, vault.x + vault.width, shoulderY);
+      ctx.lineTo(vault.x + vault.width, vault.y + vault.height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = `rgba(102, 125, 119, ${0.12 + vault.depth * 0.22})`;
+      ctx.lineWidth = 22;
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(4, 10, 11, 0.58)";
+      ctx.beginPath();
+      ctx.moveTo(vault.x + 76, vault.y + vault.height);
+      ctx.lineTo(vault.x + 76, shoulderY + 42);
+      ctx.quadraticCurveTo(vault.x + vault.width * 0.5, vault.y + 42, vault.x + vault.width - 76, shoulderY + 42);
+      ctx.lineTo(vault.x + vault.width - 76, vault.y + vault.height);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    const monument = PASS25_VISUAL_SLICE.monument;
+    ctx.save();
+    ctx.translate(monument.x, monument.y);
+    ctx.strokeStyle = "rgba(93, 89, 72, 0.72)";
+    ctx.lineWidth = 96;
+    ctx.beginPath();
+    ctx.arc(0, 0, monument.outerRadius - 48, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(168, 152, 109, 0.20)";
+    ctx.lineWidth = 18;
+    ctx.beginPath();
+    ctx.arc(0, 0, monument.outerRadius - 8, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(0, 0, monument.innerRadius, 0, Math.PI * 2);
+    ctx.stroke();
+    for (let index = 0; index < monument.spokes; index += 1) {
+      const angle = (index / monument.spokes) * Math.PI * 2 + 0.07;
+      ctx.strokeStyle = index % 3 === 0 ? "rgba(159, 143, 101, 0.38)" : "rgba(87, 91, 76, 0.46)";
+      ctx.lineWidth = index % 3 === 0 ? 30 : 18;
+      ctx.beginPath();
+      ctx.moveTo(Math.cos(angle) * 155, Math.sin(angle) * 155);
+      ctx.lineTo(Math.cos(angle) * (monument.outerRadius - 95), Math.sin(angle) * (monument.outerRadius - 95));
+      ctx.stroke();
+    }
+    ctx.fillStyle = "rgba(5, 12, 13, 0.88)";
+    ctx.beginPath();
+    ctx.arc(0, 0, 155, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = "rgba(206, 177, 111, 0.42)";
+    ctx.lineWidth = 16;
+    ctx.stroke();
+    ctx.restore();
+    ctx.restore();
+  }
+
+  drawPass25BuriedArchitecture(ctx) {
+    const bounds = PASS25_VISUAL_SLICE.bounds;
+    const palette = PASS25_PALETTE;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+
+    for (const shaft of PASS25_LIGHT_SHAFTS) {
+      const gradient = ctx.createLinearGradient(shaft.x, shaft.y, shaft.x, shaft.y + shaft.height);
+      gradient.addColorStop(0, `rgba(232, 214, 161, ${shaft.alpha})`);
+      gradient.addColorStop(0.7, `rgba(204, 184, 127, ${shaft.alpha * 0.36})`);
+      gradient.addColorStop(1, "rgba(204, 184, 127, 0)");
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(shaft.x - shaft.topWidth * 0.5, shaft.y);
+      ctx.lineTo(shaft.x + shaft.topWidth * 0.5, shaft.y);
+      ctx.lineTo(shaft.x + shaft.bottomWidth * 0.5, shaft.y + shaft.height);
+      ctx.lineTo(shaft.x - shaft.bottomWidth * 0.5, shaft.y + shaft.height);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    for (const buttress of PASS25_BUTTRESSES) {
+      ctx.fillStyle = "rgba(38, 49, 46, 0.88)";
+      ctx.strokeStyle = "rgba(117, 144, 138, 0.27)";
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      ctx.moveTo(buttress.x, buttress.y + buttress.height);
+      ctx.lineTo(buttress.x + buttress.width * 0.13, buttress.y + 90);
+      ctx.lineTo(buttress.x + buttress.width * 0.5, buttress.y);
+      ctx.lineTo(buttress.x + buttress.width * 0.87, buttress.y + 90);
+      ctx.lineTo(buttress.x + buttress.width, buttress.y + buttress.height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(168, 152, 109, 0.20)";
+      ctx.lineWidth = 4;
+      for (let y = buttress.y + 150; y < buttress.y + buttress.height; y += 145) {
+        ctx.beginPath();
+        ctx.moveTo(buttress.x + 9, y);
+        ctx.lineTo(buttress.x + buttress.width - 9, y - 22);
+        ctx.stroke();
+      }
+      if (buttress.cap) {
+        ctx.fillStyle = "rgba(111, 102, 75, 0.72)";
+        ctx.fillRect(buttress.x - 24, buttress.y + 72, buttress.width + 48, 32);
+      }
+    }
+
+    for (const rib of PASS25_RIBS) {
+      ctx.save();
+      ctx.translate(rib.x, rib.y);
+      ctx.rotate(rib.angle);
+      ctx.strokeStyle = "rgba(136, 139, 119, 0.38)";
+      ctx.lineWidth = 23;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.quadraticCurveTo(rib.width * 0.5, rib.drop, rib.width, 0);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(205, 187, 136, 0.16)";
+      ctx.lineWidth = 5;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    for (const chain of PASS25_CHAINS) {
+      for (let index = 0; index < chain.links; index += 1) {
+        const ratio = index / Math.max(1, chain.links - 1);
+        const sway = Math.sin(this.frameCount * 0.006 + index * 0.32 + chain.x) * 9 * ratio;
+        ctx.save();
+        ctx.translate(chain.x + sway, chain.y + ratio * chain.length);
+        ctx.rotate(index % 2 === 0 ? 0 : Math.PI * 0.5);
+        ctx.strokeStyle = index % 4 === 0 ? "rgba(172, 150, 101, 0.52)" : "rgba(91, 99, 88, 0.72)";
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.ellipse(0, 0, 13, 22, 0, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    ctx.globalCompositeOperation = "screen";
+    for (const lantern of PASS25_ROUTE_LANTERNS) {
+      const glow = ctx.createRadialGradient(lantern.x, lantern.y, 0, lantern.x, lantern.y, lantern.radius);
+      glow.addColorStop(0, "rgba(255, 240, 176, 0.55)");
+      glow.addColorStop(0.12, "rgba(227, 187, 114, 0.34)");
+      glow.addColorStop(1, "rgba(227, 187, 114, 0)");
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(lantern.x, lantern.y, lantern.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalCompositeOperation = "source-over";
+    for (const lantern of PASS25_ROUTE_LANTERNS) {
+      ctx.fillStyle = palette.bronze;
+      ctx.fillRect(lantern.x - 18, lantern.y - 34, 36, 68);
+      ctx.strokeStyle = palette.bronzeEdge;
+      ctx.lineWidth = 5;
+      ctx.strokeRect(lantern.x - 18, lantern.y - 34, 36, 68);
+      ctx.fillStyle = palette.routeCore;
+      ctx.fillRect(lantern.x - 7, lantern.y - 19, 14, 36);
+    }
+    ctx.restore();
+  }
+
+  drawPass25BuriedSurface(ctx) {
+    ctx.save();
+    for (const floor of PASS04_ZONE.floors) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(floor.x1, floor.y1 + 10);
+      ctx.lineTo(floor.x2, floor.y2 + 10);
+      ctx.lineTo(floor.x2, floor.y2 + 258);
+      ctx.lineTo(floor.x1, floor.y1 + 258);
+      ctx.closePath();
+      ctx.clip();
+
+      const width = floor.x2 - floor.x1;
+      const blocks = Math.max(2, Math.ceil(width / 150));
+      for (let row = 0; row < 3; row += 1) {
+        const rowY = Math.min(floor.y1, floor.y2) + 38 + row * 72;
+        for (let column = -1; column <= blocks; column += 1) {
+          const offset = row % 2 === 0 ? 0 : 62;
+          const x = floor.x1 + column * 145 + offset;
+          const shade = (row + column + floor.x1) % 3;
+          ctx.fillStyle = shade === 0 ? "rgba(18, 27, 26, 0.38)" : shade === 1 ? "rgba(75, 78, 67, 0.18)" : "rgba(37, 47, 43, 0.26)";
+          ctx.fillRect(x + 4, rowY + 4, 136, 62);
+          ctx.strokeStyle = "rgba(151, 144, 112, 0.13)";
+          ctx.lineWidth = 3;
+          ctx.strokeRect(x + 4, rowY + 4, 136, 62);
+        }
+      }
+      ctx.fillStyle = "rgba(4, 10, 10, 0.34)";
+      ctx.beginPath();
+      ctx.moveTo(floor.x1, floor.y1 + 230);
+      ctx.lineTo(floor.x2, floor.y2 + 185);
+      ctx.lineTo(floor.x2, floor.y2 + 260);
+      ctx.lineTo(floor.x1, floor.y1 + 260);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+
+      const centerX = (floor.x1 + floor.x2) * 0.5;
+      const centerY = (floor.y1 + floor.y2) * 0.5;
+      ctx.strokeStyle = "rgba(100, 104, 88, 0.38)";
+      ctx.lineWidth = 14;
+      ctx.beginPath();
+      ctx.moveTo(centerX - 48, centerY + 246);
+      ctx.lineTo(centerX, centerY + 175);
+      ctx.lineTo(centerX + 48, centerY + 246);
+      ctx.stroke();
+    }
+    for (const mark of PASS25_SURFACE_MARKS) {
+      ctx.strokeStyle = mark.moss ? "rgba(82, 119, 94, 0.72)" : "rgba(178, 169, 133, 0.28)";
+      ctx.lineWidth = mark.moss ? 5 : 3;
+      ctx.beginPath();
+      ctx.moveTo(mark.x - mark.length * 0.5, mark.y + 14);
+      ctx.lineTo(mark.x - mark.length * 0.08, mark.y + 28);
+      ctx.lineTo(mark.x + mark.length * 0.18, mark.y + 18);
+      ctx.lineTo(mark.x + mark.length * 0.5, mark.y + 34);
+      ctx.stroke();
+      if (mark.moss) {
+        ctx.fillStyle = "rgba(64, 94, 76, 0.62)";
+        for (let index = 0; index < 3; index += 1) {
+          ctx.beginPath();
+          ctx.ellipse(mark.x - 12 + index * 12, mark.y + 8, 9, 4 + index * 2, -0.4 + index * 0.2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+    ctx.restore();
+  }
+
+  drawPass25BuriedAtmosphere(ctx) {
+    const bounds = PASS25_VISUAL_SLICE.bounds;
+    ctx.save();
+    ctx.beginPath();
+    ctx.rect(bounds.x, bounds.y, bounds.width, bounds.height);
+    ctx.clip();
+    for (const mote of PASS25_DUST) {
+      const offsetY = (this.frameCount * mote.drift) % 150;
+      const y = mote.y - offsetY < bounds.y ? mote.y - offsetY + bounds.height : mote.y - offsetY;
+      const x = mote.x + Math.sin(this.frameCount * 0.012 + mote.phase) * 18;
+      const alpha = 0.12 + (Math.sin(this.frameCount * 0.018 + mote.phase) + 1) * 0.09;
+      ctx.fillStyle = `rgba(207, 194, 151, ${alpha})`;
+      ctx.beginPath();
+      ctx.arc(x, y, mote.radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  drawPass25BuriedForeground(ctx) {
+    ctx.save();
+    for (const item of PASS25_FOREGROUND) {
+      const gradient = ctx.createLinearGradient(item.x, item.y, item.x + item.width, item.y + item.height);
+      gradient.addColorStop(0, "rgba(4, 9, 10, 0.88)");
+      gradient.addColorStop(1, "rgba(18, 28, 26, 0.64)");
+      ctx.fillStyle = gradient;
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.lineTo(item.x + item.width * 0.18, item.y + 95);
+      ctx.lineTo(item.x + item.width * 0.52, item.y);
+      ctx.lineTo(item.x + item.width, item.y + 135);
+      ctx.lineTo(item.x + item.width, item.y + item.height);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = "rgba(115, 139, 129, 0.25)";
+      ctx.lineWidth = 8;
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawAuthoredTerrainDetails(ctx) {
+    ctx.save();
+    for (const support of PASS17_SUPPORTS) {
+      ctx.fillStyle = `${support.color}b0`;
+      ctx.fillRect(support.x, support.y, support.width, support.height);
+      ctx.strokeStyle = "rgba(210, 220, 207, 0.16)";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(support.x, support.y);
+      ctx.lineTo(support.x + support.width, support.y + support.height);
+      ctx.moveTo(support.x + support.width, support.y);
+      ctx.lineTo(support.x, support.y + support.height);
+      ctx.stroke();
+    }
+
+    for (const frame of PASS17_REINFORCEMENTS) {
+      ctx.strokeStyle = `${frame.color}72`;
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.moveTo(frame.x, frame.y + frame.height);
+      ctx.lineTo(frame.x, frame.y + 28);
+      ctx.quadraticCurveTo(frame.x + frame.width * 0.5, frame.y - 18, frame.x + frame.width, frame.y + 28);
+      ctx.lineTo(frame.x + frame.width, frame.y + frame.height);
+      ctx.stroke();
+      ctx.fillStyle = `${frame.color}33`;
+      ctx.beginPath();
+      ctx.arc(frame.x, frame.y + frame.height, 10, 0, Math.PI * 2);
+      ctx.arc(frame.x + frame.width, frame.y + frame.height, 10, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (const plant of PASS17_VEGETATION) {
+      ctx.fillStyle = `${plant.color}c8`;
+      const leaves = 7;
+      for (let index = 0; index < leaves; index += 1) {
+        const ratio = index / (leaves - 1);
+        const x = plant.x + plant.width * ratio;
+        const height = plant.height * (0.45 + ((index * 7) % 5) * 0.12);
+        ctx.beginPath();
+        ctx.moveTo(x - 8, plant.y);
+        ctx.quadraticCurveTo(x, plant.y - height, x + 8, plant.y);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  drawPass26FloorSkin(ctx, floor, skin) {
+    const sample = ratio => ({
+      x: floor.x1 + (floor.x2 - floor.x1) * ratio,
+      y: floor.y1 + (floor.y2 - floor.y1) * ratio,
+    });
+    const top = [0, 1 / 3, 2 / 3, 1].map((ratio, index) => {
+      const point = sample(ratio);
+      return { x: point.x, y: point.y + skin.topOffsets[index] };
+    });
+    const bottom = [0.08, 0.5, 0.92].map((ratio, index) => {
+      const point = sample(ratio);
+      return { x: point.x, y: point.y + skin.depth + skin.bottomOffsets[index] };
+    });
+    const traceBody = () => {
+      ctx.beginPath();
+      ctx.moveTo(top[0].x, top[0].y);
+      for (const point of top.slice(1)) ctx.lineTo(point.x, point.y);
+      ctx.lineTo(floor.x2, floor.y2 + skin.depth * 0.82);
+      for (const point of bottom.slice().reverse()) ctx.lineTo(point.x, point.y);
+      ctx.lineTo(floor.x1, floor.y1 + skin.depth * 0.78);
+      ctx.closePath();
+    };
+
+    ctx.save();
+    const mass = ctx.createLinearGradient(0, Math.min(floor.y1, floor.y2), 0, Math.max(floor.y1, floor.y2) + skin.depth);
+    mass.addColorStop(0, skin.base);
+    mass.addColorStop(0.55, skin.base);
+    mass.addColorStop(1, skin.dark);
+    ctx.fillStyle = mass;
+    traceBody();
+    ctx.fill();
+
+    ctx.save();
+    traceBody();
+    ctx.clip();
+    const length = Math.max(1, floor.x2 - floor.x1);
+    if (skin.mode === "timber") {
+      const plankWidth = length / skin.detailCount;
+      ctx.strokeStyle = `${skin.seam}d0`;
+      ctx.lineWidth = 4;
+      for (let index = 1; index < skin.detailCount; index += 1) {
+        const ratio = index / skin.detailCount;
+        const point = sample(ratio);
+        ctx.beginPath();
+        ctx.moveTo(point.x, point.y + 5);
+        ctx.lineTo(point.x - 7 + (index % 3) * 7, point.y + skin.depth * 0.78);
+        ctx.stroke();
+      }
+      ctx.strokeStyle = `${skin.accent}46`;
+      ctx.lineWidth = 2;
+      for (let index = 0; index < skin.detailCount; index += 1) {
+        const x = floor.x1 + plankWidth * (index + 0.18);
+        const point = sample((index + 0.18) / skin.detailCount);
+        ctx.beginPath();
+        ctx.moveTo(x, point.y + 22);
+        ctx.quadraticCurveTo(x + plankWidth * 0.32, point.y + 13, x + plankWidth * 0.65, point.y + 27);
+        ctx.stroke();
+      }
+    } else if (skin.mode === "machine") {
+      const panelWidth = length / skin.detailCount;
+      ctx.strokeStyle = `${skin.seam}a8`;
+      ctx.lineWidth = 5;
+      for (let index = 0; index < skin.detailCount; index += 1) {
+        const ratio = (index + 0.5) / skin.detailCount;
+        const point = sample(ratio);
+        const x = floor.x1 + panelWidth * index + 7;
+        ctx.strokeRect(x, point.y + 31, Math.max(22, panelWidth - 14), Math.min(86, skin.depth * 0.42));
+        ctx.fillStyle = `${skin.accent}9c`;
+        ctx.beginPath();
+        ctx.arc(x + 12, point.y + 45, 3.5, 0, Math.PI * 2);
+        ctx.arc(x + Math.max(22, panelWidth - 26), point.y + 45, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    } else if (skin.mode === "masonry") {
+      const blockWidth = Math.max(58, length / skin.detailCount);
+      ctx.strokeStyle = `${skin.seam}82`;
+      ctx.lineWidth = 4;
+      for (let row = 0; row < 3; row += 1) {
+        const yOffset = 34 + row * Math.min(70, skin.depth * 0.25);
+        ctx.beginPath();
+        ctx.moveTo(floor.x1, floor.y1 + yOffset);
+        ctx.lineTo(floor.x2, floor.y2 + yOffset - row * 5);
+        ctx.stroke();
+        const offset = row % 2 ? blockWidth * 0.5 : 0;
+        for (let x = floor.x1 + offset; x < floor.x2; x += blockWidth) {
+          const ratio = (x - floor.x1) / length;
+          const point = sample(ratio);
+          ctx.beginPath();
+          ctx.moveTo(x, point.y + yOffset);
+          ctx.lineTo(x + 7, point.y + yOffset + Math.min(66, skin.depth * 0.23));
+          ctx.stroke();
+        }
+      }
+    } else {
+      ctx.strokeStyle = `${skin.seam}8a`;
+      ctx.lineWidth = 5;
+      for (let index = 0; index < skin.detailCount; index += 1) {
+        const ratio = (index + 0.4) / skin.detailCount;
+        const point = sample(Math.min(1, ratio));
+        const width = 28 + ((skin.sourceIndex + index * 11) % 52);
+        const drop = 38 + ((skin.sourceIndex * 7 + index * 13) % Math.max(42, Math.floor(skin.depth * 0.56)));
+        ctx.beginPath();
+        ctx.moveTo(point.x - width, point.y + drop);
+        ctx.lineTo(point.x + width * 0.25, point.y + drop - 15);
+        ctx.lineTo(point.x + width, point.y + drop + 6);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+
+    ctx.strokeStyle = skin.cap;
+    ctx.lineWidth = skin.mode === "timber" ? 9 : 11;
+    ctx.lineJoin = "round";
+    ctx.beginPath();
+    ctx.moveTo(top[0].x, top[0].y);
+    for (const point of top.slice(1)) ctx.lineTo(point.x, point.y);
+    ctx.stroke();
+    ctx.strokeStyle = `${skin.accent}72`;
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    if (skin.mode !== "timber" && skin.sourceIndex % 3 === 0 && floor.x2 - floor.x1 > 150) {
+      const center = sample(0.5);
+      ctx.strokeStyle = `${skin.seam}b0`;
+      ctx.lineWidth = 13;
+      ctx.beginPath();
+      ctx.moveTo(center.x - 58, center.y + skin.depth * 0.86);
+      ctx.lineTo(center.x, center.y + skin.depth * 0.52);
+      ctx.lineTo(center.x + 58, center.y + skin.depth * 0.86);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPass26CollapsedSkin(ctx, floor, skin) {
+    ctx.save();
+    for (let index = 0; index < 5; index += 1) {
+      const ratio = (index + 0.5) / 5;
+      const x = floor.x1 + (floor.x2 - floor.x1) * ratio;
+      const y = floor.y1 + (floor.y2 - floor.y1) * ratio + 28 + (index % 3) * 24;
+      const size = 18 + ((skin.sourceIndex + index * 9) % 22);
+      ctx.fillStyle = index % 2 ? skin.dark : skin.base;
+      ctx.strokeStyle = `${skin.cap}70`;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(x - size, y);
+      ctx.lineTo(x - size * 0.2, y - size * 0.5);
+      ctx.lineTo(x + size, y + size * 0.15);
+      ctx.lineTo(x + size * 0.1, y + size * 0.72);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPass26SolidSkin(ctx, solid, skin) {
+    const c = skin.chamfer;
+    const trace = () => {
+      ctx.beginPath();
+      ctx.moveTo(solid.x + c, solid.y);
+      ctx.lineTo(solid.x + solid.width - c, solid.y);
+      ctx.lineTo(solid.x + solid.width, solid.y + c);
+      ctx.lineTo(solid.x + solid.width, solid.y + solid.height - c);
+      ctx.lineTo(solid.x + solid.width - c, solid.y + solid.height);
+      ctx.lineTo(solid.x + c, solid.y + solid.height);
+      ctx.lineTo(solid.x, solid.y + solid.height - c);
+      ctx.lineTo(solid.x, solid.y + c);
+      ctx.closePath();
+    };
+    ctx.save();
+    const gradient = ctx.createLinearGradient(solid.x, solid.y, solid.x + solid.width, solid.y + solid.height);
+    gradient.addColorStop(0, skin.base);
+    gradient.addColorStop(1, skin.dark);
+    ctx.fillStyle = gradient;
+    trace();
+    ctx.fill();
+    ctx.strokeStyle = `${skin.cap}a8`;
+    ctx.lineWidth = 7;
+    ctx.stroke();
+    ctx.save();
+    trace();
+    ctx.clip();
+    ctx.strokeStyle = `${skin.seam}9a`;
+    ctx.lineWidth = 4;
+    const horizontal = solid.width >= solid.height;
+    for (let index = 1; index < skin.detailCount; index += 1) {
+      const ratio = index / skin.detailCount;
+      ctx.beginPath();
+      if (horizontal) {
+        const x = solid.x + solid.width * ratio;
+        ctx.moveTo(x, solid.y + 7);
+        ctx.lineTo(x - 9, solid.y + solid.height - 7);
+      } else {
+        const y = solid.y + solid.height * ratio;
+        ctx.moveTo(solid.x + 7, y);
+        ctx.lineTo(solid.x + solid.width - 7, y - 9);
+      }
+      ctx.stroke();
+    }
+    if (skin.mode === "machine") {
+      ctx.fillStyle = `${skin.cap}b8`;
+      for (const [x, y] of [[solid.x + 13, solid.y + 13], [solid.x + solid.width - 13, solid.y + 13], [solid.x + 13, solid.y + solid.height - 13], [solid.x + solid.width - 13, solid.y + solid.height - 13]]) {
+        ctx.beginPath();
+        ctx.arc(x, y, 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+    ctx.restore();
+  }
+
+  drawLevel(ctx) {
+    ctx.save();
+    for (const item of this.collisionFloors) {
+      const pass26Skin = getPass26FloorSkin(item.id);
+      if (this.collapsedFloorIds.has(item.id)) {
+        if (pass26Skin) this.drawPass26CollapsedSkin(ctx, item, pass26Skin);
+        continue;
+      }
+      if (pass26Skin) {
+        this.drawPass26FloorSkin(ctx, item, pass26Skin);
+        continue;
+      }
+      if (item.phase === 15) {
+        ctx.strokeStyle = item.lane === "final_landing" ? "#9cb2ae" : "#d0a46b";
+        ctx.lineWidth = item.lane === "final_landing" ? 34 : 22;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1 + 11);
+        ctx.lineTo(item.x2, item.y2 + 11);
+        ctx.stroke();
+        ctx.strokeStyle = item.lane === "final_landing" ? "#d6ddd7" : "#f0c985";
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
+        continue;
+      }
+      if (item.phase === 18) {
+        const palette = PASS18_ZONE.palette;
+        ctx.fillStyle = palette.terrain;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        if (item.lane === "narrow") {
+          const centerX = (item.x1 + item.x2) * 0.5;
+          const centerY = (item.y1 + item.y2) * 0.5;
+          ctx.lineTo(item.x2 - 14, item.y2 + 88);
+          ctx.lineTo(centerX + 22, centerY + 176);
+          ctx.lineTo(centerX - 18, centerY + 198);
+          ctx.lineTo(item.x1 + 16, item.y1 + 96);
+        } else {
+          ctx.lineTo(item.x2 - 22, item.y2 + 220);
+          ctx.lineTo(item.x1 + 34, item.y1 + 172);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = item.lane === "checkpoint" ? palette.checkpoint : palette.edge;
+        ctx.lineWidth = item.lane === "narrow" ? 9 : 13;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
+        continue;
+      }
+      if (item.phase === 20) {
+        const palette = PASS20_ZONE.palette;
+        ctx.fillStyle = item.lane === "landing" ? "#233d3c" : "#263b3d";
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.lineTo(item.x2 - 30, item.y2 + 260);
+        ctx.lineTo(item.x1 + 34, item.y1 + 220);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = item.lane === "landing" ? palette.landing : item.lane === "checkpoint" ? palette.checkpoint : palette.trajectory;
+        ctx.lineWidth = item.lane === "launch" ? 13 : 10;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
+        continue;
+      }
+      if (item.phase === 22) {
+        const palette = PASS22_ZONE.palette;
+        ctx.fillStyle = palette.stone;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.lineTo(item.x2 - 30, item.y2 + 210);
+        ctx.lineTo(item.x1 + 32, item.y1 + 170);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = item.lane === "checkpoint" ? palette.checkpoint : palette.edge;
+        ctx.lineWidth = 11;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
+        continue;
+      }
+      if (item.phase === 23) {
+        const palette = PASS23_ZONE.palette;
+        ctx.fillStyle = palette.stone;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.lineTo(item.x2 - 20, item.y2 + 150);
+        ctx.lineTo(item.x1 + 24, item.y1 + 180);
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = item.lane === "checkpoint" ? palette.checkpoint : palette.edge;
+        ctx.lineWidth = 10;
+        ctx.beginPath();
+        ctx.moveTo(item.x1, item.y1);
+        ctx.lineTo(item.x2, item.y2);
+        ctx.stroke();
+        continue;
+      }
+      const zoneIndex = item.phase === 15 ? 10 : item.zone ?? 1;
+      const floorTheme = getPass16Theme(zoneIndex);
+      const material = getPass17Material(zoneIndex);
+      ctx.fillStyle = material.base;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1);
+      ctx.lineTo(item.x2, item.y2);
+      ctx.lineTo(item.x2, item.y2 + 260);
+      ctx.lineTo(item.x1, item.y1 + 260);
+      ctx.closePath();
+      ctx.fill();
+      ctx.strokeStyle = material.cap;
+      ctx.lineWidth = material.capWidth;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1);
+      ctx.lineTo(item.x2, item.y2);
+      ctx.stroke();
+      const length = Math.hypot(item.x2 - item.x1, item.y2 - item.y1);
+      const seams = Math.floor(length / material.seamSpacing);
+      ctx.strokeStyle = `${material.seam}88`;
+      ctx.lineWidth = 3;
+      for (let index = 1; index <= seams; index += 1) {
+        const ratio = index / (seams + 1);
+        const x = item.x1 + (item.x2 - item.x1) * ratio;
+        const y = item.y1 + (item.y2 - item.y1) * ratio;
+        ctx.beginPath();
+        ctx.moveTo(x - 8, y + 12);
+        ctx.lineTo(x + 9, y + 42);
+        ctx.stroke();
+      }
+    }
+    for (const solid of this.collisionSolids) {
+      if (!this.isSolidActive(solid)) continue;
+      const pass26Skin = getPass26SolidSkin(solid.id);
+      if (pass26Skin) {
+        this.drawPass26SolidSkin(ctx, solid, pass26Skin);
+        continue;
+      }
+      if (solid.phase === 20) {
+        ctx.fillStyle = "#1b3033";
+        ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+        ctx.strokeStyle = PASS20_ZONE.palette.checkpoint;
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.moveTo(solid.x, solid.y);
+        ctx.lineTo(solid.x + solid.width, solid.y);
+        ctx.stroke();
+        continue;
+      }
+      if (solid.phase === 22) {
+        ctx.fillStyle = PASS22_ZONE.palette.recess;
+        ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+        ctx.strokeStyle = PASS22_ZONE.palette.edge;
+        ctx.lineWidth = 6;
+        ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
+        continue;
+      }
+      if (solid.phase === 23) {
+        ctx.fillStyle = PASS23_ZONE.palette.background;
+        ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+        ctx.strokeStyle = PASS23_ZONE.palette.edge;
+        ctx.lineWidth = 6;
+        ctx.strokeRect(solid.x, solid.y, solid.width, solid.height);
+        continue;
+      }
+      if (solid.phase === 18) {
+        ctx.fillStyle = PASS18_ZONE.palette.midground;
+        ctx.beginPath();
+        if (solid.role === "pass18_low_ceiling") {
+          ctx.moveTo(solid.x, solid.y);
+          ctx.lineTo(solid.x + solid.width, solid.y);
+          ctx.lineTo(solid.x + solid.width, solid.y + solid.height - 8);
+          ctx.lineTo(solid.x + solid.width * 0.78, solid.y + solid.height + 8);
+          ctx.lineTo(solid.x + solid.width * 0.58, solid.y + solid.height - 2);
+          ctx.lineTo(solid.x + solid.width * 0.38, solid.y + solid.height + 11);
+          ctx.lineTo(solid.x + solid.width * 0.18, solid.y + solid.height - 5);
+          ctx.lineTo(solid.x, solid.y + solid.height);
+        } else {
+          ctx.moveTo(solid.x, solid.y + solid.height);
+          ctx.lineTo(solid.x + solid.width, solid.y + solid.height);
+          ctx.lineTo(solid.x + solid.width - 12, solid.y + 20);
+          ctx.lineTo(solid.x + 20, solid.y);
+        }
+        ctx.closePath();
+        ctx.fill();
+        ctx.strokeStyle = PASS18_ZONE.palette.edge;
+        ctx.lineWidth = 7;
+        ctx.beginPath();
+        ctx.moveTo(solid.x, solid.y + solid.height);
+        ctx.lineTo(solid.x + solid.width, solid.y + solid.height);
+        ctx.stroke();
+        continue;
+      }
+      const zone08Solid = solid.role.startsWith("zone08_");
+      const zone09Solid = solid.role.startsWith("zone09_");
+      ctx.fillStyle = solid.role === "baffle" ? "#26383b" : solid.role === "ceiling" ? "#394041" : solid.role === "zone07_ceiling" ? "#3b3833" : zone08Solid ? "#3d3937" : zone09Solid ? "#344147" : "#304246";
+      ctx.fillRect(solid.x, solid.y, solid.width, solid.height);
+      const solidMaterial = getPass17Material(zone09Solid ? 9 : zone08Solid ? 8 : solid.role === "zone07_ceiling" ? 7 : solid.role === "ceiling" ? 4 : 2);
+      ctx.strokeStyle = solidMaterial.cap;
+      ctx.lineWidth = solidMaterial.capWidth;
+      ctx.beginPath();
+      ctx.moveTo(solid.x, solid.y);
+      ctx.lineTo(solid.x + solid.width, solid.y);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(205, 220, 210, 0.2)";
+      for (let y = solid.y + 34; y < solid.y + solid.height; y += 52) {
+        ctx.beginPath();
+        ctx.moveTo(solid.x + 5, y);
+        ctx.lineTo(solid.x + solid.width - 5, y - 12);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  drawPass18Grotto(ctx) {
+    if (!this.progress.pass15Completed) return;
+    const zone = PASS18_ZONE;
+    const palette = zone.palette;
+    ctx.save();
+    const background = ctx.createLinearGradient(zone.bounds.x, zone.bounds.y, zone.bounds.x, zone.bounds.y + zone.bounds.height);
+    background.addColorStop(0, `${palette.background}ee`);
+    background.addColorStop(1, "#02080bee");
+    ctx.fillStyle = background;
+    ctx.fillRect(zone.bounds.x, zone.bounds.y, zone.bounds.width, zone.bounds.height);
+
+    ctx.fillStyle = `${palette.midground}c8`;
+    for (let x = zone.bounds.x + 180; x < zone.bounds.x + zone.bounds.width; x += 430) {
+      const height = 270 + ((Math.round(x / 430) % 4) * 75);
+      ctx.beginPath();
+      ctx.moveTo(x - 70, zone.bounds.y + zone.bounds.height);
+      ctx.lineTo(x, zone.bounds.y + zone.bounds.height - height);
+      ctx.lineTo(x + 70, zone.bounds.y + zone.bounds.height);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    ctx.strokeStyle = `${palette.edge}38`;
+    ctx.lineWidth = 8;
+    for (const point of zone.playerRoute.slice(1, -1)) {
+      ctx.beginPath();
+      ctx.moveTo(point.x, point.y + 32);
+      ctx.lineTo(point.x - 42, point.y + 230);
+      ctx.moveTo(point.x, point.y + 32);
+      ctx.lineTo(point.x + 42, point.y + 230);
+      ctx.stroke();
+    }
+
+    const checkpoint = zone.checkpoint;
+    ctx.strokeStyle = this.progress.pass18CheckpointActivated ? palette.checkpoint : `${palette.checkpoint}66`;
+    ctx.lineWidth = 6;
+    ctx.beginPath();
+    ctx.moveTo(checkpoint.x, checkpoint.y);
+    ctx.lineTo(checkpoint.x, checkpoint.y - 125);
+    ctx.stroke();
+    ctx.fillStyle = this.progress.pass18CheckpointActivated ? palette.checkpoint : `${palette.checkpoint}55`;
+    ctx.beginPath();
+    ctx.arc(checkpoint.x, checkpoint.y - 145, 18, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  drawPass18Hazards(ctx) {
+    if (!this.progress.pass15Completed) return;
+    ctx.save();
+    ctx.fillStyle = PASS18_ZONE.palette.hazard;
+    for (const hazard of PASS18_LEVEL.hazards) {
+      for (let x = hazard.x1; x < hazard.x2; x += 30) {
+        ctx.beginPath();
+        ctx.moveTo(x, hazard.baseY);
+        ctx.lineTo(Math.min(x + 15, hazard.x2), hazard.tipY);
+        ctx.lineTo(Math.min(x + 30, hazard.x2), hazard.baseY);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  drawPass19Aftershock(ctx) {
+    if (!this.progress.pass18Entered) return;
+    const palette = PASS19_DESTRUCTION.palette;
+    ctx.save();
+    for (const support of PASS19_DESTRUCTION.supports) {
+      const destroyed = this.pass19DestroyedFloorIds.has(support.floorId);
+      const armed = this.pass19ArmedFloors.has(support.floorId);
+      ctx.strokeStyle = destroyed ? `${palette.fracture}66` : armed ? palette.warning : `${palette.dust}55`;
+      ctx.lineWidth = destroyed ? 5 : 8;
+      ctx.setLineDash(destroyed ? [14, 18] : armed ? [10, 8] : []);
+      ctx.beginPath();
+      ctx.moveTo(support.x, support.y);
+      ctx.lineTo(support.x + support.width, support.y + support.height);
+      ctx.moveTo(support.x + support.width, support.y);
+      ctx.lineTo(support.x, support.y + support.height);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    if (this.progress.pass19AftershockStarted && !this.progress.pass19Completed) {
+      const pulse = (this.frameCount % 54) / 54;
+      const origin = PASS18_ZONE.entry;
+      ctx.strokeStyle = `${palette.warning}${Math.round((1 - pulse) * 120).toString(16).padStart(2, "0")}`;
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(origin.x, origin.y, 120 + pulse * 900, -0.65, 0.65);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPass20SpringFlight(ctx) {
+    if (!this.progress.pass19Completed) return;
+    const zone = PASS20_ZONE;
+    const spring = zone.spring;
+    const palette = zone.palette;
+    ctx.save();
+
+    ctx.fillStyle = "rgba(8, 20, 24, 0.92)";
+    ctx.beginPath();
+    ctx.moveTo(zone.bounds.x, zone.bounds.y + 220);
+    ctx.quadraticCurveTo(30900, 10040, 31800, 10220);
+    ctx.quadraticCurveTo(33100, 10080, zone.bounds.x + zone.bounds.width, zone.bounds.y + 360);
+    ctx.lineTo(zone.bounds.x + zone.bounds.width, zone.bounds.y + zone.bounds.height);
+    ctx.lineTo(zone.bounds.x, zone.bounds.y + zone.bounds.height);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle = `${palette.trajectory}72`;
+    ctx.lineWidth = 4;
+    ctx.setLineDash([18, 16]);
+    ctx.beginPath();
+    ctx.moveTo(spring.x + spring.width * 0.5, spring.y - 12);
+    ctx.quadraticCurveTo(30960, 10140, spring.landingX1 + 140, 10825);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    const checkpoint = zone.checkpoint;
+    ctx.strokeStyle = this.progress.pass20Completed ? palette.checkpoint : `${palette.checkpoint}66`;
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.moveTo(checkpoint.x, checkpoint.y);
+    ctx.lineTo(checkpoint.x, checkpoint.y - 150);
+    ctx.stroke();
+    ctx.fillStyle = this.progress.pass20Completed ? palette.checkpoint : `${palette.checkpoint}55`;
+    ctx.beginPath();
+    ctx.arc(checkpoint.x, checkpoint.y - 172, 21, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  drawPass20SpringPad(ctx) {
+    if (!this.progress.pass19Completed) return;
+    const spring = PASS20_ZONE.spring;
+    const palette = PASS20_ZONE.palette;
+    const compression = this.progress.pass20SpringLaunched ? 0.25 : 1;
+    const coilLeft = spring.x + 18;
+    const coilRight = spring.x + spring.width - 18;
+    const coilTop = spring.y - 42 * compression;
+    ctx.save();
+    ctx.strokeStyle = palette.spring;
+    ctx.lineWidth = 11;
+    ctx.beginPath();
+    ctx.moveTo(coilLeft, spring.y + spring.height);
+    for (let index = 0; index <= 6; index += 1) {
+      const ratio = index / 6;
+      const x = index % 2 === 0 ? coilLeft : coilRight;
+      const y = spring.y + spring.height - (spring.y + spring.height - coilTop) * ratio;
+      ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+    ctx.fillStyle = palette.springCore;
+    ctx.fillRect(spring.x + 6, coilTop - 10, spring.width - 12, 18);
+    ctx.restore();
+  }
+
+  drawPass20Hazard(ctx) {
+    if (!this.progress.pass19Completed) return;
+    const hazard = PASS20_ZONE.hazard;
+    ctx.save();
+    ctx.fillStyle = PASS20_ZONE.palette.hazard;
+    for (let x = hazard.x1; x < hazard.x2; x += 36) {
+      ctx.beginPath();
+      ctx.moveTo(x, hazard.baseY);
+      ctx.lineTo(Math.min(x + 18, hazard.x2), hazard.tipY);
+      ctx.lineTo(Math.min(x + 36, hazard.x2), hazard.baseY);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.restore();
+  }
+
+  drawPass23Gauntlet(ctx) {
+    if (!this.progress.pass22Completed) return;
+    const zone = PASS23_ZONE;
+    const palette = zone.palette;
+    ctx.save();
+    const gradient = ctx.createLinearGradient(zone.bounds.x, zone.bounds.y, zone.bounds.x, zone.bounds.y + zone.bounds.height);
+    gradient.addColorStop(0, `${palette.background}ee`);
+    gradient.addColorStop(1, "#02070bee");
+    ctx.fillStyle = gradient;
+    ctx.fillRect(zone.bounds.x, zone.bounds.y, zone.bounds.width, zone.bounds.height);
+    ctx.strokeStyle = `${palette.edge}42`;
+    ctx.lineWidth = 7;
+    for (let x = zone.bounds.x + 180; x < zone.bounds.x + zone.bounds.width; x += 520) {
+      ctx.beginPath();
+      ctx.moveTo(x, zone.bounds.y + zone.bounds.height);
+      ctx.quadraticCurveTo(x + 80, zone.bounds.y + 160, x + 210, zone.bounds.y + zone.bounds.height);
+      ctx.stroke();
+    }
+    const checkpoint = zone.checkpoint;
+    ctx.strokeStyle = this.progress.pass23Completed ? palette.checkpoint : `${palette.checkpoint}66`;
+    ctx.lineWidth = 7;
+    ctx.beginPath();
+    ctx.moveTo(checkpoint.x, checkpoint.y);
+    ctx.lineTo(checkpoint.x, checkpoint.y - 150);
+    ctx.stroke();
+    ctx.fillStyle = this.progress.pass23Completed ? palette.checkpoint : `${palette.checkpoint}55`;
+    ctx.beginPath();
+    ctx.arc(checkpoint.x, checkpoint.y - 170, 20, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  }
+
+  drawPass23Actors(ctx) {
+    if (!this.progress.pass22Completed) return;
+    const palette = PASS23_ZONE.palette;
+    ctx.save();
+    for (const enemy of this.pass23Enemies) {
+      if (enemy.defeated) continue;
+      ctx.fillStyle = enemy.hitFrames > 0 ? "#f5d6b2" : palette.enemy;
+      ctx.strokeStyle = "#f0ae91";
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.arc(enemy.x, enemy.y, enemy.radius, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(enemy.x - 42, enemy.y);
+      ctx.lineTo(enemy.x + 42, enemy.y);
+      ctx.moveTo(enemy.x, enemy.y - 42);
+      ctx.lineTo(enemy.x, enemy.y + 42);
+      ctx.stroke();
+    }
+    for (const anchor of PASS23_ZONE.anchors) {
+      const used = this.usedGrappleAnchorIds.has(anchor.id);
+      ctx.strokeStyle = used ? "#b8f2dd" : palette.anchor;
+      ctx.lineWidth = 6;
+      ctx.beginPath();
+      ctx.moveTo(anchor.x, anchor.y - 130);
+      ctx.lineTo(anchor.x, anchor.y - 24);
+      ctx.stroke();
+      ctx.fillStyle = used ? "#3d8276" : "#294f51";
+      ctx.beginPath();
+      ctx.arc(anchor.x, anchor.y, 23, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
+    const spring = PASS23_ZONE.spring;
+    ctx.strokeStyle = palette.spring;
+    ctx.lineWidth = 10;
+    ctx.beginPath();
+    ctx.moveTo(spring.x + 16, spring.y + spring.height);
+    for (let index = 0; index <= 6; index += 1) {
+      ctx.lineTo(index % 2 === 0 ? spring.x + 16 : spring.x + spring.width - 16, spring.y + spring.height - index * 8);
+    }
+    ctx.stroke();
+    if (this.pass23Pursuer.active) {
+      ctx.translate(this.pass23Pursuer.x, this.pass23Pursuer.y);
+      ctx.rotate(this.pass23Pursuer.rotation);
+      ctx.fillStyle = `${palette.pursuer}cc`;
+      ctx.strokeStyle = "#f19a78";
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+      ctx.arc(0, 0, 46, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(-35, -28);
+      ctx.lineTo(28, 34);
+      ctx.moveTo(30, -34);
+      ctx.lineTo(-24, 31);
+      ctx.stroke();
+    }
+    ctx.restore();
+    if (this.attackFrames > 0) {
+      const p = this.player;
+      ctx.save();
+      ctx.strokeStyle = "rgba(210, 246, 228, 0.92)";
+      ctx.lineWidth = 8;
+      ctx.beginPath();
+      ctx.arc(p.x + PLAYER_PHYSICS.width * 0.5, p.y + PLAYER_PHYSICS.height * 0.5, 68, p.facing > 0 ? -0.9 : Math.PI - 0.9, p.facing > 0 ? 0.9 : Math.PI + 0.9);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  drawBuriedStructure(ctx) {
+    const roof = PASS12_LEVEL.roof;
+    ctx.save();
+    ctx.fillStyle = "rgba(16, 26, 26, 0.98)";
+    ctx.strokeStyle = "rgba(117, 144, 138, 0.52)";
+    ctx.lineWidth = 9;
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.lineTo(roof.at(-1).x2, 200);
+    ctx.lineTo(roof[0].x1, 200);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.stroke();
+
+    ctx.strokeStyle = "rgba(168, 152, 109, 0.18)";
+    ctx.lineWidth = 24;
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1 + 30);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2 + 30);
+    ctx.stroke();
+
+    for (const item of PASS12_LEVEL.frames) {
+      const shoulderY = item.y + Math.min(190, item.height * 0.34);
+      const inset = Math.min(92, item.width * 0.12);
+      ctx.fillStyle = "rgba(43, 52, 47, 0.34)";
+      ctx.strokeStyle = "rgba(161, 150, 112, 0.38)";
+      ctx.lineWidth = 32;
+      ctx.beginPath();
+      ctx.moveTo(item.x + inset, item.y + item.height);
+      ctx.lineTo(item.x + inset, shoulderY);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y - 80, item.x + item.width - inset, shoulderY);
+      ctx.lineTo(item.x + item.width - inset, item.y + item.height);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(113, 137, 129, 0.22)";
+      ctx.lineWidth = 7;
+      ctx.stroke();
+      ctx.fillStyle = "rgba(103, 93, 69, 0.54)";
+      ctx.fillRect(item.x + inset - 38, item.y + item.height - 42, 76, 42);
+      ctx.fillRect(item.x + item.width - inset - 38, item.y + item.height - 42, 76, 42);
+      for (let index = 1; index <= 4; index += 1) {
+        const y = shoulderY + ((item.height - (shoulderY - item.y)) * index) / 5;
+        ctx.strokeStyle = "rgba(179, 164, 121, 0.16)";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(item.x + inset - 14, y);
+        ctx.lineTo(item.x + inset + 14, y - 9);
+        ctx.moveTo(item.x + item.width - inset - 14, y - 9);
+        ctx.lineTo(item.x + item.width - inset + 14, y);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  drawUnevenTunnelStructure(ctx) {
+    const roof = PASS12_LEVEL.zone04Roof;
+    ctx.save();
+    ctx.fillStyle = "rgba(33, 43, 43, 0.97)";
+    ctx.strokeStyle = "#8a8f83";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.lineTo(roof.at(-1).x2, 200);
+    ctx.lineTo(roof[0].x1, 200);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.stroke();
+
+    for (const item of PASS12_LEVEL.zone04Frames) {
+      ctx.fillStyle = "rgba(179, 151, 105, 0.055)";
+      ctx.strokeStyle = "rgba(199, 173, 130, 0.32)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 30, item.x + item.width, item.y + item.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawDestructionMazeStructure(ctx) {
+    const roof = PASS12_LEVEL.zone05Roof;
+    ctx.save();
+    ctx.fillStyle = "rgba(42, 43, 39, 0.98)";
+    ctx.strokeStyle = "#9a8e78";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.lineTo(roof.at(-1).x2, 200);
+    ctx.lineTo(roof[0].x1, 200);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(roof[0].x1, roof[0].y1);
+    for (const item of roof) ctx.lineTo(item.x2, item.y2);
+    ctx.stroke();
+
+    const corridor = PASS12_LEVEL.collapseCorridor;
+    ctx.strokeStyle = "rgba(202, 134, 89, 0.20)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(225, 158, 104, 0.62)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([20, 16]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (const support of PASS12_LEVEL.corridorSupports) {
+      if (this.destroyedSupportIds.has(support.id)) continue;
+      ctx.fillStyle = "rgba(113, 90, 67, 0.42)";
+      ctx.strokeStyle = "rgba(211, 163, 111, 0.52)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(support.x, support.y, support.width, support.height);
+      ctx.strokeRect(support.x, support.y, support.width, support.height);
+      ctx.beginPath();
+      ctx.moveTo(support.x, support.y);
+      ctx.lineTo(support.x + support.width, support.y + support.height);
+      ctx.moveTo(support.x + support.width, support.y);
+      ctx.lineTo(support.x, support.y + support.height);
+      ctx.stroke();
+    }
+
+    for (const item of PASS12_LEVEL.zone05Frames) {
+      ctx.fillStyle = "rgba(188, 150, 102, 0.045)";
+      ctx.strokeStyle = "rgba(207, 170, 120, 0.28)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 20, item.x + item.width, item.y + item.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawGiantCurveStructure(ctx) {
+    const curve = PASS12_LEVEL.boulderCurve;
+    ctx.save();
+    ctx.strokeStyle = "rgba(80, 143, 145, 0.18)";
+    ctx.lineWidth = curve.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    curve.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(116, 199, 195, 0.55)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([24, 18]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (const item of PASS12_LEVEL.zone06Frames) {
+      ctx.fillStyle = "rgba(84, 154, 154, 0.04)";
+      ctx.strokeStyle = "rgba(122, 195, 192, 0.25)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 20, item.x + item.width, item.y + item.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawFirstInternalDescent(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(20, 31, 33, 0.95)";
+    ctx.strokeStyle = "rgba(156, 129, 92, 0.72)";
+    ctx.lineWidth = 5;
+    ctx.fillRect(9000, PASS09_ZONE.surfaceCeilingY, 6500, 1900);
+    ctx.beginPath();
+    ctx.moveTo(9000, PASS09_ZONE.surfaceCeilingY);
+    ctx.lineTo(15500, PASS09_ZONE.surfaceCeilingY);
+    ctx.stroke();
+
+    const corridor = PASS12_LEVEL.zone07BoulderCorridor;
+    ctx.strokeStyle = "rgba(160, 92, 61, 0.20)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(222, 139, 88, 0.62)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([22, 16]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (const item of PASS12_LEVEL.zone07Frames) {
+      ctx.fillStyle = "rgba(160, 130, 92, 0.055)";
+      ctx.strokeStyle = "rgba(196, 162, 113, 0.34)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 40, item.x + item.width, item.y + item.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawDoubleWallChase(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(23, 29, 32, 0.96)";
+    ctx.strokeStyle = "rgba(170, 139, 99, 0.76)";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(15200, PASS10_ZONE.surfaceCeilingY);
+    ctx.lineTo(16400, 5520);
+    ctx.lineTo(17400, 5720);
+    ctx.lineTo(18700, 5800);
+    ctx.lineTo(20500, 5850);
+    ctx.lineTo(23600, 5750);
+    ctx.lineTo(23600, 7100);
+    ctx.lineTo(15200, 7100);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(15200, PASS10_ZONE.surfaceCeilingY);
+    ctx.lineTo(16400, 5520);
+    ctx.lineTo(17400, 5720);
+    ctx.lineTo(18700, 5800);
+    ctx.lineTo(20500, 5850);
+    ctx.lineTo(23600, 5750);
+    ctx.stroke();
+
+    const corridor = PASS12_LEVEL.zone08BoulderCorridor;
+    ctx.strokeStyle = "rgba(165, 88, 59, 0.20)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(226, 142, 88, 0.64)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([20, 15]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (const item of PASS12_LEVEL.zone08Frames) {
+      ctx.fillStyle = "rgba(168, 139, 98, 0.05)";
+      ctx.strokeStyle = "rgba(205, 169, 117, 0.34)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 26, item.x + item.width, item.y + item.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawGrappleChamber(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(18, 30, 35, 0.97)";
+    ctx.strokeStyle = "rgba(111, 178, 184, 0.72)";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(23600, PASS11_ZONE.surfaceCeilingY);
+    ctx.quadraticCurveTo(24400, 5400, 25100, 5850);
+    ctx.quadraticCurveTo(25800, 6350, 25300, 7200);
+    ctx.lineTo(22000, 7540);
+    ctx.lineTo(21850, 6600);
+    ctx.quadraticCurveTo(22600, 6100, 23600, PASS11_ZONE.surfaceCeilingY);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    const corridor = PASS12_LEVEL.zone09BoulderCorridor;
+    ctx.strokeStyle = "rgba(69, 118, 125, 0.23)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(224, 145, 87, 0.66)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([22, 18]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (const item of PASS12_LEVEL.zone09BoulderFloors) {
+      ctx.strokeStyle = "rgba(126, 171, 173, 0.58)";
+      ctx.lineWidth = 12;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1);
+      ctx.lineTo(item.x2, item.y2);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(39, 65, 69, 0.9)";
+      ctx.lineWidth = 30;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1 + 18);
+      ctx.lineTo(item.x2, item.y2 + 18);
+      ctx.stroke();
+    }
+
+    for (const item of PASS12_LEVEL.zone09Frames) {
+      ctx.fillStyle = "rgba(91, 151, 158, 0.045)";
+      ctx.strokeStyle = "rgba(139, 199, 202, 0.31)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.45, item.y + 30, item.x + item.width, item.y + item.height * 0.74);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawDashSpikeChamber(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(17, 27, 31, 0.97)";
+    ctx.strokeStyle = "rgba(117, 174, 178, 0.66)";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(PASS12_ZONE.entry.x, PASS12_ZONE.surfaceCeilingY);
+    ctx.quadraticCurveTo(21700, 6750, 21200, 6860);
+    ctx.quadraticCurveTo(20700, 6920, PASS12_ZONE.exit.x, 7200);
+    ctx.lineTo(19900, 7600);
+    ctx.lineTo(22550, 7600);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    const corridor = PASS12_LEVEL.zone09DashBoulderCorridor;
+    ctx.strokeStyle = "rgba(82, 123, 127, 0.23)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(222, 142, 83, 0.63)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([20, 16]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (const item of PASS12_LEVEL.zone09DashBoulderFloors) {
+      ctx.strokeStyle = "rgba(110, 155, 158, 0.58)";
+      ctx.lineWidth = 12;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1);
+      ctx.lineTo(item.x2, item.y2);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(34, 57, 61, 0.92)";
+      ctx.lineWidth = 30;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1 + 18);
+      ctx.lineTo(item.x2, item.y2 + 18);
+      ctx.stroke();
+    }
+
+    for (const item of PASS12_LEVEL.zone09DashFrames) {
+      ctx.fillStyle = "rgba(94, 144, 148, 0.04)";
+      ctx.strokeStyle = "rgba(130, 184, 187, 0.28)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 28, item.x + item.width, item.y + item.height * 0.8);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawPrecisionParkourChamber(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(14, 24, 28, 0.97)";
+    ctx.strokeStyle = "rgba(117, 174, 178, 0.66)";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(20360, 7040);
+    ctx.quadraticCurveTo(19900, 6900, 19420, 7000);
+    ctx.quadraticCurveTo(18900, 7080, 18590, 7370);
+    ctx.quadraticCurveTo(18480, 7600, 18820, 7830);
+    ctx.quadraticCurveTo(19320, 7940, 19960, 7800);
+    ctx.lineTo(20360, 7480);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    const corridor = PASS15_LEVEL.zone09PrecisionBoulderCorridor;
+    ctx.strokeStyle = "rgba(82, 123, 127, 0.23)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(222, 142, 83, 0.63)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([20, 16]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    for (const item of PASS15_LEVEL.zone09PrecisionBoulderFloors) {
+      ctx.strokeStyle = "rgba(110, 155, 158, 0.58)";
+      ctx.lineWidth = 12;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1);
+      ctx.lineTo(item.x2, item.y2);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(34, 57, 61, 0.92)";
+      ctx.lineWidth = 30;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1 + 18);
+      ctx.lineTo(item.x2, item.y2 + 18);
+      ctx.stroke();
+    }
+
+    for (const item of PASS15_LEVEL.zone09PrecisionFrames) {
+      ctx.fillStyle = "rgba(94, 144, 148, 0.04)";
+      ctx.strokeStyle = "rgba(130, 184, 187, 0.28)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.45, item.y + 36, item.x + item.width, item.y + item.height * 0.72);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawGiantDirectionTurn(ctx) {
+    ctx.save();
+    ctx.fillStyle = "rgba(11, 20, 24, 0.98)";
+    ctx.strokeStyle = "rgba(109, 169, 175, 0.72)";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(19920, 7300);
+    ctx.quadraticCurveTo(18500, 7350, 17500, 7900);
+    ctx.quadraticCurveTo(16300, 8500, 16350, 9100);
+    ctx.quadraticCurveTo(17500, 9500, 19300, 9300);
+    ctx.lineTo(19880, 9000);
+    ctx.quadraticCurveTo(18100, 9160, 16950, 8840);
+    ctx.quadraticCurveTo(17400, 8000, 19920, 7700);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+
+    const corridor = PASS15_LEVEL.zone09GiantCurveCorridor;
+    ctx.strokeStyle = "rgba(68, 113, 120, 0.27)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => {
+      if (index === 0) ctx.moveTo(item.x, item.y);
+      else ctx.lineTo(item.x, item.y);
+    });
+    ctx.stroke();
+
+    for (const item of PASS15_LEVEL.zone09GiantCurveBoulderFloors) {
+      ctx.strokeStyle = "rgba(126, 183, 184, 0.82)";
+      ctx.lineWidth = 12;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1);
+      ctx.lineTo(item.x2, item.y2);
+      ctx.stroke();
+      ctx.strokeStyle = "rgba(35, 61, 66, 0.96)";
+      ctx.lineWidth = 34;
+      ctx.beginPath();
+      ctx.moveTo(item.x1, item.y1 + 20);
+      ctx.lineTo(item.x2, item.y2 + 20);
+      ctx.stroke();
+    }
+
+    for (const item of PASS15_LEVEL.zone09GiantCurveFrames) {
+      ctx.fillStyle = "rgba(87, 143, 149, 0.035)";
+      ctx.strokeStyle = "rgba(134, 194, 197, 0.27)";
+      ctx.lineWidth = 3;
+      ctx.fillRect(item.x, item.y, item.width, item.height);
+      ctx.strokeRect(item.x, item.y, item.width, item.height);
+      ctx.beginPath();
+      ctx.moveTo(item.x, item.y + item.height);
+      ctx.quadraticCurveTo(item.x + item.width * 0.5, item.y + 40, item.x + item.width, item.y + item.height * 0.78);
+      ctx.stroke();
+    }
+
+    ctx.strokeStyle = "rgba(232, 183, 109, 0.78)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([16, 14]);
+    ctx.beginPath();
+    ctx.moveTo(PASS14_ZONE.naturalDrop.lip.x, PASS14_ZONE.naturalDrop.lip.y + 16);
+    ctx.lineTo(PASS14_ZONE.naturalDrop.landing.x, PASS14_ZONE.naturalDrop.landing.y - 24);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  drawCollapsingBridge(ctx) {
+    ctx.save();
+    const corridor = PASS15_ZONE.boulderCorridor;
+    ctx.strokeStyle = "rgba(121, 77, 51, 0.20)";
+    ctx.lineWidth = corridor.width;
+    ctx.lineJoin = "round";
+    ctx.lineCap = "round";
+    ctx.beginPath();
+    corridor.points.forEach((item, index) => index === 0 ? ctx.moveTo(item.x, item.y) : ctx.lineTo(item.x, item.y));
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(225, 151, 91, 0.62)";
+    ctx.lineWidth = 4;
+    ctx.setLineDash([24, 18]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle = "rgba(176, 118, 69, 0.38)";
+    ctx.lineWidth = 5;
+    for (const item of PASS15_ZONE.floors.filter(floorItem => floorItem.lane === "wood_deck")) {
+      if (this.collapsedFloorIds.has(item.id)) continue;
+      const length = Math.hypot(item.x2 - item.x1, item.y2 - item.y1);
+      const pieces = Math.max(1, Math.round(length / 85));
+      for (let index = 1; index < pieces; index += 1) {
+        const ratio = index / pieces;
+        const x = item.x1 + (item.x2 - item.x1) * ratio;
+        const y = item.y1 + (item.y2 - item.y1) * ratio;
+        ctx.beginPath();
+        ctx.moveTo(x - 6, y - 5);
+        ctx.lineTo(x + 8, y + 22);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  drawDashSpikes(ctx) {
+    const spike = PASS12_LEVEL.zone09DashSpikeBed;
+    const width = (spike.x2 - spike.x1) / spike.teeth;
+    ctx.save();
+    const pass37Active = this.progress.pass10Completed && Boolean(getPass37ActiveScene(this.camera));
+    const pass37SpikeRecord = pass37Active ? this.pass37AssetState?.byId?.get("dash_spike") : null;
+    if (pass37SpikeRecord?.loaded && pass37SpikeRecord.image) {
+      ctx.restore();
+      return;
+    }
+    const metal = ctx.createLinearGradient(0, spike.tipY, 0, spike.baseY);
+    metal.addColorStop(0, pass37Active ? "rgba(188, 224, 218, 0.98)" : "rgba(238, 151, 111, 0.92)");
+    metal.addColorStop(0.24, pass37Active ? "rgba(38, 56, 62, 0.98)" : "rgba(164, 79, 69, 0.88)");
+    metal.addColorStop(0.72, pass37Active ? "rgba(9, 14, 18, 0.99)" : "rgba(110, 49, 45, 0.92)");
+    metal.addColorStop(1, pass37Active ? "rgba(116, 56, 37, 0.96)" : "rgba(164, 79, 69, 0.88)");
+    ctx.fillStyle = metal;
+    ctx.strokeStyle = pass37Active ? "rgba(230, 152, 88, 0.9)" : "rgba(238, 151, 111, 0.92)";
+    ctx.lineWidth = pass37Active ? 2 : 3;
+    ctx.shadowColor = pass37Active ? "rgba(229, 84, 42, 0.68)" : "transparent";
+    ctx.shadowBlur = pass37Active ? 9 : 0;
+    ctx.beginPath();
+    ctx.moveTo(spike.x1, spike.baseY);
+    for (let index = 0; index < spike.teeth; index += 1) {
+      const left = spike.x1 + width * index;
+      ctx.lineTo(left + width * 0.5, spike.tipY + (index % 2) * 9);
+      ctx.lineTo(left + width, spike.baseY);
+    }
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  drawPrecisionHazards(ctx) {
+    ctx.save();
+    const pass38Active = this.progress.pass12Completed && Boolean(getPass38ActiveScene(this.camera, this.progress));
+    for (const hazard of PASS15_LEVEL.zone09PrecisionHazards) {
+      const width = (hazard.x2 - hazard.x1) / hazard.teeth;
+      if (pass38Active) {
+        const metal = ctx.createLinearGradient(0, hazard.tipY, 0, hazard.baseY);
+        metal.addColorStop(0, "rgba(210, 232, 224, 0.98)");
+        metal.addColorStop(0.22, "rgba(55, 77, 80, 0.98)");
+        metal.addColorStop(0.72, "rgba(8, 14, 18, 0.99)");
+        metal.addColorStop(1, "rgba(112, 58, 39, 0.98)");
+        ctx.fillStyle = metal;
+        ctx.strokeStyle = "rgba(226, 142, 77, 0.92)";
+        ctx.shadowColor = "rgba(219, 72, 39, 0.62)";
+        ctx.shadowBlur = 8;
+        ctx.lineWidth = 2;
+      } else {
+        ctx.fillStyle = "rgba(164, 79, 69, 0.88)";
+        ctx.strokeStyle = "rgba(238, 151, 111, 0.92)";
+        ctx.lineWidth = 3;
+      }
+      ctx.beginPath();
+      ctx.moveTo(hazard.x1, hazard.baseY);
+      for (let index = 0; index < hazard.teeth; index += 1) {
+        const left = hazard.x1 + width * index;
+        ctx.lineTo(left + width * 0.5, hazard.tipY + (index % 2) * 8);
+        ctx.lineTo(left + width, hazard.baseY);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawGrappleAnchors(ctx) {
+    ctx.save();
+    const pass37AnchorRecord = this.progress.pass10Completed && getPass37ActiveScene(this.camera)
+      ? this.pass37AssetState?.byId?.get(PASS37_GRAPPLE_PLAN.grappleSpriteAssetId)
+      : null;
+    for (const item of PASS11_ZONE.anchors) {
+      const used = this.usedGrappleAnchorIds.has(item.id);
+      if (pass37AnchorRecord?.loaded && pass37AnchorRecord.image) {
+        const contract = PASS37_GRAPPLE_PLAN.renderContract;
+        const left = item.x - contract.anchorWidthPx * 0.5;
+        const top = item.y - contract.anchorHeightPx + contract.anchorBottomOffsetPx;
+        ctx.save();
+        ctx.globalAlpha = used ? 0.74 : 1;
+        ctx.shadowColor = used ? "rgba(83, 242, 207, 0.92)" : "rgba(43, 199, 185, 0.62)";
+        ctx.shadowBlur = used ? 20 : 10;
+        ctx.drawImage(pass37AnchorRecord.image, left, top, contract.anchorWidthPx, contract.anchorHeightPx);
+        ctx.fillStyle = used ? "rgba(124, 255, 220, 0.7)" : "rgba(72, 228, 211, 0.34)";
+        ctx.beginPath();
+        ctx.arc(item.x, item.y - 84, used ? 12 : 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+      } else {
+        ctx.strokeStyle = used ? "rgba(126, 224, 202, 0.95)" : "rgba(177, 220, 218, 0.82)";
+        ctx.fillStyle = used ? "rgba(57, 117, 111, 0.78)" : "rgba(52, 83, 88, 0.88)";
+        ctx.lineWidth = 6;
+        ctx.beginPath();
+        ctx.moveTo(item.x, item.y - 210);
+        ctx.lineTo(item.x, item.y - 30);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(item.x, item.y, 24, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(item.x - 26, item.y + 12);
+        ctx.quadraticCurveTo(item.x, item.y + 58, item.x + 26, item.y + 12);
+        ctx.stroke();
+      }
+    }
+    if (this.grapple.active) {
+      const item = [...PASS11_ZONE.anchors, ...PASS23_ZONE.anchors].find(anchorItem => anchorItem.id === this.grapple.anchorId);
+      if (item) {
+        ctx.strokeStyle = "rgba(172, 239, 223, 0.95)";
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(item.x, item.y);
+        ctx.lineTo(this.player.x + PLAYER_PHYSICS.width * 0.5, this.player.y + PLAYER_PHYSICS.height * 0.45);
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  drawChaseSupports(ctx) {
+    ctx.save();
+    for (const support of PASS15_CHASE.supportTargets) {
+      if (support.id.startsWith("support_") || this.destroyedSupportIds.has(support.id)) continue;
+      ctx.fillStyle = "rgba(92, 82, 68, 0.72)";
+      ctx.strokeStyle = "rgba(218, 153, 96, 0.68)";
+      ctx.lineWidth = 4;
+      ctx.fillRect(support.x, support.y, support.width, support.height);
+      ctx.strokeRect(support.x, support.y, support.width, support.height);
+      ctx.beginPath();
+      ctx.moveTo(support.x, support.y);
+      ctx.lineTo(support.x + support.width, support.y + support.height);
+      ctx.moveTo(support.x + support.width, support.y);
+      ctx.lineTo(support.x, support.y + support.height);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawBoulder(ctx) {
+    const chase = this.chase;
+    if (!chase.triggered || (!chase.active && !chase.sealed)) return;
+    const radius = PASS15_CHASE.boulder.radius;
+    ctx.save();
+    ctx.translate(chase.x, chase.y);
+    ctx.rotate(chase.rotation);
+    ctx.fillStyle = "#57473b";
+    ctx.strokeStyle = chase.sealed ? "#88745d" : "#e09157";
+    ctx.lineWidth = 8;
+    ctx.beginPath();
+    ctx.arc(0, 0, radius, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.strokeStyle = "rgba(241, 181, 112, 0.72)";
+    ctx.lineWidth = 5;
+    ctx.beginPath();
+    ctx.moveTo(-55, -54);
+    ctx.lineTo(-18, -12);
+    ctx.lineTo(-46, 31);
+    ctx.moveTo(22, -72);
+    ctx.lineTo(8, -25);
+    ctx.lineTo(54, 5);
+    ctx.moveTo(61, 34);
+    ctx.lineTo(14, 28);
+    ctx.lineTo(-4, 70);
+    ctx.stroke();
+    ctx.fillStyle = "rgba(224, 142, 82, 0.25)";
+    ctx.beginPath();
+    ctx.arc(-22, -18, radius * 0.42, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+
+    if (chase.active) {
+      ctx.save();
+      ctx.fillStyle = "rgba(201, 126, 77, 0.24)";
+      for (let index = 0; index < 7; index += 1) {
+        const angle = (this.frameCount * 0.08 + index * 1.7) % (Math.PI * 2);
+        ctx.beginPath();
+        ctx.arc(chase.x + Math.cos(angle) * (radius + 18), chase.y + radius * 0.55 + Math.sin(angle) * 18, 9 + (index % 3) * 4, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+    }
+  }
+
+  drawBreakables(ctx) {
+    ctx.save();
+    for (const gate of this.breakables) {
+      if (gate.destroyed) continue;
+      const pass34Sprite = PASS34_GATE_SPRITES[gate.shape];
+      const gateRecord = this.pass34AssetState?.byId?.get(PASS34_DESTRUCTION_PLAN.gateAssetId);
+      if (pass34Sprite && gateRecord?.loaded && gateRecord.image) {
+        const visualX = gate.x - pass34Sprite.visualInsetX;
+        const visualY = gate.y - pass34Sprite.visualInsetY;
+        const visualWidth = gate.width + pass34Sprite.visualInsetX * 2;
+        const visualHeight = gate.height + pass34Sprite.visualInsetY + 30;
+        ctx.save();
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = "high";
+        ctx.shadowColor = "rgba(214, 126, 59, 0.55)";
+        ctx.shadowBlur = 12;
+        ctx.drawImage(gateRecord.image, pass34Sprite.sx, pass34Sprite.sy, pass34Sprite.sw, pass34Sprite.sh, visualX, visualY, visualWidth, visualHeight);
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "rgba(224, 170, 101, 0.48)";
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(gate.x, gate.y, gate.width, gate.height);
+        ctx.restore();
+        continue;
+      }
+      ctx.fillStyle = "#5b4b3e";
+      ctx.strokeStyle = "#e0b26f";
+      ctx.lineWidth = 4;
+      ctx.fillRect(gate.x, gate.y, gate.width, gate.height);
+      ctx.strokeRect(gate.x, gate.y, gate.width, gate.height);
+      ctx.beginPath();
+      ctx.moveTo(gate.x, gate.y);
+      ctx.lineTo(gate.x + gate.width, gate.y + gate.height);
+      ctx.moveTo(gate.x + gate.width, gate.y);
+      ctx.lineTo(gate.x, gate.y + gate.height);
+      if (gate.shape === "lattice") {
+        ctx.moveTo(gate.x, gate.y + gate.height * 0.33);
+        ctx.lineTo(gate.x + gate.width, gate.y + gate.height * 0.33);
+        ctx.moveTo(gate.x, gate.y + gate.height * 0.67);
+        ctx.lineTo(gate.x + gate.width, gate.y + gate.height * 0.67);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  drawDebris(ctx) {
+    ctx.save();
+    for (const piece of this.debris) {
+      ctx.save();
+      ctx.translate(piece.x, piece.y);
+      ctx.rotate(piece.rotation);
+      ctx.globalAlpha = Math.min(1, piece.life / 24);
+      ctx.fillStyle = piece.kind === "support" ? "#bd704a" : piece.kind === "chase" ? "#8f5a43" : "#d4a361";
+      ctx.fillRect(-piece.width * 0.5, -piece.height * 0.5, piece.width, piece.height);
+      ctx.restore();
+    }
+    ctx.restore();
+  }
+
+  drawMovingPlatforms(ctx) {
+    ctx.save();
+    for (const platform of this.movingPlatforms) {
+      if (platform.phase === 23 && !this.progress.pass22Completed) continue;
+      const pass33Carriage = platform.id === "shaft_carriage" && this.pass33AssetState?.loadedCount === PASS33_TUNNEL_ASSETS.length;
+      if (pass33Carriage) {
+        const routeRecord = this.pass33AssetState.byId.get(PASS33_TUNNEL_PLAN.playableSurfaceAssetId);
+        ctx.save();
+        ctx.strokeStyle = "rgba(75, 112, 105, 0.82)";
+        ctx.lineWidth = 4;
+        for (const cableX of [platform.x + 16, platform.x + platform.width - 16]) {
+          ctx.beginPath();
+          ctx.moveTo(cableX, platform.y - 245);
+          ctx.lineTo(cableX, platform.y - 4);
+          ctx.stroke();
+          ctx.fillStyle = "rgba(189, 139, 76, 0.9)";
+          ctx.beginPath();
+          ctx.arc(cableX, platform.y - 5, 7, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.shadowColor = "rgba(0, 2, 4, 0.95)";
+        ctx.shadowBlur = 14;
+        ctx.shadowOffsetY = 12;
+        ctx.globalAlpha = 0.99;
+        ctx.drawImage(routeRecord.image, platform.x - 8, platform.y - 5, platform.width + 16, 54);
+        ctx.shadowColor = "rgba(72, 179, 164, 0.7)";
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetY = 0;
+        ctx.strokeStyle = "rgba(188, 229, 211, 0.88)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(platform.x, platform.y);
+        ctx.lineTo(platform.x + platform.width, platform.y);
+        ctx.stroke();
+        ctx.strokeStyle = "rgba(179, 128, 68, 0.86)";
+        ctx.lineWidth = 4;
+        ctx.beginPath();
+        ctx.moveTo(platform.x + 12, platform.y + 28);
+        ctx.lineTo(platform.x + platform.width * 0.34, platform.y + 45);
+        ctx.lineTo(platform.x + platform.width * 0.5, platform.y + 25);
+        ctx.lineTo(platform.x + platform.width * 0.66, platform.y + 45);
+        ctx.lineTo(platform.x + platform.width - 12, platform.y + 28);
+        ctx.stroke();
+        ctx.restore();
+        continue;
+      }
+      ctx.fillStyle = platform.phase === 23 ? PASS23_ZONE.palette.stone : "#51605f";
+      ctx.strokeStyle = platform.phase === 23 ? PASS23_ZONE.palette.carriage : "#dfc487";
+      ctx.lineWidth = 4;
+      ctx.fillRect(platform.x, platform.y, platform.width, platform.height);
+      ctx.strokeRect(platform.x, platform.y, platform.width, platform.height);
+      ctx.strokeStyle = "rgba(223, 196, 135, 0.44)";
+      ctx.setLineDash([10, 8]);
+      ctx.beginPath();
+      ctx.moveTo(platform.xMin, platform.y + platform.height * 0.5);
+      ctx.lineTo(platform.xMax + platform.width, platform.y + platform.height * 0.5);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+    ctx.restore();
+  }
+
+  drawMarkers(ctx) {
+    const markers = [
+      { x: 600, y: 900, label: "START", active: true },
+      { x: 2800, y: 1700, label: "ZONE 02", active: this.progress.zone01Reached },
+      { x: 3290, y: 1950, label: "CLIMB I", active: this.progress.firstClimb },
+      { x: 4050, y: 2410, label: "CLIMB II", active: this.progress.secondClimb },
+      { x: 4400, y: 3100, label: "ZONE 03 ENTRY", active: this.progress.completed },
+      { x: 6240, y: 2500, label: "LOWER RISE", active: this.progress.lowerRiseReached },
+      { x: 7360, y: 2000, label: "ATRIUM", active: this.progress.atriumReached },
+      { x: 8000, y: 1600, label: "UPPER GALLERY", active: this.progress.upperGalleryReached },
+      { x: 10400, y: 3300, label: "ZONE 04 ENTRY", active: this.progress.pass04Completed },
+      { x: 11050, y: 3150, label: "LOW TUNNEL", active: this.progress.lowTunnelReached },
+      { x: 11620, y: 3290, label: "SHAFT CARRIAGE", active: this.progress.platformBoarded },
+      { x: 12220, y: 3600, label: "UNEVEN GALLERY", active: this.progress.unevenTunnelReached },
+      { x: 13400, y: 3700, label: "ZONE 05 ENTRY", active: this.progress.pass05Completed },
+      { x: 13950, y: 3950, label: "CHASE START", active: this.progress.boulderStarted },
+      { x: 14700, y: 3500, label: "DASH GATE I", active: this.breakables[0]?.destroyed },
+      { x: 19300, y: 3700, label: "DASH GATE II", active: this.breakables[1]?.destroyed },
+      { x: 20400, y: 3100, label: "HIGH GALLERY", active: this.progress.highGalleryReached },
+      { x: 23750, y: 3300, label: "DASH GATE III", active: this.breakables[2]?.destroyed },
+      { x: 24800, y: 4400, label: "ZONE 06 ENTRY", active: this.progress.pass06Completed },
+      { x: 25440, y: 4750, label: "GIANT CURVE", active: this.progress.curveCommitted },
+      { x: 25200, y: 5220, label: "LOWER LANDING", active: this.progress.zone06Dropped },
+      { x: 22400, y: 4800, label: "DASH GAP I", active: this.progress.eastDashGapCleared },
+      { x: 19000, y: 4750, label: "DASH GAP II", active: this.progress.middleDashGapCleared },
+      { x: 15720, y: 4850, label: "DASH GAP III", active: this.progress.westDashGapCleared },
+      { x: 9300, y: 5000, label: "PASS 08 EXIT", active: this.progress.pass08Completed },
+      { x: 9700, y: 5000, label: "INTERNAL ENTRY", active: this.progress.zone07Entered },
+      { x: 11650, y: 5450, label: "DROP I", active: this.progress.zone07UpperDrop },
+      { x: 10200, y: 6000, label: "DROP II", active: this.progress.zone07MiddleDrop },
+      { x: 15200, y: 5500, label: "PASS 09 EXIT", active: this.progress.pass09Completed },
+      { x: 15950, y: 6300, label: "CHASE CLIMB I", active: this.progress.zone08ShaftOneCleared },
+      { x: 17650, y: 6750, label: "CHASE CLIMB II", active: this.progress.zone08ShaftTwoCleared },
+      { x: 23600, y: 5900, label: "PASS 10 EXIT", active: this.progress.pass10Completed },
+      { x: 22400, y: 6900, label: "PASS 11 EXIT", active: this.progress.pass11Completed },
+      { x: 21450, y: 7065, label: "AIR DASH SPIKES", active: this.progress.dashSpikeCleared },
+      { x: 20300, y: 7200, label: "PASS 12 EXIT", active: this.progress.pass12Completed },
+      { x: 19740, y: 7310, label: "SHORT CUT", active: this.progress.precisionShortGapCleared },
+      { x: 18740, y: 7430, label: "TURN", active: this.progress.precisionDirectionReversed },
+      { x: 19210, y: 7500, label: "LONG HOLD", active: this.progress.precisionLongGapCleared },
+      { x: 19800, y: 7520, label: "PASS 13 EXIT", active: this.progress.pass13Completed },
+      { x: 18780, y: 7800, label: "UPPER GAP", active: this.progress.giantCurveUpperGapCleared },
+      { x: 16900, y: 8550, label: "NATURAL DROP", active: this.progress.giantCurveDropStarted },
+      { x: 16700, y: 8800, label: "LOWER TURN", active: this.progress.giantCurveDirectionReversed },
+      { x: 19000, y: 9000, label: "PASS 14 / BRIDGE", active: this.progress.pass14Completed },
+      { x: 20240, y: 9115, label: "BRIDGE GAP I", active: this.progress.bridgeGapOneCleared },
+      { x: 21960, y: 9275, label: "BRIDGE GAP II", active: this.progress.bridgeGapTwoCleared },
+      { x: 23580, y: 9420, label: "BRIDGE GAP III", active: this.progress.bridgeGapThreeCleared },
+      { x: 25200, y: 9600, label: "FINAL ESCAPE", active: this.progress.pass15Completed },
+      { x: 25700, y: 9700, label: "PASS 18 ENTRY", active: this.progress.pass18Entered },
+      { x: 27320, y: 9890, label: "NARROW MIDPOINT", active: this.progress.pass18NarrowLandings >= 7 },
+      { x: 29400, y: 10520, label: "PRECISION EXIT", active: this.progress.pass18Completed },
+    ];
+    ctx.save();
+    ctx.font = "700 11px Arial, sans-serif";
+    ctx.textAlign = "center";
+    for (const marker of markers) {
+      ctx.strokeStyle = marker.active ? "#e3c980" : "rgba(155, 199, 207, 0.45)";
+      ctx.fillStyle = marker.active ? "#e3c980" : "#79979b";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(marker.x, marker.y - 8);
+      ctx.lineTo(marker.x, marker.y - 82);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(marker.x, marker.y - 92, 8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillText(marker.label, marker.x, marker.y - 112);
+    }
+    ctx.restore();
+  }
+
+  drawPlayer(ctx) {
+    const p = this.player;
+    ctx.save();
+    if (p.dashFrames > 0) {
+      ctx.fillStyle = "rgba(183, 229, 224, 0.18)";
+      ctx.fillRect(p.x - p.facing * 45, p.y + 8, PLAYER_PHYSICS.width + 45, PLAYER_PHYSICS.height - 16);
+    }
+    ctx.fillStyle = PALETTE.player;
+    ctx.beginPath();
+    ctx.arc(p.x + 17, p.y + 10, 9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillRect(p.x + 8, p.y + 18, 18, 22);
+    ctx.fillRect(p.x + 5, p.y + 40, 8, 8);
+    ctx.fillRect(p.x + 21, p.y + 40, 8, 8);
+    ctx.strokeStyle = "#8ed1d0";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(p.x + 17, p.y + 20);
+    ctx.lineTo(p.x + 17 + p.facing * 18, p.y + 27);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  drawBlueprint() {
+    const ctx = this.context;
+    ctx.fillStyle = "#041016";
+    ctx.fillRect(0, 0, VIEWPORT.width, VIEWPORT.height);
+    const frame = { x: 42, y: 90, width: 1116, height: 510 };
+    const mapPoint = point => ({
+      x: frame.x + (point.x / WORLD.width) * frame.width,
+      y: frame.y + (point.y / WORLD.height) * frame.height,
+    });
+    ctx.strokeStyle = "rgba(139, 190, 199, 0.34)";
+    ctx.strokeRect(frame.x, frame.y, frame.width, frame.height);
+    ZONES.forEach((zone, index) => {
+      const topLeft = mapPoint(zone.bounds);
+      const width = (zone.bounds.width / WORLD.width) * frame.width;
+      const height = (zone.bounds.height / WORLD.height) * frame.height;
+      ctx.fillStyle = index < 10 ? "rgba(216, 191, 120, 0.19)" : "rgba(69, 111, 119, 0.10)";
+      ctx.strokeStyle = index < 10 ? "rgba(216, 191, 120, 0.75)" : "rgba(139, 190, 199, 0.32)";
+      ctx.fillRect(topLeft.x, topLeft.y, width, height);
+      ctx.strokeRect(topLeft.x, topLeft.y, width, height);
+      ctx.fillStyle = index < 10 ? "#ead59b" : "#8cadb3";
+      ctx.font = "700 9px Arial, sans-serif";
+      ctx.fillText(`${String(index + 1).padStart(2, "0")} ${zone.name}`, topLeft.x + 6, topLeft.y + 15);
+    });
+    const pass18TopLeft = mapPoint(PASS18_ZONE.bounds);
+    ctx.fillStyle = "rgba(183, 199, 170, 0.20)";
+    ctx.strokeStyle = "rgba(223, 201, 120, 0.78)";
+    ctx.fillRect(pass18TopLeft.x, pass18TopLeft.y, (PASS18_ZONE.bounds.width / WORLD.width) * frame.width, (PASS18_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.strokeRect(pass18TopLeft.x, pass18TopLeft.y, (PASS18_ZONE.bounds.width / WORLD.width) * frame.width, (PASS18_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.fillStyle = "#eadb9f";
+    ctx.font = "700 9px Arial, sans-serif";
+    ctx.fillText("11 NARROW PRECISION / AFTERSHOCK", pass18TopLeft.x + 6, pass18TopLeft.y + 15);
+    const pass20TopLeft = mapPoint(PASS20_ZONE.bounds);
+    ctx.fillStyle = "rgba(239, 185, 111, 0.16)";
+    ctx.strokeStyle = "rgba(239, 185, 111, 0.82)";
+    ctx.fillRect(pass20TopLeft.x, pass20TopLeft.y, (PASS20_ZONE.bounds.width / WORLD.width) * frame.width, (PASS20_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.strokeRect(pass20TopLeft.x, pass20TopLeft.y, (PASS20_ZONE.bounds.width / WORLD.width) * frame.width, (PASS20_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.fillStyle = "#f0d39a";
+    ctx.fillText("12 CHASE SPRING FLIGHT", pass20TopLeft.x + 6, pass20TopLeft.y + 15);
+    const pass22TopLeft = mapPoint(PASS22_ZONE.bounds);
+    ctx.fillStyle = "rgba(139, 183, 168, 0.16)";
+    ctx.strokeStyle = "rgba(168, 198, 187, 0.82)";
+    ctx.fillRect(pass22TopLeft.x, pass22TopLeft.y, (PASS22_ZONE.bounds.width / WORLD.width) * frame.width, (PASS22_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.strokeRect(pass22TopLeft.x, pass22TopLeft.y, (PASS22_ZONE.bounds.width / WORLD.width) * frame.width, (PASS22_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.fillStyle = "#cfe2d9";
+    ctx.fillText("13 WINDING RECOVERY SHAFT", pass22TopLeft.x + 6, pass22TopLeft.y + 15);
+    const pass23TopLeft = mapPoint(PASS23_ZONE.bounds);
+    ctx.fillStyle = "rgba(215, 103, 85, 0.13)";
+    ctx.strokeStyle = "rgba(159, 199, 193, 0.88)";
+    ctx.fillRect(pass23TopLeft.x, pass23TopLeft.y, (PASS23_ZONE.bounds.width / WORLD.width) * frame.width, (PASS23_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.strokeRect(pass23TopLeft.x, pass23TopLeft.y, (PASS23_ZONE.bounds.width / WORLD.width) * frame.width, (PASS23_ZONE.bounds.height / WORLD.height) * frame.height);
+    ctx.fillStyle = "#e1eee8";
+    ctx.fillText("14 CONVERGENCE GAUNTLET", pass23TopLeft.x + 6, pass23TopLeft.y + 15);
+    const drawRoute = (points, color, dash) => {
+      ctx.strokeStyle = color;
+      ctx.lineWidth = dash ? 2 : 3;
+      ctx.setLineDash(dash ? [7, 6] : []);
+      ctx.beginPath();
+      points.forEach((point, index) => {
+        const mapped = mapPoint(point);
+        if (index === 0) ctx.moveTo(mapped.x, mapped.y);
+        else ctx.lineTo(mapped.x, mapped.y);
+      });
+      ctx.stroke();
+      ctx.setLineDash([]);
+    };
+    drawRoute(PLAYER_ROUTE, PALETTE.route, false);
+    drawRoute(PASS13_ZONE.playerRoute, PALETTE.route, false);
+    drawRoute(PASS14_ZONE.playerRoute, PALETTE.route, false);
+    drawRoute(PASS15_ZONE.playerRoute, PALETTE.route, false);
+    drawRoute(PASS18_ZONE.playerRoute, "#dfc978", false);
+    drawRoute(PASS20_ZONE.playerRoute, PASS20_ZONE.palette.spring, false);
+    drawRoute(PASS22_ZONE.playerRoute, PASS22_ZONE.palette.guide, false);
+    drawRoute(PASS23_ZONE.playerRoute, PASS23_ZONE.palette.edge, false);
+    drawRoute(PASS23_ZONE.pursuer.route, PASS23_ZONE.palette.pursuer, true);
+    drawRoute(PASS15_CHASE.path.points, PALETTE.boulderRoute, true);
+    ctx.fillStyle = PASS19_DESTRUCTION.palette.fracture;
+    for (const support of PASS19_DESTRUCTION.supports) {
+      const mapped = mapPoint({ x: support.x + support.width * 0.5, y: support.y });
+      ctx.beginPath();
+      ctx.arc(mapped.x, mapped.y, 2.5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.fillStyle = "#eff5f3";
+    ctx.font = "800 22px Arial, sans-serif";
+    const springPoint = mapPoint({ x: PASS20_ZONE.spring.x + PASS20_ZONE.spring.width * 0.5, y: PASS20_ZONE.spring.y });
+    ctx.fillStyle = PASS20_ZONE.palette.spring;
+    ctx.beginPath();
+    ctx.arc(springPoint.x, springPoint.y, 4, 0, Math.PI * 2);
+    ctx.fill();
+    const rasterGate = PASS28_RASTER_ASSETS[0];
+    const rasterTopLeft = mapPoint(rasterGate);
+    ctx.fillStyle = "rgba(141, 203, 208, 0.16)";
+    ctx.strokeStyle = "#8dcbd0";
+    ctx.lineWidth = 2;
+    ctx.fillRect(rasterTopLeft.x, rasterTopLeft.y, (rasterGate.width / WORLD.width) * frame.width, (rasterGate.height / WORLD.height) * frame.height);
+    ctx.strokeRect(rasterTopLeft.x, rasterTopLeft.y, (rasterGate.width / WORLD.width) * frame.width, (rasterGate.height / WORLD.height) * frame.height);
+    for (const scene of PASS31_ENTRANCE_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(108, 191, 170, 0.18)";
+      ctx.strokeStyle = "#7bc9b4";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    for (const scene of PASS32_BURIED_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(217, 177, 103, 0.16)";
+      ctx.strokeStyle = "#d9b167";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    for (const scene of PASS33_TUNNEL_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(121, 207, 198, 0.16)";
+      ctx.strokeStyle = "#79cfc6";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    for (const scene of PASS34_DESTRUCTION_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(220, 137, 76, 0.17)";
+      ctx.strokeStyle = "#dc894c";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    for (const scene of PASS35_CURVE_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(80, 201, 188, 0.16)";
+      ctx.strokeStyle = "#70d0c4";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    for (const scene of PASS36_INTERNAL_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(93, 176, 166, 0.14)";
+      ctx.strokeStyle = "#83c9be";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    for (const scene of PASS37_GRAPPLE_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(97, 211, 194, 0.16)";
+      ctx.strokeStyle = "#8ad9cc";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    for (const scene of PASS38_PRECISION_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = "rgba(88, 197, 183, 0.17)";
+      ctx.strokeStyle = "#78d1c4";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    for (const scene of PASS39_BRIDGE_SCENES) {
+      const sceneTopLeft = mapPoint(scene.routeBounds);
+      ctx.fillStyle = scene.phase === "bridge" ? "rgba(214, 151, 84, 0.16)" : "rgba(89, 203, 188, 0.17)";
+      ctx.strokeStyle = scene.phase === "bridge" ? "#d79a62" : "#79d2c4";
+      ctx.lineWidth = 2;
+      ctx.fillRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+      ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
+    }
+    ctx.fillStyle = "#eff5f3";
+    ctx.fillText("PASS 40 / FULL INTEGRATION + DIRECT-ENTRY RELEASE", 42, 52);
+    ctx.fillStyle = "#a8bcc0";
+    ctx.font = "700 10px Arial, sans-serif";
+    ctx.fillText(`40 PASSES · ${PASS40_RELEASE_PLAN.runtimeAssetFiles} WEBP ASSETS · ${(PASS40_RELEASE_PLAN.optimizedRuntimeAssetBytes / 1048576).toFixed(2)} MiB · DIRECT ENTRY READY`, 42, 72);
+  }
+
+  getDebugState() {
+    const p = this.player;
+    return {
+      player: {
+        x: p.x,
+        y: p.y,
+        vx: p.vx,
+        vy: p.vy,
+        grounded: p.grounded,
+        wallSide: p.wallSide,
+        dashAvailable: p.dashAvailable,
+        grappleLaunchFrames: p.grappleLaunchFrames,
+        springLaunchFrames: p.springLaunchFrames,
+        standingPlatformId: p.standingPlatformId,
+        standingFloorId: p.standingFloorId,
+      },
+      movingPlatforms: this.movingPlatforms.map(item => ({
+        id: item.id,
+        x: item.x,
+        y: item.y,
+        direction: item.direction,
+      })),
+      pass23Enemies: this.pass23Enemies.map(item => ({ id: item.id, health: item.health, defeated: item.defeated, hitFrames: item.hitFrames })),
+      pass23Pursuer: {
+        active: this.pass23Pursuer.active,
+        escaped: this.pass23Pursuer.escaped,
+        delayFrames: this.pass23Pursuer.delayFrames,
+        pathDistance: this.pass23Pursuer.pathDistance,
+        totalDistance: this.pass23Pursuer.totalDistance,
+        x: this.pass23Pursuer.x,
+        y: this.pass23Pursuer.y,
+        minimumGap: this.pass23Pursuer.minimumGap,
+      },
+      attackFrames: this.attackFrames,
+      pass24Integration: getPass24IntegrationState(this.progress),
+      pass24ObjectiveIdsSeen: Array.from(this.pass24ObjectiveIdsSeen),
+      breakables: this.breakables.map(item => ({
+        id: item.id,
+        shape: item.shape,
+        destroyed: item.destroyed,
+      })),
+      chase: {
+        triggered: this.chase.triggered,
+        active: this.chase.active,
+        sealed: this.chase.sealed,
+        delayFrames: this.chase.delayFrames,
+        breachDelayFrames: this.chase.breachDelayFrames,
+        breachComplete: this.chase.breachComplete,
+        internalBreakpointIndex: this.chase.internalBreakpointIndex,
+        internalPauseFrames: this.chase.internalPauseFrames,
+        pass14HeadStartFrames: this.chase.pass14HeadStartFrames,
+        pass15HeadStartFrames: this.chase.pass15HeadStartFrames,
+        activeFrames: this.chase.activeFrames,
+        pathDistance: this.chase.pathDistance,
+        pathProgress: this.chase.pathDistance / PASS15_CHASE.path.totalDistance,
+        pathIndex: this.chase.pathIndex,
+        x: this.chase.x,
+        y: this.chase.y,
+        speed: this.chase.speed,
+        basePacedSpeed: this.chase.basePacedSpeed,
+        targetSpeed: this.chase.targetSpeed,
+        playerPathDistance: this.chase.playerPathDistance,
+        playerPathIndex: this.chase.playerPathIndex,
+        leadDistance: this.chase.leadDistance,
+        projectionGap: this.chase.projectionGap,
+        destructionSlowdownFrames: this.chase.destructionSlowdownFrames,
+      },
+      collapsedFloorIds: Array.from(this.collapsedFloorIds).sort(),
+      destroyedSupportIds: Array.from(this.destroyedSupportIds).sort(),
+      grapple: {
+        active: this.grapple.active,
+        anchorId: this.grapple.anchorId,
+        ropeLength: this.grapple.ropeLength,
+        attachedFrames: this.grapple.attachedFrames,
+        cooldown: this.grapple.cooldown,
+        lastAnchorId: this.grapple.lastAnchorId,
+        usedAnchorIds: Array.from(this.usedGrappleAnchorIds),
+      },
+      precisionJump: { ...this.precisionJump },
+      pass18Jump: { ...this.pass18Jump },
+      pass18VisitedFloorIds: Array.from(this.pass18VisitedFloorIds).sort(),
+      pass19ArmedFloorIds: Array.from(this.pass19ArmedFloors.keys()),
+      pass19DestroyedFloorIds: Array.from(this.pass19DestroyedFloorIds),
+      boulderCatchCount: this.boulderCatchCount,
+      debrisCount: this.debris.length,
+      camera: { ...this.camera },
+      progress: { ...this.progress },
+      keys: Array.from(this.keys).sort(),
+      blueprintVisible: this.blueprintVisible,
+      resetCount: this.resetCount,
+      frameCount: this.frameCount,
+    };
+  }
+
+  audit() {
+    const blueprint = validateBlueprint();
+    const pass03 = validatePass03Level();
+    const pass04 = validatePass04Level();
+    const pass05 = validatePass05Level();
+    const pass06 = validatePass06Level();
+    const pass07 = validatePass07Level();
+    const pass08 = validatePass08Level();
+    const pass09 = validatePass09Level();
+    const pass10 = validatePass10Level();
+    const pass11 = validatePass11Level();
+    const pass12 = validatePass12Level();
+    const pass13 = validatePass13Level();
+    const pass14 = validatePass14Level();
+    const pass15 = validatePass15Level();
+    const pass16 = validatePass16Visuals();
+    const pass17 = validatePass17Art();
+    const pass18 = validatePass18Level();
+    const pass19 = validatePass19Level();
+    const pass20 = validatePass20Level();
+    const pass21 = validatePass21Pacing();
+    const pass22 = validatePass22Level();
+    const pass23 = validatePass23Level();
+    const pass24 = validatePass24Integration();
+    const pass25 = validatePass25Visuals();
+    const pass26 = validatePass26Terrain();
+    const pass27 = validatePass27Structures();
+    const pass28 = validatePass28ArtDirection();
+    const pass29 = validatePass29ModularArt();
+    const pass30 = validatePass30QualityGate();
+    const pass31 = validatePass31EntranceArt();
+    const pass32 = validatePass32BuriedRiseArt();
+    const pass33 = validatePass33UnevenTunnelArt();
+    const pass34 = validatePass34DestructionMazeArt();
+    const pass35 = validatePass35GiantCurveArt();
+    const pass36 = validatePass36InternalChaseArt();
+    const pass37 = validatePass37GrappleDashArt();
+    const pass38 = validatePass38PrecisionCurveArt();
+    const pass39 = validatePass39BridgeAftershockArt();
+    const pass40 = validatePass40Release();
+    const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
+    const runtimeAssets = [
+      ...PASS28_RASTER_ASSETS,
+      ...PASS29_MODULE_ASSETS,
+      ...PASS31_ENTRANCE_ASSETS,
+      ...PASS32_BURIED_ASSETS,
+      ...PASS33_TUNNEL_ASSETS,
+      ...PASS34_DESTRUCTION_ASSETS,
+      ...PASS35_CURVE_ASSETS,
+      ...PASS36_INTERNAL_ASSETS,
+      ...PASS37_GRAPPLE_ASSETS,
+      ...PASS38_PRECISION_ASSETS,
+      ...PASS39_BRIDGE_ASSETS,
+    ];
+    const assetGroups = [
+      [this.pass28AssetState, PASS28_RASTER_ASSETS.length],
+      [this.pass29AssetState, PASS29_MODULE_ASSETS.length],
+      [this.pass31AssetState, PASS31_ENTRANCE_ASSETS.length],
+      [this.pass32AssetState, PASS32_BURIED_ASSETS.length],
+      [this.pass33AssetState, PASS33_TUNNEL_ASSETS.length],
+      [this.pass34AssetState, PASS34_DESTRUCTION_ASSETS.length],
+      [this.pass35AssetState, PASS35_CURVE_ASSETS.length],
+      [this.pass36AssetState, PASS36_INTERNAL_ASSETS.length],
+      [this.pass37AssetState, PASS37_GRAPPLE_ASSETS.length],
+      [this.pass38AssetState, PASS38_PRECISION_ASSETS.length],
+      [this.pass39AssetState, PASS39_BRIDGE_ASSETS.length],
+    ];
+    const checks = [
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass40" },
+      { id: "pass_number", passed: BUILD.pass === 40 },
+      { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
+      { id: "canvas_context", passed: Boolean(this.context) },
+      { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
+      { id: "single_runtime", passed: this.running && this.frameHandle !== 0 },
+      { id: "module_entry", passed: scriptSources.some(source => source.includes("src/v2/main.js")) },
+      { id: "legacy_inactive", passed: scriptSources.filter(Boolean).every(source => source.includes("src/v2/main.js")) },
+      { id: "blueprint_validation", passed: blueprint.passed },
+      { id: "pass03_level_validation", passed: pass03.passed },
+      { id: "pass04_level_validation", passed: pass04.passed },
+      { id: "pass05_level_validation", passed: pass05.passed },
+      { id: "pass06_level_validation", passed: pass06.passed },
+      { id: "pass07_level_validation", passed: pass07.passed },
+      { id: "pass08_level_validation", passed: pass08.passed },
+      { id: "pass09_level_validation", passed: pass09.passed },
+      { id: "pass10_level_validation", passed: pass10.passed },
+      { id: "pass11_level_validation", passed: pass11.passed },
+      { id: "pass12_level_validation", passed: pass12.passed },
+      { id: "pass13_level_validation", passed: pass13.passed },
+      { id: "pass14_level_validation", passed: pass14.passed },
+      { id: "pass15_level_validation", passed: pass15.passed },
+      { id: "pass16_visual_validation", passed: pass16.passed },
+      { id: "pass17_art_validation", passed: pass17.passed },
+      { id: "pass18_level_validation", passed: pass18.passed },
+      { id: "pass19_destruction_validation", passed: pass19.passed },
+      { id: "pass20_spring_validation", passed: pass20.passed },
+      { id: "pass21_pacing_validation", passed: pass21.passed },
+      { id: "pass22_shaft_validation", passed: pass22.passed },
+      { id: "pass23_convergence_validation", passed: pass23.passed },
+      { id: "pass24_integration_validation", passed: pass24.passed },
+      { id: "pass25_visual_validation", passed: pass25.passed },
+      { id: "pass26_terrain_validation", passed: pass26.passed },
+      { id: "pass27_structure_validation", passed: pass27.passed },
+      { id: "pass28_art_direction_validation", passed: pass28.passed },
+      { id: "pass28_raster_asset_loaded", passed: this.pass28AssetState?.loadedCount === PASS28_RASTER_ASSETS.length },
+      { id: "pass28_raster_asset_dimensions", passed: this.pass28AssetState?.dimensionsValid === true },
+      { id: "pass29_modular_art_validation", passed: pass29.passed },
+      { id: "pass29_module_assets_loaded", passed: this.pass29AssetState?.loadedCount === PASS29_MODULE_ASSETS.length },
+      { id: "pass29_module_dimensions", passed: this.pass29AssetState?.dimensionsValid === true },
+      { id: "pass30_quality_gate_validation", passed: pass30.passed },
+      { id: "pass30_representative_approved", passed: PASS30_QUALITY_GATE.representativeSliceApproved === true },
+      { id: "pass30_zero_collision_changes", passed: PASS30_QUALITY_GATE.collisionChanges === 0 },
+      { id: "pass31_entrance_art_validation", passed: pass31.passed },
+      { id: "pass31_assets_loaded", passed: this.pass31AssetState?.loadedCount === PASS31_ENTRANCE_ASSETS.length },
+      { id: "pass31_asset_dimensions", passed: this.pass31AssetState?.dimensionsValid === true },
+      { id: "pass31_two_scene_scope", passed: PASS31_ENTRANCE_PLAN.scope === "start_slope_and_double_wall_only" },
+      { id: "pass31_zero_collision_changes", passed: PASS31_ENTRANCE_PLAN.collisionChanges === 0 },
+      { id: "pass32_buried_art_validation", passed: pass32.passed },
+      { id: "pass32_assets_loaded", passed: this.pass32AssetState?.loadedCount === PASS32_BURIED_ASSETS.length },
+      { id: "pass32_asset_dimensions", passed: this.pass32AssetState?.dimensionsValid === true },
+      { id: "pass32_three_scene_scope", passed: PASS32_BURIED_PLAN.scope === "buried_rise_structure_only" },
+      { id: "pass32_zero_collision_changes", passed: PASS32_BURIED_PLAN.collisionChanges === 0 },
+      { id: "pass33_tunnel_art_validation", passed: pass33.passed },
+      { id: "pass33_assets_loaded", passed: this.pass33AssetState?.loadedCount === PASS33_TUNNEL_ASSETS.length },
+      { id: "pass33_asset_dimensions", passed: this.pass33AssetState?.dimensionsValid === true },
+      { id: "pass33_three_scene_scope", passed: PASS33_TUNNEL_PLAN.scope === "uneven_tunnel_and_lift_shaft_only" },
+      { id: "pass33_zero_collision_changes", passed: PASS33_TUNNEL_PLAN.collisionChanges === 0 },
+      { id: "pass34_destruction_art_validation", passed: pass34.passed },
+      { id: "pass34_assets_loaded", passed: this.pass34AssetState?.loadedCount === PASS34_DESTRUCTION_ASSETS.length },
+      { id: "pass34_asset_dimensions", passed: this.pass34AssetState?.dimensionsValid === true },
+      { id: "pass34_four_scene_scope", passed: PASS34_DESTRUCTION_PLAN.scope === "destruction_maze_only" },
+      { id: "pass34_zero_collision_changes", passed: PASS34_DESTRUCTION_PLAN.collisionChanges === 0 },
+      { id: "pass35_curve_art_validation", passed: pass35.passed },
+      { id: "pass35_assets_loaded", passed: this.pass35AssetState?.loadedCount === PASS35_CURVE_ASSETS.length },
+      { id: "pass35_asset_dimensions", passed: this.pass35AssetState?.dimensionsValid === true },
+      { id: "pass35_six_scene_scope", passed: PASS35_CURVE_PLAN.scope === "giant_curve_and_dash_run_only" },
+      { id: "pass35_zero_collision_changes", passed: PASS35_CURVE_PLAN.collisionChanges === 0 },
+      { id: "pass36_internal_art_validation", passed: pass36.passed },
+      { id: "pass36_assets_loaded", passed: this.pass36AssetState?.loadedCount === PASS36_INTERNAL_ASSETS.length },
+      { id: "pass36_asset_dimensions", passed: this.pass36AssetState?.dimensionsValid === true },
+      { id: "pass36_nine_scene_scope", passed: PASS36_INTERNAL_PLAN.scope === "internal_descent_and_double_wall_chase_only" },
+      { id: "pass36_zero_collision_changes", passed: PASS36_INTERNAL_PLAN.collisionChanges === 0 },
+      { id: "pass37_grapple_dash_art_validation", passed: pass37.passed },
+      { id: "pass37_assets_loaded", passed: this.pass37AssetState?.loadedCount === PASS37_GRAPPLE_ASSETS.length },
+      { id: "pass37_asset_dimensions", passed: this.pass37AssetState?.dimensionsValid === true },
+      { id: "pass37_seven_scene_scope", passed: PASS37_GRAPPLE_PLAN.scope === "triple_grapple_and_air_dash_spike_corridor_only" },
+      { id: "pass37_zero_collision_changes", passed: PASS37_GRAPPLE_PLAN.collisionChanges === 0 },
+      { id: "pass38_precision_curve_art_validation", passed: pass38.passed },
+      { id: "pass38_assets_loaded", passed: this.pass38AssetState?.loadedCount === PASS38_PRECISION_ASSETS.length },
+      { id: "pass38_asset_dimensions", passed: this.pass38AssetState?.dimensionsValid === true },
+      { id: "pass38_five_scene_scope", passed: PASS38_PRECISION_PLAN.scope === "precision_parkour_and_giant_direction_turn_only" },
+      { id: "pass38_zero_collision_changes", passed: PASS38_PRECISION_PLAN.collisionChanges === 0 },
+      { id: "pass39_bridge_aftershock_art_validation", passed: pass39.passed },
+      { id: "pass39_assets_loaded", passed: this.pass39AssetState?.loadedCount === PASS39_BRIDGE_ASSETS.length },
+      { id: "pass39_asset_dimensions", passed: this.pass39AssetState?.dimensionsValid === true },
+      { id: "pass39_six_scene_scope", passed: PASS39_BRIDGE_PLAN.scope === "collapsing_bridge_finale_and_aftershock_precision_only" },
+      { id: "pass39_zero_collision_changes", passed: PASS39_BRIDGE_PLAN.collisionChanges === 0 },
+      { id: "pass40_release_validation", passed: pass40.passed },
+      { id: "pass40_all_asset_groups_ready", passed: assetGroups.every(([state, expected]) => state?.loadedCount === expected && state?.failedCount === 0 && state?.dimensionsValid === true) },
+      { id: "pass40_runtime_assets_webp", passed: runtimeAssets.every(asset => asset.src.endsWith(".webp") && asset.type === PASS40_RELEASE_PLAN.runtimeAssetFormat) },
+      { id: "pass40_document_ready", passed: document.documentElement.dataset.corelessReady === "true" },
+      { id: "pass40_canvas_ready", passed: this.canvas.getAttribute("aria-busy") === "false" },
+      { id: "pass40_loading_surface_released", passed: !document.body.classList.contains("is-loading") && document.getElementById("loadingPanel")?.dataset.state === "ready" },
+      { id: "pass40_canvas_autofocus", passed: document.activeElement === this.canvas },
+      { id: "pass40_zero_gameplay_changes", passed: PASS40_RELEASE_PLAN.gameplayChanges === 0 && PASS40_RELEASE_PLAN.collisionChanges === 0 },
+      { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
+      { id: "debug_state", passed: Boolean(this.getDebugState().player) },
+    ];
+    return {
+      build: BUILD,
+      passed: checks.every(check => check.passed),
+      passedCount: checks.filter(check => check.passed).length,
+      total: checks.length,
+      checks,
+      blueprint,
+      pass03,
+      pass04,
+      pass05,
+      pass06,
+      pass07,
+      pass08,
+      pass09,
+      pass10,
+      pass11,
+      pass12,
+      pass13,
+      pass14,
+      pass15,
+      pass16,
+      pass17,
+      pass18,
+      pass19,
+      pass20,
+      pass21,
+      pass22,
+      pass23,
+      pass24,
+      pass25,
+      pass26,
+      pass27,
+      pass28,
+      pass29,
+      pass30,
+      pass31,
+      pass32,
+      pass33,
+      pass34,
+      pass35,
+      pass36,
+      pass37,
+      pass38,
+      pass39,
+      pass40,
+      pass28Assets: Object.freeze({
+        loadedCount: this.pass28AssetState?.loadedCount ?? 0,
+        failedCount: this.pass28AssetState?.failedCount ?? PASS28_RASTER_ASSETS.length,
+        dimensionsValid: this.pass28AssetState?.dimensionsValid === true,
+      }),
+      pass29Assets: Object.freeze({
+        loadedCount: this.pass29AssetState?.loadedCount ?? 0,
+        failedCount: this.pass29AssetState?.failedCount ?? PASS29_MODULE_ASSETS.length,
+        dimensionsValid: this.pass29AssetState?.dimensionsValid === true,
+      }),
+      pass31Assets: Object.freeze({
+        loadedCount: this.pass31AssetState?.loadedCount ?? 0,
+        failedCount: this.pass31AssetState?.failedCount ?? PASS31_ENTRANCE_ASSETS.length,
+        dimensionsValid: this.pass31AssetState?.dimensionsValid === true,
+      }),
+      pass32Assets: Object.freeze({
+        loadedCount: this.pass32AssetState?.loadedCount ?? 0,
+        failedCount: this.pass32AssetState?.failedCount ?? PASS32_BURIED_ASSETS.length,
+        dimensionsValid: this.pass32AssetState?.dimensionsValid === true,
+      }),
+      pass33Assets: Object.freeze({
+        loadedCount: this.pass33AssetState?.loadedCount ?? 0,
+        failedCount: this.pass33AssetState?.failedCount ?? PASS33_TUNNEL_ASSETS.length,
+        dimensionsValid: this.pass33AssetState?.dimensionsValid === true,
+      }),
+      pass34Assets: Object.freeze({
+        loadedCount: this.pass34AssetState?.loadedCount ?? 0,
+        failedCount: this.pass34AssetState?.failedCount ?? PASS34_DESTRUCTION_ASSETS.length,
+        dimensionsValid: this.pass34AssetState?.dimensionsValid === true,
+      }),
+      pass35Assets: Object.freeze({
+        loadedCount: this.pass35AssetState?.loadedCount ?? 0,
+        failedCount: this.pass35AssetState?.failedCount ?? PASS35_CURVE_ASSETS.length,
+        dimensionsValid: this.pass35AssetState?.dimensionsValid === true,
+      }),
+      pass36Assets: Object.freeze({
+        loadedCount: this.pass36AssetState?.loadedCount ?? 0,
+        failedCount: this.pass36AssetState?.failedCount ?? PASS36_INTERNAL_ASSETS.length,
+        dimensionsValid: this.pass36AssetState?.dimensionsValid === true,
+      }),
+      pass37Assets: Object.freeze({
+        loadedCount: this.pass37AssetState?.loadedCount ?? 0,
+        failedCount: this.pass37AssetState?.failedCount ?? PASS37_GRAPPLE_ASSETS.length,
+        dimensionsValid: this.pass37AssetState?.dimensionsValid === true,
+      }),
+      pass38Assets: Object.freeze({
+        loadedCount: this.pass38AssetState?.loadedCount ?? 0,
+        failedCount: this.pass38AssetState?.failedCount ?? PASS38_PRECISION_ASSETS.length,
+        dimensionsValid: this.pass38AssetState?.dimensionsValid === true,
+      }),
+      pass39Assets: Object.freeze({
+        loadedCount: this.pass39AssetState?.loadedCount ?? 0,
+        failedCount: this.pass39AssetState?.failedCount ?? PASS39_BRIDGE_ASSETS.length,
+        dimensionsValid: this.pass39AssetState?.dimensionsValid === true,
+      }),
+      gameplay: this.getDebugState(),
+      inputProbe: {
+        downs: this.inputProbe.downs,
+        ups: this.inputProbe.ups,
+        lastCode: this.inputProbe.lastCode,
+        usedCodes: Array.from(this.inputProbe.usedCodes).sort(),
+      },
+    };
+  }
+
+  updateStatus() {
+    const audit = this.audit();
+    this.statusElements.build.textContent = "PASS 40 · COMPLETE MEGA ROOM · SITE READY";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P40 ${audit.pass40.passedCount}/${audit.pass40.total}`;
+    this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
+  }
+}

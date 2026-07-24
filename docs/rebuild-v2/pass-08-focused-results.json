@@ -1,0 +1,29 @@
+{
+  "helper_contact_test": {
+    "category": "C",
+    "helperCoordinateMovement": true,
+    "actualKeyboardCompletion": false,
+    "resetCount": 1,
+    "boulderCatchCount": 1,
+    "respawn": { "x": 600, "y": 852 }
+  },
+  "helper_camera_test": {
+    "category": "C",
+    "helperCoordinateMovement": true,
+    "actualKeyboardCompletion": false,
+    "actualKeyboardInput": ["KeyD"],
+    "cameraZoom": 0.8443419710515968,
+    "displayedGapPixels": 1037
+  },
+  "deterministic_boulder_path_test": {
+    "category": "B",
+    "actualKeyboardCompletion": false,
+    "pathDistance": 30779.372511505342,
+    "pathProgress": 1,
+    "finalCoordinate": { "x": 9300, "y": 5000 },
+    "boulderFinished": true,
+    "floorsCollapsed": 31,
+    "supportsDestroyed": 13,
+    "resetCount": 0
+  }
+}

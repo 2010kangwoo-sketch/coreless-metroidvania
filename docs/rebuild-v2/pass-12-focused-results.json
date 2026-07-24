@@ -1,0 +1,6462 @@
+{
+  "version": "rebuild-v2-pass12-focused",
+  "testedWith": "Chromium + Playwright actual keyboard events",
+  "actualKeyboardRoute": "Pass 11 exit helper placement -> left takeoff slope -> Space jump -> Shift air dash -> long spike landing -> Pass 12 exit",
+  "helperCoordinateMovement": true,
+  "traversalFailure": null,
+  "state": {
+    "title": "Coreless · Rebuild V2 · Pass 12",
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass12",
+        "pass": 12,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "aa942aaf5f31cd49cd3ba196a193d5f66e5e93d5"
+      },
+      "passed": true,
+      "passedCount": 21,
+      "total": 21,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        },
+        {
+          "id": "pass03_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass04_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass05_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass06_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass07_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass08_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass09_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass10_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass11_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass12_level_validation",
+          "passed": true
+        },
+        {
+          "id": "player_dimensions",
+          "passed": true
+        },
+        {
+          "id": "debug_state",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "pass03": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "theoreticalJumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "world_contains_level",
+            "passed": true
+          },
+          {
+            "id": "camera_contains_level",
+            "passed": true
+          },
+          {
+            "id": "spawn_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone01_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "pass03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "two_baffles",
+            "passed": true
+          },
+          {
+            "id": "two_climb_walls",
+            "passed": true
+          },
+          {
+            "id": "first_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "second_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "first_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "second_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "walljump_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "macro_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "run_speed",
+            "passed": true
+          },
+          {
+            "id": "variable_jump",
+            "passed": true
+          },
+          {
+            "id": "air_dash",
+            "passed": true
+          }
+        ]
+      },
+      "pass04": {
+        "passed": true,
+        "passedCount": 22,
+        "total": 22,
+        "highestFloor": 1600,
+        "lowestRoof": 1100,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone03_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "zone03_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone03_single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "two_jump_gaps",
+            "passed": true
+          },
+          {
+            "id": "gap_widths",
+            "passed": true
+          },
+          {
+            "id": "rise_height",
+            "passed": true
+          },
+          {
+            "id": "highest_floor_recorded",
+            "passed": true
+          },
+          {
+            "id": "buried_below_roof",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "frames_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "pass03_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass05": {
+        "passed": true,
+        "passedCount": 25,
+        "total": 25,
+        "normalJumpRise": 114.88970588235293,
+        "ceilingClearances": [
+          80,
+          70
+        ],
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_pass04",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone04_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_distinct_gaps",
+            "passed": true
+          },
+          {
+            "id": "precision_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "shaft_requires_platform",
+            "passed": true
+          },
+          {
+            "id": "one_moving_platform",
+            "passed": true
+          },
+          {
+            "id": "platform_spans_shaft",
+            "passed": true
+          },
+          {
+            "id": "platform_travel",
+            "passed": true
+          },
+          {
+            "id": "two_low_ceiling_beams",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_clearance",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass04_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass06": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_pass05",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone05_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gates",
+            "passed": true
+          },
+          {
+            "id": "gate_shapes_distinct",
+            "passed": true
+          },
+          {
+            "id": "gates_ordered",
+            "passed": true
+          },
+          {
+            "id": "gates_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "gates_exceed_normal_jump",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_forward",
+            "passed": true
+          },
+          {
+            "id": "corridor_same_structure",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_supports",
+            "passed": true
+          },
+          {
+            "id": "supports_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "eight_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass05_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass07": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "runOnlyDistance": 196.69117647058823,
+        "dashDistance": 136.4,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_pass06",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "upper_floor_count",
+            "passed": true
+          },
+          {
+            "id": "lower_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floor_lanes",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gaps",
+            "passed": true
+          },
+          {
+            "id": "dash_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "dash_gaps_match_floors",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "curve_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "single_direction_change",
+            "passed": true
+          },
+          {
+            "id": "curve_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "curve_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "visible_vertical_drop",
+            "passed": true
+          },
+          {
+            "id": "landing_below_lip",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_coordinates",
+            "passed": true
+          },
+          {
+            "id": "pass06_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass08": {
+        "passed": true,
+        "passedCount": 24,
+        "total": 24,
+        "totalDistance": 30779.372511505342,
+        "collapsePanelCount": 31,
+        "supportTargetCount": 13,
+        "checks": [
+          {
+            "id": "pass07_level_retained",
+            "passed": true
+          },
+          {
+            "id": "active_boulder",
+            "passed": true
+          },
+          {
+            "id": "single_combined_path",
+            "passed": true
+          },
+          {
+            "id": "path_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "zone05_to_zone06_join",
+            "passed": true
+          },
+          {
+            "id": "path_starts_on_zone05_floor",
+            "passed": true
+          },
+          {
+            "id": "path_ends_at_zone06_exit",
+            "passed": true
+          },
+          {
+            "id": "strict_cumulative_distance",
+            "passed": true
+          },
+          {
+            "id": "long_chase_route",
+            "passed": true
+          },
+          {
+            "id": "physical_curve_apex",
+            "passed": true
+          },
+          {
+            "id": "one_direction_change",
+            "passed": true
+          },
+          {
+            "id": "boulder_radius_fits_corridors",
+            "passed": true
+          },
+          {
+            "id": "bounded_spawn_delay",
+            "passed": true
+          },
+          {
+            "id": "bounded_speed",
+            "passed": true
+          },
+          {
+            "id": "all_chase_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "collapse_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "thirteen_support_targets",
+            "passed": true
+          },
+          {
+            "id": "support_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "supports_before_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_near_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_matches_pass07",
+            "passed": true
+          },
+          {
+            "id": "gaps_remain_physical",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "reserved_flags_unchanged",
+            "passed": true
+          }
+        ]
+      },
+      "pass09": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "totalDistance": 37613.124580885786,
+        "extensionDistance": 6833.752069380444,
+        "collapsePanelCount": 40,
+        "supportTargetCount": 19,
+        "checks": [
+          {
+            "id": "pass08_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass08",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "three_upper_floors",
+            "passed": true
+          },
+          {
+            "id": "one_middle_return",
+            "passed": true
+          },
+          {
+            "id": "five_lower_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_connected",
+            "passed": true
+          },
+          {
+            "id": "two_physical_drops",
+            "passed": true
+          },
+          {
+            "id": "single_player_route",
+            "passed": true
+          },
+          {
+            "id": "three_ceiling_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "eleven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "physical_u_turn",
+            "passed": true
+          },
+          {
+            "id": "corridor_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "corridor_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "six_internal_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "nineteen_supports",
+            "passed": true
+          },
+          {
+            "id": "breach_delay",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          }
+        ]
+      },
+      "pass10": {
+        "passed": true,
+        "passedCount": 30,
+        "total": 30,
+        "theoreticalJumpRise": 114.88970588235293,
+        "totalDistance": 46988.78994100213,
+        "extensionDistance": 9375.665360116342,
+        "collapsePanelCount": 50,
+        "supportTargetCount": 27,
+        "checks": [
+          {
+            "id": "pass09_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass09",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "ten_player_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "eight_solids",
+            "passed": true
+          },
+          {
+            "id": "two_complete_wall_pairs",
+            "passed": true
+          },
+          {
+            "id": "two_forced_shafts",
+            "passed": true
+          },
+          {
+            "id": "shaft_one_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "shaft_two_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "wall_corridor_widths",
+            "passed": true
+          },
+          {
+            "id": "second_shaft_after_first_lip",
+            "passed": true
+          },
+          {
+            "id": "no_bypass_floor",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "fourteen_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_player_endpoints",
+            "passed": true
+          },
+          {
+            "id": "corridor_descends_through_both_shafts",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "eight_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "twenty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "four_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "milestones_force_two_successes",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass11": {
+        "passed": true,
+        "passedCount": 31,
+        "total": 31,
+        "directHorizontalGap": 750,
+        "noGrappleAirReach": 457.4,
+        "totalDistance": 51578.488132262966,
+        "extensionDistance": 4589.698191260839,
+        "collapsePanelCount": 52,
+        "supportTargetCount": 33,
+        "checks": [
+          {
+            "id": "pass10_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass10",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "six_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "two_player_floors",
+            "passed": true
+          },
+          {
+            "id": "no_direct_floor_bridge",
+            "passed": true
+          },
+          {
+            "id": "three_ordered_anchors",
+            "passed": true
+          },
+          {
+            "id": "unique_anchor_ids",
+            "passed": true
+          },
+          {
+            "id": "anchors_inside_zone",
+            "passed": true
+          },
+          {
+            "id": "anchor_ranges",
+            "passed": true
+          },
+          {
+            "id": "first_anchor_reachable_from_launch",
+            "passed": true
+          },
+          {
+            "id": "anchor_chain_overlaps",
+            "passed": true
+          },
+          {
+            "id": "two_arch_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_entry_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "six_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "six_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "thirty_three_supports",
+            "passed": true
+          },
+          {
+            "id": "three_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_three_anchors",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass12": {
+        "passed": true,
+        "passedCount": 32,
+        "total": 32,
+        "horizontalGap": 300,
+        "landingDrop": 100,
+        "airTime": 43.52253087835111,
+        "jumpOnlyReach": 232.84554019917843,
+        "jumpDashReach": 310.3955401991784,
+        "totalDistance": 53722.74478801561,
+        "extensionDistance": 2144.2566557526443,
+        "collapsePanelCount": 55,
+        "supportTargetCount": 37,
+        "checks": [
+          {
+            "id": "pass11_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass11",
+            "passed": true
+          },
+          {
+            "id": "entry_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "six_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_player_floors",
+            "passed": true
+          },
+          {
+            "id": "three_hundred_pixel_gap",
+            "passed": true
+          },
+          {
+            "id": "jump_alone_cannot_clear",
+            "passed": true
+          },
+          {
+            "id": "jump_dash_can_clear",
+            "passed": true
+          },
+          {
+            "id": "no_floor_bridge_over_spikes",
+            "passed": true
+          },
+          {
+            "id": "single_long_spike_bed",
+            "passed": true
+          },
+          {
+            "id": "spikes_ignored_by_boulder",
+            "passed": true
+          },
+          {
+            "id": "two_arch_solids",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "five_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_entry_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "four_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "four_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "fifty_five_collapse_panels",
+            "passed": true
+          },
+          {
+            "id": "thirty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "two_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_air_dash",
+            "passed": true
+          },
+          {
+            "id": "extension_stays_in_zone09",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "gameplay": {
+        "player": {
+          "x": 20320.41079345461,
+          "y": 7144.517841309078,
+          "vx": 0,
+          "vy": 0,
+          "grounded": true,
+          "wallSide": 0,
+          "dashAvailable": true,
+          "grappleLaunchFrames": 0,
+          "standingPlatformId": null
+        },
+        "movingPlatforms": [
+          {
+            "id": "shaft_carriage",
+            "x": 11588.899999999983,
+            "y": 3290,
+            "direction": 1
+          }
+        ],
+        "breakables": [
+          {
+            "id": "west_braced_gate",
+            "shape": "cross_brace",
+            "destroyed": false
+          },
+          {
+            "id": "middle_lattice_gate",
+            "shape": "lattice",
+            "destroyed": false
+          },
+          {
+            "id": "east_split_gate",
+            "shape": "split_pillar",
+            "destroyed": false
+          }
+        ],
+        "chase": {
+          "triggered": true,
+          "active": false,
+          "sealed": true,
+          "delayFrames": 0,
+          "breachDelayFrames": 0,
+          "breachComplete": true,
+          "internalBreakpointIndex": 12,
+          "internalPauseFrames": 0,
+          "activeFrames": 607,
+          "pathDistance": 53188.12592763376,
+          "pathProgress": 0.9900485564821492,
+          "pathIndex": 61,
+          "x": 20834.243352492744,
+          "y": 7220.034125718478,
+          "speed": 5.6515949999999995
+        },
+        "collapsedFloorIds": [
+          "curve_approach",
+          "curve_bend",
+          "curve_drop_lip",
+          "curve_landing",
+          "curve_runout",
+          "dash_spike_landing",
+          "dash_spike_takeoff",
+          "double_wall_connector",
+          "double_wall_entry_slope",
+          "double_wall_exit_rise",
+          "double_wall_exit_shelf",
+          "double_wall_lip_one",
+          "double_wall_lip_two",
+          "double_wall_lower_hall_a",
+          "double_wall_lower_hall_b",
+          "double_wall_pit_one",
+          "double_wall_pit_two",
+          "east_dash_takeoff",
+          "east_mid",
+          "east_wave",
+          "eastern_descent",
+          "eastern_hall",
+          "eastern_ridge",
+          "exit_drop",
+          "final_rise",
+          "first_rise",
+          "first_sink",
+          "grapple_exit_shelf",
+          "grapple_launch_ramp",
+          "high_gallery",
+          "internal_entry_surface",
+          "internal_exit_rise",
+          "internal_lower_landing",
+          "internal_lower_wave_a",
+          "internal_lower_wave_b",
+          "internal_lower_wave_c",
+          "internal_middle_return",
+          "internal_upper_gallery",
+          "internal_upper_ramp",
+          "low_wave_a",
+          "low_wave_b",
+          "low_wave_c",
+          "lower_hall",
+          "maze_entry_rise",
+          "mid_dash_takeoff",
+          "middle_descent",
+          "middle_hall",
+          "middle_wave",
+          "second_rise",
+          "west_dash_landing",
+          "western_hall",
+          "western_ridge",
+          "zone05_exit",
+          "zone06_exit_rise"
+        ],
+        "destroyedSupportIds": [
+          "curve_support_1",
+          "curve_support_2",
+          "curve_support_3",
+          "curve_support_4",
+          "curve_support_5",
+          "curve_support_6",
+          "dash_spike_support_entry",
+          "dash_spike_support_landing",
+          "dash_spike_support_takeoff",
+          "double_wall_support_connector",
+          "double_wall_support_entry",
+          "double_wall_support_exit",
+          "double_wall_support_lower_hall",
+          "double_wall_support_one_left",
+          "double_wall_support_one_right",
+          "double_wall_support_two_left",
+          "double_wall_support_two_right",
+          "grapple_support_apex",
+          "grapple_support_exit",
+          "grapple_support_high",
+          "grapple_support_launch",
+          "grapple_support_lower",
+          "grapple_support_turn",
+          "internal_support_drop",
+          "internal_support_entry",
+          "internal_support_exit",
+          "internal_support_lower_a",
+          "internal_support_lower_b",
+          "internal_support_return",
+          "support_east_a",
+          "support_east_b",
+          "support_exit",
+          "support_mid_a",
+          "support_mid_b",
+          "support_west_a",
+          "support_west_b"
+        ],
+        "grapple": {
+          "active": false,
+          "anchorId": null,
+          "ropeLength": 0,
+          "attachedFrames": 0,
+          "cooldown": 0,
+          "lastAnchorId": null,
+          "usedAnchorIds": []
+        },
+        "boulderCatchCount": 0,
+        "debrisCount": 21,
+        "camera": {
+          "x": 19540.082172099203,
+          "y": 6829.4135009994325,
+          "zoom": 0.9999376186142298
+        },
+        "progress": {
+          "zone01Reached": true,
+          "firstDropped": false,
+          "firstClimb": false,
+          "secondDropped": false,
+          "secondClimb": false,
+          "completed": false,
+          "zone03Entered": false,
+          "lowerRiseReached": false,
+          "atriumReached": false,
+          "upperGalleryReached": false,
+          "longDescentReached": false,
+          "pass04Completed": false,
+          "zone04Entered": false,
+          "lowTunnelReached": false,
+          "platformBoarded": false,
+          "movingPlatformCrossed": false,
+          "unevenTunnelReached": false,
+          "pass05Completed": false,
+          "zone05Entered": false,
+          "lowerHallReached": false,
+          "highGalleryReached": false,
+          "pass06Completed": false,
+          "zone06Entered": false,
+          "curveCommitted": false,
+          "zone06Dropped": false,
+          "eastDashGapCleared": false,
+          "middleDashGapCleared": false,
+          "westDashGapCleared": false,
+          "pass07Completed": true,
+          "chaseTriggered": false,
+          "boulderStarted": true,
+          "boulderEnteredCurve": true,
+          "boulderRoundedApex": true,
+          "boulderFinished": false,
+          "chaseEscaped": true,
+          "pass08Completed": true,
+          "zone07Entered": true,
+          "zone07UpperDrop": true,
+          "zone07MiddleReturn": false,
+          "zone07MiddleDrop": false,
+          "zone07LowerRun": false,
+          "zone07ExitReached": true,
+          "boulderAtInternalEntry": true,
+          "internalStructureBreached": true,
+          "pass09Completed": true,
+          "zone08Entered": true,
+          "zone08ShaftOneDropped": false,
+          "zone08ShaftOneCleared": false,
+          "zone08ShaftTwoDropped": false,
+          "zone08ShaftTwoCleared": false,
+          "zone08LowerHallReached": false,
+          "zone08ExitReached": true,
+          "pass10Completed": true,
+          "zone09Entered": true,
+          "grappleAnchorOneUsed": true,
+          "grappleAnchorTwoUsed": true,
+          "grappleAnchorThreeUsed": true,
+          "grappleChainCompleted": true,
+          "zone09ExitReached": true,
+          "pass11Completed": true,
+          "dashSpikeEntered": true,
+          "dashSpikeTakeoff": true,
+          "dashSpikeAirDashUsed": true,
+          "dashSpikeCleared": true,
+          "zone09DashExitReached": true,
+          "pass12Completed": true,
+          "chaseWallJumps": 0,
+          "floorsCollapsed": 54,
+          "supportsDestroyed": 36,
+          "internalDirectionChanges": 1,
+          "dashGapClears": 0,
+          "directionChanges": 0,
+          "breakablesDestroyed": 0,
+          "platformRides": 0,
+          "groundJumps": 1,
+          "wallJumps": 0,
+          "ledgeAssists": 0,
+          "dashes": 1,
+          "grappleAttaches": 0,
+          "grappleReleases": 0,
+          "grappleUniqueAnchors": 0,
+          "chaseAirDashes": 1
+        },
+        "keys": [],
+        "blueprintVisible": false,
+        "resetCount": 0,
+        "frameCount": 772
+      },
+      "inputProbe": {
+        "downs": 3,
+        "ups": 1067,
+        "lastCode": "ShiftLeft",
+        "usedCodes": [
+          "KeyA",
+          "ShiftLeft",
+          "Space"
+        ]
+      }
+    },
+    "debug": {
+      "player": {
+        "x": 20320.41079345461,
+        "y": 7144.517841309078,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true,
+        "wallSide": 0,
+        "dashAvailable": true,
+        "grappleLaunchFrames": 0,
+        "standingPlatformId": null
+      },
+      "movingPlatforms": [
+        {
+          "id": "shaft_carriage",
+          "x": 11588.899999999983,
+          "y": 3290,
+          "direction": 1
+        }
+      ],
+      "breakables": [
+        {
+          "id": "west_braced_gate",
+          "shape": "cross_brace",
+          "destroyed": false
+        },
+        {
+          "id": "middle_lattice_gate",
+          "shape": "lattice",
+          "destroyed": false
+        },
+        {
+          "id": "east_split_gate",
+          "shape": "split_pillar",
+          "destroyed": false
+        }
+      ],
+      "chase": {
+        "triggered": true,
+        "active": false,
+        "sealed": true,
+        "delayFrames": 0,
+        "breachDelayFrames": 0,
+        "breachComplete": true,
+        "internalBreakpointIndex": 12,
+        "internalPauseFrames": 0,
+        "activeFrames": 607,
+        "pathDistance": 53188.12592763376,
+        "pathProgress": 0.9900485564821492,
+        "pathIndex": 61,
+        "x": 20834.243352492744,
+        "y": 7220.034125718478,
+        "speed": 5.6515949999999995
+      },
+      "collapsedFloorIds": [
+        "curve_approach",
+        "curve_bend",
+        "curve_drop_lip",
+        "curve_landing",
+        "curve_runout",
+        "dash_spike_landing",
+        "dash_spike_takeoff",
+        "double_wall_connector",
+        "double_wall_entry_slope",
+        "double_wall_exit_rise",
+        "double_wall_exit_shelf",
+        "double_wall_lip_one",
+        "double_wall_lip_two",
+        "double_wall_lower_hall_a",
+        "double_wall_lower_hall_b",
+        "double_wall_pit_one",
+        "double_wall_pit_two",
+        "east_dash_takeoff",
+        "east_mid",
+        "east_wave",
+        "eastern_descent",
+        "eastern_hall",
+        "eastern_ridge",
+        "exit_drop",
+        "final_rise",
+        "first_rise",
+        "first_sink",
+        "grapple_exit_shelf",
+        "grapple_launch_ramp",
+        "high_gallery",
+        "internal_entry_surface",
+        "internal_exit_rise",
+        "internal_lower_landing",
+        "internal_lower_wave_a",
+        "internal_lower_wave_b",
+        "internal_lower_wave_c",
+        "internal_middle_return",
+        "internal_upper_gallery",
+        "internal_upper_ramp",
+        "low_wave_a",
+        "low_wave_b",
+        "low_wave_c",
+        "lower_hall",
+        "maze_entry_rise",
+        "mid_dash_takeoff",
+        "middle_descent",
+        "middle_hall",
+        "middle_wave",
+        "second_rise",
+        "west_dash_landing",
+        "western_hall",
+        "western_ridge",
+        "zone05_exit",
+        "zone06_exit_rise"
+      ],
+      "destroyedSupportIds": [
+        "curve_support_1",
+        "curve_support_2",
+        "curve_support_3",
+        "curve_support_4",
+        "curve_support_5",
+        "curve_support_6",
+        "dash_spike_support_entry",
+        "dash_spike_support_landing",
+        "dash_spike_support_takeoff",
+        "double_wall_support_connector",
+        "double_wall_support_entry",
+        "double_wall_support_exit",
+        "double_wall_support_lower_hall",
+        "double_wall_support_one_left",
+        "double_wall_support_one_right",
+        "double_wall_support_two_left",
+        "double_wall_support_two_right",
+        "grapple_support_apex",
+        "grapple_support_exit",
+        "grapple_support_high",
+        "grapple_support_launch",
+        "grapple_support_lower",
+        "grapple_support_turn",
+        "internal_support_drop",
+        "internal_support_entry",
+        "internal_support_exit",
+        "internal_support_lower_a",
+        "internal_support_lower_b",
+        "internal_support_return",
+        "support_east_a",
+        "support_east_b",
+        "support_exit",
+        "support_mid_a",
+        "support_mid_b",
+        "support_west_a",
+        "support_west_b"
+      ],
+      "grapple": {
+        "active": false,
+        "anchorId": null,
+        "ropeLength": 0,
+        "attachedFrames": 0,
+        "cooldown": 0,
+        "lastAnchorId": null,
+        "usedAnchorIds": []
+      },
+      "boulderCatchCount": 0,
+      "debrisCount": 21,
+      "camera": {
+        "x": 19540.082172099203,
+        "y": 6829.4135009994325,
+        "zoom": 0.9999376186142298
+      },
+      "progress": {
+        "zone01Reached": true,
+        "firstDropped": false,
+        "firstClimb": false,
+        "secondDropped": false,
+        "secondClimb": false,
+        "completed": false,
+        "zone03Entered": false,
+        "lowerRiseReached": false,
+        "atriumReached": false,
+        "upperGalleryReached": false,
+        "longDescentReached": false,
+        "pass04Completed": false,
+        "zone04Entered": false,
+        "lowTunnelReached": false,
+        "platformBoarded": false,
+        "movingPlatformCrossed": false,
+        "unevenTunnelReached": false,
+        "pass05Completed": false,
+        "zone05Entered": false,
+        "lowerHallReached": false,
+        "highGalleryReached": false,
+        "pass06Completed": false,
+        "zone06Entered": false,
+        "curveCommitted": false,
+        "zone06Dropped": false,
+        "eastDashGapCleared": false,
+        "middleDashGapCleared": false,
+        "westDashGapCleared": false,
+        "pass07Completed": true,
+        "chaseTriggered": false,
+        "boulderStarted": true,
+        "boulderEnteredCurve": true,
+        "boulderRoundedApex": true,
+        "boulderFinished": false,
+        "chaseEscaped": true,
+        "pass08Completed": true,
+        "zone07Entered": true,
+        "zone07UpperDrop": true,
+        "zone07MiddleReturn": false,
+        "zone07MiddleDrop": false,
+        "zone07LowerRun": false,
+        "zone07ExitReached": true,
+        "boulderAtInternalEntry": true,
+        "internalStructureBreached": true,
+        "pass09Completed": true,
+        "zone08Entered": true,
+        "zone08ShaftOneDropped": false,
+        "zone08ShaftOneCleared": false,
+        "zone08ShaftTwoDropped": false,
+        "zone08ShaftTwoCleared": false,
+        "zone08LowerHallReached": false,
+        "zone08ExitReached": true,
+        "pass10Completed": true,
+        "zone09Entered": true,
+        "grappleAnchorOneUsed": true,
+        "grappleAnchorTwoUsed": true,
+        "grappleAnchorThreeUsed": true,
+        "grappleChainCompleted": true,
+        "zone09ExitReached": true,
+        "pass11Completed": true,
+        "dashSpikeEntered": true,
+        "dashSpikeTakeoff": true,
+        "dashSpikeAirDashUsed": true,
+        "dashSpikeCleared": true,
+        "zone09DashExitReached": true,
+        "pass12Completed": true,
+        "chaseWallJumps": 0,
+        "floorsCollapsed": 54,
+        "supportsDestroyed": 36,
+        "internalDirectionChanges": 1,
+        "dashGapClears": 0,
+        "directionChanges": 0,
+        "breakablesDestroyed": 0,
+        "platformRides": 0,
+        "groundJumps": 1,
+        "wallJumps": 0,
+        "ledgeAssists": 0,
+        "dashes": 1,
+        "grappleAttaches": 0,
+        "grappleReleases": 0,
+        "grappleUniqueAnchors": 0,
+        "chaseAirDashes": 1
+      },
+      "keys": [],
+      "blueprintVisible": false,
+      "resetCount": 0,
+      "frameCount": 772
+    }
+  },
+  "routeSamples": [
+    {
+      "frame": 67,
+      "x": 22440,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 71,
+      "x": 22432.8,
+      "y": 6852,
+      "vx": -2.9,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 71,
+      "x": 22432.8,
+      "y": 6852,
+      "vx": -2.9,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 71,
+      "x": 22432.8,
+      "y": 6852,
+      "vx": -2.9,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 71,
+      "x": 22432.8,
+      "y": 6852,
+      "vx": -2.9,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 73,
+      "x": 22424.9,
+      "y": 6852,
+      "vx": -4.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 74,
+      "x": 22419.8,
+      "y": 6852,
+      "vx": -5,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 76,
+      "x": 22409.1,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 77,
+      "x": 22403.8,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.932
+    },
+    {
+      "frame": 79,
+      "x": 22393.1,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.932
+    },
+    {
+      "frame": 80,
+      "x": 22387.7,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.932
+    },
+    {
+      "frame": 82,
+      "x": 22377,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.932
+    },
+    {
+      "frame": 83,
+      "x": 22371.7,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.932
+    },
+    {
+      "frame": 85,
+      "x": 22361,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.932
+    },
+    {
+      "frame": 86,
+      "x": 22355.6,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.933
+    },
+    {
+      "frame": 88,
+      "x": 22344.9,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.933
+    },
+    {
+      "frame": 90,
+      "x": 22334.2,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.933
+    },
+    {
+      "frame": 92,
+      "x": 22323.5,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.933
+    },
+    {
+      "frame": 95,
+      "x": 22307.5,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.933
+    },
+    {
+      "frame": 96,
+      "x": 22302.1,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.934
+    },
+    {
+      "frame": 98,
+      "x": 22291.4,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.934
+    },
+    {
+      "frame": 100,
+      "x": 22280.7,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.934
+    },
+    {
+      "frame": 101,
+      "x": 22275.4,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.934
+    },
+    {
+      "frame": 102,
+      "x": 22270,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.934
+    },
+    {
+      "frame": 103,
+      "x": 22264.7,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.934
+    },
+    {
+      "frame": 105,
+      "x": 22254,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.935
+    },
+    {
+      "frame": 107,
+      "x": 22243.3,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.935
+    },
+    {
+      "frame": 108,
+      "x": 22237.9,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.935
+    },
+    {
+      "frame": 110,
+      "x": 22227.2,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.935
+    },
+    {
+      "frame": 111,
+      "x": 22221.9,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.935
+    },
+    {
+      "frame": 113,
+      "x": 22211.2,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.935
+    },
+    {
+      "frame": 115,
+      "x": 22200.5,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 116,
+      "x": 22195.1,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 118,
+      "x": 22184.4,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 119,
+      "x": 22179.1,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 121,
+      "x": 22168.4,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 122,
+      "x": 22163,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 124,
+      "x": 22152.3,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 126,
+      "x": 22141.6,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.937
+    },
+    {
+      "frame": 127,
+      "x": 22136.3,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.937
+    },
+    {
+      "frame": 129,
+      "x": 22125.6,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.937
+    },
+    {
+      "frame": 131,
+      "x": 22114.9,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.937
+    },
+    {
+      "frame": 132,
+      "x": 22109.5,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.937
+    },
+    {
+      "frame": 134,
+      "x": 22098.8,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 136,
+      "x": 22088.1,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 137,
+      "x": 22082.8,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 139,
+      "x": 22072.1,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 141,
+      "x": 22061.4,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 142,
+      "x": 22056,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 144,
+      "x": 22045.3,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.939
+    },
+    {
+      "frame": 145,
+      "x": 22040,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.939
+    },
+    {
+      "frame": 147,
+      "x": 22029.3,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.939
+    },
+    {
+      "frame": 149,
+      "x": 22018.6,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.939
+    },
+    {
+      "frame": 150,
+      "x": 22013.2,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.939
+    },
+    {
+      "frame": 152,
+      "x": 22002.5,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.939
+    },
+    {
+      "frame": 154,
+      "x": 21991.8,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.94
+    },
+    {
+      "frame": 155,
+      "x": 21986.5,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": false,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.94
+    },
+    {
+      "frame": 157,
+      "x": 21975.8,
+      "y": 6853.8,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.94
+    },
+    {
+      "frame": 158,
+      "x": 21970.4,
+      "y": 6855.1,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.94
+    },
+    {
+      "frame": 160,
+      "x": 21959.7,
+      "y": 6857.8,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.94
+    },
+    {
+      "frame": 162,
+      "x": 21949,
+      "y": 6860.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.94
+    },
+    {
+      "frame": 163,
+      "x": 21943.7,
+      "y": 6861.8,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.941
+    },
+    {
+      "frame": 165,
+      "x": 21933,
+      "y": 6864.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.941
+    },
+    {
+      "frame": 167,
+      "x": 21922.3,
+      "y": 6867.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.941
+    },
+    {
+      "frame": 168,
+      "x": 21916.9,
+      "y": 6868.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.941
+    },
+    {
+      "frame": 170,
+      "x": 21906.2,
+      "y": 6871.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.941
+    },
+    {
+      "frame": 172,
+      "x": 21895.5,
+      "y": 6873.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 173,
+      "x": 21890.2,
+      "y": 6875.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 175,
+      "x": 21879.5,
+      "y": 6877.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 176,
+      "x": 21874.1,
+      "y": 6879.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 178,
+      "x": 21863.4,
+      "y": 6881.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 179,
+      "x": 21858.1,
+      "y": 6883.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 181,
+      "x": 21847.4,
+      "y": 6885.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 182,
+      "x": 21842,
+      "y": 6887.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 184,
+      "x": 21831.3,
+      "y": 6889.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 185,
+      "x": 21826,
+      "y": 6891.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 187,
+      "x": 21815.3,
+      "y": 6893.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 189,
+      "x": 21804.6,
+      "y": 6896.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 190,
+      "x": 21799.2,
+      "y": 6897.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 192,
+      "x": 21788.5,
+      "y": 6900.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.944
+    },
+    {
+      "frame": 193,
+      "x": 21783.2,
+      "y": 6902,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.944
+    },
+    {
+      "frame": 195,
+      "x": 21772.5,
+      "y": 6904.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.944
+    },
+    {
+      "frame": 196,
+      "x": 21767.1,
+      "y": 6906,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.944
+    },
+    {
+      "frame": 198,
+      "x": 21756.4,
+      "y": 6908.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.944
+    },
+    {
+      "frame": 199,
+      "x": 21751.1,
+      "y": 6910,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.944
+    },
+    {
+      "frame": 201,
+      "x": 21740.4,
+      "y": 6912.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 203,
+      "x": 21729.7,
+      "y": 6915.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 204,
+      "x": 21724.3,
+      "y": 6916.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 206,
+      "x": 21713.6,
+      "y": 6919.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 207,
+      "x": 21708.3,
+      "y": 6920.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 209,
+      "x": 21697.6,
+      "y": 6923.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 211,
+      "x": 21686.9,
+      "y": 6926,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": false,
+      "dashSpikeAirDashUsed": false,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.946
+    },
+    {
+      "frame": 248,
+      "x": 21460.7,
+      "y": 6896.4,
+      "vx": -12.4,
+      "vy": 0.5,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.949
+    },
+    {
+      "frame": 248,
+      "x": 21460.7,
+      "y": 6896.4,
+      "vx": -12.4,
+      "vy": 0.5,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.949
+    },
+    {
+      "frame": 249,
+      "x": 21448.3,
+      "y": 6897,
+      "vx": -12.4,
+      "vy": 0.7,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 251,
+      "x": 21423.5,
+      "y": 6898.8,
+      "vx": -12.4,
+      "vy": 1,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 252,
+      "x": 21411.1,
+      "y": 6899.9,
+      "vx": -12.4,
+      "vy": 1.1,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 254,
+      "x": 21386.3,
+      "y": 6902.5,
+      "vx": -12.4,
+      "vy": 1.4,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 256,
+      "x": 21362,
+      "y": 6906.2,
+      "vx": -12,
+      "vy": 2.2,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 257,
+      "x": 21350.4,
+      "y": 6909,
+      "vx": -11.6,
+      "vy": 2.9,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 259,
+      "x": 21328.5,
+      "y": 6916.8,
+      "vx": -10.7,
+      "vy": 4.2,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.951
+    },
+    {
+      "frame": 260,
+      "x": 21318.2,
+      "y": 6921.7,
+      "vx": -10.3,
+      "vy": 4.9,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.951
+    },
+    {
+      "frame": 262,
+      "x": 21298.9,
+      "y": 6933.5,
+      "vx": -9.5,
+      "vy": 6.3,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.951
+    },
+    {
+      "frame": 264,
+      "x": 21281.2,
+      "y": 6948,
+      "vx": -8.6,
+      "vy": 7.6,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.951
+    },
+    {
+      "frame": 265,
+      "x": 21273,
+      "y": 6956.3,
+      "vx": -8.2,
+      "vy": 8.3,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.951
+    },
+    {
+      "frame": 267,
+      "x": 21257.9,
+      "y": 6975,
+      "vx": -7.4,
+      "vy": 9.7,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.951
+    },
+    {
+      "frame": 268,
+      "x": 21251,
+      "y": 6985.3,
+      "vx": -6.9,
+      "vy": 10.3,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.952
+    },
+    {
+      "frame": 270,
+      "x": 21238.3,
+      "y": 7008,
+      "vx": -6.1,
+      "vy": 11.7,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.952
+    },
+    {
+      "frame": 272,
+      "x": 21227.3,
+      "y": 7033.5,
+      "vx": -5.3,
+      "vy": 13.1,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.952
+    },
+    {
+      "frame": 273,
+      "x": 21222,
+      "y": 7047.2,
+      "vx": -5.3,
+      "vy": 13.7,
+      "grounded": false,
+      "dashAvailable": false,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": false,
+      "boulderProgress": 0.952
+    },
+    {
+      "frame": 311,
+      "x": 21018.7,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.956
+    },
+    {
+      "frame": 311,
+      "x": 21018.7,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.956
+    },
+    {
+      "frame": 311,
+      "x": 21018.7,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.956
+    },
+    {
+      "frame": 311,
+      "x": 21018.7,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.956
+    },
+    {
+      "frame": 313,
+      "x": 21008,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.956
+    },
+    {
+      "frame": 314,
+      "x": 21002.6,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.956
+    },
+    {
+      "frame": 316,
+      "x": 20991.9,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.957
+    },
+    {
+      "frame": 317,
+      "x": 20986.6,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.957
+    },
+    {
+      "frame": 319,
+      "x": 20975.9,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.957
+    },
+    {
+      "frame": 320,
+      "x": 20970.5,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.957
+    },
+    {
+      "frame": 322,
+      "x": 20959.8,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.957
+    },
+    {
+      "frame": 323,
+      "x": 20954.5,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.957
+    },
+    {
+      "frame": 325,
+      "x": 20943.8,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 326,
+      "x": 20938.4,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 328,
+      "x": 20927.7,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 329,
+      "x": 20922.4,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 331,
+      "x": 20911.7,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 332,
+      "x": 20906.3,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 335,
+      "x": 20890.3,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.959
+    },
+    {
+      "frame": 337,
+      "x": 20879.6,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.959
+    },
+    {
+      "frame": 339,
+      "x": 20868.9,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.959
+    },
+    {
+      "frame": 340,
+      "x": 20863.5,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.959
+    },
+    {
+      "frame": 341,
+      "x": 20858.2,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.959
+    },
+    {
+      "frame": 343,
+      "x": 20847.5,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.959
+    },
+    {
+      "frame": 344,
+      "x": 20842.1,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 346,
+      "x": 20831.4,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 347,
+      "x": 20826.1,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 349,
+      "x": 20815.4,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 350,
+      "x": 20810,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 352,
+      "x": 20799.3,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 353,
+      "x": 20794,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 355,
+      "x": 20783.3,
+      "y": 7052,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 356,
+      "x": 20777.9,
+      "y": 7053,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 358,
+      "x": 20767.2,
+      "y": 7055.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 359,
+      "x": 20761.9,
+      "y": 7056.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 361,
+      "x": 20751.2,
+      "y": 7058.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 363,
+      "x": 20740.5,
+      "y": 7060.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 364,
+      "x": 20735.1,
+      "y": 7061.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.962
+    },
+    {
+      "frame": 366,
+      "x": 20724.4,
+      "y": 7063.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.962
+    },
+    {
+      "frame": 368,
+      "x": 20713.7,
+      "y": 7065.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.962
+    },
+    {
+      "frame": 369,
+      "x": 20708.4,
+      "y": 7066.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.962
+    },
+    {
+      "frame": 371,
+      "x": 20697.7,
+      "y": 7069.1,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.962
+    },
+    {
+      "frame": 372,
+      "x": 20692.3,
+      "y": 7070.1,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.962
+    },
+    {
+      "frame": 374,
+      "x": 20681.6,
+      "y": 7072.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.963
+    },
+    {
+      "frame": 375,
+      "x": 20676.3,
+      "y": 7073.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.963
+    },
+    {
+      "frame": 377,
+      "x": 20665.6,
+      "y": 7075.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.963
+    },
+    {
+      "frame": 378,
+      "x": 20660.2,
+      "y": 7076.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.963
+    },
+    {
+      "frame": 380,
+      "x": 20649.5,
+      "y": 7078.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.963
+    },
+    {
+      "frame": 381,
+      "x": 20644.2,
+      "y": 7079.8,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.963
+    },
+    {
+      "frame": 383,
+      "x": 20633.5,
+      "y": 7081.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 384,
+      "x": 20628.1,
+      "y": 7083,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 386,
+      "x": 20617.4,
+      "y": 7085.1,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 387,
+      "x": 20612.1,
+      "y": 7086.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 389,
+      "x": 20601.4,
+      "y": 7088.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 390,
+      "x": 20596,
+      "y": 7089.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 392,
+      "x": 20585.3,
+      "y": 7091.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.965
+    },
+    {
+      "frame": 394,
+      "x": 20574.6,
+      "y": 7093.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.965
+    },
+    {
+      "frame": 395,
+      "x": 20569.3,
+      "y": 7094.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.965
+    },
+    {
+      "frame": 397,
+      "x": 20558.6,
+      "y": 7096.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.965
+    },
+    {
+      "frame": 398,
+      "x": 20553.2,
+      "y": 7098,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.965
+    },
+    {
+      "frame": 400,
+      "x": 20542.5,
+      "y": 7100.1,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.965
+    },
+    {
+      "frame": 401,
+      "x": 20537.2,
+      "y": 7101.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.965
+    },
+    {
+      "frame": 403,
+      "x": 20526.5,
+      "y": 7103.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.966
+    },
+    {
+      "frame": 405,
+      "x": 20515.8,
+      "y": 7105.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.966
+    },
+    {
+      "frame": 406,
+      "x": 20510.4,
+      "y": 7106.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.966
+    },
+    {
+      "frame": 408,
+      "x": 20499.7,
+      "y": 7108.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.966
+    },
+    {
+      "frame": 410,
+      "x": 20489,
+      "y": 7110.8,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.966
+    },
+    {
+      "frame": 412,
+      "x": 20478.3,
+      "y": 7112.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.967
+    },
+    {
+      "frame": 413,
+      "x": 20473,
+      "y": 7114,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.967
+    },
+    {
+      "frame": 415,
+      "x": 20462.3,
+      "y": 7116.1,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.967
+    },
+    {
+      "frame": 417,
+      "x": 20451.6,
+      "y": 7118.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.967
+    },
+    {
+      "frame": 419,
+      "x": 20440.9,
+      "y": 7120.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.967
+    },
+    {
+      "frame": 421,
+      "x": 20430.2,
+      "y": 7122.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.968
+    },
+    {
+      "frame": 422,
+      "x": 20424.8,
+      "y": 7123.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.968
+    },
+    {
+      "frame": 424,
+      "x": 20414.1,
+      "y": 7125.8,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.968
+    },
+    {
+      "frame": 426,
+      "x": 20403.4,
+      "y": 7127.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.968
+    },
+    {
+      "frame": 427,
+      "x": 20398.1,
+      "y": 7129,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.968
+    },
+    {
+      "frame": 429,
+      "x": 20387.4,
+      "y": 7131.1,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.968
+    },
+    {
+      "frame": 431,
+      "x": 20376.7,
+      "y": 7133.3,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.969
+    },
+    {
+      "frame": 433,
+      "x": 20366,
+      "y": 7135.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.969
+    },
+    {
+      "frame": 434,
+      "x": 20360.6,
+      "y": 7136.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.969
+    },
+    {
+      "frame": 436,
+      "x": 20349.9,
+      "y": 7138.6,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.969
+    },
+    {
+      "frame": 438,
+      "x": 20339.2,
+      "y": 7140.8,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.969
+    },
+    {
+      "frame": 440,
+      "x": 20331.8,
+      "y": 7142.2,
+      "vx": -3.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 442,
+      "x": 20327.3,
+      "y": 7143.1,
+      "vx": -2,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 444,
+      "x": 20324.5,
+      "y": 7143.7,
+      "vx": -1.2,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 445,
+      "x": 20323.6,
+      "y": 7143.9,
+      "vx": -0.9,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 447,
+      "x": 20322.3,
+      "y": 7144.1,
+      "vx": -0.6,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 449,
+      "x": 20321.5,
+      "y": 7144.3,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 451,
+      "x": 20321,
+      "y": 7144.4,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 453,
+      "x": 20320.7,
+      "y": 7144.5,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 455,
+      "x": 20320.5,
+      "y": 7144.5,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 457,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 459,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 461,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 463,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 465,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 467,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 469,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 471,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 473,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 475,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 477,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 478,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 480,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 482,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 485,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 487,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 489,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 491,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 493,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.97
+    },
+    {
+      "frame": 495,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.971
+    },
+    {
+      "frame": 496,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.971
+    },
+    {
+      "frame": 498,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.971
+    },
+    {
+      "frame": 500,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.971
+    },
+    {
+      "frame": 502,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.971
+    },
+    {
+      "frame": 504,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.972
+    },
+    {
+      "frame": 506,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.972
+    },
+    {
+      "frame": 509,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.972
+    },
+    {
+      "frame": 510,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.972
+    },
+    {
+      "frame": 512,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.972
+    },
+    {
+      "frame": 514,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.973
+    },
+    {
+      "frame": 516,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.973
+    },
+    {
+      "frame": 518,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.973
+    },
+    {
+      "frame": 520,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.973
+    },
+    {
+      "frame": 522,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.973
+    },
+    {
+      "frame": 523,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.974
+    },
+    {
+      "frame": 525,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.974
+    },
+    {
+      "frame": 527,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.974
+    },
+    {
+      "frame": 529,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.974
+    },
+    {
+      "frame": 531,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.974
+    },
+    {
+      "frame": 533,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.975
+    },
+    {
+      "frame": 535,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.975
+    },
+    {
+      "frame": 538,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.975
+    },
+    {
+      "frame": 540,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.975
+    },
+    {
+      "frame": 542,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.976
+    },
+    {
+      "frame": 544,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.976
+    },
+    {
+      "frame": 546,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.976
+    },
+    {
+      "frame": 548,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.976
+    },
+    {
+      "frame": 549,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.976
+    },
+    {
+      "frame": 551,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.976
+    },
+    {
+      "frame": 553,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.977
+    },
+    {
+      "frame": 555,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.977
+    },
+    {
+      "frame": 557,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.977
+    },
+    {
+      "frame": 559,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.977
+    },
+    {
+      "frame": 561,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.978
+    },
+    {
+      "frame": 564,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.978
+    },
+    {
+      "frame": 566,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.978
+    },
+    {
+      "frame": 568,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.978
+    },
+    {
+      "frame": 570,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.978
+    },
+    {
+      "frame": 573,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.979
+    },
+    {
+      "frame": 575,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.979
+    },
+    {
+      "frame": 577,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.979
+    },
+    {
+      "frame": 579,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.979
+    },
+    {
+      "frame": 581,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.98
+    },
+    {
+      "frame": 583,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.98
+    },
+    {
+      "frame": 585,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.98
+    },
+    {
+      "frame": 587,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.98
+    },
+    {
+      "frame": 589,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.98
+    },
+    {
+      "frame": 592,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.981
+    },
+    {
+      "frame": 594,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.981
+    },
+    {
+      "frame": 596,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.981
+    },
+    {
+      "frame": 598,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.981
+    },
+    {
+      "frame": 600,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.982
+    },
+    {
+      "frame": 602,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.982
+    },
+    {
+      "frame": 604,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.982
+    },
+    {
+      "frame": 606,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.982
+    },
+    {
+      "frame": 608,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.982
+    },
+    {
+      "frame": 611,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.983
+    },
+    {
+      "frame": 613,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.983
+    },
+    {
+      "frame": 615,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.983
+    },
+    {
+      "frame": 618,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.984
+    },
+    {
+      "frame": 621,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.984
+    },
+    {
+      "frame": 623,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.984
+    },
+    {
+      "frame": 626,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.984
+    },
+    {
+      "frame": 628,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 631,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 633,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 636,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 639,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 641,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 644,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 647,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 649,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 652,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 655,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 658,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 660,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 663,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 666,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 669,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 671,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 673,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 676,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 678,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 681,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 683,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 686,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 689,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 691,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 694,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.985
+    },
+    {
+      "frame": 697,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.986
+    },
+    {
+      "frame": 699,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.986
+    },
+    {
+      "frame": 702,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.986
+    },
+    {
+      "frame": 704,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.986
+    },
+    {
+      "frame": 707,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.987
+    },
+    {
+      "frame": 709,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.987
+    },
+    {
+      "frame": 712,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.987
+    },
+    {
+      "frame": 714,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.987
+    },
+    {
+      "frame": 717,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.988
+    },
+    {
+      "frame": 719,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.988
+    },
+    {
+      "frame": 722,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.988
+    },
+    {
+      "frame": 724,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.988
+    },
+    {
+      "frame": 727,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.989
+    },
+    {
+      "frame": 729,
+      "x": 20320.4,
+      "y": 7144.5,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "dashAvailable": true,
+      "dashSpikeEntered": true,
+      "dashSpikeTakeoff": true,
+      "dashSpikeAirDashUsed": true,
+      "dashSpikeCleared": true,
+      "boulderProgress": 0.989
+    }
+  ],
+  "deterministicChecks": {
+    "title": true,
+    "runtimeAudit": true,
+    "pass12Audit": true,
+    "jumpOnlyInsufficient": true,
+    "jumpDashSufficient": true,
+    "entered": true,
+    "takeoff": true,
+    "airDashUsed": true,
+    "landing": true,
+    "exitReached": true,
+    "completed": true,
+    "boulderCoveredSpikes": true,
+    "boulderSealed": true,
+    "noReset": true,
+    "noBoulderCatch": true,
+    "keyboard": true,
+    "console": true
+  },
+  "passed": true,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "limitations": [
+    "The helper only places the player at the Pass 11 exit and configures prior completion state.",
+    "This focused run is not counted as a full start-to-exit traversal."
+  ]
+}

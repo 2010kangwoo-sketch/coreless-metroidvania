@@ -1,0 +1,50 @@
+{
+  "version": "rebuild-pass08-cinematic-snake-v1",
+  "tested_with": "Chromium headless + Chrome DevTools Protocol actual keyboard events",
+  "source_sha256": "a751c384328eb38ba74abfff5fde2fe242e07c77b287844d3c516fe20cf80151",
+  "audit": {
+    "passed": true,
+    "checks": [
+      {"id": "top_to_bottom", "passed": true},
+      {"id": "four_snake_lanes", "passed": true},
+      {"id": "three_curved_turns", "passed": true},
+      {"id": "uneven_terrain", "passed": true},
+      {"id": "wall_jump_required", "passed": true},
+      {"id": "dash_spikes_two", "passed": true},
+      {"id": "precision_parkour", "passed": true},
+      {"id": "moving_platform", "passed": true},
+      {"id": "destructible_groups", "passed": true},
+      {"id": "boulder_route", "passed": true},
+      {"id": "boulder_slowdown", "passed": true},
+      {"id": "checkpoint", "passed": true},
+      {"id": "single_loop", "passed": true},
+      {"id": "no_external_assets", "passed": true},
+      {"id": "manual_activation", "passed": true},
+      {"id": "auto_activation", "passed": true},
+      {"id": "variable_jump", "passed": true},
+      {"id": "cinematic_camera", "passed": true}
+    ]
+  },
+  "route_length": 17767.26487349036,
+  "lane0": {"x": 1722.9199999999898, "y": 437.97999999999746, "jumps": 3, "deaths": 0},
+  "curved_turn": {
+    "samples": [
+      {"progress": 3920, "x": 3894.7341280980863, "y": 632.8378100112548, "angle": 0.8667066316426209},
+      {"progress": 4140, "x": 4015.00235344148, "y": 814.1087522794395, "angle": 1.101613887124044},
+      {"progress": 4350, "x": 4133.552501370982, "y": 975.9403211686372, "angle": 0.6575531622983035},
+      {"progress": 4580, "x": 3969.5509246855586, "y": 1029.8479908615725, "angle": -2.7756427291156456}
+    ]
+  },
+  "wall_jump": {"start_y": 997.5870967741935, "end_y": 737.6209548387094, "wall_jumps": 3, "actual_space_inputs": 5, "deaths": 0},
+  "dash_spikes": {"without_dash_death_delta": 1, "with_dash_death_delta": 0, "end_x": 1276.9999999999982, "dash_count": 1},
+  "precision_parkour": {"end_x": 2642.239999999983, "end_y": 1487.04, "actual_jump_inputs": 6, "deaths": 0, "cleared": true},
+  "variable_jump": {"short_min_y": 1464.28, "full_min_y": 1393.6355555555556, "height_difference_px": 70.64444444444439},
+  "moving_platform": {"relative_start_x": 40.51190132851207, "relative_end_x": 40.51190132851207, "relative_error_px": 0.0, "player_delta_x": 82.35630842364162},
+  "boulder": {"destroyed_groups": 9, "slowdowns": 9, "remaining_groups": [], "death_delta": 0},
+  "finish": {"completed": true, "checkpoint": "cp_snake_chase_entry", "progress": 17767.26487349036},
+  "runtime": {"console_errors": 0, "status": "PASS 08C · 18/18"},
+  "limitations": [
+    "Full start-to-finish uninterrupted keyboard run was attempted and reached the lower half, but was not accepted as a pass because it did not complete without a fall.",
+    "All mandatory mechanics and the finish checkpoint were verified as separate actual-browser scenarios; helper teleport was used only to set up each focused scenario."
+  ]
+}

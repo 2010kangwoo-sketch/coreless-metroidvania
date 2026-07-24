@@ -1,0 +1,102 @@
+{
+  "browser": "Chromium headless via Chrome DevTools Protocol",
+  "load_method": "about:blank document injection because managed Chromium blocked localhost, file and data URLs",
+  "version": "rebuild-pass08-browser-verified",
+  "route": {
+    "length": 8832.491289522866,
+    "single_route": true,
+    "start": {"x": 160, "y": 250},
+    "first_round_turn": {
+      "entry": {"s": 2780, "x": 2887.647233131259, "y": 424.98005387901014},
+      "exit": {"s": 3200, "x": 2777.446540906679, "y": 731.9348264608183}
+    },
+    "second_round_turn": {
+      "entry": {"s": 5800, "x": 257.20024880623515, "y": 942.8969999820001},
+      "exit": {"s": 6300, "x": 502.73888480095366, "y": 1267.19153355358}
+    },
+    "end": {"s": 8800, "x": 2929.321981743063, "y": 1479.3075136873133}
+  },
+  "configuration": {
+    "breakable_groups": 9,
+    "dash_spike_zones": 2,
+    "precision_jump_zones": 3,
+    "wall_jumps_required": 5,
+    "dash_frames": 27,
+    "dash_speed": 10.4,
+    "boulder_arm_progress": 900,
+    "boulder_warning_frames": 120,
+    "boulder_break_slowdown": 1.12,
+    "boulder_slow_frames": 38
+  },
+  "actual_keyboard_tests": {
+    "maze_jump": {
+      "keys": ["D", "Space"],
+      "final_progress": 968.4999999999968,
+      "jumps": 1,
+      "deaths": 0
+    },
+    "wall_jump": {
+      "keys": ["A", "D", "Space"],
+      "wall_jumps": 5,
+      "final_progress": 2801.500000000001,
+      "deaths": 0
+    },
+    "spikes_without_dash": {
+      "keys": ["D"],
+      "spike_deaths": 1
+    },
+    "first_spikes_with_dash": {
+      "keys": ["D", "Shift"],
+      "dashes": 1,
+      "final_progress": 3954.550000000007,
+      "deaths": 0
+    },
+    "precision_parkour": {
+      "keys": ["D", "Space"],
+      "jumps": 2,
+      "final_progress": 4605.150000000024,
+      "deaths": 0
+    },
+    "low_ceiling_jump": {
+      "keys": ["D", "Space"],
+      "jumps": 1,
+      "final_progress": 6695.650000000008,
+      "deaths": 0
+    },
+    "lower_spikes_with_dash": {
+      "keys": ["D", "Shift"],
+      "dashes": 1,
+      "final_progress": 7664.549999999995,
+      "deaths": 0
+    }
+  },
+  "boulder_tests": {
+    "first_round_turn": {
+      "destroyed_groups": 4,
+      "slowdowns": 4,
+      "deaths": 0
+    },
+    "second_round_turn": {
+      "destroyed_groups_cumulative": 6,
+      "slowdowns_cumulative": 6,
+      "deaths": 0
+    },
+    "ignores_spikes": true
+  },
+  "github_loader_test": {
+    "before_f8_api_exists": false,
+    "after_actual_f8_api_exists": true,
+    "canvas_replaced": true,
+    "audit": "16/16",
+    "console_errors": 0,
+    "external_payload_chunks": 0,
+    "recursive_calls": 0,
+    "automatic_retries": 0,
+    "animation_loops": 1
+  },
+  "limitations": {
+    "full_run_from_pass_1_to_pass_8": false,
+    "continuous_pass_8_clear": false,
+    "note": "Each control feature was validated independently with real Chromium keyboard events; boulder path and destruction were validated deterministically with the same runtime functions."
+  }
+}

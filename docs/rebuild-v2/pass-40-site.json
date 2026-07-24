@@ -1,0 +1,21 @@
+{
+  "title": "Coreless Mega Room",
+  "status": "succeeded",
+  "productionUrl": "https://coreless-mega-room.leesodong.chatgpt.site",
+  "entryBehavior": "The site root redirects directly to /game/index.html and the game starts automatically after optimized runtime assets finish loading.",
+  "runtimeAssetFiles": 60,
+  "runtimeAssetBytes": 16009222,
+  "runtimeAssetMiB": 15.267583847045898,
+  "deploymentBuildValidated": true,
+  "cloudBrowserPreview": {
+    "status": "not_run",
+    "reason": "Cloud browser access to the internal agent preview was declined. No alternate browser surface was used to bypass that permission."
+  },
+  "gameplayBaseline": {
+    "sourcePass": 39,
+    "commit": "c5ab950",
+    "actualKeyboardRoutePassed": true,
+    "gameplayChangesInPass40": 0,
+    "collisionChangesInPass40": 0
+  }
+}

@@ -1,0 +1,7648 @@
+{
+  "version": "rebuild-v2-pass13",
+  "testedWith": "Chromium + Playwright actual keyboard events",
+  "actualKeyboardRoute": "start slope -> zones 01-07 -> internal descent -> double wall climb -> grapple chain -> air-dash spikes -> short jump cut -> landing reversal -> held long jump -> pass 13 exit",
+  "helperCoordinateMovement": false,
+  "traversalFailure": null,
+  "state": {
+    "title": "Coreless · Rebuild V2 · Pass 13",
+    "activeElement": "gameCanvas",
+    "canvas": {
+      "width": 1200,
+      "height": 680
+    },
+    "buildStatus": "PASS 13 · PRECISION PARKOUR 01–09",
+    "auditStatus": "AUDIT 22/22 · P13 37/37",
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass13",
+        "pass": 13,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "a69b6e1c034ec03ec6e5fbb9bed9d3ac5efd809d"
+      },
+      "passed": true,
+      "passedCount": 22,
+      "total": 22,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        },
+        {
+          "id": "pass03_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass04_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass05_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass06_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass07_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass08_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass09_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass10_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass11_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass12_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass13_level_validation",
+          "passed": true
+        },
+        {
+          "id": "player_dimensions",
+          "passed": true
+        },
+        {
+          "id": "debug_state",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "pass03": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "theoreticalJumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "world_contains_level",
+            "passed": true
+          },
+          {
+            "id": "camera_contains_level",
+            "passed": true
+          },
+          {
+            "id": "spawn_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone01_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "pass03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "two_baffles",
+            "passed": true
+          },
+          {
+            "id": "two_climb_walls",
+            "passed": true
+          },
+          {
+            "id": "first_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "second_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "first_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "second_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "walljump_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "macro_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "run_speed",
+            "passed": true
+          },
+          {
+            "id": "variable_jump",
+            "passed": true
+          },
+          {
+            "id": "air_dash",
+            "passed": true
+          }
+        ]
+      },
+      "pass04": {
+        "passed": true,
+        "passedCount": 22,
+        "total": 22,
+        "highestFloor": 1600,
+        "lowestRoof": 1100,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone03_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "zone03_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone03_single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "two_jump_gaps",
+            "passed": true
+          },
+          {
+            "id": "gap_widths",
+            "passed": true
+          },
+          {
+            "id": "rise_height",
+            "passed": true
+          },
+          {
+            "id": "highest_floor_recorded",
+            "passed": true
+          },
+          {
+            "id": "buried_below_roof",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "frames_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "pass03_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass05": {
+        "passed": true,
+        "passedCount": 25,
+        "total": 25,
+        "normalJumpRise": 114.88970588235293,
+        "ceilingClearances": [
+          80,
+          70
+        ],
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_pass04",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone04_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_distinct_gaps",
+            "passed": true
+          },
+          {
+            "id": "precision_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "shaft_requires_platform",
+            "passed": true
+          },
+          {
+            "id": "one_moving_platform",
+            "passed": true
+          },
+          {
+            "id": "platform_spans_shaft",
+            "passed": true
+          },
+          {
+            "id": "platform_travel",
+            "passed": true
+          },
+          {
+            "id": "two_low_ceiling_beams",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_clearance",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass04_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass06": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_pass05",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone05_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gates",
+            "passed": true
+          },
+          {
+            "id": "gate_shapes_distinct",
+            "passed": true
+          },
+          {
+            "id": "gates_ordered",
+            "passed": true
+          },
+          {
+            "id": "gates_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "gates_exceed_normal_jump",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_forward",
+            "passed": true
+          },
+          {
+            "id": "corridor_same_structure",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_supports",
+            "passed": true
+          },
+          {
+            "id": "supports_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "eight_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass05_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass07": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "runOnlyDistance": 196.69117647058823,
+        "dashDistance": 136.4,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_pass06",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "upper_floor_count",
+            "passed": true
+          },
+          {
+            "id": "lower_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floor_lanes",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gaps",
+            "passed": true
+          },
+          {
+            "id": "dash_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "dash_gaps_match_floors",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "curve_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "single_direction_change",
+            "passed": true
+          },
+          {
+            "id": "curve_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "curve_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "visible_vertical_drop",
+            "passed": true
+          },
+          {
+            "id": "landing_below_lip",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_coordinates",
+            "passed": true
+          },
+          {
+            "id": "pass06_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass08": {
+        "passed": true,
+        "passedCount": 24,
+        "total": 24,
+        "totalDistance": 30779.372511505342,
+        "collapsePanelCount": 31,
+        "supportTargetCount": 13,
+        "checks": [
+          {
+            "id": "pass07_level_retained",
+            "passed": true
+          },
+          {
+            "id": "active_boulder",
+            "passed": true
+          },
+          {
+            "id": "single_combined_path",
+            "passed": true
+          },
+          {
+            "id": "path_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "zone05_to_zone06_join",
+            "passed": true
+          },
+          {
+            "id": "path_starts_on_zone05_floor",
+            "passed": true
+          },
+          {
+            "id": "path_ends_at_zone06_exit",
+            "passed": true
+          },
+          {
+            "id": "strict_cumulative_distance",
+            "passed": true
+          },
+          {
+            "id": "long_chase_route",
+            "passed": true
+          },
+          {
+            "id": "physical_curve_apex",
+            "passed": true
+          },
+          {
+            "id": "one_direction_change",
+            "passed": true
+          },
+          {
+            "id": "boulder_radius_fits_corridors",
+            "passed": true
+          },
+          {
+            "id": "bounded_spawn_delay",
+            "passed": true
+          },
+          {
+            "id": "bounded_speed",
+            "passed": true
+          },
+          {
+            "id": "all_chase_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "collapse_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "thirteen_support_targets",
+            "passed": true
+          },
+          {
+            "id": "support_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "supports_before_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_near_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_matches_pass07",
+            "passed": true
+          },
+          {
+            "id": "gaps_remain_physical",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "reserved_flags_unchanged",
+            "passed": true
+          }
+        ]
+      },
+      "pass09": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "totalDistance": 37613.124580885786,
+        "extensionDistance": 6833.752069380444,
+        "collapsePanelCount": 40,
+        "supportTargetCount": 19,
+        "checks": [
+          {
+            "id": "pass08_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass08",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "three_upper_floors",
+            "passed": true
+          },
+          {
+            "id": "one_middle_return",
+            "passed": true
+          },
+          {
+            "id": "five_lower_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_connected",
+            "passed": true
+          },
+          {
+            "id": "two_physical_drops",
+            "passed": true
+          },
+          {
+            "id": "single_player_route",
+            "passed": true
+          },
+          {
+            "id": "three_ceiling_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "eleven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "physical_u_turn",
+            "passed": true
+          },
+          {
+            "id": "corridor_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "corridor_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "six_internal_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "nineteen_supports",
+            "passed": true
+          },
+          {
+            "id": "breach_delay",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          }
+        ]
+      },
+      "pass10": {
+        "passed": true,
+        "passedCount": 30,
+        "total": 30,
+        "theoreticalJumpRise": 114.88970588235293,
+        "totalDistance": 46988.78994100213,
+        "extensionDistance": 9375.665360116342,
+        "collapsePanelCount": 50,
+        "supportTargetCount": 27,
+        "checks": [
+          {
+            "id": "pass09_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass09",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "ten_player_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "eight_solids",
+            "passed": true
+          },
+          {
+            "id": "two_complete_wall_pairs",
+            "passed": true
+          },
+          {
+            "id": "two_forced_shafts",
+            "passed": true
+          },
+          {
+            "id": "shaft_one_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "shaft_two_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "wall_corridor_widths",
+            "passed": true
+          },
+          {
+            "id": "second_shaft_after_first_lip",
+            "passed": true
+          },
+          {
+            "id": "no_bypass_floor",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "fourteen_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_player_endpoints",
+            "passed": true
+          },
+          {
+            "id": "corridor_descends_through_both_shafts",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "eight_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "twenty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "four_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "milestones_force_two_successes",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass11": {
+        "passed": true,
+        "passedCount": 31,
+        "total": 31,
+        "directHorizontalGap": 750,
+        "noGrappleAirReach": 457.4,
+        "totalDistance": 51578.488132262966,
+        "extensionDistance": 4589.698191260839,
+        "collapsePanelCount": 52,
+        "supportTargetCount": 33,
+        "checks": [
+          {
+            "id": "pass10_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass10",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "six_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "two_player_floors",
+            "passed": true
+          },
+          {
+            "id": "no_direct_floor_bridge",
+            "passed": true
+          },
+          {
+            "id": "three_ordered_anchors",
+            "passed": true
+          },
+          {
+            "id": "unique_anchor_ids",
+            "passed": true
+          },
+          {
+            "id": "anchors_inside_zone",
+            "passed": true
+          },
+          {
+            "id": "anchor_ranges",
+            "passed": true
+          },
+          {
+            "id": "first_anchor_reachable_from_launch",
+            "passed": true
+          },
+          {
+            "id": "anchor_chain_overlaps",
+            "passed": true
+          },
+          {
+            "id": "two_arch_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_entry_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "six_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "six_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "thirty_three_supports",
+            "passed": true
+          },
+          {
+            "id": "three_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_three_anchors",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass12": {
+        "passed": true,
+        "passedCount": 32,
+        "total": 32,
+        "horizontalGap": 300,
+        "landingDrop": 100,
+        "airTime": 43.52253087835111,
+        "jumpOnlyReach": 232.84554019917843,
+        "jumpDashReach": 310.3955401991784,
+        "totalDistance": 53722.74478801561,
+        "extensionDistance": 2144.2566557526443,
+        "collapsePanelCount": 55,
+        "supportTargetCount": 37,
+        "checks": [
+          {
+            "id": "pass11_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass11",
+            "passed": true
+          },
+          {
+            "id": "entry_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "six_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_player_floors",
+            "passed": true
+          },
+          {
+            "id": "three_hundred_pixel_gap",
+            "passed": true
+          },
+          {
+            "id": "jump_alone_cannot_clear",
+            "passed": true
+          },
+          {
+            "id": "jump_dash_can_clear",
+            "passed": true
+          },
+          {
+            "id": "no_floor_bridge_over_spikes",
+            "passed": true
+          },
+          {
+            "id": "single_long_spike_bed",
+            "passed": true
+          },
+          {
+            "id": "spikes_ignored_by_boulder",
+            "passed": true
+          },
+          {
+            "id": "two_arch_solids",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "five_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_entry_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "four_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "four_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "fifty_five_collapse_panels",
+            "passed": true
+          },
+          {
+            "id": "thirty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "two_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_air_dash",
+            "passed": true
+          },
+          {
+            "id": "extension_stays_in_zone09",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass13": {
+        "passed": true,
+        "passedCount": 37,
+        "total": 37,
+        "shortGap": 100,
+        "longGap": 195,
+        "ceilingHeadroom": 72,
+        "exitRunout": 140,
+        "exitFloorYAtMarker": 7520.166666666667,
+        "shortCutRise": 44.66393223529411,
+        "fullJumpRise": 114.88970588235293,
+        "shortCutReach": 132.05099798149396,
+        "shortCutLongReach": 151.01879194732,
+        "fullLongReach": 223.10424473817906,
+        "totalDistance": 56388.129270691235,
+        "extensionDistance": 2665.384482675625,
+        "collapsePanelCount": 61,
+        "supportTargetCount": 42,
+        "checks": [
+          {
+            "id": "pass12_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass12",
+            "passed": true
+          },
+          {
+            "id": "entry_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "ten_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "route_contains_direction_reversal",
+            "passed": true
+          },
+          {
+            "id": "six_player_floors",
+            "passed": true
+          },
+          {
+            "id": "exit_has_safe_runout",
+            "passed": true
+          },
+          {
+            "id": "one_hundred_pixel_short_gap",
+            "passed": true
+          },
+          {
+            "id": "short_cut_clears_short_gap",
+            "passed": true
+          },
+          {
+            "id": "one_hundred_ninety_five_pixel_long_gap",
+            "passed": true
+          },
+          {
+            "id": "short_cut_cannot_clear_long_gap",
+            "passed": true
+          },
+          {
+            "id": "full_jump_clears_long_gap",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_requires_jump_cut",
+            "passed": true
+          },
+          {
+            "id": "two_gap_hazards",
+            "passed": true
+          },
+          {
+            "id": "hazards_exactly_fill_gaps",
+            "passed": true
+          },
+          {
+            "id": "three_architecture_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "ten_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_entry_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "corridor_has_rounded_return",
+            "passed": true
+          },
+          {
+            "id": "six_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "five_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "sixty_one_collapse_panels",
+            "passed": true
+          },
+          {
+            "id": "forty_two_supports",
+            "passed": true
+          },
+          {
+            "id": "three_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_precision_sequence",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_boulder",
+            "passed": true
+          },
+          {
+            "id": "extension_stays_in_zone09",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "gameplay": {
+        "player": {
+          "x": 19795.501736619484,
+          "y": 7473.312659190119,
+          "vx": 0,
+          "vy": 0,
+          "grounded": true,
+          "wallSide": 0,
+          "dashAvailable": true,
+          "grappleLaunchFrames": 0,
+          "standingPlatformId": null
+        },
+        "movingPlatforms": [
+          {
+            "id": "shaft_carriage",
+            "x": 11642.649999999974,
+            "y": 3290,
+            "direction": 1
+          }
+        ],
+        "breakables": [
+          {
+            "id": "west_braced_gate",
+            "shape": "cross_brace",
+            "destroyed": true
+          },
+          {
+            "id": "middle_lattice_gate",
+            "shape": "lattice",
+            "destroyed": true
+          },
+          {
+            "id": "east_split_gate",
+            "shape": "split_pillar",
+            "destroyed": true
+          }
+        ],
+        "chase": {
+          "triggered": true,
+          "active": false,
+          "sealed": true,
+          "delayFrames": 0,
+          "breachDelayFrames": 0,
+          "breachComplete": true,
+          "internalBreakpointIndex": 14,
+          "internalPauseFrames": 0,
+          "activeFrames": 9424,
+          "pathDistance": 55824.24852501086,
+          "pathProgress": 0.9900000097010939,
+          "pathIndex": 69,
+          "x": 19237.148989687925,
+          "y": 7553.834263700635,
+          "speed": 6.05
+        },
+        "collapsedFloorIds": [
+          "curve_approach",
+          "curve_bend",
+          "curve_drop_lip",
+          "curve_landing",
+          "curve_runout",
+          "dash_spike_exit_slope",
+          "dash_spike_landing",
+          "dash_spike_takeoff",
+          "double_wall_connector",
+          "double_wall_entry_slope",
+          "double_wall_exit_rise",
+          "double_wall_exit_shelf",
+          "double_wall_lip_one",
+          "double_wall_lip_two",
+          "double_wall_lower_hall_a",
+          "double_wall_lower_hall_b",
+          "double_wall_pit_one",
+          "double_wall_pit_two",
+          "east_dash_takeoff",
+          "east_mid",
+          "east_wave",
+          "eastern_descent",
+          "eastern_hall",
+          "eastern_ridge",
+          "exit_drop",
+          "final_rise",
+          "first_rise",
+          "first_sink",
+          "grapple_exit_shelf",
+          "grapple_launch_ramp",
+          "high_gallery",
+          "internal_entry_surface",
+          "internal_exit_rise",
+          "internal_lower_landing",
+          "internal_lower_wave_a",
+          "internal_lower_wave_b",
+          "internal_lower_wave_c",
+          "internal_middle_return",
+          "internal_upper_gallery",
+          "internal_upper_ramp",
+          "low_wave_a",
+          "low_wave_b",
+          "low_wave_c",
+          "lower_hall",
+          "maze_entry_rise",
+          "mid_dash_takeoff",
+          "middle_descent",
+          "middle_hall",
+          "middle_wave",
+          "precision_entry_slope",
+          "precision_short_landing",
+          "precision_turn_descent",
+          "precision_turn_launch",
+          "second_rise",
+          "west_dash_landing",
+          "western_hall",
+          "western_ridge",
+          "zone05_exit",
+          "zone06_exit_rise"
+        ],
+        "destroyedSupportIds": [
+          "curve_support_1",
+          "curve_support_2",
+          "curve_support_3",
+          "curve_support_4",
+          "curve_support_5",
+          "curve_support_6",
+          "dash_spike_support_entry",
+          "dash_spike_support_exit",
+          "dash_spike_support_landing",
+          "dash_spike_support_takeoff",
+          "double_wall_support_connector",
+          "double_wall_support_entry",
+          "double_wall_support_exit",
+          "double_wall_support_lower_hall",
+          "double_wall_support_one_left",
+          "double_wall_support_one_right",
+          "double_wall_support_two_left",
+          "double_wall_support_two_right",
+          "grapple_support_apex",
+          "grapple_support_exit",
+          "grapple_support_high",
+          "grapple_support_launch",
+          "grapple_support_lower",
+          "grapple_support_turn",
+          "internal_support_drop",
+          "internal_support_entry",
+          "internal_support_exit",
+          "internal_support_lower_a",
+          "internal_support_lower_b",
+          "internal_support_return",
+          "precision_support_turn",
+          "support_east_a",
+          "support_east_b",
+          "support_exit",
+          "support_mid_a",
+          "support_mid_b",
+          "support_west_a",
+          "support_west_b"
+        ],
+        "grapple": {
+          "active": false,
+          "anchorId": null,
+          "ropeLength": 978.1898687650371,
+          "attachedFrames": 0,
+          "cooldown": 0,
+          "lastAnchorId": "grapple_anchor_three",
+          "usedAnchorIds": [
+            "grapple_anchor_one",
+            "grapple_anchor_two",
+            "grapple_anchor_three"
+          ]
+        },
+        "precisionJump": {
+          "kind": null,
+          "holdFrames": 0,
+          "cut": false
+        },
+        "boulderCatchCount": 0,
+        "debrisCount": 14,
+        "camera": {
+          "x": 19404.749921730483,
+          "y": 7119.637091882014,
+          "zoom": 0.9999740188552789
+        },
+        "progress": {
+          "zone01Reached": true,
+          "firstDropped": true,
+          "firstClimb": true,
+          "secondDropped": true,
+          "secondClimb": true,
+          "completed": true,
+          "zone03Entered": true,
+          "lowerRiseReached": true,
+          "atriumReached": true,
+          "upperGalleryReached": true,
+          "longDescentReached": true,
+          "pass04Completed": true,
+          "zone04Entered": true,
+          "lowTunnelReached": true,
+          "platformBoarded": true,
+          "movingPlatformCrossed": true,
+          "unevenTunnelReached": true,
+          "pass05Completed": true,
+          "zone05Entered": true,
+          "lowerHallReached": true,
+          "highGalleryReached": true,
+          "pass06Completed": true,
+          "zone06Entered": true,
+          "curveCommitted": true,
+          "zone06Dropped": true,
+          "eastDashGapCleared": true,
+          "middleDashGapCleared": true,
+          "westDashGapCleared": true,
+          "pass07Completed": true,
+          "chaseTriggered": true,
+          "boulderStarted": true,
+          "boulderEnteredCurve": true,
+          "boulderRoundedApex": true,
+          "boulderFinished": false,
+          "chaseEscaped": true,
+          "pass08Completed": true,
+          "zone07Entered": true,
+          "zone07UpperDrop": true,
+          "zone07MiddleReturn": true,
+          "zone07MiddleDrop": true,
+          "zone07LowerRun": true,
+          "zone07ExitReached": true,
+          "boulderAtInternalEntry": true,
+          "internalStructureBreached": true,
+          "pass09Completed": true,
+          "zone08Entered": true,
+          "zone08ShaftOneDropped": true,
+          "zone08ShaftOneCleared": true,
+          "zone08ShaftTwoDropped": true,
+          "zone08ShaftTwoCleared": true,
+          "zone08LowerHallReached": true,
+          "zone08ExitReached": true,
+          "pass10Completed": true,
+          "zone09Entered": true,
+          "grappleAnchorOneUsed": true,
+          "grappleAnchorTwoUsed": true,
+          "grappleAnchorThreeUsed": true,
+          "grappleChainCompleted": true,
+          "zone09ExitReached": true,
+          "pass11Completed": true,
+          "dashSpikeEntered": true,
+          "dashSpikeTakeoff": true,
+          "dashSpikeAirDashUsed": true,
+          "dashSpikeCleared": true,
+          "zone09DashExitReached": true,
+          "pass12Completed": true,
+          "precisionEntered": true,
+          "precisionShortTakeoff": true,
+          "precisionShortJumpCut": true,
+          "precisionShortGapCleared": true,
+          "precisionLowCeilingCleared": true,
+          "precisionTurnReached": true,
+          "precisionDirectionReversed": true,
+          "precisionLongTakeoff": true,
+          "precisionLongGapCleared": true,
+          "precisionExitReached": true,
+          "pass13Completed": true,
+          "chaseWallJumps": 11,
+          "floorsCollapsed": 59,
+          "supportsDestroyed": 38,
+          "internalDirectionChanges": 2,
+          "dashGapClears": 3,
+          "directionChanges": 1,
+          "breakablesDestroyed": 3,
+          "platformRides": 1,
+          "groundJumps": 16,
+          "wallJumps": 13,
+          "ledgeAssists": 3,
+          "dashes": 13,
+          "grappleAttaches": 3,
+          "grappleReleases": 3,
+          "grappleUniqueAnchors": 3,
+          "chaseAirDashes": 1,
+          "precisionShortJumps": 1,
+          "precisionLongJumps": 1,
+          "precisionDirectionChanges": 1,
+          "precisionCeilingBumps": 0
+        },
+        "keys": [],
+        "blueprintVisible": false,
+        "resetCount": 0,
+        "frameCount": 17535
+      },
+      "inputProbe": {
+        "downs": 83,
+        "ups": 83,
+        "lastCode": "KeyB",
+        "usedCodes": [
+          "KeyA",
+          "KeyB",
+          "KeyD",
+          "KeyE",
+          "ShiftLeft",
+          "Space"
+        ]
+      }
+    },
+    "debug": {
+      "player": {
+        "x": 19795.501736619484,
+        "y": 7473.312659190119,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true,
+        "wallSide": 0,
+        "dashAvailable": true,
+        "grappleLaunchFrames": 0,
+        "standingPlatformId": null
+      },
+      "movingPlatforms": [
+        {
+          "id": "shaft_carriage",
+          "x": 11642.649999999974,
+          "y": 3290,
+          "direction": 1
+        }
+      ],
+      "breakables": [
+        {
+          "id": "west_braced_gate",
+          "shape": "cross_brace",
+          "destroyed": true
+        },
+        {
+          "id": "middle_lattice_gate",
+          "shape": "lattice",
+          "destroyed": true
+        },
+        {
+          "id": "east_split_gate",
+          "shape": "split_pillar",
+          "destroyed": true
+        }
+      ],
+      "chase": {
+        "triggered": true,
+        "active": false,
+        "sealed": true,
+        "delayFrames": 0,
+        "breachDelayFrames": 0,
+        "breachComplete": true,
+        "internalBreakpointIndex": 14,
+        "internalPauseFrames": 0,
+        "activeFrames": 9424,
+        "pathDistance": 55824.24852501086,
+        "pathProgress": 0.9900000097010939,
+        "pathIndex": 69,
+        "x": 19237.148989687925,
+        "y": 7553.834263700635,
+        "speed": 6.05
+      },
+      "collapsedFloorIds": [
+        "curve_approach",
+        "curve_bend",
+        "curve_drop_lip",
+        "curve_landing",
+        "curve_runout",
+        "dash_spike_exit_slope",
+        "dash_spike_landing",
+        "dash_spike_takeoff",
+        "double_wall_connector",
+        "double_wall_entry_slope",
+        "double_wall_exit_rise",
+        "double_wall_exit_shelf",
+        "double_wall_lip_one",
+        "double_wall_lip_two",
+        "double_wall_lower_hall_a",
+        "double_wall_lower_hall_b",
+        "double_wall_pit_one",
+        "double_wall_pit_two",
+        "east_dash_takeoff",
+        "east_mid",
+        "east_wave",
+        "eastern_descent",
+        "eastern_hall",
+        "eastern_ridge",
+        "exit_drop",
+        "final_rise",
+        "first_rise",
+        "first_sink",
+        "grapple_exit_shelf",
+        "grapple_launch_ramp",
+        "high_gallery",
+        "internal_entry_surface",
+        "internal_exit_rise",
+        "internal_lower_landing",
+        "internal_lower_wave_a",
+        "internal_lower_wave_b",
+        "internal_lower_wave_c",
+        "internal_middle_return",
+        "internal_upper_gallery",
+        "internal_upper_ramp",
+        "low_wave_a",
+        "low_wave_b",
+        "low_wave_c",
+        "lower_hall",
+        "maze_entry_rise",
+        "mid_dash_takeoff",
+        "middle_descent",
+        "middle_hall",
+        "middle_wave",
+        "precision_entry_slope",
+        "precision_short_landing",
+        "precision_turn_descent",
+        "precision_turn_launch",
+        "second_rise",
+        "west_dash_landing",
+        "western_hall",
+        "western_ridge",
+        "zone05_exit",
+        "zone06_exit_rise"
+      ],
+      "destroyedSupportIds": [
+        "curve_support_1",
+        "curve_support_2",
+        "curve_support_3",
+        "curve_support_4",
+        "curve_support_5",
+        "curve_support_6",
+        "dash_spike_support_entry",
+        "dash_spike_support_exit",
+        "dash_spike_support_landing",
+        "dash_spike_support_takeoff",
+        "double_wall_support_connector",
+        "double_wall_support_entry",
+        "double_wall_support_exit",
+        "double_wall_support_lower_hall",
+        "double_wall_support_one_left",
+        "double_wall_support_one_right",
+        "double_wall_support_two_left",
+        "double_wall_support_two_right",
+        "grapple_support_apex",
+        "grapple_support_exit",
+        "grapple_support_high",
+        "grapple_support_launch",
+        "grapple_support_lower",
+        "grapple_support_turn",
+        "internal_support_drop",
+        "internal_support_entry",
+        "internal_support_exit",
+        "internal_support_lower_a",
+        "internal_support_lower_b",
+        "internal_support_return",
+        "precision_support_turn",
+        "support_east_a",
+        "support_east_b",
+        "support_exit",
+        "support_mid_a",
+        "support_mid_b",
+        "support_west_a",
+        "support_west_b"
+      ],
+      "grapple": {
+        "active": false,
+        "anchorId": null,
+        "ropeLength": 978.1898687650371,
+        "attachedFrames": 0,
+        "cooldown": 0,
+        "lastAnchorId": "grapple_anchor_three",
+        "usedAnchorIds": [
+          "grapple_anchor_one",
+          "grapple_anchor_two",
+          "grapple_anchor_three"
+        ]
+      },
+      "precisionJump": {
+        "kind": null,
+        "holdFrames": 0,
+        "cut": false
+      },
+      "boulderCatchCount": 0,
+      "debrisCount": 14,
+      "camera": {
+        "x": 19404.749921730483,
+        "y": 7119.637091882014,
+        "zoom": 0.9999740188552789
+      },
+      "progress": {
+        "zone01Reached": true,
+        "firstDropped": true,
+        "firstClimb": true,
+        "secondDropped": true,
+        "secondClimb": true,
+        "completed": true,
+        "zone03Entered": true,
+        "lowerRiseReached": true,
+        "atriumReached": true,
+        "upperGalleryReached": true,
+        "longDescentReached": true,
+        "pass04Completed": true,
+        "zone04Entered": true,
+        "lowTunnelReached": true,
+        "platformBoarded": true,
+        "movingPlatformCrossed": true,
+        "unevenTunnelReached": true,
+        "pass05Completed": true,
+        "zone05Entered": true,
+        "lowerHallReached": true,
+        "highGalleryReached": true,
+        "pass06Completed": true,
+        "zone06Entered": true,
+        "curveCommitted": true,
+        "zone06Dropped": true,
+        "eastDashGapCleared": true,
+        "middleDashGapCleared": true,
+        "westDashGapCleared": true,
+        "pass07Completed": true,
+        "chaseTriggered": true,
+        "boulderStarted": true,
+        "boulderEnteredCurve": true,
+        "boulderRoundedApex": true,
+        "boulderFinished": false,
+        "chaseEscaped": true,
+        "pass08Completed": true,
+        "zone07Entered": true,
+        "zone07UpperDrop": true,
+        "zone07MiddleReturn": true,
+        "zone07MiddleDrop": true,
+        "zone07LowerRun": true,
+        "zone07ExitReached": true,
+        "boulderAtInternalEntry": true,
+        "internalStructureBreached": true,
+        "pass09Completed": true,
+        "zone08Entered": true,
+        "zone08ShaftOneDropped": true,
+        "zone08ShaftOneCleared": true,
+        "zone08ShaftTwoDropped": true,
+        "zone08ShaftTwoCleared": true,
+        "zone08LowerHallReached": true,
+        "zone08ExitReached": true,
+        "pass10Completed": true,
+        "zone09Entered": true,
+        "grappleAnchorOneUsed": true,
+        "grappleAnchorTwoUsed": true,
+        "grappleAnchorThreeUsed": true,
+        "grappleChainCompleted": true,
+        "zone09ExitReached": true,
+        "pass11Completed": true,
+        "dashSpikeEntered": true,
+        "dashSpikeTakeoff": true,
+        "dashSpikeAirDashUsed": true,
+        "dashSpikeCleared": true,
+        "zone09DashExitReached": true,
+        "pass12Completed": true,
+        "precisionEntered": true,
+        "precisionShortTakeoff": true,
+        "precisionShortJumpCut": true,
+        "precisionShortGapCleared": true,
+        "precisionLowCeilingCleared": true,
+        "precisionTurnReached": true,
+        "precisionDirectionReversed": true,
+        "precisionLongTakeoff": true,
+        "precisionLongGapCleared": true,
+        "precisionExitReached": true,
+        "pass13Completed": true,
+        "chaseWallJumps": 11,
+        "floorsCollapsed": 59,
+        "supportsDestroyed": 38,
+        "internalDirectionChanges": 2,
+        "dashGapClears": 3,
+        "directionChanges": 1,
+        "breakablesDestroyed": 3,
+        "platformRides": 1,
+        "groundJumps": 16,
+        "wallJumps": 13,
+        "ledgeAssists": 3,
+        "dashes": 13,
+        "grappleAttaches": 3,
+        "grappleReleases": 3,
+        "grappleUniqueAnchors": 3,
+        "chaseAirDashes": 1,
+        "precisionShortJumps": 1,
+        "precisionLongJumps": 1,
+        "precisionDirectionChanges": 1,
+        "precisionCeilingBumps": 0
+      },
+      "keys": [],
+      "blueprintVisible": false,
+      "resetCount": 0,
+      "frameCount": 17535
+    },
+    "legacyGlobals": []
+  },
+  "routeSamples": [
+    {
+      "frame": 170,
+      "x": 807.4,
+      "y": 917.8,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 214,
+      "x": 1042.8,
+      "y": 1006.6,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 256,
+      "x": 1267.5,
+      "y": 1032.4,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 298,
+      "x": 1492.2,
+      "y": 996.9,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 339,
+      "x": 1711.6,
+      "y": 1112.7,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 381,
+      "x": 1936.3,
+      "y": 1231.5,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 423,
+      "x": 2269.6,
+      "y": 1369.7,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 465,
+      "x": 2494.3,
+      "y": 1470.5,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 507,
+      "x": 2719,
+      "y": 1611.7,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 548,
+      "x": 2938.3,
+      "y": 1768.3,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 590,
+      "x": 2966,
+      "y": 1956.1,
+      "vx": 0,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 633,
+      "x": 3121.8,
+      "y": 1993.7,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 675,
+      "x": 3174.4,
+      "y": 1931.2,
+      "vx": -5.9,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 717,
+      "x": 3510.8,
+      "y": 1947.2,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 760,
+      "x": 3726,
+      "y": 2345,
+      "vx": 0,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 801,
+      "x": 3726.4,
+      "y": 2474.1,
+      "vx": 0.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 843,
+      "x": 3924.6,
+      "y": 2521.5,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 885,
+      "x": 3838,
+      "y": 2551.8,
+      "vx": -5.3,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 927,
+      "x": 3892.3,
+      "y": 2592.9,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 971,
+      "x": 4064.4,
+      "y": 2362,
+      "vx": 6.2,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1014,
+      "x": 4296.3,
+      "y": 2466,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1056,
+      "x": 4521,
+      "y": 3052,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1099,
+      "x": 4751,
+      "y": 3048,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1142,
+      "x": 4981.1,
+      "y": 2996.9,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1185,
+      "x": 5211.1,
+      "y": 2929,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1227,
+      "x": 5435.8,
+      "y": 2745.1,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1269,
+      "x": 5660.5,
+      "y": 2561.3,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1311,
+      "x": 5885.2,
+      "y": 2502,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1389,
+      "x": 6302.5,
+      "y": 2441.7,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1431,
+      "x": 6527.2,
+      "y": 2271.5,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1472,
+      "x": 6746.6,
+      "y": 2105.3,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1514,
+      "x": 6971.3,
+      "y": 2002,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1596,
+      "x": 7410,
+      "y": 1954.9,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1637,
+      "x": 7629.3,
+      "y": 1800.7,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1679,
+      "x": 7854,
+      "y": 1642.7,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1721,
+      "x": 8168.2,
+      "y": 1552,
+      "vx": 11,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1763,
+      "x": 8412,
+      "y": 1552,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1805,
+      "x": 8636.7,
+      "y": 1690.4,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1846,
+      "x": 8856.1,
+      "y": 1887.8,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1888,
+      "x": 9080.8,
+      "y": 2002,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 1930,
+      "x": 9305.5,
+      "y": 2038.5,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 1972,
+      "x": 9530.2,
+      "y": 2403.7,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2013,
+      "x": 9749.5,
+      "y": 2652,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2055,
+      "x": 9974.2,
+      "y": 2707,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2097,
+      "x": 10198.9,
+      "y": 3006.6,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2138,
+      "x": 10418.3,
+      "y": 3252,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2180,
+      "x": 10643,
+      "y": 3252,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2222,
+      "x": 10867.7,
+      "y": 3172.9,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2264,
+      "x": 11092.4,
+      "y": 3102,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2306,
+      "x": 11317.1,
+      "y": 3102,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2348,
+      "x": 11400.1,
+      "y": 3102,
+      "vx": 0,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2390,
+      "x": 11400.1,
+      "y": 3102,
+      "vx": 0,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2431,
+      "x": 11436.3,
+      "y": 3102,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2473,
+      "x": 11615.7,
+      "y": 3242,
+      "vx": 0.1,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2514,
+      "x": 11704.1,
+      "y": 3242,
+      "vx": 0,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2556,
+      "x": 11878.3,
+      "y": 3242,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2597,
+      "x": 12069.3,
+      "y": 3462.9,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2639,
+      "x": 12294,
+      "y": 3503.3,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2698,
+      "x": 12609.6,
+      "y": 3340.5,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2760,
+      "x": 12941.3,
+      "y": 3558,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2802,
+      "x": 13166,
+      "y": 3497,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2845,
+      "x": 13396.1,
+      "y": 3652,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2888,
+      "x": 13626.1,
+      "y": 3652,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass05_complete"
+    },
+    {
+      "frame": 2930,
+      "x": 13850.8,
+      "y": 3572.8,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 2972,
+      "x": 14075.5,
+      "y": 3491.1,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3013,
+      "x": 14294.9,
+      "y": 3452,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3055,
+      "x": 14519.6,
+      "y": 3452,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3097,
+      "x": 14852.9,
+      "y": 3452,
+      "vx": 5.4,
+      "boulderX": 13400,
+      "boulderY": 3900,
+      "boulderProgress": 0,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "destruction_maze_west"
+    },
+    {
+      "frame": 3138,
+      "x": 15072.2,
+      "y": 3560.1,
+      "vx": 5.4,
+      "boulderX": 13550.4,
+      "boulderY": 3916.1,
+      "boulderProgress": 0.003,
+      "cameraZoom": 0.73,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3180,
+      "x": 15296.9,
+      "y": 3688.5,
+      "vx": 5.4,
+      "boulderX": 13784.4,
+      "boulderY": 3941.2,
+      "boulderProgress": 0.007,
+      "cameraZoom": 0.636,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3222,
+      "x": 15521.6,
+      "y": 3816.9,
+      "vx": 5.4,
+      "boulderX": 14018.6,
+      "boulderY": 3966.3,
+      "boulderProgress": 0.011,
+      "cameraZoom": 0.622,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3264,
+      "x": 15746.3,
+      "y": 3852,
+      "vx": 5.4,
+      "boulderX": 14252.9,
+      "boulderY": 3991.4,
+      "boulderProgress": 0.015,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3305,
+      "x": 15965.7,
+      "y": 3852,
+      "vx": 5.4,
+      "boulderX": 14481.8,
+      "boulderY": 4015.9,
+      "boulderProgress": 0.019,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3347,
+      "x": 16190.4,
+      "y": 3852,
+      "vx": 5.4,
+      "boulderX": 14716.4,
+      "boulderY": 4041,
+      "boulderProgress": 0.023,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3389,
+      "x": 16415.1,
+      "y": 3744.7,
+      "vx": 5.4,
+      "boulderX": 14949.3,
+      "boulderY": 4078.7,
+      "boulderProgress": 0.028,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3431,
+      "x": 16639.8,
+      "y": 3562.1,
+      "vx": 5.4,
+      "boulderX": 15181.4,
+      "boulderY": 4123.3,
+      "boulderProgress": 0.032,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3473,
+      "x": 16864.5,
+      "y": 3379.5,
+      "vx": 5.4,
+      "boulderX": 15413.5,
+      "boulderY": 4168,
+      "boulderProgress": 0.036,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3515,
+      "x": 17089.2,
+      "y": 3202,
+      "vx": 5.4,
+      "boulderX": 15645.8,
+      "boulderY": 4212.7,
+      "boulderProgress": 0.04,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3557,
+      "x": 17313.9,
+      "y": 3202,
+      "vx": 5.4,
+      "boulderX": 15878.3,
+      "boulderY": 4257.4,
+      "boulderProgress": 0.044,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3599,
+      "x": 17538.6,
+      "y": 3202,
+      "vx": 5.4,
+      "boulderX": 16110.6,
+      "boulderY": 4296.6,
+      "boulderProgress": 0.049,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3641,
+      "x": 17763.3,
+      "y": 3202,
+      "vx": 5.4,
+      "boulderX": 16336.2,
+      "boulderY": 4224.1,
+      "boulderProgress": 0.053,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3683,
+      "x": 17988,
+      "y": 3261.1,
+      "vx": 5.4,
+      "boulderX": 16562,
+      "boulderY": 4151.5,
+      "boulderProgress": 0.057,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3724,
+      "x": 18207.3,
+      "y": 3384.4,
+      "vx": 5.4,
+      "boulderX": 16782.6,
+      "boulderY": 4080.6,
+      "boulderProgress": 0.061,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3767,
+      "x": 18437.4,
+      "y": 3513.8,
+      "vx": 5.4,
+      "boulderX": 17014,
+      "boulderY": 4006.2,
+      "boulderProgress": 0.065,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3809,
+      "x": 18662.1,
+      "y": 3640.2,
+      "vx": 5.4,
+      "boulderX": 17240.2,
+      "boulderY": 3933.5,
+      "boulderProgress": 0.07,
+      "cameraZoom": 0.626,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3851,
+      "x": 18886.8,
+      "y": 3652,
+      "vx": 5.4,
+      "boulderX": 17466.6,
+      "boulderY": 3860.7,
+      "boulderProgress": 0.074,
+      "cameraZoom": 0.634,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3893,
+      "x": 19111.5,
+      "y": 3652,
+      "vx": 5.4,
+      "boulderX": 17697.5,
+      "boulderY": 3896.1,
+      "boulderProgress": 0.078,
+      "cameraZoom": 0.637,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3935,
+      "x": 19444.8,
+      "y": 3652,
+      "vx": 5.4,
+      "boulderX": 17929.4,
+      "boulderY": 3950.2,
+      "boulderProgress": 0.082,
+      "cameraZoom": 0.625,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 3977,
+      "x": 19669.5,
+      "y": 3527.7,
+      "vx": 5.4,
+      "boulderX": 18161.4,
+      "boulderY": 4004.3,
+      "boulderProgress": 0.087,
+      "cameraZoom": 0.621,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4019,
+      "x": 19894.2,
+      "y": 3377.9,
+      "vx": 5.4,
+      "boulderX": 18393.5,
+      "boulderY": 4058.5,
+      "boulderProgress": 0.091,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4061,
+      "x": 20118.9,
+      "y": 3228.1,
+      "vx": 5.4,
+      "boulderX": 18625.8,
+      "boulderY": 4112.7,
+      "boulderProgress": 0.095,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4103,
+      "x": 20343.6,
+      "y": 3078.3,
+      "vx": 5.4,
+      "boulderX": 18858.2,
+      "boulderY": 4166.9,
+      "boulderProgress": 0.099,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4145,
+      "x": 20568.3,
+      "y": 3052,
+      "vx": 5.4,
+      "boulderX": 19087.5,
+      "boulderY": 4167.9,
+      "boulderProgress": 0.103,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4187,
+      "x": 20793,
+      "y": 3052,
+      "vx": 5.4,
+      "boulderX": 19311.9,
+      "boulderY": 4085.6,
+      "boulderProgress": 0.108,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4229,
+      "x": 21017.7,
+      "y": 3052,
+      "vx": 5.4,
+      "boulderX": 19536.4,
+      "boulderY": 4003.3,
+      "boulderProgress": 0.112,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4271,
+      "x": 21242.4,
+      "y": 3092.8,
+      "vx": 5.4,
+      "boulderX": 19761,
+      "boulderY": 3921,
+      "boulderProgress": 0.116,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4313,
+      "x": 21467.1,
+      "y": 3247.3,
+      "vx": 5.4,
+      "boulderX": 19985.8,
+      "boulderY": 3838.5,
+      "boulderProgress": 0.12,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4354,
+      "x": 21686.4,
+      "y": 3398.1,
+      "vx": 5.4,
+      "boulderX": 20205.4,
+      "boulderY": 3758,
+      "boulderProgress": 0.125,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4396,
+      "x": 21911.1,
+      "y": 3552.6,
+      "vx": 5.4,
+      "boulderX": 20430.4,
+      "boulderY": 3675.5,
+      "boulderProgress": 0.129,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4438,
+      "x": 22135.8,
+      "y": 3602,
+      "vx": 5.4,
+      "boulderX": 20657.3,
+      "boulderY": 3702.4,
+      "boulderProgress": 0.133,
+      "cameraZoom": 0.621,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4480,
+      "x": 22360.5,
+      "y": 3602,
+      "vx": 5.4,
+      "boulderX": 20885,
+      "boulderY": 3778.3,
+      "boulderProgress": 0.137,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4522,
+      "x": 22585.2,
+      "y": 3602,
+      "vx": 5.4,
+      "boulderX": 21112.8,
+      "boulderY": 3854.3,
+      "boulderProgress": 0.142,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4563,
+      "x": 22804.6,
+      "y": 3592.6,
+      "vx": 5.4,
+      "boulderX": 21335.4,
+      "boulderY": 3928.5,
+      "boulderProgress": 0.146,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4605,
+      "x": 23029.3,
+      "y": 3494.2,
+      "vx": 5.4,
+      "boulderX": 21563.5,
+      "boulderY": 4004.5,
+      "boulderProgress": 0.15,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4647,
+      "x": 23254,
+      "y": 3395.9,
+      "vx": 5.4,
+      "boulderX": 21791.7,
+      "boulderY": 4080.6,
+      "boulderProgress": 0.154,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4689,
+      "x": 23478.7,
+      "y": 3297.6,
+      "vx": 5.4,
+      "boulderX": 22020.6,
+      "boulderY": 4144.9,
+      "boulderProgress": 0.159,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4731,
+      "x": 23801.9,
+      "y": 3252,
+      "vx": 9.5,
+      "boulderX": 22254.3,
+      "boulderY": 4086.4,
+      "boulderProgress": 0.163,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4773,
+      "x": 24036.7,
+      "y": 3252,
+      "vx": 5.4,
+      "boulderX": 22488.2,
+      "boulderY": 4028,
+      "boulderProgress": 0.167,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4815,
+      "x": 24261.4,
+      "y": 3395.7,
+      "vx": 5.4,
+      "boulderX": 22722.2,
+      "boulderY": 3969.5,
+      "boulderProgress": 0.171,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4858,
+      "x": 24491.4,
+      "y": 3817.5,
+      "vx": 5.4,
+      "boulderX": 22961.9,
+      "boulderY": 3909.5,
+      "boulderProgress": 0.176,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4901,
+      "x": 24721.5,
+      "y": 4239.2,
+      "vx": 5.4,
+      "boulderX": 23201.8,
+      "boulderY": 3849.5,
+      "boulderProgress": 0.18,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4944,
+      "x": 24951.5,
+      "y": 4352,
+      "vx": 5.4,
+      "boulderX": 23441.8,
+      "boulderY": 3810.5,
+      "boulderProgress": 0.185,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 4987,
+      "x": 25181.6,
+      "y": 4382.8,
+      "vx": 5.4,
+      "boulderX": 23682,
+      "boulderY": 3870.5,
+      "boulderProgress": 0.189,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 5030,
+      "x": 25411.6,
+      "y": 4654.4,
+      "vx": 5.4,
+      "boulderX": 23922.4,
+      "boulderY": 3930.6,
+      "boulderProgress": 0.193,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 5073,
+      "x": 25641.7,
+      "y": 5150.8,
+      "vx": 5.4,
+      "boulderX": 24162.9,
+      "boulderY": 3990.7,
+      "boulderProgress": 0.198,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 5116,
+      "x": 25824.2,
+      "y": 5356.6,
+      "vx": -2.6,
+      "boulderX": 24402.7,
+      "boulderY": 4052.4,
+      "boulderProgress": 0.202,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 5158,
+      "x": 25603.5,
+      "y": 5293.6,
+      "vx": -5.3,
+      "boulderX": 24585.2,
+      "boulderY": 4212,
+      "boulderProgress": 0.206,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 5199,
+      "x": 25384.2,
+      "y": 5230.9,
+      "vx": -5.3,
+      "boulderX": 24763.4,
+      "boulderY": 4368,
+      "boulderProgress": 0.211,
+      "cameraZoom": 0.706,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "active_chase"
+    },
+    {
+      "frame": 5241,
+      "x": 25159.5,
+      "y": 5166.7,
+      "vx": -5.3,
+      "boulderX": 24994.1,
+      "boulderY": 4400,
+      "boulderProgress": 0.215,
+      "cameraZoom": 0.88,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_curve"
+    },
+    {
+      "frame": 5283,
+      "x": 24934.8,
+      "y": 5102.5,
+      "vx": -5.3,
+      "boulderX": 25230.7,
+      "boulderY": 4440.9,
+      "boulderProgress": 0.219,
+      "cameraZoom": 0.98,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_curve"
+    },
+    {
+      "frame": 5324,
+      "x": 24715.4,
+      "y": 5090.5,
+      "vx": -5.3,
+      "boulderX": 25391.3,
+      "boulderY": 4609.5,
+      "boulderProgress": 0.223,
+      "cameraZoom": 0.969,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_curve"
+    },
+    {
+      "frame": 5366,
+      "x": 24490.7,
+      "y": 5078.7,
+      "vx": -5.3,
+      "boulderX": 25475.4,
+      "boulderY": 4836.8,
+      "boulderProgress": 0.228,
+      "cameraZoom": 0.877,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_curve"
+    },
+    {
+      "frame": 5407,
+      "x": 24271.4,
+      "y": 5067.2,
+      "vx": -5.3,
+      "boulderX": 25626.4,
+      "boulderY": 5018.9,
+      "boulderProgress": 0.232,
+      "cameraZoom": 0.739,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_curve"
+    },
+    {
+      "frame": 5449,
+      "x": 24046.7,
+      "y": 5055.4,
+      "vx": -5.3,
+      "boulderX": 25785.9,
+      "boulderY": 5202.9,
+      "boulderProgress": 0.236,
+      "cameraZoom": 0.64,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_curve"
+    },
+    {
+      "frame": 5491,
+      "x": 23822,
+      "y": 5015.1,
+      "vx": -5.3,
+      "boulderX": 25945.4,
+      "boulderY": 5387,
+      "boulderProgress": 0.241,
+      "cameraZoom": 0.623,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_curve"
+    },
+    {
+      "frame": 5533,
+      "x": 23597.3,
+      "y": 4963.7,
+      "vx": -5.3,
+      "boulderX": 25845.7,
+      "boulderY": 5405.9,
+      "boulderProgress": 0.245,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5575,
+      "x": 23372.6,
+      "y": 4912.2,
+      "vx": -5.3,
+      "boulderX": 25611.2,
+      "boulderY": 5338.9,
+      "boulderProgress": 0.249,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5617,
+      "x": 23147.9,
+      "y": 4860.8,
+      "vx": -5.3,
+      "boulderX": 25376.5,
+      "boulderY": 5271.9,
+      "boulderProgress": 0.254,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5659,
+      "x": 22923.2,
+      "y": 4809.3,
+      "vx": -5.3,
+      "boulderX": 25141.7,
+      "boulderY": 5204.8,
+      "boulderProgress": 0.258,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5733,
+      "x": 22394.1,
+      "y": 4578.3,
+      "vx": -5.3,
+      "boulderX": 24719,
+      "boulderY": 5137.8,
+      "boulderProgress": 0.266,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5775,
+      "x": 22169.4,
+      "y": 4803.1,
+      "vx": -5.3,
+      "boulderX": 24474.7,
+      "boulderY": 5125,
+      "boulderProgress": 0.27,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5817,
+      "x": 21944.7,
+      "y": 4850.3,
+      "vx": -5.3,
+      "boulderX": 24230.3,
+      "boulderY": 5112.1,
+      "boulderProgress": 0.274,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5859,
+      "x": 21720,
+      "y": 4897.4,
+      "vx": -5.3,
+      "boulderX": 23986,
+      "boulderY": 5096.8,
+      "boulderProgress": 0.279,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5901,
+      "x": 21495.3,
+      "y": 4944.5,
+      "vx": -5.3,
+      "boulderX": 23747.1,
+      "boulderY": 5042.1,
+      "boulderProgress": 0.283,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5943,
+      "x": 21270.6,
+      "y": 4991.7,
+      "vx": -5.3,
+      "boulderX": 23508.1,
+      "boulderY": 4987.3,
+      "boulderProgress": 0.287,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 5985,
+      "x": 21045.9,
+      "y": 5038.8,
+      "vx": -5.3,
+      "boulderX": 23268.9,
+      "boulderY": 4932.6,
+      "boulderProgress": 0.292,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6027,
+      "x": 20821.2,
+      "y": 5018.9,
+      "vx": -5.3,
+      "boulderX": 23029.5,
+      "boulderY": 4877.8,
+      "boulderProgress": 0.296,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6069,
+      "x": 20596.5,
+      "y": 4972.9,
+      "vx": -5.3,
+      "boulderX": 22790,
+      "boulderY": 4822.9,
+      "boulderProgress": 0.3,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6111,
+      "x": 20371.8,
+      "y": 4926.9,
+      "vx": -5.3,
+      "boulderX": 22546.8,
+      "boulderY": 4800,
+      "boulderProgress": 0.305,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6152,
+      "x": 20152.4,
+      "y": 4882,
+      "vx": -5.3,
+      "boulderX": 22309.3,
+      "boulderY": 4825.3,
+      "boulderProgress": 0.309,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6194,
+      "x": 19927.7,
+      "y": 4836,
+      "vx": -5.3,
+      "boulderX": 22068.4,
+      "boulderY": 4875.9,
+      "boulderProgress": 0.313,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6236,
+      "x": 19703,
+      "y": 4790,
+      "vx": -5.3,
+      "boulderX": 21827.4,
+      "boulderY": 4926.4,
+      "boulderProgress": 0.318,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6278,
+      "x": 19478.3,
+      "y": 4744,
+      "vx": -5.3,
+      "boulderX": 21586.2,
+      "boulderY": 4977,
+      "boulderProgress": 0.322,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6353,
+      "x": 18943.8,
+      "y": 4599.3,
+      "vx": -5.3,
+      "boulderX": 21155.1,
+      "boulderY": 5067.5,
+      "boulderProgress": 0.33,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6394,
+      "x": 18724.5,
+      "y": 4792.8,
+      "vx": -5.3,
+      "boulderX": 20919.2,
+      "boulderY": 5083.5,
+      "boulderProgress": 0.334,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6436,
+      "x": 18499.8,
+      "y": 4863.5,
+      "vx": -5.3,
+      "boulderX": 20677.2,
+      "boulderY": 5033.9,
+      "boulderProgress": 0.339,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6478,
+      "x": 18275.1,
+      "y": 4934.2,
+      "vx": -5.3,
+      "boulderX": 20435.1,
+      "boulderY": 4984.4,
+      "boulderProgress": 0.343,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6519,
+      "x": 18055.7,
+      "y": 5003.2,
+      "vx": -5.3,
+      "boulderX": 20198.6,
+      "boulderY": 4936,
+      "boulderProgress": 0.347,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6562,
+      "x": 17825.7,
+      "y": 5075.6,
+      "vx": -5.3,
+      "boulderX": 19950.4,
+      "boulderY": 4885.2,
+      "boulderProgress": 0.352,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6605,
+      "x": 17595.6,
+      "y": 5148,
+      "vx": -5.3,
+      "boulderX": 19702.1,
+      "boulderY": 4834.3,
+      "boulderProgress": 0.356,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6648,
+      "x": 17365.6,
+      "y": 5105.3,
+      "vx": -5.3,
+      "boulderX": 19453.6,
+      "boulderY": 4783.5,
+      "boulderProgress": 0.361,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6691,
+      "x": 17135.5,
+      "y": 5055.9,
+      "vx": -5.3,
+      "boulderX": 19203.2,
+      "boulderY": 4750,
+      "boulderProgress": 0.365,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6732,
+      "x": 16916.2,
+      "y": 5008.8,
+      "vx": -5.3,
+      "boulderX": 18964.2,
+      "boulderY": 4770.7,
+      "boulderProgress": 0.369,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6774,
+      "x": 16691.5,
+      "y": 4960.6,
+      "vx": -5.3,
+      "boulderX": 18727.4,
+      "boulderY": 4845.2,
+      "boulderProgress": 0.374,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6816,
+      "x": 16466.8,
+      "y": 4912.3,
+      "vx": -5.3,
+      "boulderX": 18490.5,
+      "boulderY": 4919.8,
+      "boulderProgress": 0.378,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6858,
+      "x": 16242.1,
+      "y": 4864.1,
+      "vx": -5.3,
+      "boulderX": 18253.5,
+      "boulderY": 4994.4,
+      "boulderProgress": 0.383,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6899,
+      "x": 16022.7,
+      "y": 4817,
+      "vx": -5.3,
+      "boulderX": 18022,
+      "boulderY": 5067.2,
+      "boulderProgress": 0.387,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 6974,
+      "x": 15488.3,
+      "y": 4849,
+      "vx": -5.3,
+      "boulderX": 17598,
+      "boulderY": 5199.6,
+      "boulderProgress": 0.395,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7015,
+      "x": 15268.9,
+      "y": 4897.1,
+      "vx": -5.3,
+      "boulderX": 17360.3,
+      "boulderY": 5148.5,
+      "boulderProgress": 0.399,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7057,
+      "x": 15044.2,
+      "y": 4946.3,
+      "vx": -5.3,
+      "boulderX": 17116.6,
+      "boulderY": 5096.2,
+      "boulderProgress": 0.404,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7098,
+      "x": 14824.9,
+      "y": 4994.3,
+      "vx": -5.3,
+      "boulderX": 16878.6,
+      "boulderY": 5045.1,
+      "boulderProgress": 0.408,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7140,
+      "x": 14600.2,
+      "y": 5043.5,
+      "vx": -5.3,
+      "boulderX": 16634.7,
+      "boulderY": 4992.7,
+      "boulderProgress": 0.412,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7182,
+      "x": 14375.5,
+      "y": 5092.7,
+      "vx": -5.3,
+      "boulderX": 16390.6,
+      "boulderY": 4940.3,
+      "boulderProgress": 0.417,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7224,
+      "x": 14150.8,
+      "y": 5054.8,
+      "vx": -5.3,
+      "boulderX": 16146.3,
+      "boulderY": 4887.9,
+      "boulderProgress": 0.421,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7267,
+      "x": 13920.7,
+      "y": 4995.1,
+      "vx": -5.3,
+      "boulderX": 15894.4,
+      "boulderY": 4850,
+      "boulderProgress": 0.426,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7309,
+      "x": 13696,
+      "y": 4936.9,
+      "vx": -5.3,
+      "boulderX": 15646.1,
+      "boulderY": 4866.2,
+      "boulderProgress": 0.43,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7352,
+      "x": 13466,
+      "y": 4877.2,
+      "vx": -5.3,
+      "boulderX": 15395.8,
+      "boulderY": 4921,
+      "boulderProgress": 0.435,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7395,
+      "x": 13235.9,
+      "y": 4817.6,
+      "vx": -5.3,
+      "boulderX": 15145.3,
+      "boulderY": 4975.8,
+      "boulderProgress": 0.439,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7436,
+      "x": 13016.6,
+      "y": 4760.7,
+      "vx": -5.3,
+      "boulderX": 14906.4,
+      "boulderY": 5028.2,
+      "boulderProgress": 0.444,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7478,
+      "x": 12791.9,
+      "y": 4810.8,
+      "vx": -5.3,
+      "boulderX": 14661.5,
+      "boulderY": 5081.8,
+      "boulderProgress": 0.448,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7521,
+      "x": 12561.8,
+      "y": 4881.6,
+      "vx": -5.3,
+      "boulderX": 14410.6,
+      "boulderY": 5136.7,
+      "boulderProgress": 0.453,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7562,
+      "x": 12342.5,
+      "y": 4949.1,
+      "vx": -5.3,
+      "boulderX": 14172.8,
+      "boulderY": 5104.1,
+      "boulderProgress": 0.457,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7605,
+      "x": 12112.4,
+      "y": 5019.9,
+      "vx": -5.3,
+      "boulderX": 13923.9,
+      "boulderY": 5039.5,
+      "boulderProgress": 0.462,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7647,
+      "x": 11887.7,
+      "y": 5089,
+      "vx": -5.3,
+      "boulderX": 13680.6,
+      "boulderY": 4976.5,
+      "boulderProgress": 0.466,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7689,
+      "x": 11663,
+      "y": 5147.2,
+      "vx": -5.3,
+      "boulderX": 13437.2,
+      "boulderY": 4913.4,
+      "boulderProgress": 0.47,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7732,
+      "x": 11433,
+      "y": 5092,
+      "vx": -5.3,
+      "boulderX": 13187.9,
+      "boulderY": 4848.7,
+      "boulderProgress": 0.475,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7774,
+      "x": 11208.3,
+      "y": 5038.1,
+      "vx": -5.3,
+      "boulderX": 12944.8,
+      "boulderY": 4817,
+      "boulderProgress": 0.479,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7816,
+      "x": 10983.6,
+      "y": 4984.1,
+      "vx": -5.3,
+      "boulderX": 12704.1,
+      "boulderY": 4891.1,
+      "boulderProgress": 0.484,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7858,
+      "x": 10758.9,
+      "y": 4930.2,
+      "vx": -5.3,
+      "boulderX": 12463.1,
+      "boulderY": 4965.2,
+      "boulderProgress": 0.488,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7900,
+      "x": 10534.2,
+      "y": 4876.3,
+      "vx": -5.3,
+      "boulderX": 12222.1,
+      "boulderY": 5039.4,
+      "boulderProgress": 0.493,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7942,
+      "x": 10309.5,
+      "y": 4862.7,
+      "vx": -5.3,
+      "boulderX": 11980.8,
+      "boulderY": 5113.6,
+      "boulderProgress": 0.497,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 7984,
+      "x": 10084.8,
+      "y": 4882.3,
+      "vx": -5.3,
+      "boulderX": 11739.5,
+      "boulderY": 5187.8,
+      "boulderProgress": 0.502,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 8027,
+      "x": 9854.7,
+      "y": 4902.3,
+      "vx": -5.3,
+      "boulderX": 11488.6,
+      "boulderY": 5149.3,
+      "boulderProgress": 0.506,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 8069,
+      "x": 9630,
+      "y": 4921.8,
+      "vx": -5.3,
+      "boulderX": 11242.8,
+      "boulderY": 5090.3,
+      "boulderProgress": 0.511,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 8111,
+      "x": 9405.3,
+      "y": 4941.4,
+      "vx": -5.3,
+      "boulderX": 10996.8,
+      "boulderY": 5031.2,
+      "boulderProgress": 0.515,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "boulder_lower_chase"
+    },
+    {
+      "frame": 8153,
+      "x": 9391,
+      "y": 4952,
+      "vx": 5.4,
+      "boulderX": 10750.7,
+      "boulderY": 4972.2,
+      "boulderProgress": 0.52,
+      "cameraZoom": 0.63,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass08_boundary"
+    },
+    {
+      "frame": 8208,
+      "x": 9685.3,
+      "y": 5188,
+      "vx": 5.4,
+      "boulderX": 10427.6,
+      "boulderY": 4901.9,
+      "boulderProgress": 0.526,
+      "cameraZoom": 0.847,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8250,
+      "x": 9910,
+      "y": 5308.9,
+      "vx": 5.4,
+      "boulderX": 10175.1,
+      "boulderY": 4923.9,
+      "boulderProgress": 0.53,
+      "cameraZoom": 0.977,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8292,
+      "x": 10134.7,
+      "y": 5321,
+      "vx": 5.4,
+      "boulderX": 9922.4,
+      "boulderY": 4945.9,
+      "boulderProgress": 0.535,
+      "cameraZoom": 0.997,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8334,
+      "x": 10359.4,
+      "y": 5333.2,
+      "vx": 5.4,
+      "boulderX": 9669.6,
+      "boulderY": 4967.9,
+      "boulderProgress": 0.539,
+      "cameraZoom": 0.997,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8377,
+      "x": 10589.4,
+      "y": 5345.6,
+      "vx": 5.4,
+      "boulderX": 9410.6,
+      "boulderY": 4990.4,
+      "boulderProgress": 0.544,
+      "cameraZoom": 0.817,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8418,
+      "x": 10808.8,
+      "y": 5357.4,
+      "vx": 5.4,
+      "boulderX": 9296.3,
+      "boulderY": 5001.2,
+      "boulderProgress": 0.546,
+      "cameraZoom": 0.66,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8460,
+      "x": 11033.5,
+      "y": 5369.6,
+      "vx": 5.4,
+      "boulderX": 9296.3,
+      "boulderY": 5001.2,
+      "boulderProgress": 0.546,
+      "cameraZoom": 0.626,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8503,
+      "x": 11263.5,
+      "y": 5382,
+      "vx": 5.4,
+      "boulderX": 9296.3,
+      "boulderY": 5001.2,
+      "boulderProgress": 0.546,
+      "cameraZoom": 0.621,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8545,
+      "x": 11488.2,
+      "y": 5394.2,
+      "vx": 5.4,
+      "boulderX": 9296.3,
+      "boulderY": 5001.2,
+      "boulderProgress": 0.546,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8587,
+      "x": 11712.9,
+      "y": 5483.6,
+      "vx": 5.4,
+      "boulderX": 9296.3,
+      "boulderY": 5001.2,
+      "boulderProgress": 0.546,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8642,
+      "x": 12007.2,
+      "y": 5712,
+      "vx": 5.4,
+      "boulderX": 9147,
+      "boulderY": 5051,
+      "boulderProgress": 0.549,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_upper_run"
+    },
+    {
+      "frame": 8684,
+      "x": 12227.7,
+      "y": 5930.5,
+      "vx": 3.7,
+      "boulderX": 9011.8,
+      "boulderY": 5239.5,
+      "boulderProgress": 0.553,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 8739,
+      "x": 12019.5,
+      "y": 6132,
+      "vx": -5.3,
+      "boulderX": 9207.7,
+      "boulderY": 5473.9,
+      "boulderProgress": 0.559,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 8782,
+      "x": 11789.4,
+      "y": 6132,
+      "vx": -5.3,
+      "boulderX": 9456.2,
+      "boulderY": 5535.6,
+      "boulderProgress": 0.564,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 8825,
+      "x": 11559.4,
+      "y": 6132,
+      "vx": -5.3,
+      "boulderX": 9715,
+      "boulderY": 5561.5,
+      "boulderProgress": 0.568,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 8881,
+      "x": 11259.8,
+      "y": 6132,
+      "vx": -5.3,
+      "boulderX": 10052.2,
+      "boulderY": 5595.2,
+      "boulderProgress": 0.574,
+      "cameraZoom": 0.635,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 8924,
+      "x": 11029.7,
+      "y": 6132,
+      "vx": -5.3,
+      "boulderX": 10311.2,
+      "boulderY": 5619.2,
+      "boulderProgress": 0.579,
+      "cameraZoom": 0.789,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 8967,
+      "x": 10799.7,
+      "y": 6132,
+      "vx": -5.3,
+      "boulderX": 10570.3,
+      "boulderY": 5642.8,
+      "boulderProgress": 0.584,
+      "cameraZoom": 0.965,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 9010,
+      "x": 10569.6,
+      "y": 6362.7,
+      "vx": -5.3,
+      "boulderX": 10829.4,
+      "boulderY": 5666.3,
+      "boulderProgress": 0.588,
+      "cameraZoom": 0.995,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 9053,
+      "x": 10339.6,
+      "y": 6374.2,
+      "vx": -5.3,
+      "boulderX": 11088.4,
+      "boulderY": 5689.9,
+      "boulderProgress": 0.593,
+      "cameraZoom": 0.894,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "internal_middle_return"
+    },
+    {
+      "frame": 9107,
+      "x": 10308.2,
+      "y": 6375.7,
+      "vx": 5.4,
+      "boulderX": 11202.9,
+      "boulderY": 5699.6,
+      "boulderProgress": 0.595,
+      "cameraZoom": 0.752,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9149,
+      "x": 10532.9,
+      "y": 6364.5,
+      "vx": 5.4,
+      "boulderX": 11202.9,
+      "boulderY": 5699.6,
+      "boulderProgress": 0.595,
+      "cameraZoom": 0.811,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9191,
+      "x": 10757.6,
+      "y": 6353.3,
+      "vx": 5.4,
+      "boulderX": 11202.9,
+      "boulderY": 5699.6,
+      "boulderProgress": 0.595,
+      "cameraZoom": 0.907,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9246,
+      "x": 11051.8,
+      "y": 6374.4,
+      "vx": 5.4,
+      "boulderX": 11286.7,
+      "boulderY": 5687,
+      "boulderProgress": 0.596,
+      "cameraZoom": 0.991,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9288,
+      "x": 11276.5,
+      "y": 6393.1,
+      "vx": 5.4,
+      "boulderX": 11538,
+      "boulderY": 5649.3,
+      "boulderProgress": 0.601,
+      "cameraZoom": 0.977,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9330,
+      "x": 11501.2,
+      "y": 6411.9,
+      "vx": 5.4,
+      "boulderX": 11789.2,
+      "boulderY": 5611.6,
+      "boulderProgress": 0.605,
+      "cameraZoom": 0.935,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9372,
+      "x": 11725.9,
+      "y": 6430.6,
+      "vx": 5.4,
+      "boulderX": 12040.5,
+      "boulderY": 5573.9,
+      "boulderProgress": 0.61,
+      "cameraZoom": 0.892,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9415,
+      "x": 11956,
+      "y": 6449.7,
+      "vx": 5.4,
+      "boulderX": 12297.8,
+      "boulderY": 5535.3,
+      "boulderProgress": 0.614,
+      "cameraZoom": 0.851,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9456,
+      "x": 12175.3,
+      "y": 6408.3,
+      "vx": 5.4,
+      "boulderX": 12540.9,
+      "boulderY": 5552.9,
+      "boulderProgress": 0.619,
+      "cameraZoom": 0.844,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9498,
+      "x": 12400,
+      "y": 6357.2,
+      "vx": 5.4,
+      "boulderX": 12788.4,
+      "boulderY": 5610.6,
+      "boulderProgress": 0.623,
+      "cameraZoom": 0.891,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9540,
+      "x": 12624.7,
+      "y": 6306.2,
+      "vx": 5.4,
+      "boulderX": 13035.8,
+      "boulderY": 5668.4,
+      "boulderProgress": 0.628,
+      "cameraZoom": 0.952,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9583,
+      "x": 12854.8,
+      "y": 6253.9,
+      "vx": 5.4,
+      "boulderX": 13289.2,
+      "boulderY": 5727.5,
+      "boulderProgress": 0.633,
+      "cameraZoom": 0.993,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9625,
+      "x": 13079.5,
+      "y": 6202.8,
+      "vx": 5.4,
+      "boulderX": 13536.6,
+      "boulderY": 5785.2,
+      "boulderProgress": 0.637,
+      "cameraZoom": 0.999,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9667,
+      "x": 13304.2,
+      "y": 6235.2,
+      "vx": 5.4,
+      "boulderX": 13601.5,
+      "boulderY": 5799.8,
+      "boulderProgress": 0.638,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9709,
+      "x": 13528.9,
+      "y": 6268.9,
+      "vx": 5.4,
+      "boulderX": 13601.5,
+      "boulderY": 5799.8,
+      "boulderProgress": 0.638,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9751,
+      "x": 13753.6,
+      "y": 6302.6,
+      "vx": 5.4,
+      "boulderX": 13601.5,
+      "boulderY": 5799.8,
+      "boulderProgress": 0.638,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9794,
+      "x": 13983.6,
+      "y": 6337.1,
+      "vx": 5.4,
+      "boulderX": 13601.5,
+      "boulderY": 5799.8,
+      "boulderProgress": 0.638,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9836,
+      "x": 14208.3,
+      "y": 6249.5,
+      "vx": 5.4,
+      "boulderX": 13840.2,
+      "boulderY": 5760,
+      "boulderProgress": 0.642,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9878,
+      "x": 14433,
+      "y": 6065.6,
+      "vx": 5.4,
+      "boulderX": 14090.8,
+      "boulderY": 5718.2,
+      "boulderProgress": 0.647,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9920,
+      "x": 14657.7,
+      "y": 5881.8,
+      "vx": 5.4,
+      "boulderX": 14341.5,
+      "boulderY": 5676.4,
+      "boulderProgress": 0.651,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 9962,
+      "x": 14882.4,
+      "y": 5697.9,
+      "vx": 5.4,
+      "boulderX": 14502.6,
+      "boulderY": 5649.5,
+      "boulderProgress": 0.654,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 10004,
+      "x": 15107.1,
+      "y": 5514.1,
+      "vx": 5.4,
+      "boulderX": 14502.6,
+      "boulderY": 5649.5,
+      "boulderProgress": 0.654,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "internal_lower_run"
+    },
+    {
+      "frame": 10046,
+      "x": 15331.8,
+      "y": 5511.5,
+      "vx": 5.4,
+      "boulderX": 14502.6,
+      "boulderY": 5649.5,
+      "boulderProgress": 0.654,
+      "cameraZoom": 0.981,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass09_boundary"
+    },
+    {
+      "frame": 10088,
+      "x": 15556.5,
+      "y": 5601.4,
+      "vx": 5.4,
+      "boulderX": 14502.6,
+      "boulderY": 5649.5,
+      "boulderProgress": 0.654,
+      "cameraZoom": 0.864,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass09_boundary"
+    },
+    {
+      "frame": 10130,
+      "x": 15781.2,
+      "y": 5676.5,
+      "vx": 5.4,
+      "boulderX": 14502.6,
+      "boulderY": 5649.5,
+      "boulderProgress": 0.654,
+      "cameraZoom": 0.748,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass09_boundary"
+    },
+    {
+      "frame": 10172,
+      "x": 15926,
+      "y": 6072.8,
+      "vx": 0,
+      "boulderX": 14502.6,
+      "boulderY": 5649.5,
+      "boulderProgress": 0.654,
+      "cameraZoom": 0.65,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass09_boundary"
+    },
+    {
+      "frame": 10226,
+      "x": 15813.8,
+      "y": 5959.7,
+      "vx": 5.4,
+      "boulderX": 14733.3,
+      "boulderY": 5600,
+      "boulderProgress": 0.659,
+      "cameraZoom": 0.711,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_climb_one"
+    },
+    {
+      "frame": 10268,
+      "x": 15804.1,
+      "y": 5907.6,
+      "vx": -5.3,
+      "boulderX": 14981.7,
+      "boulderY": 5546.8,
+      "boulderProgress": 0.663,
+      "cameraZoom": 0.797,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "chase_climb_one"
+    },
+    {
+      "frame": 10311,
+      "x": 15910.1,
+      "y": 5913.7,
+      "vx": 5.4,
+      "boulderX": 15235.8,
+      "boulderY": 5509,
+      "boulderProgress": 0.668,
+      "cameraZoom": 0.944,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_climb_one"
+    },
+    {
+      "frame": 10368,
+      "x": 16182.1,
+      "y": 5815.9,
+      "vx": 5.4,
+      "boulderX": 15570.4,
+      "boulderY": 5592.6,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.995,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_chase_climbs"
+    },
+    {
+      "frame": 10411,
+      "x": 16412.1,
+      "y": 5843.5,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.976,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_chase_climbs"
+    },
+    {
+      "frame": 10454,
+      "x": 16642.2,
+      "y": 5915.7,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.848,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_chase_climbs"
+    },
+    {
+      "frame": 10496,
+      "x": 16866.9,
+      "y": 6005.6,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.727,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_chase_climbs"
+    },
+    {
+      "frame": 10538,
+      "x": 17091.6,
+      "y": 6089.4,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.642,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_chase_climbs"
+    },
+    {
+      "frame": 10580,
+      "x": 17226,
+      "y": 6479.1,
+      "vx": 0,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.623,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_chase_climbs"
+    },
+    {
+      "frame": 10634,
+      "x": 17124.5,
+      "y": 6352.4,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_climb_two"
+    },
+    {
+      "frame": 10676,
+      "x": 17093.4,
+      "y": 6312.6,
+      "vx": -5.3,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "chase_climb_two"
+    },
+    {
+      "frame": 10719,
+      "x": 17220.8,
+      "y": 6331,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_climb_two"
+    },
+    {
+      "frame": 10761,
+      "x": 17081.6,
+      "y": 6243.5,
+      "vx": 5.9,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_climb_two"
+    },
+    {
+      "frame": 10814,
+      "x": 17496.4,
+      "y": 6161.7,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 10856,
+      "x": 17721.1,
+      "y": 6171.9,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 10898,
+      "x": 17945.8,
+      "y": 6182.1,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 10940,
+      "x": 18170.5,
+      "y": 6192.3,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 10981,
+      "x": 18389.9,
+      "y": 6202.4,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11036,
+      "x": 18684.1,
+      "y": 6219.7,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11078,
+      "x": 18908.8,
+      "y": 6232.9,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11119,
+      "x": 19128.2,
+      "y": 6245.8,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11161,
+      "x": 19352.9,
+      "y": 6259.1,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11203,
+      "x": 19577.6,
+      "y": 6272.3,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11244,
+      "x": 19796.9,
+      "y": 6285.2,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11287,
+      "x": 20027,
+      "y": 6298.7,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11329,
+      "x": 20251.7,
+      "y": 6293.1,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11371,
+      "x": 20476.4,
+      "y": 6281.3,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11413,
+      "x": 20701.1,
+      "y": 6269.5,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11455,
+      "x": 20925.8,
+      "y": 6257.6,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11497,
+      "x": 21150.5,
+      "y": 6245.8,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11539,
+      "x": 21375.2,
+      "y": 6234,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11582,
+      "x": 21605.2,
+      "y": 6221.9,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11624,
+      "x": 21829.9,
+      "y": 6210.1,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11666,
+      "x": 22054.6,
+      "y": 6186.3,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11708,
+      "x": 22279.3,
+      "y": 6137.2,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11750,
+      "x": 22504,
+      "y": 6088,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11792,
+      "x": 22728.7,
+      "y": 6038.9,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11834,
+      "x": 22953.4,
+      "y": 5989.7,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11876,
+      "x": 23178.1,
+      "y": 5940.6,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11918,
+      "x": 23402.8,
+      "y": 5891.4,
+      "vx": 5.4,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 11960,
+      "x": 23596.3,
+      "y": 5852,
+      "vx": 0.6,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12001,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12043,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12084,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12127,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12168,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 15603.2,
+      "boulderY": 5604.8,
+      "boulderProgress": 0.674,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12210,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 15724,
+      "boulderY": 5786,
+      "boulderProgress": 0.678,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12252,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 15846.1,
+      "boulderY": 6007.6,
+      "boulderProgress": 0.683,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12294,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 15946.2,
+      "boulderY": 6241.2,
+      "boulderProgress": 0.687,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12336,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16194.5,
+      "boulderY": 6250,
+      "boulderProgress": 0.692,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12378,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16351.5,
+      "boulderY": 6249,
+      "boulderProgress": 0.695,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12420,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16351.5,
+      "boulderY": 6249,
+      "boulderProgress": 0.695,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12462,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16351.5,
+      "boulderY": 6249,
+      "boulderProgress": 0.695,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12504,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16351.5,
+      "boulderY": 6249,
+      "boulderProgress": 0.695,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12545,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16351.5,
+      "boulderY": 6249,
+      "boulderProgress": 0.695,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12587,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16351.5,
+      "boulderY": 6249,
+      "boulderProgress": 0.695,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12629,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16386.8,
+      "boulderY": 6225.5,
+      "boulderProgress": 0.695,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12672,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16603.2,
+      "boulderY": 6081.2,
+      "boulderProgress": 0.7,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12715,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 16822.4,
+      "boulderY": 5957.5,
+      "boulderProgress": 0.705,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12757,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17063.5,
+      "boulderY": 6037.8,
+      "boulderProgress": 0.709,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12800,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12843,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12886,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12930,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 12973,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13015,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13058,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13100,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13142,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13185,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13227,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13269,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13311,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13353,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17251.8,
+      "boulderY": 6102.4,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13395,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17270,
+      "boulderY": 6126.6,
+      "boulderProgress": 0.713,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13437,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17422.4,
+      "boulderY": 6329.9,
+      "boulderProgress": 0.718,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13480,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17578.5,
+      "boulderY": 6538,
+      "boulderProgress": 0.722,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13522,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 17750.4,
+      "boulderY": 6688.8,
+      "boulderProgress": 0.727,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13565,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 18004.4,
+      "boulderY": 6632.4,
+      "boulderProgress": 0.731,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13608,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 18243.6,
+      "boulderY": 6540.4,
+      "boulderProgress": 0.736,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13650,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 18458,
+      "boulderY": 6404,
+      "boulderProgress": 0.741,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13692,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 18672.4,
+      "boulderY": 6267.6,
+      "boulderProgress": 0.745,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13735,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 18927,
+      "boulderY": 6262.6,
+      "boulderProgress": 0.75,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13777,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 19180.8,
+      "boulderY": 6276.7,
+      "boulderProgress": 0.754,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13820,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 19440.5,
+      "boulderY": 6291.1,
+      "boulderProgress": 0.759,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13862,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 19694.2,
+      "boulderY": 6305.2,
+      "boulderProgress": 0.763,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13904,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 19947.9,
+      "boulderY": 6319.3,
+      "boulderProgress": 0.768,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13947,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 20207.7,
+      "boulderY": 6333.8,
+      "boulderProgress": 0.772,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 13989,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 20461.4,
+      "boulderY": 6347.9,
+      "boulderProgress": 0.777,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 14031,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 20714.9,
+      "boulderY": 6335.7,
+      "boulderProgress": 0.781,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 14074,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 20974.5,
+      "boulderY": 6318.4,
+      "boulderProgress": 0.786,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 14118,
+      "x": 23598.2,
+      "y": 5852,
+      "vx": 0,
+      "boulderX": 21240.1,
+      "boulderY": 6300.7,
+      "boulderProgress": 0.791,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "chase_lower_hall"
+    },
+    {
+      "frame": 14161,
+      "x": 23752.1,
+      "y": 5852,
+      "vx": 5.4,
+      "boulderX": 21499.7,
+      "boulderY": 6283.4,
+      "boulderProgress": 0.795,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass10_complete"
+    },
+    {
+      "frame": 14204,
+      "x": 24011.6,
+      "y": 5852,
+      "vx": 8.4,
+      "boulderX": 21759.3,
+      "boulderY": 6266,
+      "boulderProgress": 0.8,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "pass10_complete"
+    },
+    {
+      "frame": 14246,
+      "x": 24453.5,
+      "y": 5969.9,
+      "vx": 7.8,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "triple_grapple"
+    },
+    {
+      "frame": 14288,
+      "x": 24594.8,
+      "y": 6382.3,
+      "vx": -2.6,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "triple_grapple"
+    },
+    {
+      "frame": 14330,
+      "x": 24360.1,
+      "y": 6946.5,
+      "vx": -9.8,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14372,
+      "x": 23865.3,
+      "y": 7312.6,
+      "vx": -11.7,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14415,
+      "x": 23369.9,
+      "y": 7330.7,
+      "vx": -11.4,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14457,
+      "x": 22888.7,
+      "y": 7065.1,
+      "vx": -11.3,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.651,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14499,
+      "x": 22498.8,
+      "y": 6633.2,
+      "vx": -8.8,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.894,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14542,
+      "x": 22443,
+      "y": 6852,
+      "vx": 0.7,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.984,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14583,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.992,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14626,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14667,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14710,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14752,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14795,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14837,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14880,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14922,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 14965,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15007,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15050,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15093,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15136,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22000.7,
+      "boulderY": 6249.8,
+      "boulderProgress": 0.804,
+      "cameraZoom": 0.993,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15178,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22201.7,
+      "boulderY": 6205.9,
+      "boulderProgress": 0.808,
+      "cameraZoom": 0.999,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15221,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22455.8,
+      "boulderY": 6150.3,
+      "boulderProgress": 0.813,
+      "cameraZoom": 1,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15263,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22704,
+      "boulderY": 6096,
+      "boulderProgress": 0.817,
+      "cameraZoom": 0.981,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15306,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 22958.2,
+      "boulderY": 6040.4,
+      "boulderProgress": 0.822,
+      "cameraZoom": 0.893,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15348,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 23206.4,
+      "boulderY": 5986.1,
+      "boulderProgress": 0.826,
+      "cameraZoom": 0.792,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15390,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 23454.6,
+      "boulderY": 5931.8,
+      "boulderProgress": 0.831,
+      "cameraZoom": 0.699,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15433,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 23709.2,
+      "boulderY": 5921.8,
+      "boulderProgress": 0.835,
+      "cameraZoom": 0.634,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15475,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 23958.4,
+      "boulderY": 5971.7,
+      "boulderProgress": 0.84,
+      "cameraZoom": 0.622,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15517,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24201.5,
+      "boulderY": 6020.7,
+      "boulderProgress": 0.844,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15560,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24201.5,
+      "boulderY": 6020.7,
+      "boulderProgress": 0.844,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15602,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24201.5,
+      "boulderY": 6020.7,
+      "boulderProgress": 0.844,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15644,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24409.8,
+      "boulderY": 6117.9,
+      "boulderProgress": 0.848,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15686,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24640.1,
+      "boulderY": 6225.4,
+      "boulderProgress": 0.853,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15728,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24841.1,
+      "boulderY": 6365.8,
+      "boulderProgress": 0.857,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15771,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24979,
+      "boulderY": 6586.4,
+      "boulderProgress": 0.862,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15813,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 25046.1,
+      "boulderY": 6703.5,
+      "boulderProgress": 0.864,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15856,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24969.2,
+      "boulderY": 6771.8,
+      "boulderProgress": 0.866,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15898,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24779.3,
+      "boulderY": 6940.6,
+      "boulderProgress": 0.871,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15941,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24579.9,
+      "boulderY": 7102,
+      "boulderProgress": 0.875,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 15983,
+      "x": 22445.4,
+      "y": 6852,
+      "vx": 0,
+      "boulderX": 24327,
+      "boulderY": 7127.3,
+      "boulderProgress": 0.88,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "grapple_exit"
+    },
+    {
+      "frame": 16025,
+      "x": 22382.4,
+      "y": 6852,
+      "vx": -5.3,
+      "boulderX": 24074.2,
+      "boulderY": 7152.6,
+      "boulderProgress": 0.884,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "air_dash_spikes"
+    },
+    {
+      "frame": 16067,
+      "x": 22157.7,
+      "y": 6852,
+      "vx": -5.3,
+      "boulderX": 23821.4,
+      "boulderY": 7177.9,
+      "boulderProgress": 0.889,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "air_dash_spikes"
+    },
+    {
+      "frame": 16110,
+      "x": 21927.7,
+      "y": 6865.8,
+      "vx": -5.3,
+      "boulderX": 23598.6,
+      "boulderY": 7199.7,
+      "boulderProgress": 0.893,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "air_dash_spikes"
+    },
+    {
+      "frame": 16152,
+      "x": 21703,
+      "y": 6922,
+      "vx": -5.3,
+      "boulderX": 23598.6,
+      "boulderY": 7199.7,
+      "boulderProgress": 0.893,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "air_dash_spikes"
+    },
+    {
+      "frame": 16208,
+      "x": 21270.2,
+      "y": 6972.9,
+      "vx": -5.3,
+      "boulderX": 23428.4,
+      "boulderY": 7157.1,
+      "boulderProgress": 0.896,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "air_dash_spikes"
+    },
+    {
+      "frame": 16263,
+      "x": 20975.9,
+      "y": 7052,
+      "vx": -5.3,
+      "boulderX": 23105.6,
+      "boulderY": 7076.4,
+      "boulderProgress": 0.902,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16305,
+      "x": 20751.2,
+      "y": 7058.4,
+      "vx": -5.3,
+      "boulderX": 22859.1,
+      "boulderY": 7014.8,
+      "boulderProgress": 0.906,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16347,
+      "x": 20526.5,
+      "y": 7103.3,
+      "vx": -5.3,
+      "boulderX": 22612.6,
+      "boulderY": 6953.1,
+      "boulderProgress": 0.911,
+      "cameraZoom": 0.62,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16390,
+      "x": 20313.9,
+      "y": 7145.8,
+      "vx": -1.2,
+      "boulderX": 22359.8,
+      "boulderY": 6908,
+      "boulderProgress": 0.915,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16433,
+      "x": 20309.8,
+      "y": 7146.6,
+      "vx": 0,
+      "boulderX": 22104.7,
+      "boulderY": 6959.1,
+      "boulderProgress": 0.92,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16475,
+      "x": 20309.8,
+      "y": 7146.6,
+      "vx": 0,
+      "boulderX": 21897.2,
+      "boulderY": 7001,
+      "boulderProgress": 0.924,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16518,
+      "x": 20309.8,
+      "y": 7146.6,
+      "vx": 0,
+      "boulderX": 21868.6,
+      "boulderY": 7011,
+      "boulderProgress": 0.924,
+      "cameraZoom": 0.62,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16560,
+      "x": 20309.8,
+      "y": 7146.6,
+      "vx": 0,
+      "boulderX": 21628.8,
+      "boulderY": 7094.9,
+      "boulderProgress": 0.929,
+      "cameraZoom": 0.645,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16604,
+      "x": 20309.8,
+      "y": 7146.6,
+      "vx": 0,
+      "boulderX": 21373.4,
+      "boulderY": 7168.5,
+      "boulderProgress": 0.934,
+      "cameraZoom": 0.739,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16647,
+      "x": 20309.8,
+      "y": 7146.6,
+      "vx": 0,
+      "boulderX": 21119.6,
+      "boulderY": 7225.6,
+      "boulderProgress": 0.938,
+      "cameraZoom": 0.877,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16690,
+      "x": 20309.8,
+      "y": 7146.6,
+      "vx": 0,
+      "boulderX": 21095.9,
+      "boulderY": 7229.8,
+      "boulderProgress": 0.939,
+      "cameraZoom": 0.963,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16734,
+      "x": 20309.8,
+      "y": 7146.6,
+      "vx": 0,
+      "boulderX": 20956.8,
+      "boulderY": 7224.6,
+      "boulderProgress": 0.941,
+      "cameraZoom": 0.989,
+      "keys": [],
+      "phase": "dash_spike_exit"
+    },
+    {
+      "frame": 16778,
+      "x": 20198.7,
+      "y": 7168.1,
+      "vx": -5.3,
+      "boulderX": 20690.8,
+      "boulderY": 7214.7,
+      "boulderProgress": 0.946,
+      "cameraZoom": 0.999,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "precision_short_jump"
+    },
+    {
+      "frame": 16821,
+      "x": 19968.6,
+      "y": 7211.9,
+      "vx": -5.3,
+      "boulderX": 20430.9,
+      "boulderY": 7204.9,
+      "boulderProgress": 0.95,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "precision_short_jump"
+    },
+    {
+      "frame": 16866,
+      "x": 19727.9,
+      "y": 7262,
+      "vx": -5.3,
+      "boulderX": 20250.4,
+      "boulderY": 7209.9,
+      "boulderProgress": 0.954,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "precision_descent"
+    },
+    {
+      "frame": 16909,
+      "x": 19497.8,
+      "y": 7262,
+      "vx": -5.3,
+      "boulderX": 20250.4,
+      "boulderY": 7209.9,
+      "boulderProgress": 0.954,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "precision_descent"
+    },
+    {
+      "frame": 16951,
+      "x": 19273.1,
+      "y": 7306.3,
+      "vx": -5.3,
+      "boulderX": 20250.4,
+      "boulderY": 7209.9,
+      "boulderProgress": 0.954,
+      "cameraZoom": 0.907,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "precision_descent"
+    },
+    {
+      "frame": 16994,
+      "x": 19043.1,
+      "y": 7366.3,
+      "vx": -5.3,
+      "boulderX": 19995.3,
+      "boulderY": 7260.9,
+      "boulderProgress": 0.958,
+      "cameraZoom": 0.857,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "precision_descent"
+    },
+    {
+      "frame": 17037,
+      "x": 18813,
+      "y": 7382,
+      "vx": -5.3,
+      "boulderX": 19740.2,
+      "boulderY": 7312,
+      "boulderProgress": 0.963,
+      "cameraZoom": 0.865,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "precision_descent"
+    },
+    {
+      "frame": 17080,
+      "x": 18894,
+      "y": 7382,
+      "vx": 5.4,
+      "boulderX": 19550.4,
+      "boulderY": 7349.9,
+      "boulderProgress": 0.966,
+      "cameraZoom": 0.954,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "precision_long_jump"
+    },
+    {
+      "frame": 17123,
+      "x": 19124,
+      "y": 7341,
+      "vx": 5.4,
+      "boulderX": 19550.4,
+      "boulderY": 7349.9,
+      "boulderProgress": 0.966,
+      "cameraZoom": 0.994,
+      "keys": [
+        "KeyD",
+        "Space"
+      ],
+      "phase": "precision_long_jump"
+    },
+    {
+      "frame": 17165,
+      "x": 19348.7,
+      "y": 7452,
+      "vx": 5.4,
+      "boulderX": 19550.4,
+      "boulderY": 7349.9,
+      "boulderProgress": 0.966,
+      "cameraZoom": 0.999,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "precision_exit"
+    },
+    {
+      "frame": 17208,
+      "x": 19578.8,
+      "y": 7452,
+      "vx": 5.4,
+      "boulderX": 19550.4,
+      "boulderY": 7349.9,
+      "boulderProgress": 0.966,
+      "cameraZoom": 1,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "precision_exit"
+    },
+    {
+      "frame": 17251,
+      "x": 19791.4,
+      "y": 7472.9,
+      "vx": 1.2,
+      "boulderX": 19360.6,
+      "boulderY": 7387.9,
+      "boulderProgress": 0.97,
+      "cameraZoom": 1,
+      "keys": [],
+      "phase": "precision_exit"
+    },
+    {
+      "frame": 17294,
+      "x": 19795.5,
+      "y": 7473.3,
+      "vx": 0,
+      "boulderX": 19105.5,
+      "boulderY": 7438.9,
+      "boulderProgress": 0.974,
+      "cameraZoom": 1,
+      "keys": [],
+      "phase": "precision_exit"
+    },
+    {
+      "frame": 17337,
+      "x": 19795.5,
+      "y": 7473.3,
+      "vx": 0,
+      "boulderX": 18853,
+      "boulderY": 7501.7,
+      "boulderProgress": 0.979,
+      "cameraZoom": 0.933,
+      "keys": [],
+      "phase": "precision_exit"
+    },
+    {
+      "frame": 17380,
+      "x": 19795.5,
+      "y": 7473.3,
+      "vx": 0,
+      "boulderX": 18874.5,
+      "boulderY": 7568.5,
+      "boulderProgress": 0.984,
+      "cameraZoom": 0.853,
+      "keys": [],
+      "phase": "precision_exit"
+    },
+    {
+      "frame": 17423,
+      "x": 19795.5,
+      "y": 7473.3,
+      "vx": 0,
+      "boulderX": 19134.4,
+      "boulderY": 7559.2,
+      "boulderProgress": 0.988,
+      "cameraZoom": 0.963,
+      "keys": [],
+      "phase": "precision_exit"
+    }
+  ],
+  "deterministicChecks": {
+    "title": true,
+    "canvas": true,
+    "focused": true,
+    "runtimeAudit": true,
+    "blueprintAudit": true,
+    "pass03Audit": true,
+    "pass04Audit": true,
+    "pass05Audit": true,
+    "pass06Audit": true,
+    "pass07Audit": true,
+    "pass08Audit": true,
+    "pass09Audit": true,
+    "pass10Audit": true,
+    "pass11Audit": true,
+    "pass12Audit": true,
+    "pass13Audit": true,
+    "firstDrop": true,
+    "firstClimb": true,
+    "secondDrop": true,
+    "secondClimb": true,
+    "completed": true,
+    "zone03Entered": true,
+    "lowerRiseReached": true,
+    "atriumReached": true,
+    "upperGalleryReached": true,
+    "longDescentReached": true,
+    "pass04Completed": true,
+    "zone04Entered": true,
+    "lowTunnelReached": true,
+    "platformBoarded": true,
+    "movingPlatformCrossed": true,
+    "unevenTunnelReached": true,
+    "pass05Completed": true,
+    "zone05Entered": true,
+    "lowerHallReached": true,
+    "highGalleryReached": true,
+    "pass06Completed": true,
+    "zone06Entered": true,
+    "curveCommitted": true,
+    "zone06Dropped": true,
+    "threeDashGaps": true,
+    "onePhysicalDirectionChange": true,
+    "pass07Completed": true,
+    "activeBoulderStarted": true,
+    "boulderEnteredCurve": true,
+    "boulderRoundedApex": true,
+    "chaseEscaped": true,
+    "pass08Completed": true,
+    "zone07Entered": true,
+    "firstInternalDrop": true,
+    "middleReturn": true,
+    "secondInternalDrop": true,
+    "lowerInternalRun": true,
+    "zone07ExitReached": true,
+    "structureBreached": true,
+    "twoInternalDirectionChanges": true,
+    "pass09Completed": true,
+    "zone08Entered": true,
+    "chaseShaftOneDrop": true,
+    "chaseShaftOneClear": true,
+    "chaseShaftTwoDrop": true,
+    "chaseShaftTwoClear": true,
+    "chaseLowerHall": true,
+    "zone08Exit": true,
+    "pass10Completed": true,
+    "zone09Entered": true,
+    "tripleGrapple": true,
+    "zone09Exit": true,
+    "pass11Completed": true,
+    "dashSpikeEntered": true,
+    "dashSpikeTakeoff": true,
+    "dashSpikeAirDash": true,
+    "dashSpikeCleared": true,
+    "zone09DashExit": true,
+    "pass12Completed": true,
+    "precisionShortSequence": true,
+    "precisionTurnSequence": true,
+    "precisionLongSequence": true,
+    "precisionExit": true,
+    "pass13Completed": true,
+    "noPrecisionCeilingBump": true,
+    "repeatedChaseWallJumps": true,
+    "collapseBehindPlayer": true,
+    "supportsDestroyed": true,
+    "boulderCoveredRoute": true,
+    "boulderSealed": true,
+    "noBoulderCatch": true,
+    "destructionByDash": true,
+    "allGatesDestroyed": true,
+    "movingPlatformRide": true,
+    "tunnelJumpGaps": true,
+    "jumpGaps": true,
+    "wallJumps": true,
+    "noReset": true,
+    "keyboard": true,
+    "blueprintToggle": true,
+    "legacyInactive": true,
+    "console": true
+  },
+  "passed": true,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "limitations": [
+    "Only zones 01 through 09 have playable collision in pass 13.",
+    "Zone 10 remains blueprint data.",
+    "The active chase currently seals at the Pass 13 exit; the giant arc turn and bridge finale are not implemented.",
+    "Long support-break pauses are graybox chase pacing and still need later difficulty tuning.",
+    "Destroyed supports and floors use graybox debris, not final destruction animation.",
+    "Graybox shapes are collision prototypes, not final terrain art."
+  ]
+}

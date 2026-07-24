@@ -1,0 +1,1596 @@
+{
+  "version": "rebuild-v2-pass05",
+  "testedWith": "Chromium + Playwright actual keyboard events",
+  "actualKeyboardRoute": "start slope -> double wall climb -> buried rise -> low tunnel -> moving platform shaft -> short and long timing gaps -> pass 05 exit",
+  "helperCoordinateMovement": false,
+  "traversalFailure": null,
+  "state": {
+    "title": "Coreless · Rebuild V2 · Pass 05",
+    "activeElement": "gameCanvas",
+    "canvas": {
+      "width": 1200,
+      "height": 680
+    },
+    "buildStatus": "PASS 05 · PLAYABLE 01–04",
+    "auditStatus": "AUDIT 14/14 · P05 25/25",
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass05",
+        "pass": 5,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "f57ea9eeb878c03a61aadf0801be53be3afa562e"
+      },
+      "passed": true,
+      "passedCount": 14,
+      "total": 14,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        },
+        {
+          "id": "pass03_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass04_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass05_level_validation",
+          "passed": true
+        },
+        {
+          "id": "player_dimensions",
+          "passed": true
+        },
+        {
+          "id": "debug_state",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "pass03": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "theoreticalJumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "world_contains_level",
+            "passed": true
+          },
+          {
+            "id": "camera_contains_level",
+            "passed": true
+          },
+          {
+            "id": "spawn_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone01_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "pass03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "two_baffles",
+            "passed": true
+          },
+          {
+            "id": "two_climb_walls",
+            "passed": true
+          },
+          {
+            "id": "first_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "second_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "first_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "second_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "walljump_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "macro_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "run_speed",
+            "passed": true
+          },
+          {
+            "id": "variable_jump",
+            "passed": true
+          },
+          {
+            "id": "air_dash",
+            "passed": true
+          }
+        ]
+      },
+      "pass04": {
+        "passed": true,
+        "passedCount": 22,
+        "total": 22,
+        "highestFloor": 1600,
+        "lowestRoof": 1100,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone03_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "zone03_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone03_single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "two_jump_gaps",
+            "passed": true
+          },
+          {
+            "id": "gap_widths",
+            "passed": true
+          },
+          {
+            "id": "rise_height",
+            "passed": true
+          },
+          {
+            "id": "highest_floor_recorded",
+            "passed": true
+          },
+          {
+            "id": "buried_below_roof",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "frames_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "pass03_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass05": {
+        "passed": true,
+        "passedCount": 25,
+        "total": 25,
+        "normalJumpRise": 114.88970588235293,
+        "ceilingClearances": [
+          80,
+          70
+        ],
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_pass04",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone04_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_distinct_gaps",
+            "passed": true
+          },
+          {
+            "id": "precision_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "shaft_requires_platform",
+            "passed": true
+          },
+          {
+            "id": "one_moving_platform",
+            "passed": true
+          },
+          {
+            "id": "platform_spans_shaft",
+            "passed": true
+          },
+          {
+            "id": "platform_travel",
+            "passed": true
+          },
+          {
+            "id": "two_low_ceiling_beams",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_clearance",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass04_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "gameplay": {
+        "player": {
+          "x": 13420.017941482603,
+          "y": 3652,
+          "vx": 0,
+          "vy": 0,
+          "grounded": true,
+          "wallSide": 0,
+          "dashAvailable": true,
+          "standingPlatformId": null
+        },
+        "movingPlatforms": [
+          {
+            "id": "shaft_carriage",
+            "x": 11543.74999999999,
+            "y": 3290,
+            "direction": 1
+          }
+        ],
+        "camera": {
+          "x": 12599.997139140249,
+          "y": 3351.7087743130555
+        },
+        "progress": {
+          "zone01Reached": true,
+          "firstDropped": true,
+          "firstClimb": true,
+          "secondDropped": true,
+          "secondClimb": true,
+          "completed": true,
+          "zone03Entered": true,
+          "lowerRiseReached": true,
+          "atriumReached": true,
+          "upperGalleryReached": true,
+          "longDescentReached": true,
+          "pass04Completed": true,
+          "zone04Entered": true,
+          "lowTunnelReached": true,
+          "platformBoarded": true,
+          "movingPlatformCrossed": true,
+          "unevenTunnelReached": true,
+          "pass05Completed": true,
+          "platformRides": 1,
+          "groundJumps": 12,
+          "wallJumps": 2,
+          "ledgeAssists": 2,
+          "dashes": 5
+        },
+        "keys": [],
+        "blueprintVisible": false,
+        "resetCount": 0,
+        "frameCount": 3212
+      },
+      "inputProbe": {
+        "downs": 37,
+        "ups": 41,
+        "lastCode": "KeyB",
+        "usedCodes": [
+          "KeyA",
+          "KeyB",
+          "KeyD",
+          "ShiftLeft",
+          "Space"
+        ]
+      }
+    },
+    "debug": {
+      "player": {
+        "x": 13420.017941482603,
+        "y": 3652,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true,
+        "wallSide": 0,
+        "dashAvailable": true,
+        "standingPlatformId": null
+      },
+      "movingPlatforms": [
+        {
+          "id": "shaft_carriage",
+          "x": 11543.74999999999,
+          "y": 3290,
+          "direction": 1
+        }
+      ],
+      "camera": {
+        "x": 12599.997139140249,
+        "y": 3351.7087743130555
+      },
+      "progress": {
+        "zone01Reached": true,
+        "firstDropped": true,
+        "firstClimb": true,
+        "secondDropped": true,
+        "secondClimb": true,
+        "completed": true,
+        "zone03Entered": true,
+        "lowerRiseReached": true,
+        "atriumReached": true,
+        "upperGalleryReached": true,
+        "longDescentReached": true,
+        "pass04Completed": true,
+        "zone04Entered": true,
+        "lowTunnelReached": true,
+        "platformBoarded": true,
+        "movingPlatformCrossed": true,
+        "unevenTunnelReached": true,
+        "pass05Completed": true,
+        "platformRides": 1,
+        "groundJumps": 12,
+        "wallJumps": 2,
+        "ledgeAssists": 2,
+        "dashes": 5
+      },
+      "keys": [],
+      "blueprintVisible": false,
+      "resetCount": 0,
+      "frameCount": 3212
+    },
+    "legacyGlobals": []
+  },
+  "routeSamples": [
+    {
+      "frame": 156,
+      "x": 721.8,
+      "y": 885.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 182,
+      "x": 860.9,
+      "y": 938,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 209,
+      "x": 1005.4,
+      "y": 992.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 236,
+      "x": 1149.8,
+      "y": 1047,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 264,
+      "x": 1299.6,
+      "y": 1026.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 290,
+      "x": 1438.7,
+      "y": 1000.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 318,
+      "x": 1697.1,
+      "y": 1105.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 345,
+      "x": 1841.6,
+      "y": 1181.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 372,
+      "x": 1986,
+      "y": 1257.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 399,
+      "x": 2130.5,
+      "y": 1316.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 427,
+      "x": 2280.3,
+      "y": 1373.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 455,
+      "x": 2430.1,
+      "y": 1430.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 482,
+      "x": 2683.1,
+      "y": 1589.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 501,
+      "x": 2784.8,
+      "y": 1652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 515,
+      "x": 2859.7,
+      "y": 1658.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 539,
+      "x": 2966,
+      "y": 1867.6,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 566,
+      "x": 2966,
+      "y": 1952.7,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 593,
+      "x": 3030.9,
+      "y": 2090.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 619,
+      "x": 3170,
+      "y": 2021.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 645,
+      "x": 3158.2,
+      "y": 1994.5,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 679,
+      "x": 3012.7,
+      "y": 2005,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 698,
+      "x": 3082.9,
+      "y": 2051.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 725,
+      "x": 3200.5,
+      "y": 1971.2,
+      "vx": -7.6,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 789,
+      "x": 3592.3,
+      "y": 2115.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 815,
+      "x": 3726,
+      "y": 2342.2,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 841,
+      "x": 3726,
+      "y": 2424.1,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 867,
+      "x": 3753.7,
+      "y": 2543.4,
+      "vx": 4.6,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 894,
+      "x": 3897.9,
+      "y": 2496.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 919,
+      "x": 3949.9,
+      "y": 2514.4,
+      "vx": -4.5,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 945,
+      "x": 3811.2,
+      "y": 2602,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 972,
+      "x": 3832.2,
+      "y": 2521.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 998,
+      "x": 3971.3,
+      "y": 2493.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1060,
+      "x": 4269.5,
+      "y": 2415,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1087,
+      "x": 4414,
+      "y": 2797.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1113,
+      "x": 4553.1,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1139,
+      "x": 4692.2,
+      "y": 3052,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1227,
+      "x": 5163,
+      "y": 2956.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1251,
+      "x": 5291.4,
+      "y": 2863.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1278,
+      "x": 5435.8,
+      "y": 2745.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1305,
+      "x": 5580.3,
+      "y": 2627,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1318,
+      "x": 5649.8,
+      "y": 2570,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1345,
+      "x": 5794.3,
+      "y": 2502,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1383,
+      "x": 5997.6,
+      "y": 2502,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1419,
+      "x": 6190.2,
+      "y": 2442.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1506,
+      "x": 6655.6,
+      "y": 2174.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1532,
+      "x": 6794.7,
+      "y": 2068.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1557,
+      "x": 6928.5,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1584,
+      "x": 7072.9,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1618,
+      "x": 7254.8,
+      "y": 1917.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "buried_rise"
+    },
+    {
+      "frame": 1689,
+      "x": 7634.7,
+      "y": 1796.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1705,
+      "x": 7720.3,
+      "y": 1736.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1732,
+      "x": 7864.7,
+      "y": 1635.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1756,
+      "x": 7993.1,
+      "y": 1552,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "atrium"
+    },
+    {
+      "frame": 1842,
+      "x": 8561.8,
+      "y": 1622.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1868,
+      "x": 8700.9,
+      "y": 1748.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1895,
+      "x": 8845.4,
+      "y": 1878.1,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1921,
+      "x": 8984.5,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "upper_gallery"
+    },
+    {
+      "frame": 1947,
+      "x": 9123.6,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 1973,
+      "x": 9262.7,
+      "y": 2002,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 1996,
+      "x": 9385.7,
+      "y": 2168.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2019,
+      "x": 9508.8,
+      "y": 2368.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2043,
+      "x": 9637.2,
+      "y": 2577.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2060,
+      "x": 9728.1,
+      "y": 2652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2072,
+      "x": 9792.3,
+      "y": 2652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2091,
+      "x": 9894,
+      "y": 2652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2116,
+      "x": 10027.7,
+      "y": 2778.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2141,
+      "x": 10161.5,
+      "y": 2956.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2164,
+      "x": 10284.5,
+      "y": 3120.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2187,
+      "x": 10407.6,
+      "y": 3252,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2211,
+      "x": 10536,
+      "y": 3252,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2237,
+      "x": 10675.1,
+      "y": 3252,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "long_descent"
+    },
+    {
+      "frame": 2305,
+      "x": 10799.6,
+      "y": 3202,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2329,
+      "x": 10928,
+      "y": 3147,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2396,
+      "x": 11069.9,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2417,
+      "x": 11164.9,
+      "y": 3102,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2442,
+      "x": 11298.7,
+      "y": 3102,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2466,
+      "x": 11400.7,
+      "y": 3102,
+      "vx": 0.7,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2492,
+      "x": 11403.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2516,
+      "x": 11403.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2540,
+      "x": 11403.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2564,
+      "x": 11403.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2589,
+      "x": 11403.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2614,
+      "x": 11403.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2637,
+      "x": 11403.1,
+      "y": 3102,
+      "vx": 0,
+      "keys": [],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2662,
+      "x": 11466.1,
+      "y": 3102.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "low_tunnel"
+    },
+    {
+      "frame": 2728,
+      "x": 11685.4,
+      "y": 3242,
+      "vx": 0,
+      "keys": [],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2752,
+      "x": 11737,
+      "y": 3242,
+      "vx": 0,
+      "keys": [],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2777,
+      "x": 11827,
+      "y": 3242,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2801,
+      "x": 11944.5,
+      "y": 3266.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2826,
+      "x": 12078.3,
+      "y": 3468.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2852,
+      "x": 12217.4,
+      "y": 3544.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "moving_platform"
+    },
+    {
+      "frame": 2920,
+      "x": 12336.6,
+      "y": 3480.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2955,
+      "x": 12523.8,
+      "y": 3325.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 2978,
+      "x": 12646.9,
+      "y": 3402,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 3014,
+      "x": 12839.5,
+      "y": 3466.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 3038,
+      "x": 12967.9,
+      "y": 3652,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 3063,
+      "x": 13101.6,
+      "y": 3454.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 3087,
+      "x": 13230,
+      "y": 3542.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    },
+    {
+      "frame": 3111,
+      "x": 13358.4,
+      "y": 3634.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "uneven_tunnel"
+    }
+  ],
+  "deterministicChecks": {
+    "title": true,
+    "canvas": true,
+    "focused": true,
+    "runtimeAudit": true,
+    "blueprintAudit": true,
+    "pass03Audit": true,
+    "pass04Audit": true,
+    "pass05Audit": true,
+    "firstDrop": true,
+    "firstClimb": true,
+    "secondDrop": true,
+    "secondClimb": true,
+    "completed": true,
+    "zone03Entered": true,
+    "lowerRiseReached": true,
+    "atriumReached": true,
+    "upperGalleryReached": true,
+    "longDescentReached": true,
+    "pass04Completed": true,
+    "zone04Entered": true,
+    "lowTunnelReached": true,
+    "platformBoarded": true,
+    "movingPlatformCrossed": true,
+    "unevenTunnelReached": true,
+    "pass05Completed": true,
+    "movingPlatformRide": true,
+    "tunnelJumpGaps": true,
+    "jumpGaps": true,
+    "wallJumps": true,
+    "noReset": true,
+    "keyboard": true,
+    "blueprintToggle": true,
+    "legacyInactive": true,
+    "console": true
+  },
+  "passed": true,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "limitations": [
+    "Only zones 01 through 04 have playable collision in pass 05.",
+    "The remaining six zones are still blueprint data.",
+    "Graybox shapes are collision prototypes, not final terrain art."
+  ]
+}

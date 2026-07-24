@@ -1,0 +1,728 @@
+{
+  "version": "rebuild-v2-pass03",
+  "testedWith": "Chromium + Playwright actual keyboard events",
+  "actualKeyboardRoute": "start slope -> zone 02 drop -> wall climb I -> lower connector -> wall climb II -> pass 03 exit",
+  "helperCoordinateMovement": false,
+  "traversalFailure": null,
+  "state": {
+    "title": "Coreless · Rebuild V2 · Pass 03",
+    "activeElement": "gameCanvas",
+    "canvas": {
+      "width": 1200,
+      "height": 680
+    },
+    "buildStatus": "PASS 03 · PLAYABLE 01–02",
+    "auditStatus": "AUDIT 12/12 · LEVEL 20/20",
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass03",
+        "pass": 3,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "f57ea9eeb878c03a61aadf0801be53be3afa562e"
+      },
+      "passed": true,
+      "passedCount": 12,
+      "total": 12,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        },
+        {
+          "id": "pass03_level_validation",
+          "passed": true
+        },
+        {
+          "id": "player_dimensions",
+          "passed": true
+        },
+        {
+          "id": "debug_state",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "pass03": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "theoreticalJumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "world_contains_level",
+            "passed": true
+          },
+          {
+            "id": "camera_contains_level",
+            "passed": true
+          },
+          {
+            "id": "spawn_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone01_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "pass03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "two_baffles",
+            "passed": true
+          },
+          {
+            "id": "two_climb_walls",
+            "passed": true
+          },
+          {
+            "id": "first_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "second_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "first_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "second_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "walljump_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "macro_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "run_speed",
+            "passed": true
+          },
+          {
+            "id": "variable_jump",
+            "passed": true
+          },
+          {
+            "id": "air_dash",
+            "passed": true
+          }
+        ]
+      },
+      "gameplay": {
+        "player": {
+          "x": 4565.325644970442,
+          "y": 3052,
+          "vx": 0,
+          "vy": 0,
+          "grounded": true,
+          "wallSide": 0,
+          "dashAvailable": true
+        },
+        "camera": {
+          "x": 3599.9958444876374,
+          "y": 2749.377901053761
+        },
+        "progress": {
+          "zone01Reached": true,
+          "firstDropped": true,
+          "firstClimb": true,
+          "secondDropped": true,
+          "secondClimb": true,
+          "completed": true,
+          "wallJumps": 3,
+          "ledgeAssists": 2,
+          "dashes": 4
+        },
+        "keys": [],
+        "blueprintVisible": false,
+        "resetCount": 0,
+        "frameCount": 1188
+      },
+      "inputProbe": {
+        "downs": 29,
+        "ups": 33,
+        "lastCode": "KeyB",
+        "usedCodes": [
+          "KeyA",
+          "KeyB",
+          "KeyD",
+          "ShiftLeft",
+          "Space"
+        ]
+      }
+    },
+    "debug": {
+      "player": {
+        "x": 4565.325644970442,
+        "y": 3052,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true,
+        "wallSide": 0,
+        "dashAvailable": true
+      },
+      "camera": {
+        "x": 3599.9958444876374,
+        "y": 2749.377901053761
+      },
+      "progress": {
+        "zone01Reached": true,
+        "firstDropped": true,
+        "firstClimb": true,
+        "secondDropped": true,
+        "secondClimb": true,
+        "completed": true,
+        "wallJumps": 3,
+        "ledgeAssists": 2,
+        "dashes": 4
+      },
+      "keys": [],
+      "blueprintVisible": false,
+      "resetCount": 0,
+      "frameCount": 1188
+    },
+    "legacyGlobals": []
+  },
+  "routeSamples": [
+    {
+      "frame": 114,
+      "x": 711.1,
+      "y": 881.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 138,
+      "x": 839.5,
+      "y": 929.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 164,
+      "x": 978.6,
+      "y": 982.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 190,
+      "x": 1117.7,
+      "y": 1034.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 215,
+      "x": 1251.5,
+      "y": 1035.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 240,
+      "x": 1385.2,
+      "y": 1010.3,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 266,
+      "x": 1632.9,
+      "y": 1071.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 291,
+      "x": 1766.7,
+      "y": 1141.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 315,
+      "x": 1895.1,
+      "y": 1209.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 337,
+      "x": 2012.8,
+      "y": 1271.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 360,
+      "x": 2135.8,
+      "y": 1318.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 383,
+      "x": 2258.9,
+      "y": 1365.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 405,
+      "x": 2485.2,
+      "y": 1464.8,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 429,
+      "x": 2613.6,
+      "y": 1545.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 454,
+      "x": 2747.3,
+      "y": 1629.6,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 479,
+      "x": 2881.1,
+      "y": 1676.5,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 503,
+      "x": 2966,
+      "y": 1880.2,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 526,
+      "x": 2966,
+      "y": 1952.7,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "slope"
+    },
+    {
+      "frame": 551,
+      "x": 3020.2,
+      "y": 2102,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 577,
+      "x": 3159.3,
+      "y": 2015.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 601,
+      "x": 3216,
+      "y": 1998.4,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 626,
+      "x": 3094.1,
+      "y": 2007.6,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 650,
+      "x": 3014,
+      "y": 1998.4,
+      "vx": 0.8,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 675,
+      "x": 3125.7,
+      "y": 2080.9,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 699,
+      "x": 3216,
+      "y": 2026.5,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_1"
+    },
+    {
+      "frame": 721,
+      "x": 3292,
+      "y": 1902,
+      "vx": 6.2,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 781,
+      "x": 3619.1,
+      "y": 2192.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 794,
+      "x": 3688.6,
+      "y": 2267.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 819,
+      "x": 3726,
+      "y": 2395.8,
+      "vx": 0,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 849,
+      "x": 3734.8,
+      "y": 2500.5,
+      "vx": 2.5,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "between_climbs"
+    },
+    {
+      "frame": 873,
+      "x": 3855.1,
+      "y": 2501.4,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 898,
+      "x": 3975.3,
+      "y": 2590.2,
+      "vx": -0.7,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 923,
+      "x": 3864.7,
+      "y": 2515.7,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 947,
+      "x": 3784.7,
+      "y": 2498.4,
+      "vx": 0.8,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 972,
+      "x": 3896.4,
+      "y": 2579,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 996,
+      "x": 3923.6,
+      "y": 2415.4,
+      "vx": -5.3,
+      "keys": [
+        "KeyA"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1058,
+      "x": 4323,
+      "y": 2470.7,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    },
+    {
+      "frame": 1082,
+      "x": 4451.4,
+      "y": 2763.2,
+      "vx": 5.4,
+      "keys": [
+        "KeyD"
+      ],
+      "phase": "climb_2"
+    }
+  ],
+  "deterministicChecks": {
+    "title": true,
+    "canvas": true,
+    "focused": true,
+    "runtimeAudit": true,
+    "blueprintAudit": true,
+    "pass03Audit": true,
+    "firstDrop": true,
+    "firstClimb": true,
+    "secondDrop": true,
+    "secondClimb": true,
+    "completed": true,
+    "wallJumps": true,
+    "noReset": true,
+    "keyboard": true,
+    "blueprintToggle": true,
+    "legacyInactive": true,
+    "console": true
+  },
+  "passed": true,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "limitations": [
+    "Only zones 01 and 02 have playable collision in pass 03.",
+    "The rest of the 26000 x 7800 world remains blueprint data.",
+    "Graybox shapes are collision prototypes, not final terrain art."
+  ]
+}

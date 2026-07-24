@@ -1,0 +1,5692 @@
+{
+  "version": "rebuild-v2-pass11-focused",
+  "testedWith": "Chromium + Playwright actual keyboard events",
+  "actualKeyboardRoute": "pass 10 exit helper placement -> launch ramp -> grapple one -> grapple two -> grapple three -> lower-left exit shelf",
+  "helperCoordinateMovement": true,
+  "traversalFailure": null,
+  "state": {
+    "title": "Coreless · Rebuild V2 · Pass 11",
+    "audit": {
+      "build": {
+        "id": "rebuild-v2-pass11",
+        "pass": 11,
+        "branch": "rebuild/mega-room-40pass",
+        "draftPullRequest": 1,
+        "previousBaselineSha": "1b564cd53f6338b85f900a5d0ecbb5f71db16baf"
+      },
+      "passed": true,
+      "passedCount": 20,
+      "total": 20,
+      "checks": [
+        {
+          "id": "build_id",
+          "passed": true
+        },
+        {
+          "id": "pass_number",
+          "passed": true
+        },
+        {
+          "id": "canvas",
+          "passed": true
+        },
+        {
+          "id": "canvas_context",
+          "passed": true
+        },
+        {
+          "id": "stage_sequence",
+          "passed": true
+        },
+        {
+          "id": "single_runtime",
+          "passed": true
+        },
+        {
+          "id": "module_entry",
+          "passed": true
+        },
+        {
+          "id": "legacy_inactive",
+          "passed": true
+        },
+        {
+          "id": "blueprint_validation",
+          "passed": true
+        },
+        {
+          "id": "pass03_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass04_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass05_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass06_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass07_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass08_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass09_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass10_level_validation",
+          "passed": true
+        },
+        {
+          "id": "pass11_level_validation",
+          "passed": true
+        },
+        {
+          "id": "player_dimensions",
+          "passed": true
+        },
+        {
+          "id": "debug_state",
+          "passed": true
+        }
+      ],
+      "blueprint": {
+        "passed": true,
+        "passedCount": 18,
+        "total": 18,
+        "checks": [
+          {
+            "id": "world_width",
+            "passed": true
+          },
+          {
+            "id": "world_height",
+            "passed": true
+          },
+          {
+            "id": "camera_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone_count",
+            "passed": true
+          },
+          {
+            "id": "zone_ids_unique",
+            "passed": true
+          },
+          {
+            "id": "stage_order",
+            "passed": true
+          },
+          {
+            "id": "zone_bounds",
+            "passed": true
+          },
+          {
+            "id": "entries_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exits_in_zone",
+            "passed": true
+          },
+          {
+            "id": "exact_connections",
+            "passed": true
+          },
+          {
+            "id": "macro_descent",
+            "passed": true
+          },
+          {
+            "id": "zone_route_joins",
+            "passed": true
+          },
+          {
+            "id": "player_route_world",
+            "passed": true
+          },
+          {
+            "id": "player_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "boulder_route_world",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_count",
+            "passed": true
+          },
+          {
+            "id": "chase_features_reserved_for_pass08",
+            "passed": true
+          },
+          {
+            "id": "chase_feature_bounds",
+            "passed": true
+          }
+        ]
+      },
+      "pass03": {
+        "passed": true,
+        "passedCount": 20,
+        "total": 20,
+        "theoreticalJumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "world_contains_level",
+            "passed": true
+          },
+          {
+            "id": "camera_contains_level",
+            "passed": true
+          },
+          {
+            "id": "spawn_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone01_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "pass03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "two_baffles",
+            "passed": true
+          },
+          {
+            "id": "two_climb_walls",
+            "passed": true
+          },
+          {
+            "id": "first_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "second_underpass_clearance",
+            "passed": true
+          },
+          {
+            "id": "first_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "second_requires_walljump",
+            "passed": true
+          },
+          {
+            "id": "walljump_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "macro_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "run_speed",
+            "passed": true
+          },
+          {
+            "id": "variable_jump",
+            "passed": true
+          },
+          {
+            "id": "air_dash",
+            "passed": true
+          }
+        ]
+      },
+      "pass04": {
+        "passed": true,
+        "passedCount": 22,
+        "total": 22,
+        "highestFloor": 1600,
+        "lowestRoof": 1100,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone03_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone03_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "zone03_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "zone03_single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "two_jump_gaps",
+            "passed": true
+          },
+          {
+            "id": "gap_widths",
+            "passed": true
+          },
+          {
+            "id": "rise_height",
+            "passed": true
+          },
+          {
+            "id": "highest_floor_recorded",
+            "passed": true
+          },
+          {
+            "id": "buried_below_roof",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "frames_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "spawn_retained",
+            "passed": true
+          },
+          {
+            "id": "pass03_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass05": {
+        "passed": true,
+        "passedCount": 25,
+        "total": 25,
+        "normalJumpRise": 114.88970588235293,
+        "ceilingClearances": [
+          80,
+          70
+        ],
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_entry_matches_pass04",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone04_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone04_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_distinct_gaps",
+            "passed": true
+          },
+          {
+            "id": "precision_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "shaft_requires_platform",
+            "passed": true
+          },
+          {
+            "id": "one_moving_platform",
+            "passed": true
+          },
+          {
+            "id": "platform_spans_shaft",
+            "passed": true
+          },
+          {
+            "id": "platform_travel",
+            "passed": true
+          },
+          {
+            "id": "two_low_ceiling_beams",
+            "passed": true
+          },
+          {
+            "id": "low_ceiling_clearance",
+            "passed": true
+          },
+          {
+            "id": "solids_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "four_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass04_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass06": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_entry_matches_pass05",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone05_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "zone05_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "single_forward_route",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gates",
+            "passed": true
+          },
+          {
+            "id": "gate_shapes_distinct",
+            "passed": true
+          },
+          {
+            "id": "gates_ordered",
+            "passed": true
+          },
+          {
+            "id": "gates_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "gates_exceed_normal_jump",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "collapse_corridor_forward",
+            "passed": true
+          },
+          {
+            "id": "corridor_same_structure",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_supports",
+            "passed": true
+          },
+          {
+            "id": "supports_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "roof_continuity",
+            "passed": true
+          },
+          {
+            "id": "roof_span",
+            "passed": true
+          },
+          {
+            "id": "eight_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          },
+          {
+            "id": "pass05_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass07": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "jumpRise": 114.88970588235293,
+        "runOnlyDistance": 196.69117647058823,
+        "dashDistance": 136.4,
+        "checks": [
+          {
+            "id": "combined_level_in_world",
+            "passed": true
+          },
+          {
+            "id": "camera_matches_level",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_entry_matches_pass06",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "zone06_exit_lower",
+            "passed": true
+          },
+          {
+            "id": "upper_floor_count",
+            "passed": true
+          },
+          {
+            "id": "lower_floor_count",
+            "passed": true
+          },
+          {
+            "id": "combined_floor_count",
+            "passed": true
+          },
+          {
+            "id": "floor_lanes",
+            "passed": true
+          },
+          {
+            "id": "floors_ordered",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_endpoints",
+            "passed": true
+          },
+          {
+            "id": "three_dash_gaps",
+            "passed": true
+          },
+          {
+            "id": "dash_gap_widths",
+            "passed": true
+          },
+          {
+            "id": "dash_gaps_match_floors",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_inactive",
+            "passed": true
+          },
+          {
+            "id": "curve_corridor_width",
+            "passed": true
+          },
+          {
+            "id": "curve_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "single_direction_change",
+            "passed": true
+          },
+          {
+            "id": "curve_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "curve_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "visible_vertical_drop",
+            "passed": true
+          },
+          {
+            "id": "landing_below_lip",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "milestone_coordinates",
+            "passed": true
+          },
+          {
+            "id": "pass06_geometry_retained",
+            "passed": true
+          }
+        ]
+      },
+      "pass08": {
+        "passed": true,
+        "passedCount": 24,
+        "total": 24,
+        "totalDistance": 30779.372511505342,
+        "collapsePanelCount": 31,
+        "supportTargetCount": 13,
+        "checks": [
+          {
+            "id": "pass07_level_retained",
+            "passed": true
+          },
+          {
+            "id": "active_boulder",
+            "passed": true
+          },
+          {
+            "id": "single_combined_path",
+            "passed": true
+          },
+          {
+            "id": "path_points_in_world",
+            "passed": true
+          },
+          {
+            "id": "zone05_to_zone06_join",
+            "passed": true
+          },
+          {
+            "id": "path_starts_on_zone05_floor",
+            "passed": true
+          },
+          {
+            "id": "path_ends_at_zone06_exit",
+            "passed": true
+          },
+          {
+            "id": "strict_cumulative_distance",
+            "passed": true
+          },
+          {
+            "id": "long_chase_route",
+            "passed": true
+          },
+          {
+            "id": "physical_curve_apex",
+            "passed": true
+          },
+          {
+            "id": "one_direction_change",
+            "passed": true
+          },
+          {
+            "id": "boulder_radius_fits_corridors",
+            "passed": true
+          },
+          {
+            "id": "bounded_spawn_delay",
+            "passed": true
+          },
+          {
+            "id": "bounded_speed",
+            "passed": true
+          },
+          {
+            "id": "all_chase_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "collapse_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "thirteen_support_targets",
+            "passed": true
+          },
+          {
+            "id": "support_triggers_ordered",
+            "passed": true
+          },
+          {
+            "id": "supports_before_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_near_route_end",
+            "passed": true
+          },
+          {
+            "id": "completion_matches_pass07",
+            "passed": true
+          },
+          {
+            "id": "gaps_remain_physical",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "reserved_flags_unchanged",
+            "passed": true
+          }
+        ]
+      },
+      "pass09": {
+        "passed": true,
+        "passedCount": 28,
+        "total": 28,
+        "totalDistance": 37613.124580885786,
+        "extensionDistance": 6833.752069380444,
+        "collapsePanelCount": 40,
+        "supportTargetCount": 19,
+        "checks": [
+          {
+            "id": "pass08_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass08",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "three_upper_floors",
+            "passed": true
+          },
+          {
+            "id": "one_middle_return",
+            "passed": true
+          },
+          {
+            "id": "five_lower_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "upper_route_connected",
+            "passed": true
+          },
+          {
+            "id": "lower_route_connected",
+            "passed": true
+          },
+          {
+            "id": "two_physical_drops",
+            "passed": true
+          },
+          {
+            "id": "single_player_route",
+            "passed": true
+          },
+          {
+            "id": "three_ceiling_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "eleven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "physical_u_turn",
+            "passed": true
+          },
+          {
+            "id": "corridor_starts_at_entry",
+            "passed": true
+          },
+          {
+            "id": "corridor_ends_at_exit",
+            "passed": true
+          },
+          {
+            "id": "six_internal_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "nineteen_supports",
+            "passed": true
+          },
+          {
+            "id": "breach_delay",
+            "passed": true
+          },
+          {
+            "id": "milestone_order",
+            "passed": true
+          }
+        ]
+      },
+      "pass10": {
+        "passed": true,
+        "passedCount": 30,
+        "total": 30,
+        "theoreticalJumpRise": 114.88970588235293,
+        "totalDistance": 46988.78994100213,
+        "extensionDistance": 9375.665360116342,
+        "collapsePanelCount": 50,
+        "supportTargetCount": 27,
+        "checks": [
+          {
+            "id": "pass09_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass09",
+            "passed": true
+          },
+          {
+            "id": "exit_matches_blueprint",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "ten_player_floors",
+            "passed": true
+          },
+          {
+            "id": "floors_in_bounds",
+            "passed": true
+          },
+          {
+            "id": "eight_solids",
+            "passed": true
+          },
+          {
+            "id": "two_complete_wall_pairs",
+            "passed": true
+          },
+          {
+            "id": "two_forced_shafts",
+            "passed": true
+          },
+          {
+            "id": "shaft_one_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "shaft_two_requires_walljumps",
+            "passed": true
+          },
+          {
+            "id": "wall_corridor_widths",
+            "passed": true
+          },
+          {
+            "id": "second_shaft_after_first_lip",
+            "passed": true
+          },
+          {
+            "id": "no_bypass_floor",
+            "passed": true
+          },
+          {
+            "id": "six_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "fourteen_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_player_endpoints",
+            "passed": true
+          },
+          {
+            "id": "corridor_descends_through_both_shafts",
+            "passed": true
+          },
+          {
+            "id": "no_teleport_segments",
+            "passed": true
+          },
+          {
+            "id": "eight_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "twenty_seven_supports",
+            "passed": true
+          },
+          {
+            "id": "four_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "milestones_force_two_successes",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "pass11": {
+        "passed": true,
+        "passedCount": 31,
+        "total": 31,
+        "directHorizontalGap": 750,
+        "noGrappleAirReach": 457.4,
+        "totalDistance": 51578.488132262966,
+        "extensionDistance": 4589.698191260839,
+        "collapsePanelCount": 52,
+        "supportTargetCount": 33,
+        "checks": [
+          {
+            "id": "pass10_level_retained",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_pass10",
+            "passed": true
+          },
+          {
+            "id": "entry_matches_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_inside_zone09",
+            "passed": true
+          },
+          {
+            "id": "exit_lower_than_entry",
+            "passed": true
+          },
+          {
+            "id": "surface_ceiling_matches_entry",
+            "passed": true
+          },
+          {
+            "id": "six_player_route_points",
+            "passed": true
+          },
+          {
+            "id": "route_matches_endpoints",
+            "passed": true
+          },
+          {
+            "id": "two_player_floors",
+            "passed": true
+          },
+          {
+            "id": "no_direct_floor_bridge",
+            "passed": true
+          },
+          {
+            "id": "three_ordered_anchors",
+            "passed": true
+          },
+          {
+            "id": "unique_anchor_ids",
+            "passed": true
+          },
+          {
+            "id": "anchors_inside_zone",
+            "passed": true
+          },
+          {
+            "id": "anchor_ranges",
+            "passed": true
+          },
+          {
+            "id": "first_anchor_reachable_from_launch",
+            "passed": true
+          },
+          {
+            "id": "anchor_chain_overlaps",
+            "passed": true
+          },
+          {
+            "id": "two_arch_solids",
+            "passed": true
+          },
+          {
+            "id": "five_architecture_frames",
+            "passed": true
+          },
+          {
+            "id": "wide_boulder_corridor",
+            "passed": true
+          },
+          {
+            "id": "seven_corridor_points",
+            "passed": true
+          },
+          {
+            "id": "corridor_matches_entry_exit",
+            "passed": true
+          },
+          {
+            "id": "smooth_corridor_segments",
+            "passed": true
+          },
+          {
+            "id": "six_visible_chute_floors",
+            "passed": true
+          },
+          {
+            "id": "six_destructible_supports",
+            "passed": true
+          },
+          {
+            "id": "extended_chase_path",
+            "passed": true
+          },
+          {
+            "id": "strict_chase_distances",
+            "passed": true
+          },
+          {
+            "id": "all_player_floors_collapsible",
+            "passed": true
+          },
+          {
+            "id": "thirty_three_supports",
+            "passed": true
+          },
+          {
+            "id": "three_new_breakpoints",
+            "passed": true
+          },
+          {
+            "id": "completion_requires_three_anchors",
+            "passed": true
+          },
+          {
+            "id": "level_inside_world",
+            "passed": true
+          }
+        ]
+      },
+      "gameplay": {
+        "player": {
+          "x": 22349.869381576344,
+          "y": 6852,
+          "vx": 0,
+          "vy": 0,
+          "grounded": true,
+          "wallSide": 0,
+          "dashAvailable": true,
+          "grappleLaunchFrames": 0,
+          "standingPlatformId": null
+        },
+        "movingPlatforms": [
+          {
+            "id": "shaft_carriage",
+            "x": 11636.199999999975,
+            "y": 3290,
+            "direction": 1
+          }
+        ],
+        "breakables": [
+          {
+            "id": "west_braced_gate",
+            "shape": "cross_brace",
+            "destroyed": false
+          },
+          {
+            "id": "middle_lattice_gate",
+            "shape": "lattice",
+            "destroyed": false
+          },
+          {
+            "id": "east_split_gate",
+            "shape": "split_pillar",
+            "destroyed": false
+          }
+        ],
+        "chase": {
+          "triggered": true,
+          "active": false,
+          "sealed": true,
+          "delayFrames": 0,
+          "breachDelayFrames": 0,
+          "breachComplete": true,
+          "internalBreakpointIndex": 9,
+          "internalPauseFrames": 0,
+          "activeFrames": 828,
+          "pathDistance": 49775.210853362034,
+          "pathProgress": 0.9650381904510892,
+          "pathIndex": 56,
+          "x": 24163.534925771022,
+          "y": 7143.646507422898,
+          "speed": 5.67038
+        },
+        "collapsedFloorIds": [
+          "curve_approach",
+          "curve_bend",
+          "curve_drop_lip",
+          "curve_landing",
+          "curve_runout",
+          "double_wall_connector",
+          "double_wall_entry_slope",
+          "double_wall_exit_rise",
+          "double_wall_exit_shelf",
+          "double_wall_lip_one",
+          "double_wall_lip_two",
+          "double_wall_lower_hall_a",
+          "double_wall_lower_hall_b",
+          "double_wall_pit_one",
+          "double_wall_pit_two",
+          "east_dash_takeoff",
+          "east_mid",
+          "east_wave",
+          "eastern_descent",
+          "eastern_hall",
+          "eastern_ridge",
+          "exit_drop",
+          "final_rise",
+          "first_rise",
+          "first_sink",
+          "grapple_launch_ramp",
+          "high_gallery",
+          "internal_entry_surface",
+          "internal_exit_rise",
+          "internal_lower_landing",
+          "internal_lower_wave_a",
+          "internal_lower_wave_b",
+          "internal_lower_wave_c",
+          "internal_middle_return",
+          "internal_upper_gallery",
+          "internal_upper_ramp",
+          "low_wave_a",
+          "low_wave_b",
+          "low_wave_c",
+          "lower_hall",
+          "maze_entry_rise",
+          "mid_dash_takeoff",
+          "middle_descent",
+          "middle_hall",
+          "middle_wave",
+          "second_rise",
+          "west_dash_landing",
+          "western_hall",
+          "western_ridge",
+          "zone05_exit",
+          "zone06_exit_rise"
+        ],
+        "destroyedSupportIds": [
+          "curve_support_1",
+          "curve_support_2",
+          "curve_support_3",
+          "curve_support_4",
+          "curve_support_5",
+          "curve_support_6",
+          "double_wall_support_connector",
+          "double_wall_support_entry",
+          "double_wall_support_exit",
+          "double_wall_support_lower_hall",
+          "double_wall_support_one_left",
+          "double_wall_support_one_right",
+          "double_wall_support_two_left",
+          "double_wall_support_two_right",
+          "grapple_support_apex",
+          "grapple_support_high",
+          "grapple_support_launch",
+          "grapple_support_turn",
+          "internal_support_drop",
+          "internal_support_entry",
+          "internal_support_exit",
+          "internal_support_lower_a",
+          "internal_support_lower_b",
+          "internal_support_return",
+          "support_east_a",
+          "support_east_b",
+          "support_exit",
+          "support_mid_a",
+          "support_mid_b",
+          "support_west_a",
+          "support_west_b"
+        ],
+        "grapple": {
+          "active": false,
+          "anchorId": null,
+          "ropeLength": 902.310657662194,
+          "attachedFrames": 0,
+          "cooldown": 0,
+          "lastAnchorId": "grapple_anchor_three",
+          "usedAnchorIds": [
+            "grapple_anchor_one",
+            "grapple_anchor_two",
+            "grapple_anchor_three"
+          ]
+        },
+        "boulderCatchCount": 0,
+        "debrisCount": 0,
+        "camera": {
+          "x": 21481.09450894985,
+          "y": 6519.009305918198,
+          "zoom": 0.9954647226697999
+        },
+        "progress": {
+          "zone01Reached": true,
+          "firstDropped": false,
+          "firstClimb": false,
+          "secondDropped": false,
+          "secondClimb": false,
+          "completed": false,
+          "zone03Entered": false,
+          "lowerRiseReached": false,
+          "atriumReached": false,
+          "upperGalleryReached": false,
+          "longDescentReached": false,
+          "pass04Completed": false,
+          "zone04Entered": false,
+          "lowTunnelReached": false,
+          "platformBoarded": false,
+          "movingPlatformCrossed": false,
+          "unevenTunnelReached": false,
+          "pass05Completed": false,
+          "zone05Entered": false,
+          "lowerHallReached": false,
+          "highGalleryReached": false,
+          "pass06Completed": false,
+          "zone06Entered": false,
+          "curveCommitted": false,
+          "zone06Dropped": false,
+          "eastDashGapCleared": false,
+          "middleDashGapCleared": false,
+          "westDashGapCleared": false,
+          "pass07Completed": true,
+          "chaseTriggered": false,
+          "boulderStarted": true,
+          "boulderEnteredCurve": true,
+          "boulderRoundedApex": true,
+          "boulderFinished": false,
+          "chaseEscaped": true,
+          "pass08Completed": true,
+          "zone07Entered": true,
+          "zone07UpperDrop": true,
+          "zone07MiddleReturn": true,
+          "zone07MiddleDrop": true,
+          "zone07LowerRun": true,
+          "zone07ExitReached": true,
+          "boulderAtInternalEntry": true,
+          "internalStructureBreached": true,
+          "pass09Completed": true,
+          "zone08Entered": true,
+          "zone08ShaftOneDropped": true,
+          "zone08ShaftOneCleared": true,
+          "zone08ShaftTwoDropped": true,
+          "zone08ShaftTwoCleared": true,
+          "zone08LowerHallReached": true,
+          "zone08ExitReached": true,
+          "pass10Completed": true,
+          "zone09Entered": true,
+          "grappleAnchorOneUsed": true,
+          "grappleAnchorTwoUsed": true,
+          "grappleAnchorThreeUsed": true,
+          "grappleChainCompleted": true,
+          "zone09ExitReached": true,
+          "pass11Completed": true,
+          "chaseWallJumps": 0,
+          "floorsCollapsed": 51,
+          "supportsDestroyed": 31,
+          "internalDirectionChanges": 0,
+          "dashGapClears": 0,
+          "directionChanges": 0,
+          "breakablesDestroyed": 0,
+          "platformRides": 0,
+          "groundJumps": 0,
+          "wallJumps": 0,
+          "ledgeAssists": 0,
+          "dashes": 0,
+          "grappleAttaches": 3,
+          "grappleReleases": 3,
+          "grappleUniqueAnchors": 3
+        },
+        "keys": [],
+        "blueprintVisible": false,
+        "resetCount": 0,
+        "frameCount": 1036
+      },
+      "inputProbe": {
+        "downs": 1636,
+        "ups": 1636,
+        "lastCode": "KeyA",
+        "usedCodes": [
+          "KeyA",
+          "KeyD",
+          "KeyE"
+        ]
+      }
+    },
+    "debug": {
+      "player": {
+        "x": 22349.869381576344,
+        "y": 6852,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true,
+        "wallSide": 0,
+        "dashAvailable": true,
+        "grappleLaunchFrames": 0,
+        "standingPlatformId": null
+      },
+      "movingPlatforms": [
+        {
+          "id": "shaft_carriage",
+          "x": 11636.199999999975,
+          "y": 3290,
+          "direction": 1
+        }
+      ],
+      "breakables": [
+        {
+          "id": "west_braced_gate",
+          "shape": "cross_brace",
+          "destroyed": false
+        },
+        {
+          "id": "middle_lattice_gate",
+          "shape": "lattice",
+          "destroyed": false
+        },
+        {
+          "id": "east_split_gate",
+          "shape": "split_pillar",
+          "destroyed": false
+        }
+      ],
+      "chase": {
+        "triggered": true,
+        "active": false,
+        "sealed": true,
+        "delayFrames": 0,
+        "breachDelayFrames": 0,
+        "breachComplete": true,
+        "internalBreakpointIndex": 9,
+        "internalPauseFrames": 0,
+        "activeFrames": 828,
+        "pathDistance": 49775.210853362034,
+        "pathProgress": 0.9650381904510892,
+        "pathIndex": 56,
+        "x": 24163.534925771022,
+        "y": 7143.646507422898,
+        "speed": 5.67038
+      },
+      "collapsedFloorIds": [
+        "curve_approach",
+        "curve_bend",
+        "curve_drop_lip",
+        "curve_landing",
+        "curve_runout",
+        "double_wall_connector",
+        "double_wall_entry_slope",
+        "double_wall_exit_rise",
+        "double_wall_exit_shelf",
+        "double_wall_lip_one",
+        "double_wall_lip_two",
+        "double_wall_lower_hall_a",
+        "double_wall_lower_hall_b",
+        "double_wall_pit_one",
+        "double_wall_pit_two",
+        "east_dash_takeoff",
+        "east_mid",
+        "east_wave",
+        "eastern_descent",
+        "eastern_hall",
+        "eastern_ridge",
+        "exit_drop",
+        "final_rise",
+        "first_rise",
+        "first_sink",
+        "grapple_launch_ramp",
+        "high_gallery",
+        "internal_entry_surface",
+        "internal_exit_rise",
+        "internal_lower_landing",
+        "internal_lower_wave_a",
+        "internal_lower_wave_b",
+        "internal_lower_wave_c",
+        "internal_middle_return",
+        "internal_upper_gallery",
+        "internal_upper_ramp",
+        "low_wave_a",
+        "low_wave_b",
+        "low_wave_c",
+        "lower_hall",
+        "maze_entry_rise",
+        "mid_dash_takeoff",
+        "middle_descent",
+        "middle_hall",
+        "middle_wave",
+        "second_rise",
+        "west_dash_landing",
+        "western_hall",
+        "western_ridge",
+        "zone05_exit",
+        "zone06_exit_rise"
+      ],
+      "destroyedSupportIds": [
+        "curve_support_1",
+        "curve_support_2",
+        "curve_support_3",
+        "curve_support_4",
+        "curve_support_5",
+        "curve_support_6",
+        "double_wall_support_connector",
+        "double_wall_support_entry",
+        "double_wall_support_exit",
+        "double_wall_support_lower_hall",
+        "double_wall_support_one_left",
+        "double_wall_support_one_right",
+        "double_wall_support_two_left",
+        "double_wall_support_two_right",
+        "grapple_support_apex",
+        "grapple_support_high",
+        "grapple_support_launch",
+        "grapple_support_turn",
+        "internal_support_drop",
+        "internal_support_entry",
+        "internal_support_exit",
+        "internal_support_lower_a",
+        "internal_support_lower_b",
+        "internal_support_return",
+        "support_east_a",
+        "support_east_b",
+        "support_exit",
+        "support_mid_a",
+        "support_mid_b",
+        "support_west_a",
+        "support_west_b"
+      ],
+      "grapple": {
+        "active": false,
+        "anchorId": null,
+        "ropeLength": 902.310657662194,
+        "attachedFrames": 0,
+        "cooldown": 0,
+        "lastAnchorId": "grapple_anchor_three",
+        "usedAnchorIds": [
+          "grapple_anchor_one",
+          "grapple_anchor_two",
+          "grapple_anchor_three"
+        ]
+      },
+      "boulderCatchCount": 0,
+      "debrisCount": 0,
+      "camera": {
+        "x": 21481.09450894985,
+        "y": 6519.009305918198,
+        "zoom": 0.9954647226697999
+      },
+      "progress": {
+        "zone01Reached": true,
+        "firstDropped": false,
+        "firstClimb": false,
+        "secondDropped": false,
+        "secondClimb": false,
+        "completed": false,
+        "zone03Entered": false,
+        "lowerRiseReached": false,
+        "atriumReached": false,
+        "upperGalleryReached": false,
+        "longDescentReached": false,
+        "pass04Completed": false,
+        "zone04Entered": false,
+        "lowTunnelReached": false,
+        "platformBoarded": false,
+        "movingPlatformCrossed": false,
+        "unevenTunnelReached": false,
+        "pass05Completed": false,
+        "zone05Entered": false,
+        "lowerHallReached": false,
+        "highGalleryReached": false,
+        "pass06Completed": false,
+        "zone06Entered": false,
+        "curveCommitted": false,
+        "zone06Dropped": false,
+        "eastDashGapCleared": false,
+        "middleDashGapCleared": false,
+        "westDashGapCleared": false,
+        "pass07Completed": true,
+        "chaseTriggered": false,
+        "boulderStarted": true,
+        "boulderEnteredCurve": true,
+        "boulderRoundedApex": true,
+        "boulderFinished": false,
+        "chaseEscaped": true,
+        "pass08Completed": true,
+        "zone07Entered": true,
+        "zone07UpperDrop": true,
+        "zone07MiddleReturn": true,
+        "zone07MiddleDrop": true,
+        "zone07LowerRun": true,
+        "zone07ExitReached": true,
+        "boulderAtInternalEntry": true,
+        "internalStructureBreached": true,
+        "pass09Completed": true,
+        "zone08Entered": true,
+        "zone08ShaftOneDropped": true,
+        "zone08ShaftOneCleared": true,
+        "zone08ShaftTwoDropped": true,
+        "zone08ShaftTwoCleared": true,
+        "zone08LowerHallReached": true,
+        "zone08ExitReached": true,
+        "pass10Completed": true,
+        "zone09Entered": true,
+        "grappleAnchorOneUsed": true,
+        "grappleAnchorTwoUsed": true,
+        "grappleAnchorThreeUsed": true,
+        "grappleChainCompleted": true,
+        "zone09ExitReached": true,
+        "pass11Completed": true,
+        "chaseWallJumps": 0,
+        "floorsCollapsed": 51,
+        "supportsDestroyed": 31,
+        "internalDirectionChanges": 0,
+        "dashGapClears": 0,
+        "directionChanges": 0,
+        "breakablesDestroyed": 0,
+        "platformRides": 0,
+        "groundJumps": 0,
+        "wallJumps": 0,
+        "ledgeAssists": 0,
+        "dashes": 0,
+        "grappleAttaches": 3,
+        "grappleReleases": 3,
+        "grappleUniqueAnchors": 3
+      },
+      "keys": [],
+      "blueprintVisible": false,
+      "resetCount": 0,
+      "frameCount": 1036
+    }
+  },
+  "routeSamples": [
+    {
+      "frame": 75,
+      "x": 23595.7,
+      "y": 5852,
+      "vx": 0.7,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.879
+    },
+    {
+      "frame": 77,
+      "x": 23599.3,
+      "y": 5852,
+      "vx": 2.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.879
+    },
+    {
+      "frame": 79,
+      "x": 23605.8,
+      "y": 5852,
+      "vx": 3.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.879
+    },
+    {
+      "frame": 82,
+      "x": 23620.5,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.88
+    },
+    {
+      "frame": 85,
+      "x": 23636.6,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.88
+    },
+    {
+      "frame": 87,
+      "x": 23647.3,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.88
+    },
+    {
+      "frame": 90,
+      "x": 23663.3,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.88
+    },
+    {
+      "frame": 92,
+      "x": 23674,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.881
+    },
+    {
+      "frame": 94,
+      "x": 23684.7,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.881
+    },
+    {
+      "frame": 96,
+      "x": 23695.4,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.881
+    },
+    {
+      "frame": 100,
+      "x": 23716.8,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.882
+    },
+    {
+      "frame": 102,
+      "x": 23727.5,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.882
+    },
+    {
+      "frame": 105,
+      "x": 23743.6,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.882
+    },
+    {
+      "frame": 107,
+      "x": 23754.3,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.882
+    },
+    {
+      "frame": 109,
+      "x": 23765,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.883
+    },
+    {
+      "frame": 111,
+      "x": 23775.7,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.883
+    },
+    {
+      "frame": 113,
+      "x": 23786.4,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.883
+    },
+    {
+      "frame": 116,
+      "x": 23802.4,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.883
+    },
+    {
+      "frame": 118,
+      "x": 23813.1,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.883
+    },
+    {
+      "frame": 120,
+      "x": 23823.8,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.884
+    },
+    {
+      "frame": 123,
+      "x": 23839.9,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.884
+    },
+    {
+      "frame": 125,
+      "x": 23850.6,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.884
+    },
+    {
+      "frame": 127,
+      "x": 23861.3,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.884
+    },
+    {
+      "frame": 130,
+      "x": 23877.3,
+      "y": 5852,
+      "vx": 5.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 0,
+      "boulderProgress": 0.885
+    },
+    {
+      "frame": 132,
+      "x": 23888.4,
+      "y": 5852,
+      "vx": 5.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 2,
+      "usedAnchors": 1,
+      "boulderProgress": 0.885
+    },
+    {
+      "frame": 134,
+      "x": 23900.2,
+      "y": 5852,
+      "vx": 5.9,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 4,
+      "usedAnchors": 1,
+      "boulderProgress": 0.885
+    },
+    {
+      "frame": 136,
+      "x": 23912.5,
+      "y": 5852,
+      "vx": 6.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 6,
+      "usedAnchors": 1,
+      "boulderProgress": 0.885
+    },
+    {
+      "frame": 139,
+      "x": 23932.1,
+      "y": 5852,
+      "vx": 6.7,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 9,
+      "usedAnchors": 1,
+      "boulderProgress": 0.886
+    },
+    {
+      "frame": 141,
+      "x": 23946,
+      "y": 5852,
+      "vx": 7,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 11,
+      "usedAnchors": 1,
+      "boulderProgress": 0.886
+    },
+    {
+      "frame": 143,
+      "x": 23960.6,
+      "y": 5852,
+      "vx": 7.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 13,
+      "usedAnchors": 1,
+      "boulderProgress": 0.886
+    },
+    {
+      "frame": 145,
+      "x": 23975.8,
+      "y": 5852,
+      "vx": 7.7,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 15,
+      "usedAnchors": 1,
+      "boulderProgress": 0.886
+    },
+    {
+      "frame": 148,
+      "x": 23999.8,
+      "y": 5852,
+      "vx": 8.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 18,
+      "usedAnchors": 1,
+      "boulderProgress": 0.887
+    },
+    {
+      "frame": 150,
+      "x": 24016.8,
+      "y": 5852,
+      "vx": 8.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 20,
+      "usedAnchors": 1,
+      "boulderProgress": 0.887
+    },
+    {
+      "frame": 152,
+      "x": 24034.5,
+      "y": 5852,
+      "vx": 8.9,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 22,
+      "usedAnchors": 1,
+      "boulderProgress": 0.887
+    },
+    {
+      "frame": 154,
+      "x": 24052.9,
+      "y": 5852,
+      "vx": 9.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 24,
+      "usedAnchors": 1,
+      "boulderProgress": 0.887
+    },
+    {
+      "frame": 157,
+      "x": 24082,
+      "y": 5852,
+      "vx": 9.9,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 27,
+      "usedAnchors": 1,
+      "boulderProgress": 0.888
+    },
+    {
+      "frame": 159,
+      "x": 24102.5,
+      "y": 5852,
+      "vx": 10.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 29,
+      "usedAnchors": 1,
+      "boulderProgress": 0.888
+    },
+    {
+      "frame": 162,
+      "x": 24134.9,
+      "y": 5852,
+      "vx": 11,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 32,
+      "usedAnchors": 1,
+      "boulderProgress": 0.888
+    },
+    {
+      "frame": 164,
+      "x": 24157.6,
+      "y": 5852,
+      "vx": 11.5,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_one",
+      "attachedFrames": 34,
+      "usedAnchors": 1,
+      "boulderProgress": 0.888
+    },
+    {
+      "frame": 166,
+      "x": 24184.4,
+      "y": 5848.7,
+      "vx": 13.4,
+      "vy": -1.4,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 1,
+      "boulderProgress": 0.889
+    },
+    {
+      "frame": 169,
+      "x": 24224.7,
+      "y": 5847.3,
+      "vx": 13.4,
+      "vy": 0,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 1,
+      "boulderProgress": 0.889
+    },
+    {
+      "frame": 171,
+      "x": 24251.6,
+      "y": 5848.9,
+      "vx": 13.4,
+      "vy": 1,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 1,
+      "boulderProgress": 0.889
+    },
+    {
+      "frame": 173,
+      "x": 24276.5,
+      "y": 5851.7,
+      "vx": 11.5,
+      "vy": 1.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_two",
+      "attachedFrames": 1,
+      "usedAnchors": 2,
+      "boulderProgress": 0.889
+    },
+    {
+      "frame": 175,
+      "x": 24288.8,
+      "y": 5850.7,
+      "vx": 6.1,
+      "vy": -0.2,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 2,
+      "boulderProgress": 0.89
+    },
+    {
+      "frame": 178,
+      "x": 24306.4,
+      "y": 5853,
+      "vx": 5.8,
+      "vy": 1.2,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 2,
+      "boulderProgress": 0.89
+    },
+    {
+      "frame": 180,
+      "x": 24317.6,
+      "y": 5857,
+      "vx": 5.5,
+      "vy": 2.2,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 2,
+      "boulderProgress": 0.89
+    },
+    {
+      "frame": 182,
+      "x": 24325.8,
+      "y": 5863.8,
+      "vx": 2.8,
+      "vy": 4.1,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 1,
+      "usedAnchors": 3,
+      "boulderProgress": 0.89
+    },
+    {
+      "frame": 185,
+      "x": 24332.5,
+      "y": 5874.6,
+      "vx": 1.9,
+      "vy": 3.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 4,
+      "usedAnchors": 3,
+      "boulderProgress": 0.891
+    },
+    {
+      "frame": 187,
+      "x": 24335.5,
+      "y": 5880.6,
+      "vx": 1.4,
+      "vy": 2.9,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 6,
+      "usedAnchors": 3,
+      "boulderProgress": 0.891
+    },
+    {
+      "frame": 189,
+      "x": 24337.3,
+      "y": 5885.6,
+      "vx": 0.8,
+      "vy": 2.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 8,
+      "usedAnchors": 3,
+      "boulderProgress": 0.891
+    },
+    {
+      "frame": 191,
+      "x": 24338.1,
+      "y": 5889.6,
+      "vx": 0.2,
+      "vy": 1.9,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 10,
+      "usedAnchors": 3,
+      "boulderProgress": 0.891
+    },
+    {
+      "frame": 193,
+      "x": 24337.7,
+      "y": 5892.7,
+      "vx": -0.3,
+      "vy": 1.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 12,
+      "usedAnchors": 3,
+      "boulderProgress": 0.892
+    },
+    {
+      "frame": 195,
+      "x": 24336.1,
+      "y": 5894.7,
+      "vx": -0.9,
+      "vy": 0.9,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 14,
+      "usedAnchors": 3,
+      "boulderProgress": 0.892
+    },
+    {
+      "frame": 197,
+      "x": 24333.5,
+      "y": 5895.8,
+      "vx": -1.5,
+      "vy": 0.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 16,
+      "usedAnchors": 3,
+      "boulderProgress": 0.892
+    },
+    {
+      "frame": 199,
+      "x": 24329.7,
+      "y": 5895.9,
+      "vx": -2,
+      "vy": -0.1,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 18,
+      "usedAnchors": 3,
+      "boulderProgress": 0.892
+    },
+    {
+      "frame": 201,
+      "x": 24324.8,
+      "y": 5895,
+      "vx": -2.6,
+      "vy": -0.6,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 20,
+      "usedAnchors": 3,
+      "boulderProgress": 0.893
+    },
+    {
+      "frame": 203,
+      "x": 24318.8,
+      "y": 5893.1,
+      "vx": -3.2,
+      "vy": -1.1,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 22,
+      "usedAnchors": 3,
+      "boulderProgress": 0.893
+    },
+    {
+      "frame": 205,
+      "x": 24311.6,
+      "y": 5890.2,
+      "vx": -3.7,
+      "vy": -1.6,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 24,
+      "usedAnchors": 3,
+      "boulderProgress": 0.893
+    },
+    {
+      "frame": 208,
+      "x": 24298.7,
+      "y": 5884.1,
+      "vx": -4.6,
+      "vy": -2.3,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 27,
+      "usedAnchors": 3,
+      "boulderProgress": 0.893
+    },
+    {
+      "frame": 210,
+      "x": 24288.6,
+      "y": 5878.8,
+      "vx": -5.2,
+      "vy": -2.8,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 29,
+      "usedAnchors": 3,
+      "boulderProgress": 0.893
+    },
+    {
+      "frame": 212,
+      "x": 24277.4,
+      "y": 5872.6,
+      "vx": -5.8,
+      "vy": -3.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 31,
+      "usedAnchors": 3,
+      "boulderProgress": 0.894
+    },
+    {
+      "frame": 214,
+      "x": 24264.9,
+      "y": 5865.5,
+      "vx": -6.4,
+      "vy": -3.7,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 33,
+      "usedAnchors": 3,
+      "boulderProgress": 0.894
+    },
+    {
+      "frame": 216,
+      "x": 24251.1,
+      "y": 5857.4,
+      "vx": -7,
+      "vy": -4.1,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 35,
+      "usedAnchors": 3,
+      "boulderProgress": 0.894
+    },
+    {
+      "frame": 218,
+      "x": 24236.1,
+      "y": 5848.5,
+      "vx": -7.7,
+      "vy": -4.6,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 37,
+      "usedAnchors": 3,
+      "boulderProgress": 0.894
+    },
+    {
+      "frame": 220,
+      "x": 24219.8,
+      "y": 5838.7,
+      "vx": -8.3,
+      "vy": -5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 39,
+      "usedAnchors": 3,
+      "boulderProgress": 0.895
+    },
+    {
+      "frame": 222,
+      "x": 24202.1,
+      "y": 5828.1,
+      "vx": -9,
+      "vy": -5.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 41,
+      "usedAnchors": 3,
+      "boulderProgress": 0.895
+    },
+    {
+      "frame": 224,
+      "x": 24183,
+      "y": 5816.8,
+      "vx": -9.7,
+      "vy": -5.8,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 43,
+      "usedAnchors": 3,
+      "boulderProgress": 0.895
+    },
+    {
+      "frame": 226,
+      "x": 24162.6,
+      "y": 5804.6,
+      "vx": -10.4,
+      "vy": -6.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 45,
+      "usedAnchors": 3,
+      "boulderProgress": 0.895
+    },
+    {
+      "frame": 228,
+      "x": 24140.6,
+      "y": 5791.7,
+      "vx": -11.1,
+      "vy": -6.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 47,
+      "usedAnchors": 3,
+      "boulderProgress": 0.895
+    },
+    {
+      "frame": 230,
+      "x": 24117.6,
+      "y": 5778.2,
+      "vx": -11.5,
+      "vy": -6.9,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 49,
+      "usedAnchors": 3,
+      "boulderProgress": 0.896
+    },
+    {
+      "frame": 232,
+      "x": 24094.6,
+      "y": 5764,
+      "vx": -11.5,
+      "vy": -7.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 51,
+      "usedAnchors": 3,
+      "boulderProgress": 0.896
+    },
+    {
+      "frame": 234,
+      "x": 24071.6,
+      "y": 5749.3,
+      "vx": -11.5,
+      "vy": -7.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 53,
+      "usedAnchors": 3,
+      "boulderProgress": 0.896
+    },
+    {
+      "frame": 237,
+      "x": 24037.1,
+      "y": 5726.2,
+      "vx": -11.5,
+      "vy": -7.8,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 56,
+      "usedAnchors": 3,
+      "boulderProgress": 0.896
+    },
+    {
+      "frame": 239,
+      "x": 24014.1,
+      "y": 5710.2,
+      "vx": -11.5,
+      "vy": -8,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 58,
+      "usedAnchors": 3,
+      "boulderProgress": 0.897
+    },
+    {
+      "frame": 241,
+      "x": 23991.1,
+      "y": 5693.9,
+      "vx": -11.5,
+      "vy": -8.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 60,
+      "usedAnchors": 3,
+      "boulderProgress": 0.897
+    },
+    {
+      "frame": 243,
+      "x": 23968.1,
+      "y": 5677.3,
+      "vx": -11.5,
+      "vy": -8.3,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 62,
+      "usedAnchors": 3,
+      "boulderProgress": 0.897
+    },
+    {
+      "frame": 245,
+      "x": 23945.1,
+      "y": 5660.5,
+      "vx": -11.5,
+      "vy": -8.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 64,
+      "usedAnchors": 3,
+      "boulderProgress": 0.897
+    },
+    {
+      "frame": 247,
+      "x": 23922.1,
+      "y": 5643.5,
+      "vx": -11.5,
+      "vy": -8.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 66,
+      "usedAnchors": 3,
+      "boulderProgress": 0.898
+    },
+    {
+      "frame": 250,
+      "x": 23887.6,
+      "y": 5617.7,
+      "vx": -11.5,
+      "vy": -8.6,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 69,
+      "usedAnchors": 3,
+      "boulderProgress": 0.898
+    },
+    {
+      "frame": 252,
+      "x": 23864.6,
+      "y": 5600.6,
+      "vx": -11.5,
+      "vy": -8.6,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 71,
+      "usedAnchors": 3,
+      "boulderProgress": 0.898
+    },
+    {
+      "frame": 254,
+      "x": 23841.6,
+      "y": 5583.4,
+      "vx": -11.5,
+      "vy": -8.6,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 73,
+      "usedAnchors": 3,
+      "boulderProgress": 0.898
+    },
+    {
+      "frame": 257,
+      "x": 23807.1,
+      "y": 5558,
+      "vx": -11.5,
+      "vy": -8.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 76,
+      "usedAnchors": 3,
+      "boulderProgress": 0.899
+    },
+    {
+      "frame": 259,
+      "x": 23784.1,
+      "y": 5541.2,
+      "vx": -11.5,
+      "vy": -8.3,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 78,
+      "usedAnchors": 3,
+      "boulderProgress": 0.899
+    },
+    {
+      "frame": 261,
+      "x": 23761.1,
+      "y": 5524.8,
+      "vx": -11.5,
+      "vy": -8.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 80,
+      "usedAnchors": 3,
+      "boulderProgress": 0.899
+    },
+    {
+      "frame": 264,
+      "x": 23726.6,
+      "y": 5500.8,
+      "vx": -11.5,
+      "vy": -7.9,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 83,
+      "usedAnchors": 3,
+      "boulderProgress": 0.899
+    },
+    {
+      "frame": 266,
+      "x": 23703.6,
+      "y": 5485.3,
+      "vx": -11.5,
+      "vy": -7.7,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 85,
+      "usedAnchors": 3,
+      "boulderProgress": 0.9
+    },
+    {
+      "frame": 268,
+      "x": 23680.3,
+      "y": 5479,
+      "vx": -11.5,
+      "vy": -1.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 87,
+      "usedAnchors": 3,
+      "boulderProgress": 0.9
+    },
+    {
+      "frame": 271,
+      "x": 23645.8,
+      "y": 5476,
+      "vx": -11.5,
+      "vy": -0.8,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 90,
+      "usedAnchors": 3,
+      "boulderProgress": 0.9
+    },
+    {
+      "frame": 273,
+      "x": 23622.8,
+      "y": 5474.9,
+      "vx": -11.5,
+      "vy": -0.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 92,
+      "usedAnchors": 3,
+      "boulderProgress": 0.9
+    },
+    {
+      "frame": 275,
+      "x": 23599.8,
+      "y": 5474.3,
+      "vx": -11.5,
+      "vy": -0.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 94,
+      "usedAnchors": 3,
+      "boulderProgress": 0.901
+    },
+    {
+      "frame": 277,
+      "x": 23576.8,
+      "y": 5474.6,
+      "vx": -11.5,
+      "vy": 0.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 96,
+      "usedAnchors": 3,
+      "boulderProgress": 0.901
+    },
+    {
+      "frame": 280,
+      "x": 23542.3,
+      "y": 5476.3,
+      "vx": -11.5,
+      "vy": 0.8,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 99,
+      "usedAnchors": 3,
+      "boulderProgress": 0.901
+    },
+    {
+      "frame": 282,
+      "x": 23519.3,
+      "y": 5478.6,
+      "vx": -11.5,
+      "vy": 1.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 101,
+      "usedAnchors": 3,
+      "boulderProgress": 0.901
+    },
+    {
+      "frame": 284,
+      "x": 23496.3,
+      "y": 5481.7,
+      "vx": -11.5,
+      "vy": 1.7,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 103,
+      "usedAnchors": 3,
+      "boulderProgress": 0.902
+    },
+    {
+      "frame": 286,
+      "x": 23473.3,
+      "y": 5485.9,
+      "vx": -11.5,
+      "vy": 2.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 105,
+      "usedAnchors": 3,
+      "boulderProgress": 0.902
+    },
+    {
+      "frame": 288,
+      "x": 23450.3,
+      "y": 5491,
+      "vx": -11.5,
+      "vy": 2.7,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 107,
+      "usedAnchors": 3,
+      "boulderProgress": 0.902
+    },
+    {
+      "frame": 291,
+      "x": 23415.8,
+      "y": 5500.7,
+      "vx": -11.5,
+      "vy": 3.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 110,
+      "usedAnchors": 3,
+      "boulderProgress": 0.902
+    },
+    {
+      "frame": 293,
+      "x": 23392.8,
+      "y": 5508.6,
+      "vx": -11.5,
+      "vy": 4.1,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 112,
+      "usedAnchors": 3,
+      "boulderProgress": 0.903
+    },
+    {
+      "frame": 295,
+      "x": 23369.8,
+      "y": 5517.8,
+      "vx": -11.5,
+      "vy": 4.7,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 114,
+      "usedAnchors": 3,
+      "boulderProgress": 0.903
+    },
+    {
+      "frame": 298,
+      "x": 23335.3,
+      "y": 5533.8,
+      "vx": -11.5,
+      "vy": 5.7,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 117,
+      "usedAnchors": 3,
+      "boulderProgress": 0.903
+    },
+    {
+      "frame": 300,
+      "x": 23312.3,
+      "y": 5546.2,
+      "vx": -11.5,
+      "vy": 6.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 119,
+      "usedAnchors": 3,
+      "boulderProgress": 0.903
+    },
+    {
+      "frame": 302,
+      "x": 23289.3,
+      "y": 5560,
+      "vx": -11.5,
+      "vy": 7.1,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 121,
+      "usedAnchors": 3,
+      "boulderProgress": 0.904
+    },
+    {
+      "frame": 305,
+      "x": 23254.8,
+      "y": 5583.5,
+      "vx": -11.5,
+      "vy": 8.2,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 124,
+      "usedAnchors": 3,
+      "boulderProgress": 0.904
+    },
+    {
+      "frame": 307,
+      "x": 23231.8,
+      "y": 5601,
+      "vx": -11.5,
+      "vy": 9,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 126,
+      "usedAnchors": 3,
+      "boulderProgress": 0.904
+    },
+    {
+      "frame": 309,
+      "x": 23208.8,
+      "y": 5620.2,
+      "vx": -11.5,
+      "vy": 9.8,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 128,
+      "usedAnchors": 3,
+      "boulderProgress": 0.904
+    },
+    {
+      "frame": 312,
+      "x": 23174.3,
+      "y": 5652.2,
+      "vx": -11.5,
+      "vy": 11.1,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 131,
+      "usedAnchors": 3,
+      "boulderProgress": 0.905
+    },
+    {
+      "frame": 314,
+      "x": 23151.3,
+      "y": 5675.7,
+      "vx": -11.5,
+      "vy": 12,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 133,
+      "usedAnchors": 3,
+      "boulderProgress": 0.905
+    },
+    {
+      "frame": 317,
+      "x": 23116.8,
+      "y": 5714.5,
+      "vx": -11.5,
+      "vy": 13.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 136,
+      "usedAnchors": 3,
+      "boulderProgress": 0.905
+    },
+    {
+      "frame": 319,
+      "x": 23093.8,
+      "y": 5742.8,
+      "vx": -11.5,
+      "vy": 14.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 138,
+      "usedAnchors": 3,
+      "boulderProgress": 0.905
+    },
+    {
+      "frame": 321,
+      "x": 23070.8,
+      "y": 5773.1,
+      "vx": -11.5,
+      "vy": 15.4,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 140,
+      "usedAnchors": 3,
+      "boulderProgress": 0.906
+    },
+    {
+      "frame": 324,
+      "x": 23036.3,
+      "y": 5819.6,
+      "vx": -11.5,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 143,
+      "usedAnchors": 3,
+      "boulderProgress": 0.906
+    },
+    {
+      "frame": 326,
+      "x": 23013.3,
+      "y": 5850.6,
+      "vx": -11.5,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 145,
+      "usedAnchors": 3,
+      "boulderProgress": 0.906
+    },
+    {
+      "frame": 328,
+      "x": 22990.3,
+      "y": 5881.6,
+      "vx": -11.5,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 147,
+      "usedAnchors": 3,
+      "boulderProgress": 0.906
+    },
+    {
+      "frame": 331,
+      "x": 22955.8,
+      "y": 5928.1,
+      "vx": -11.5,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 150,
+      "usedAnchors": 3,
+      "boulderProgress": 0.907
+    },
+    {
+      "frame": 333,
+      "x": 22932.8,
+      "y": 5959.1,
+      "vx": -11.5,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 152,
+      "usedAnchors": 3,
+      "boulderProgress": 0.907
+    },
+    {
+      "frame": 335,
+      "x": 22909.8,
+      "y": 5990.1,
+      "vx": -11.5,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": true,
+      "anchorId": "grapple_anchor_three",
+      "attachedFrames": 154,
+      "usedAnchors": 3,
+      "boulderProgress": 0.907
+    },
+    {
+      "frame": 338,
+      "x": 22869.5,
+      "y": 5989.4,
+      "vx": -13.4,
+      "vy": 0.3,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.907
+    },
+    {
+      "frame": 340,
+      "x": 22842.7,
+      "y": 5991.4,
+      "vx": -13.4,
+      "vy": 1.2,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.908
+    },
+    {
+      "frame": 342,
+      "x": 22815.8,
+      "y": 5995.4,
+      "vx": -13.4,
+      "vy": 2.2,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.908
+    },
+    {
+      "frame": 345,
+      "x": 22775.5,
+      "y": 6005,
+      "vx": -13.4,
+      "vy": 3.7,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.908
+    },
+    {
+      "frame": 347,
+      "x": 22749.1,
+      "y": 6013.9,
+      "vx": -13.1,
+      "vy": 4.7,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.908
+    },
+    {
+      "frame": 349,
+      "x": 22723.2,
+      "y": 6024.7,
+      "vx": -12.8,
+      "vy": 5.7,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.909
+    },
+    {
+      "frame": 352,
+      "x": 22685.5,
+      "y": 6044.6,
+      "vx": -12.4,
+      "vy": 7.1,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.909
+    },
+    {
+      "frame": 355,
+      "x": 22648.7,
+      "y": 6056.4,
+      "vx": -12.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.909
+    },
+    {
+      "frame": 358,
+      "x": 22611.6,
+      "y": 6064.5,
+      "vx": -12.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.91
+    },
+    {
+      "frame": 360,
+      "x": 22587.5,
+      "y": 6069.8,
+      "vx": -11.7,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.91
+    },
+    {
+      "frame": 363,
+      "x": 22556.9,
+      "y": 6076.5,
+      "vx": -9.5,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.91
+    },
+    {
+      "frame": 366,
+      "x": 22532.7,
+      "y": 6081.8,
+      "vx": -7.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.91
+    },
+    {
+      "frame": 368,
+      "x": 22520.1,
+      "y": 6084.5,
+      "vx": -5.9,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.911
+    },
+    {
+      "frame": 371,
+      "x": 22504.1,
+      "y": 6088,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.911
+    },
+    {
+      "frame": 373,
+      "x": 22493.4,
+      "y": 6090.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.911
+    },
+    {
+      "frame": 375,
+      "x": 22482.7,
+      "y": 6092.7,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.911
+    },
+    {
+      "frame": 378,
+      "x": 22466.6,
+      "y": 6096.2,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.912
+    },
+    {
+      "frame": 380,
+      "x": 22455.9,
+      "y": 6098.5,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.912
+    },
+    {
+      "frame": 383,
+      "x": 22439.9,
+      "y": 6102.1,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.912
+    },
+    {
+      "frame": 385,
+      "x": 22429.2,
+      "y": 6104.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.913
+    },
+    {
+      "frame": 388,
+      "x": 22413.1,
+      "y": 6107.9,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.913
+    },
+    {
+      "frame": 391,
+      "x": 22397.1,
+      "y": 6111.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.913
+    },
+    {
+      "frame": 393,
+      "x": 22386.4,
+      "y": 6113.8,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.913
+    },
+    {
+      "frame": 397,
+      "x": 22365,
+      "y": 6118.4,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.914
+    },
+    {
+      "frame": 400,
+      "x": 22348.9,
+      "y": 6122,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.914
+    },
+    {
+      "frame": 403,
+      "x": 22332.9,
+      "y": 6125,
+      "vx": -5.3,
+      "vy": 0.7,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.915
+    },
+    {
+      "frame": 407,
+      "x": 22315.7,
+      "y": 6134.5,
+      "vx": -3.7,
+      "vy": 3.4,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.915
+    },
+    {
+      "frame": 410,
+      "x": 22307.2,
+      "y": 6148.8,
+      "vx": -2.4,
+      "vy": 5.4,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.915
+    },
+    {
+      "frame": 413,
+      "x": 22302.5,
+      "y": 6169.2,
+      "vx": -1.2,
+      "vy": 7.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.916
+    },
+    {
+      "frame": 416,
+      "x": 22301.6,
+      "y": 6195.7,
+      "vx": 0.1,
+      "vy": 9.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.916
+    },
+    {
+      "frame": 419,
+      "x": 22304.4,
+      "y": 6228.3,
+      "vx": 1.4,
+      "vy": 11.6,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.916
+    },
+    {
+      "frame": 422,
+      "x": 22311,
+      "y": 6267.1,
+      "vx": 2.6,
+      "vy": 13.6,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.917
+    },
+    {
+      "frame": 425,
+      "x": 22321.4,
+      "y": 6311.8,
+      "vx": 3.9,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.917
+    },
+    {
+      "frame": 427,
+      "x": 22330.5,
+      "y": 6342.8,
+      "vx": 4.7,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.917
+    },
+    {
+      "frame": 431,
+      "x": 22351.7,
+      "y": 6404.8,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.918
+    },
+    {
+      "frame": 434,
+      "x": 22367.7,
+      "y": 6451.3,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.918
+    },
+    {
+      "frame": 437,
+      "x": 22383.8,
+      "y": 6497.8,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.918
+    },
+    {
+      "frame": 440,
+      "x": 22399.8,
+      "y": 6544.3,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.919
+    },
+    {
+      "frame": 443,
+      "x": 22415.9,
+      "y": 6590.8,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.919
+    },
+    {
+      "frame": 446,
+      "x": 22431.9,
+      "y": 6637.3,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.919
+    },
+    {
+      "frame": 449,
+      "x": 22448,
+      "y": 6683.8,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.92
+    },
+    {
+      "frame": 452,
+      "x": 22464,
+      "y": 6730.3,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.92
+    },
+    {
+      "frame": 455,
+      "x": 22480.1,
+      "y": 6776.8,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.92
+    },
+    {
+      "frame": 459,
+      "x": 22501.5,
+      "y": 6838.8,
+      "vx": 5.4,
+      "vy": 15.5,
+      "grounded": false,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.921
+    },
+    {
+      "frame": 461,
+      "x": 22511.5,
+      "y": 6852,
+      "vx": 4.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.921
+    },
+    {
+      "frame": 463,
+      "x": 22518.6,
+      "y": 6852,
+      "vx": 3.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.921
+    },
+    {
+      "frame": 466,
+      "x": 22523.8,
+      "y": 6852,
+      "vx": 1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.921
+    },
+    {
+      "frame": 469,
+      "x": 22522.6,
+      "y": 6852,
+      "vx": -1.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.922
+    },
+    {
+      "frame": 472,
+      "x": 22514.9,
+      "y": 6852,
+      "vx": -3.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.922
+    },
+    {
+      "frame": 475,
+      "x": 22500.8,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.922
+    },
+    {
+      "frame": 478,
+      "x": 22484.7,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 481,
+      "x": 22468.7,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 483,
+      "x": 22458,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 486,
+      "x": 22441.9,
+      "y": 6852,
+      "vx": -5.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 489,
+      "x": 22429.2,
+      "y": 6852,
+      "vx": -3.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 492,
+      "x": 22423.1,
+      "y": 6852,
+      "vx": -1.5,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 496,
+      "x": 22419.6,
+      "y": 6852,
+      "vx": -0.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 499,
+      "x": 22417.1,
+      "y": 6852,
+      "vx": -0.9,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 503,
+      "x": 22415.1,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 506,
+      "x": 22413.1,
+      "y": 6852,
+      "vx": -0.8,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 510,
+      "x": 22411.4,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 514,
+      "x": 22410.7,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 517,
+      "x": 22410.5,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 521,
+      "x": 22410.5,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 525,
+      "x": 22409.3,
+      "y": 6852,
+      "vx": -0.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 529,
+      "x": 22408,
+      "y": 6852,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 532,
+      "x": 22407.6,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 536,
+      "x": 22407.4,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 540,
+      "x": 22407.4,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 544,
+      "x": 22407.4,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 547,
+      "x": 22407.4,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 551,
+      "x": 22405.7,
+      "y": 6852,
+      "vx": -0.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 555,
+      "x": 22404.7,
+      "y": 6852,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 559,
+      "x": 22404.4,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 563,
+      "x": 22404.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 566,
+      "x": 22404.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 570,
+      "x": 22403.6,
+      "y": 6852,
+      "vx": -0.7,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 574,
+      "x": 22402,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.923
+    },
+    {
+      "frame": 578,
+      "x": 22401.4,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.924
+    },
+    {
+      "frame": 581,
+      "x": 22401.2,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.924
+    },
+    {
+      "frame": 586,
+      "x": 22398.7,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.925
+    },
+    {
+      "frame": 589,
+      "x": 22398.2,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.925
+    },
+    {
+      "frame": 593,
+      "x": 22397.9,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.925
+    },
+    {
+      "frame": 597,
+      "x": 22397.9,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.926
+    },
+    {
+      "frame": 600,
+      "x": 22397.9,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.926
+    },
+    {
+      "frame": 604,
+      "x": 22397.9,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.927
+    },
+    {
+      "frame": 608,
+      "x": 22396.2,
+      "y": 6852,
+      "vx": -0.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.927
+    },
+    {
+      "frame": 612,
+      "x": 22395.2,
+      "y": 6852,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.928
+    },
+    {
+      "frame": 616,
+      "x": 22394.9,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.928
+    },
+    {
+      "frame": 620,
+      "x": 22394.8,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.928
+    },
+    {
+      "frame": 623,
+      "x": 22394.8,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.929
+    },
+    {
+      "frame": 627,
+      "x": 22394.8,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.929
+    },
+    {
+      "frame": 631,
+      "x": 22394.1,
+      "y": 6852,
+      "vx": -0.7,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.93
+    },
+    {
+      "frame": 635,
+      "x": 22392.5,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.93
+    },
+    {
+      "frame": 639,
+      "x": 22391.9,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.93
+    },
+    {
+      "frame": 642,
+      "x": 22391.7,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 646,
+      "x": 22391.7,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.931
+    },
+    {
+      "frame": 650,
+      "x": 22391.7,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.932
+    },
+    {
+      "frame": 654,
+      "x": 22391.7,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.932
+    },
+    {
+      "frame": 658,
+      "x": 22389.6,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.933
+    },
+    {
+      "frame": 662,
+      "x": 22388.9,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.933
+    },
+    {
+      "frame": 666,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.933
+    },
+    {
+      "frame": 669,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.934
+    },
+    {
+      "frame": 673,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.934
+    },
+    {
+      "frame": 677,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.935
+    },
+    {
+      "frame": 681,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.935
+    },
+    {
+      "frame": 685,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 689,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 693,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.936
+    },
+    {
+      "frame": 697,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.937
+    },
+    {
+      "frame": 700,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.937
+    },
+    {
+      "frame": 704,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 708,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 712,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.938
+    },
+    {
+      "frame": 716,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.939
+    },
+    {
+      "frame": 719,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.939
+    },
+    {
+      "frame": 723,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.94
+    },
+    {
+      "frame": 727,
+      "x": 22388.6,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.94
+    },
+    {
+      "frame": 731,
+      "x": 22386.5,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.941
+    },
+    {
+      "frame": 735,
+      "x": 22385.8,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.941
+    },
+    {
+      "frame": 738,
+      "x": 22385.5,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.941
+    },
+    {
+      "frame": 741,
+      "x": 22385.5,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 745,
+      "x": 22384.2,
+      "y": 6852,
+      "vx": -0.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.942
+    },
+    {
+      "frame": 749,
+      "x": 22382.9,
+      "y": 6852,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 753,
+      "x": 22382.5,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 757,
+      "x": 22382.4,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.943
+    },
+    {
+      "frame": 761,
+      "x": 22382.4,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.944
+    },
+    {
+      "frame": 765,
+      "x": 22381.1,
+      "y": 6852,
+      "vx": -0.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.944
+    },
+    {
+      "frame": 769,
+      "x": 22379.8,
+      "y": 6852,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 773,
+      "x": 22379.4,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 777,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 781,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 784,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 788,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 792,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 795,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 800,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 804,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 807,
+      "x": 22379.3,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 812,
+      "x": 22376.9,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 815,
+      "x": 22376.4,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 819,
+      "x": 22376.2,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.945
+    },
+    {
+      "frame": 823,
+      "x": 22376.2,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.946
+    },
+    {
+      "frame": 827,
+      "x": 22376.2,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.946
+    },
+    {
+      "frame": 831,
+      "x": 22376.2,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.947
+    },
+    {
+      "frame": 835,
+      "x": 22376.2,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.947
+    },
+    {
+      "frame": 839,
+      "x": 22374.4,
+      "y": 6852,
+      "vx": -0.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.947
+    },
+    {
+      "frame": 842,
+      "x": 22372.9,
+      "y": 6852,
+      "vx": -1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.948
+    },
+    {
+      "frame": 846,
+      "x": 22370.6,
+      "y": 6852,
+      "vx": -0.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.948
+    },
+    {
+      "frame": 850,
+      "x": 22369.8,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.949
+    },
+    {
+      "frame": 854,
+      "x": 22369.5,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.949
+    },
+    {
+      "frame": 858,
+      "x": 22369.5,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 862,
+      "x": 22367.5,
+      "y": 6852,
+      "vx": -0.3,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 866,
+      "x": 22366.7,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.95
+    },
+    {
+      "frame": 870,
+      "x": 22364.3,
+      "y": 6852,
+      "vx": -0.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.951
+    },
+    {
+      "frame": 874,
+      "x": 22363.4,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.951
+    },
+    {
+      "frame": 877,
+      "x": 22363.1,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.952
+    },
+    {
+      "frame": 881,
+      "x": 22363,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.952
+    },
+    {
+      "frame": 884,
+      "x": 22363,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.952
+    },
+    {
+      "frame": 888,
+      "x": 22363,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.953
+    },
+    {
+      "frame": 891,
+      "x": 22363,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.953
+    },
+    {
+      "frame": 894,
+      "x": 22361.7,
+      "y": 6852,
+      "vx": -0.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.954
+    },
+    {
+      "frame": 898,
+      "x": 22358.1,
+      "y": 6852,
+      "vx": -0.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.954
+    },
+    {
+      "frame": 902,
+      "x": 22356.7,
+      "y": 6852,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.954
+    },
+    {
+      "frame": 907,
+      "x": 22356.1,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.955
+    },
+    {
+      "frame": 911,
+      "x": 22356.1,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.955
+    },
+    {
+      "frame": 915,
+      "x": 22356.1,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.956
+    },
+    {
+      "frame": 919,
+      "x": 22356.1,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.956
+    },
+    {
+      "frame": 922,
+      "x": 22356.1,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.957
+    },
+    {
+      "frame": 926,
+      "x": 22356.1,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.957
+    },
+    {
+      "frame": 931,
+      "x": 22354.8,
+      "y": 6852,
+      "vx": -0.6,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 935,
+      "x": 22353.5,
+      "y": 6852,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 939,
+      "x": 22353.1,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.958
+    },
+    {
+      "frame": 942,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.959
+    },
+    {
+      "frame": 946,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.959
+    },
+    {
+      "frame": 950,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 954,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.96
+    },
+    {
+      "frame": 958,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 962,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 966,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.961
+    },
+    {
+      "frame": 970,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.962
+    },
+    {
+      "frame": 974,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.962
+    },
+    {
+      "frame": 978,
+      "x": 22353,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.963
+    },
+    {
+      "frame": 982,
+      "x": 22351.3,
+      "y": 6852,
+      "vx": -0.4,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.963
+    },
+    {
+      "frame": 986,
+      "x": 22350.3,
+      "y": 6852,
+      "vx": -0.2,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 990,
+      "x": 22349.9,
+      "y": 6852,
+      "vx": -0.1,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 994,
+      "x": 22349.9,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.964
+    },
+    {
+      "frame": 998,
+      "x": 22349.9,
+      "y": 6852,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "grappleActive": false,
+      "anchorId": null,
+      "attachedFrames": 0,
+      "usedAnchors": 3,
+      "boulderProgress": 0.965
+    }
+  ],
+  "deterministicChecks": {
+    "title": true,
+    "runtimeAudit": true,
+    "pass11Audit": true,
+    "completed": true,
+    "threeUniqueAnchors": true,
+    "threeAttaches": true,
+    "threeReleases": true,
+    "orderedAnchorFlags": true,
+    "exitReached": true,
+    "boulderCoveredRoute": true,
+    "boulderSealed": true,
+    "noReset": true,
+    "noBoulderCatch": true,
+    "keyboard": true,
+    "console": true
+  },
+  "passed": true,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "limitations": [
+    "The helper only places the player at the Pass 10 exit and configures prior completion state.",
+    "This focused run is not counted as a full start-to-exit traversal."
+  ]
+}

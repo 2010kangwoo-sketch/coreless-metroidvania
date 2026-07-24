@@ -1,31 +1,57 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>Coreless Metroidvania · v59-16</title>
-  <link rel="stylesheet" href="style.css?v=59_16pass16c">
+  <meta name="theme-color" content="#05080c">
+  <meta name="description" content="Coreless 초대형 단일 방 40차 완성 빌드">
+  <title>Coreless · Mega Room · Complete</title>
+  <link rel="stylesheet" href="style.css?v=rebuild-v2-pass40">
 </head>
-<body>
-  <h1>Coreless Metroidvania</h1>
-  <p class="info">A/D 이동·집게 가속 · Space 점프·집게 해제 · Shift/K 대시 · J 공격 · L 회복 · F2 검증</p>
-  <p id="loadStatus" class="load-status" aria-live="polite">v59-16 게임 불러오는 중…</p>
-  <canvas id="gameCanvas" width="900" height="520" tabindex="0" aria-label="Coreless Metroidvania 게임 화면"></canvas>
+<body class="is-loading">
+  <main class="game-shell">
+    <canvas
+      id="gameCanvas"
+      width="1200"
+      height="680"
+      tabindex="0"
+      aria-label="Coreless mega room complete playable build"
+      aria-busy="true"
+    ></canvas>
 
-  <script>window.__corelessGzip = "";</script>
-  <script src="src/pass16/final-part-01.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-02.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-03.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-04.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-05.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-06.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-07.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-08.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-09.js?v=59_16pass16c"></script>
-  <script src="src/pass16/final-part-10.js?v=59_16pass16c"></script>
-  <script src="src/main.js?v=59_16pass16c"></script>
+    <header class="build-panel" aria-live="polite">
+      <p class="eyebrow">CORELESS · REBUILD V2</p>
+      <h1>PASS 40 / COMPLETE MEGA ROOM</h1>
+      <div class="status-row">
+        <span id="buildStatus">BOOTING</span>
+        <span id="auditStatus">AUDIT PENDING</span>
+      </div>
+    </header>
+
+    <section id="loadingPanel" class="loading-panel" aria-live="polite">
+      <p class="loading-kicker">CORELESS</p>
+      <h2>초대형 방을 준비하고 있습니다</h2>
+      <p id="loadingProgress">그래픽 자산 확인 중 · 0/11</p>
+      <div class="loading-track" aria-hidden="true">
+        <span id="loadingBar"></span>
+      </div>
+      <p class="loading-note">완료되면 자동으로 시작됩니다.</p>
+    </section>
+
+    <p class="control-hint">A/D MOVE · SPACE JUMP · SHIFT DASH · E GRAPPLE · F ATTACK · R RESET · B BLUEPRINT</p>
+  </main>
+
+  <noscript>JavaScript is required to run Coreless.</noscript>
+  <script>
+    const showBootFailure = () => {
+      const panel = document.getElementById("loadingPanel");
+      const progress = document.getElementById("loadingProgress");
+      if (panel) panel.dataset.state = "error";
+      if (progress) progress.textContent = "실행 준비에 실패했습니다. 페이지를 새로고침해 주세요.";
+    };
+    window.addEventListener("error", showBootFailure);
+    window.addEventListener("unhandledrejection", showBootFailure);
+  </script>
+  <script type="module" src="src/v2/main.js?v=rebuild-v2-pass40"></script>
 </body>
 </html>

@@ -1,0 +1,175 @@
+{
+  "version": "rebuild-v2-pass40-release",
+  "passed": true,
+  "checks": {
+    "releasePlan": true,
+    "elevenAssetGroups": true,
+    "sixtyUniqueAssets": true,
+    "allAssetsExist": true,
+    "allAssetsWebp": true,
+    "allDeclarationsWebp": true,
+    "allAssetDimensions": true,
+    "alphaCutoutsPreserved": true,
+    "exactRuntimeBytes": true,
+    "runtimeBudget": true,
+    "directEntryTitle": true,
+    "canvasPresent": true,
+    "loadingSurfacePresent": true,
+    "visibleFailureHandler": true,
+    "pass40ModuleEntry": true,
+    "responsiveCanvas": true,
+    "loadingReleaseCss": true,
+    "reducedMotion": true,
+    "pass40Workflow": true,
+    "collisionFilesUnchanged": true,
+    "sourceEvidenceExcludedFromRuntime": true,
+    "postReleasePolishDeferred": true
+  },
+  "measurements": {
+    "assetGroups": 11,
+    "declaredAssetReferences": 76,
+    "uniqueRuntimeAssets": 60,
+    "originalRuntimeAssetBytes": 73116142,
+    "optimizedRuntimeAssetBytes": 16009222,
+    "originalRuntimeAssetMiB": 69.7289867401123,
+    "optimizedRuntimeAssetMiB": 15.267583847045898,
+    "reductionRatio": 0.781043945125004,
+    "changedCollisionFiles": []
+  },
+  "validation": {
+    "passed": true,
+    "passedCount": 32,
+    "total": 32,
+    "reductionRatio": 0.781043945125004,
+    "checks": [
+      {
+        "id": "plan_id",
+        "passed": true
+      },
+      {
+        "id": "baseline_sha",
+        "passed": true
+      },
+      {
+        "id": "scope_explicit",
+        "passed": true
+      },
+      {
+        "id": "forty_passes_complete",
+        "passed": true
+      },
+      {
+        "id": "direct_entry_declared",
+        "passed": true
+      },
+      {
+        "id": "hosted_entry_declared",
+        "passed": true
+      },
+      {
+        "id": "auto_start",
+        "passed": true
+      },
+      {
+        "id": "canvas_auto_focus",
+        "passed": true
+      },
+      {
+        "id": "responsive_canvas",
+        "passed": true
+      },
+      {
+        "id": "loading_surface",
+        "passed": true
+      },
+      {
+        "id": "visible_boot_failure",
+        "passed": true
+      },
+      {
+        "id": "no_external_runtime_dependencies",
+        "passed": true
+      },
+      {
+        "id": "eleven_asset_groups",
+        "passed": true
+      },
+      {
+        "id": "sixty_runtime_assets",
+        "passed": true
+      },
+      {
+        "id": "webp_runtime_format",
+        "passed": true
+      },
+      {
+        "id": "runtime_asset_budget",
+        "passed": true
+      },
+      {
+        "id": "runtime_asset_reduction",
+        "passed": true
+      },
+      {
+        "id": "seven_required_inputs",
+        "passed": true
+      },
+      {
+        "id": "required_inputs_unique",
+        "passed": true
+      },
+      {
+        "id": "six_required_dom_ids",
+        "passed": true
+      },
+      {
+        "id": "required_dom_ids_unique",
+        "passed": true
+      },
+      {
+        "id": "deployment_core_included",
+        "passed": true
+      },
+      {
+        "id": "deployment_evidence_excluded",
+        "passed": true
+      },
+      {
+        "id": "git_metadata_excluded",
+        "passed": true
+      },
+      {
+        "id": "zero_collision_changes",
+        "passed": true
+      },
+      {
+        "id": "zero_gameplay_changes",
+        "passed": true
+      },
+      {
+        "id": "zero_visual_style_changes",
+        "passed": true
+      },
+      {
+        "id": "polish_deferred",
+        "passed": true
+      },
+      {
+        "id": "polish_after_release",
+        "passed": true
+      },
+      {
+        "id": "three_polish_operations",
+        "passed": true
+      },
+      {
+        "id": "optimized_smaller_than_original",
+        "passed": true
+      },
+      {
+        "id": "budget_below_sixteen_mib",
+        "passed": true
+      }
+    ]
+  }
+}
