@@ -36,7 +36,8 @@ import { PASS35_CAMERA_SAMPLES, PASS35_CURVE_ASSETS, PASS35_CURVE_PLAN, PASS35_C
 import { PASS36_CAMERA_SAMPLES, PASS36_INTERNAL_ASSETS, PASS36_INTERNAL_PLAN, PASS36_INTERNAL_PLACEMENTS, PASS36_INTERNAL_SCENES, PASS36_WALL_FACES, loadPass36InternalAssets, validatePass36InternalChaseArt } from "./pass36-internal-chase-art.js";
 import { PASS37_CAMERA_SAMPLES, PASS37_GRAPPLE_ASSETS, PASS37_GRAPPLE_PLAN, PASS37_GRAPPLE_PLACEMENTS, PASS37_GRAPPLE_SCENES, loadPass37GrappleAssets, validatePass37GrappleDashArt } from "./pass37-grapple-dash-art.js";
 import { PASS38_CAMERA_SAMPLES, PASS38_PRECISION_ASSETS, PASS38_PRECISION_PLAN, PASS38_PRECISION_PLACEMENTS, PASS38_PRECISION_SCENES, loadPass38PrecisionAssets, validatePass38PrecisionCurveArt } from "./pass38-precision-curve-art.js";
-import { Pass38Runtime } from "./runtime.js";
+import { PASS39_BRIDGE_ASSETS, PASS39_BRIDGE_PLAN, PASS39_BRIDGE_PLACEMENTS, PASS39_BRIDGE_SCENES, PASS39_CAMERA_SAMPLES, loadPass39BridgeAssets, validatePass39BridgeAftershockArt } from "./pass39-bridge-aftershock-art.js";
+import { Pass39Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
@@ -46,11 +47,11 @@ if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets(), loadPass33TunnelAssets(), loadPass34DestructionAssets(), loadPass35CurveAssets(), loadPass36InternalAssets(), loadPass37GrappleAssets(), loadPass38PrecisionAssets()]);
-const runtime = new Pass38Runtime(canvas, {
+const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState, pass39AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets(), loadPass33TunnelAssets(), loadPass34DestructionAssets(), loadPass35CurveAssets(), loadPass36InternalAssets(), loadPass37GrappleAssets(), loadPass38PrecisionAssets(), loadPass39BridgeAssets()]);
+const runtime = new Pass39Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
-}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState);
+}, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState, pass39AssetState);
 
 runtime.start();
 
@@ -274,6 +275,15 @@ window.__corelessV2 = Object.freeze({
     cameraSamples: PASS38_CAMERA_SAMPLES,
     assetState: pass38AssetState,
     validate: validatePass38PrecisionCurveArt,
+  }),
+  pass39: Object.freeze({
+    plan: PASS39_BRIDGE_PLAN,
+    assets: PASS39_BRIDGE_ASSETS,
+    scenes: PASS39_BRIDGE_SCENES,
+    placements: PASS39_BRIDGE_PLACEMENTS,
+    cameraSamples: PASS39_CAMERA_SAMPLES,
+    assetState: pass39AssetState,
+    validate: validatePass39BridgeAftershockArt,
   }),
   runtime,
   audit: () => runtime.audit(),
