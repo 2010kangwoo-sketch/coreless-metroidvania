@@ -4,11 +4,11 @@ const freezeList = items => Object.freeze(items.map(item => Object.freeze(item))
 
 export const PASS32_BURIED_ASSETS = freezeList([
   { id: "buried_far", src: "assets/v2/pass32/buried-far.webp", type: "image/webp", layer: "far_background", alpha: false, expectedWidth: 1672, expectedHeight: 941, provenance: "pass32_new" },
-  { id: "crown_atrium", src: "assets/v2/pass32/crown-atrium.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1448, expectedHeight: 988, provenance: "pass32_new" },
-  { id: "eastern_gallery", src: "assets/v2/pass32/eastern-gallery.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1711, expectedHeight: 662, provenance: "pass32_new" },
-  { id: "foreground_ruins", src: "assets/v2/pass32/foreground-ruins.png", type: "image/png", layer: "foreground", alpha: true, expectedWidth: 1884, expectedHeight: 738, provenance: "pass32_new" },
-  { id: "entrance_arch", src: "assets/v2/pass31/entrance-arch.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1150, expectedHeight: 1244, provenance: "pass31_shared" },
-  { id: "route_stone", src: "assets/v2/pass31/route-stone.png", type: "image/png", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
+  { id: "crown_atrium", src: "assets/v2/pass32/crown-atrium.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1448, expectedHeight: 988, provenance: "pass32_new" },
+  { id: "eastern_gallery", src: "assets/v2/pass32/eastern-gallery.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1711, expectedHeight: 662, provenance: "pass32_new" },
+  { id: "foreground_ruins", src: "assets/v2/pass32/foreground-ruins.webp", type: "image/webp", layer: "foreground", alpha: true, expectedWidth: 1884, expectedHeight: 738, provenance: "pass32_new" },
+  { id: "entrance_arch", src: "assets/v2/pass31/entrance-arch.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1150, expectedHeight: 1244, provenance: "pass31_shared" },
+  { id: "route_stone", src: "assets/v2/pass31/route-stone.webp", type: "image/webp", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
 ]);
 
 export const PASS32_BURIED_SCENES = freezeList([
@@ -149,7 +149,7 @@ export function validatePass32BuriedRiseArt() {
     { id: "five_alpha_assets", passed: PASS32_BURIED_ASSETS.filter(asset => asset.alpha).length === 5 },
     { id: "route_surface_shared", passed: PASS32_BURIED_ASSETS.find(asset => asset.id === plan.playableSurfaceAssetId)?.provenance === "pass31_shared" },
     { id: "entrance_arch_shared", passed: PASS32_BURIED_ASSETS.find(asset => asset.id === "entrance_arch")?.provenance === "pass31_shared" },
-    { id: "runtime_formats", passed: PASS32_BURIED_ASSETS.every(asset => asset.type === "image/png" || asset.type === "image/webp") },
+    { id: "runtime_formats", passed: PASS32_BURIED_ASSETS.every(asset => asset.type === "image/webp" || asset.type === "image/webp") },
     { id: "dimensions_positive", passed: PASS32_BURIED_ASSETS.every(asset => asset.expectedWidth >= 480 && asset.expectedHeight >= 200) },
     { id: "scene_ranges_touch", passed: PASS32_BURIED_SCENES.every((scene, index) => index === 0 || scene.activationBounds.minX - PASS32_BURIED_SCENES[index - 1].activationBounds.maxX < 0.01) },
     { id: "route_bounds_overlap", passed: PASS32_BURIED_SCENES.every((scene, index) => index === 0 || PASS32_BURIED_SCENES[index - 1].routeBounds.x + PASS32_BURIED_SCENES[index - 1].routeBounds.width >= scene.routeBounds.x) },

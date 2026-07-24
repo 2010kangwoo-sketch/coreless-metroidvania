@@ -4,13 +4,13 @@ const freezeList = items => Object.freeze(items.map(item => Object.freeze(item))
 
 export const PASS38_PRECISION_ASSETS = freezeList([
   { id: "precision_curve_far", src: "assets/v2/pass38/precision-curve-far.webp", type: "image/webp", layer: "far_background", alpha: false, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new" },
-  { id: "precision_entry", src: "assets/v2/pass38/precision-entry.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.0903 },
-  { id: "precision_return", src: "assets/v2/pass38/precision-return.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.2598 },
-  { id: "curve_upper", src: "assets/v2/pass38/curve-upper.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.7129 },
-  { id: "curve_drop", src: "assets/v2/pass38/curve-drop.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.4503 },
-  { id: "curve_lower", src: "assets/v2/pass38/curve-lower.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.3460 },
-  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.png", type: "image/png", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
-  { id: "route_stone", src: "assets/v2/pass31/route-stone.png", type: "image/png", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
+  { id: "precision_entry", src: "assets/v2/pass38/precision-entry.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.0903 },
+  { id: "precision_return", src: "assets/v2/pass38/precision-return.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.2598 },
+  { id: "curve_upper", src: "assets/v2/pass38/curve-upper.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.7129 },
+  { id: "curve_drop", src: "assets/v2/pass38/curve-drop.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.4503 },
+  { id: "curve_lower", src: "assets/v2/pass38/curve-lower.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass38_new", bottomEdgeCoverage: 0.3460 },
+  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.webp", type: "image/webp", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
+  { id: "route_stone", src: "assets/v2/pass31/route-stone.webp", type: "image/webp", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
 ]);
 
 export const PASS38_PRECISION_SCENES = freezeList([

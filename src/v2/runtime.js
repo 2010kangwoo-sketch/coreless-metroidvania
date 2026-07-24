@@ -50,6 +50,7 @@ import { PASS36_INTERNAL_ASSETS, PASS36_INTERNAL_PLAN, PASS36_INTERNAL_PLACEMENT
 import { PASS37_GRAPPLE_ASSETS, PASS37_GRAPPLE_PLAN, PASS37_GRAPPLE_PLACEMENTS, PASS37_GRAPPLE_SCENES, getPass37ActiveScene, getPass37SceneBlend, getPass37ScreenPlacement, validatePass37GrappleDashArt } from "./pass37-grapple-dash-art.js";
 import { PASS38_PRECISION_ASSETS, PASS38_PRECISION_PLAN, PASS38_PRECISION_PLACEMENTS, PASS38_PRECISION_SCENES, getPass38ActiveScene, getPass38SceneBlend, getPass38ScreenPlacement, validatePass38PrecisionCurveArt } from "./pass38-precision-curve-art.js";
 import { PASS39_BRIDGE_ASSETS, PASS39_BRIDGE_PLAN, PASS39_BRIDGE_PLACEMENTS, PASS39_BRIDGE_SCENES, getPass39ActiveScene, getPass39SceneBlend, getPass39ScreenPlacement, validatePass39BridgeAftershockArt } from "./pass39-bridge-aftershock-art.js";
+import { PASS40_RELEASE_PLAN, validatePass40Release } from "./pass40-release.js";
 
 const CONTROL_CODES = new Set(["KeyA", "KeyB", "KeyD", "KeyE", "KeyF", "Space", "ShiftLeft", "ShiftRight", "KeyR"]);
 const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
@@ -57,7 +58,7 @@ const approach = (value, target, amount) => value < target
   ? Math.min(value + amount, target)
   : Math.max(value - amount, target);
 
-export class Pass39Runtime {
+export class Pass40Runtime {
   constructor(canvas, statusElements, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState, pass39AssetState) {
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
@@ -5566,10 +5567,10 @@ export class Pass39Runtime {
       ctx.strokeRect(sceneTopLeft.x, sceneTopLeft.y, (scene.routeBounds.width / WORLD.width) * frame.width, (scene.routeBounds.height / WORLD.height) * frame.height);
     }
     ctx.fillStyle = "#eff5f3";
-    ctx.fillText("PASS 39 / COLLAPSING BRIDGE + AFTERSHOCK DEPTH", 42, 52);
+    ctx.fillText("PASS 40 / FULL INTEGRATION + DIRECT-ENTRY RELEASE", 42, 52);
     ctx.fillStyle = "#a8bcc0";
     ctx.font = "700 10px Arial, sans-serif";
-    ctx.fillText(`${PASS39_BRIDGE_PLAN.sceneCount} BRIDGE + AFTERSHOCK SCENES · PARALLAX ${PASS39_BRIDGE_PLAN.parallaxRatios.far.toFixed(2)}–${PASS39_BRIDGE_PLAN.parallaxRatios.foreground.toFixed(2)} · SUPPORTS CONTINUE BELOW VIEW`, 42, 72);
+    ctx.fillText(`40 PASSES · ${PASS40_RELEASE_PLAN.runtimeAssetFiles} WEBP ASSETS · ${(PASS40_RELEASE_PLAN.optimizedRuntimeAssetBytes / 1048576).toFixed(2)} MiB · DIRECT ENTRY READY`, 42, 72);
   }
 
   getDebugState() {
@@ -5705,10 +5706,37 @@ export class Pass39Runtime {
     const pass37 = validatePass37GrappleDashArt();
     const pass38 = validatePass38PrecisionCurveArt();
     const pass39 = validatePass39BridgeAftershockArt();
+    const pass40 = validatePass40Release();
     const scriptSources = Array.from(document.scripts).map(script => script.getAttribute("src") ?? "");
+    const runtimeAssets = [
+      ...PASS28_RASTER_ASSETS,
+      ...PASS29_MODULE_ASSETS,
+      ...PASS31_ENTRANCE_ASSETS,
+      ...PASS32_BURIED_ASSETS,
+      ...PASS33_TUNNEL_ASSETS,
+      ...PASS34_DESTRUCTION_ASSETS,
+      ...PASS35_CURVE_ASSETS,
+      ...PASS36_INTERNAL_ASSETS,
+      ...PASS37_GRAPPLE_ASSETS,
+      ...PASS38_PRECISION_ASSETS,
+      ...PASS39_BRIDGE_ASSETS,
+    ];
+    const assetGroups = [
+      [this.pass28AssetState, PASS28_RASTER_ASSETS.length],
+      [this.pass29AssetState, PASS29_MODULE_ASSETS.length],
+      [this.pass31AssetState, PASS31_ENTRANCE_ASSETS.length],
+      [this.pass32AssetState, PASS32_BURIED_ASSETS.length],
+      [this.pass33AssetState, PASS33_TUNNEL_ASSETS.length],
+      [this.pass34AssetState, PASS34_DESTRUCTION_ASSETS.length],
+      [this.pass35AssetState, PASS35_CURVE_ASSETS.length],
+      [this.pass36AssetState, PASS36_INTERNAL_ASSETS.length],
+      [this.pass37AssetState, PASS37_GRAPPLE_ASSETS.length],
+      [this.pass38AssetState, PASS38_PRECISION_ASSETS.length],
+      [this.pass39AssetState, PASS39_BRIDGE_ASSETS.length],
+    ];
     const checks = [
-      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass39" },
-      { id: "pass_number", passed: BUILD.pass === 39 },
+      { id: "build_id", passed: BUILD.id === "rebuild-v2-pass40" },
+      { id: "pass_number", passed: BUILD.pass === 40 },
       { id: "canvas", passed: this.canvas.width === VIEWPORT.width && this.canvas.height === VIEWPORT.height },
       { id: "canvas_context", passed: Boolean(this.context) },
       { id: "stage_sequence", passed: STAGE_SEQUENCE.length === 10 },
@@ -5795,6 +5823,14 @@ export class Pass39Runtime {
       { id: "pass39_asset_dimensions", passed: this.pass39AssetState?.dimensionsValid === true },
       { id: "pass39_six_scene_scope", passed: PASS39_BRIDGE_PLAN.scope === "collapsing_bridge_finale_and_aftershock_precision_only" },
       { id: "pass39_zero_collision_changes", passed: PASS39_BRIDGE_PLAN.collisionChanges === 0 },
+      { id: "pass40_release_validation", passed: pass40.passed },
+      { id: "pass40_all_asset_groups_ready", passed: assetGroups.every(([state, expected]) => state?.loadedCount === expected && state?.failedCount === 0 && state?.dimensionsValid === true) },
+      { id: "pass40_runtime_assets_webp", passed: runtimeAssets.every(asset => asset.src.endsWith(".webp") && asset.type === PASS40_RELEASE_PLAN.runtimeAssetFormat) },
+      { id: "pass40_document_ready", passed: document.documentElement.dataset.corelessReady === "true" },
+      { id: "pass40_canvas_ready", passed: this.canvas.getAttribute("aria-busy") === "false" },
+      { id: "pass40_loading_surface_released", passed: !document.body.classList.contains("is-loading") && document.getElementById("loadingPanel")?.dataset.state === "ready" },
+      { id: "pass40_canvas_autofocus", passed: document.activeElement === this.canvas },
+      { id: "pass40_zero_gameplay_changes", passed: PASS40_RELEASE_PLAN.gameplayChanges === 0 && PASS40_RELEASE_PLAN.collisionChanges === 0 },
       { id: "player_dimensions", passed: PLAYER_PHYSICS.width === 34 && PLAYER_PHYSICS.height === 48 },
       { id: "debug_state", passed: Boolean(this.getDebugState().player) },
     ];
@@ -5842,6 +5878,7 @@ export class Pass39Runtime {
       pass37,
       pass38,
       pass39,
+      pass40,
       pass28Assets: Object.freeze({
         loadedCount: this.pass28AssetState?.loadedCount ?? 0,
         failedCount: this.pass28AssetState?.failedCount ?? PASS28_RASTER_ASSETS.length,
@@ -5909,8 +5946,8 @@ export class Pass39Runtime {
 
   updateStatus() {
     const audit = this.audit();
-    this.statusElements.build.textContent = "PASS 39 · COLLAPSING BRIDGE + AFTERSHOCK DEPTH";
-    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P39 ${audit.pass39.passedCount}/${audit.pass39.total}`;
+    this.statusElements.build.textContent = "PASS 40 · COMPLETE MEGA ROOM · SITE READY";
+    this.statusElements.audit.textContent = `AUDIT ${audit.passedCount}/${audit.total} · P40 ${audit.pass40.passedCount}/${audit.pass40.total}`;
     this.statusElements.audit.dataset.state = audit.passed ? "pass" : "fail";
   }
 }

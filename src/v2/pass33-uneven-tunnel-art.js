@@ -4,11 +4,11 @@ const freezeList = items => Object.freeze(items.map(item => Object.freeze(item))
 
 export const PASS33_TUNNEL_ASSETS = freezeList([
   { id: "tunnel_far", src: "assets/v2/pass33/tunnel-far.webp", type: "image/webp", layer: "far_background", alpha: false, expectedWidth: 1586, expectedHeight: 992, provenance: "pass33_new" },
-  { id: "compression_vault", src: "assets/v2/pass33/compression-vault.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1923, expectedHeight: 818, provenance: "pass33_new" },
-  { id: "shaft_frame", src: "assets/v2/pass33/shaft-frame.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1024, expectedHeight: 1536, provenance: "pass33_new", bottomEdgeCoverage: 0.3427 },
-  { id: "uneven_gallery", src: "assets/v2/pass33/uneven-gallery.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1690, expectedHeight: 931, provenance: "pass33_new", bottomEdgeCoverage: 0.3313 },
-  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.png", type: "image/png", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_new" },
-  { id: "route_stone", src: "assets/v2/pass31/route-stone.png", type: "image/png", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
+  { id: "compression_vault", src: "assets/v2/pass33/compression-vault.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1923, expectedHeight: 818, provenance: "pass33_new" },
+  { id: "shaft_frame", src: "assets/v2/pass33/shaft-frame.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1024, expectedHeight: 1536, provenance: "pass33_new", bottomEdgeCoverage: 0.3427 },
+  { id: "uneven_gallery", src: "assets/v2/pass33/uneven-gallery.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1690, expectedHeight: 931, provenance: "pass33_new", bottomEdgeCoverage: 0.3313 },
+  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.webp", type: "image/webp", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_new" },
+  { id: "route_stone", src: "assets/v2/pass31/route-stone.webp", type: "image/webp", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
 ]);
 
 export const PASS33_TUNNEL_SCENES = freezeList([
@@ -179,7 +179,7 @@ export function validatePass33UnevenTunnelArt() {
     { id: "surface_asset_shared", passed: PASS33_TUNNEL_ASSETS.find(item => item.id === plan.playableSurfaceAssetId)?.provenance === "pass31_shared" },
     { id: "far_assets_opaque", passed: PASS33_TUNNEL_ASSETS.filter(item => item.layer === "far_background").every(item => item.alpha === false) },
     { id: "cutouts_have_alpha", passed: PASS33_TUNNEL_ASSETS.filter(item => ["midground", "foreground"].includes(item.layer)).every(item => item.alpha === true) },
-    { id: "source_types_supported", passed: PASS33_TUNNEL_ASSETS.every(item => ["image/png", "image/webp"].includes(item.type)) },
+    { id: "source_types_supported", passed: PASS33_TUNNEL_ASSETS.every(item => ["image/webp", "image/webp"].includes(item.type)) },
     { id: "dimensions_declared", passed: PASS33_TUNNEL_ASSETS.every(item => item.expectedWidth > 0 && item.expectedHeight > 0) },
     { id: "player_safety_contract", passed: plan.renderContract.playerSafetyRect.width >= 100 && plan.renderContract.playerSafetyRect.height >= 120 },
     { id: "measured_region_contract", passed: plan.renderContract.measuredPixelRegion.width === VIEWPORT.width },

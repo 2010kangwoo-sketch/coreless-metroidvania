@@ -4,13 +4,13 @@ const freezeList = items => Object.freeze(items.map(item => Object.freeze(item))
 
 export const PASS37_GRAPPLE_ASSETS = freezeList([
   { id: "grapple_far", src: "assets/v2/pass37/grapple-far.webp", type: "image/webp", layer: "far_background", alpha: false, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new" },
-  { id: "grapple_nave", src: "assets/v2/pass37/grapple-nave.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new", bottomEdgeCoverage: 0.5730 },
-  { id: "grapple_exit", src: "assets/v2/pass37/grapple-exit.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new", bottomEdgeCoverage: 0.1549 },
-  { id: "dash_spike", src: "assets/v2/pass37/dash-spike.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new", bottomEdgeCoverage: 0.5981 },
-  { id: "dash_exit", src: "assets/v2/pass37/dash-exit.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new", bottomEdgeCoverage: 0.2309 },
-  { id: "grapple_anchor", src: "assets/v2/pass37/grapple-anchor.png", type: "image/png", layer: "gameplay_sprite", alpha: true, expectedWidth: 1024, expectedHeight: 1536, provenance: "pass37_new" },
-  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.png", type: "image/png", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
-  { id: "route_stone", src: "assets/v2/pass31/route-stone.png", type: "image/png", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
+  { id: "grapple_nave", src: "assets/v2/pass37/grapple-nave.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new", bottomEdgeCoverage: 0.5730 },
+  { id: "grapple_exit", src: "assets/v2/pass37/grapple-exit.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new", bottomEdgeCoverage: 0.1549 },
+  { id: "dash_spike", src: "assets/v2/pass37/dash-spike.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new", bottomEdgeCoverage: 0.5981 },
+  { id: "dash_exit", src: "assets/v2/pass37/dash-exit.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass37_new", bottomEdgeCoverage: 0.2309 },
+  { id: "grapple_anchor", src: "assets/v2/pass37/grapple-anchor.webp", type: "image/webp", layer: "gameplay_sprite", alpha: true, expectedWidth: 1024, expectedHeight: 1536, provenance: "pass37_new" },
+  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.webp", type: "image/webp", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
+  { id: "route_stone", src: "assets/v2/pass31/route-stone.webp", type: "image/webp", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
 ]);
 
 export const PASS37_GRAPPLE_SCENES = freezeList([

@@ -37,23 +37,59 @@ import { PASS36_CAMERA_SAMPLES, PASS36_INTERNAL_ASSETS, PASS36_INTERNAL_PLAN, PA
 import { PASS37_CAMERA_SAMPLES, PASS37_GRAPPLE_ASSETS, PASS37_GRAPPLE_PLAN, PASS37_GRAPPLE_PLACEMENTS, PASS37_GRAPPLE_SCENES, loadPass37GrappleAssets, validatePass37GrappleDashArt } from "./pass37-grapple-dash-art.js";
 import { PASS38_CAMERA_SAMPLES, PASS38_PRECISION_ASSETS, PASS38_PRECISION_PLAN, PASS38_PRECISION_PLACEMENTS, PASS38_PRECISION_SCENES, loadPass38PrecisionAssets, validatePass38PrecisionCurveArt } from "./pass38-precision-curve-art.js";
 import { PASS39_BRIDGE_ASSETS, PASS39_BRIDGE_PLAN, PASS39_BRIDGE_PLACEMENTS, PASS39_BRIDGE_SCENES, PASS39_CAMERA_SAMPLES, loadPass39BridgeAssets, validatePass39BridgeAftershockArt } from "./pass39-bridge-aftershock-art.js";
-import { Pass39Runtime } from "./runtime.js";
+import { PASS40_RELEASE_PLAN, validatePass40Release } from "./pass40-release.js";
+import { Pass40Runtime } from "./runtime.js";
 
 const canvas = document.getElementById("gameCanvas");
 const buildStatus = document.getElementById("buildStatus");
 const auditStatus = document.getElementById("auditStatus");
+const loadingPanel = document.getElementById("loadingPanel");
+const loadingProgress = document.getElementById("loadingProgress");
+const loadingBar = document.getElementById("loadingBar");
 
 if (!(canvas instanceof HTMLCanvasElement)) {
   throw new Error("Coreless V2 could not find #gameCanvas.");
 }
 
-const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState, pass39AssetState] = await Promise.all([loadPass28RasterAssets(), loadPass29ModuleAssets(), loadPass31EntranceAssets(), loadPass32BuriedAssets(), loadPass33TunnelAssets(), loadPass34DestructionAssets(), loadPass35CurveAssets(), loadPass36InternalAssets(), loadPass37GrappleAssets(), loadPass38PrecisionAssets(), loadPass39BridgeAssets()]);
-const runtime = new Pass39Runtime(canvas, {
+document.documentElement.dataset.corelessReady = "false";
+
+const assetLoaders = Object.freeze([
+  ["FOUNDATION", loadPass28RasterAssets],
+  ["MODULES", loadPass29ModuleAssets],
+  ["ENTRANCE", loadPass31EntranceAssets],
+  ["BURIED RISE", loadPass32BuriedAssets],
+  ["TUNNEL", loadPass33TunnelAssets],
+  ["DESTRUCTION", loadPass34DestructionAssets],
+  ["GIANT CURVE", loadPass35CurveAssets],
+  ["INTERNAL CHASE", loadPass36InternalAssets],
+  ["GRAPPLE + DASH", loadPass37GrappleAssets],
+  ["PRECISION CURVE", loadPass38PrecisionAssets],
+  ["BRIDGE + AFTERSHOCK", loadPass39BridgeAssets],
+]);
+
+let completedAssetGroups = 0;
+const assetStates = await Promise.all(assetLoaders.map(async ([label, load]) => {
+  const state = await load();
+  completedAssetGroups += 1;
+  const ratio = completedAssetGroups / assetLoaders.length;
+  if (loadingProgress) loadingProgress.textContent = `${label} 준비 완료 · ${completedAssetGroups}/${assetLoaders.length}`;
+  if (loadingBar) loadingBar.style.width = `${Math.round(ratio * 100)}%`;
+  return state;
+}));
+
+const [pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState, pass39AssetState] = assetStates;
+const runtime = new Pass40Runtime(canvas, {
   build: buildStatus,
   audit: auditStatus,
 }, pass28AssetState, pass29AssetState, pass31AssetState, pass32AssetState, pass33AssetState, pass34AssetState, pass35AssetState, pass36AssetState, pass37AssetState, pass38AssetState, pass39AssetState);
 
 runtime.start();
+canvas.setAttribute("aria-busy", "false");
+document.documentElement.dataset.corelessReady = "true";
+document.body.classList.remove("is-loading");
+if (loadingPanel) loadingPanel.dataset.state = "ready";
+if (loadingProgress) loadingProgress.textContent = "준비 완료";
+if (loadingBar) loadingBar.style.width = "100%";
 
 requestAnimationFrame(() => {
   runtime.updateStatus();
@@ -284,6 +320,10 @@ window.__corelessV2 = Object.freeze({
     cameraSamples: PASS39_CAMERA_SAMPLES,
     assetState: pass39AssetState,
     validate: validatePass39BridgeAftershockArt,
+  }),
+  pass40: Object.freeze({
+    release: PASS40_RELEASE_PLAN,
+    validate: validatePass40Release,
   }),
   runtime,
   audit: () => runtime.audit(),

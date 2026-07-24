@@ -4,15 +4,15 @@ const freezeList = items => Object.freeze(items.map(item => Object.freeze(item))
 
 export const PASS35_CURVE_ASSETS = freezeList([
   { id: "dash_far", src: "assets/v2/pass35/dash-far.webp", type: "image/webp", layer: "far_background", alpha: false, expectedWidth: 1672, expectedHeight: 941, provenance: "pass35_new" },
-  { id: "curve_chamber", src: "assets/v2/pass35/curve-chamber.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1402, expectedHeight: 1122, provenance: "pass35_new", bottomEdgeCoverage: 0.5094 },
-  { id: "east_dash_vault", src: "assets/v2/pass35/east-dash-vault.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1691, expectedHeight: 930, provenance: "pass35_new", bottomEdgeCoverage: 0.425 },
-  { id: "middle_dash_vault", src: "assets/v2/pass35/middle-dash-vault.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1719, expectedHeight: 915, provenance: "pass35_new", bottomEdgeCoverage: 0.4137 },
-  { id: "west_dash_vault", src: "assets/v2/pass35/west-dash-vault.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1693, expectedHeight: 929, provenance: "pass35_new", bottomEdgeCoverage: 0.4086 },
-  { id: "wave_gallery", src: "assets/v2/pass35/wave-gallery.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1693, expectedHeight: 929, provenance: "pass35_new", bottomEdgeCoverage: 0.6141 },
-  { id: "exit_vault", src: "assets/v2/pass35/exit-vault.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1694, expectedHeight: 928, provenance: "pass35_new", bottomEdgeCoverage: 0.4184 },
-  { id: "dash_gap_ends", src: "assets/v2/pass35/dash-gap-ends.png", type: "image/png", layer: "interactive_structure", alpha: true, expectedWidth: 1536, expectedHeight: 1024, provenance: "pass35_new" },
-  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.png", type: "image/png", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
-  { id: "route_stone", src: "assets/v2/pass31/route-stone.png", type: "image/png", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
+  { id: "curve_chamber", src: "assets/v2/pass35/curve-chamber.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1402, expectedHeight: 1122, provenance: "pass35_new", bottomEdgeCoverage: 0.5094 },
+  { id: "east_dash_vault", src: "assets/v2/pass35/east-dash-vault.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1691, expectedHeight: 930, provenance: "pass35_new", bottomEdgeCoverage: 0.425 },
+  { id: "middle_dash_vault", src: "assets/v2/pass35/middle-dash-vault.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1719, expectedHeight: 915, provenance: "pass35_new", bottomEdgeCoverage: 0.4137 },
+  { id: "west_dash_vault", src: "assets/v2/pass35/west-dash-vault.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1693, expectedHeight: 929, provenance: "pass35_new", bottomEdgeCoverage: 0.4086 },
+  { id: "wave_gallery", src: "assets/v2/pass35/wave-gallery.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1693, expectedHeight: 929, provenance: "pass35_new", bottomEdgeCoverage: 0.6141 },
+  { id: "exit_vault", src: "assets/v2/pass35/exit-vault.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1694, expectedHeight: 928, provenance: "pass35_new", bottomEdgeCoverage: 0.4184 },
+  { id: "dash_gap_ends", src: "assets/v2/pass35/dash-gap-ends.webp", type: "image/webp", layer: "interactive_structure", alpha: true, expectedWidth: 1536, expectedHeight: 1024, provenance: "pass35_new" },
+  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.webp", type: "image/webp", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
+  { id: "route_stone", src: "assets/v2/pass31/route-stone.webp", type: "image/webp", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
 ]);
 
 export const PASS35_CURVE_SCENES = freezeList([

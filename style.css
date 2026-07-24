@@ -46,6 +46,7 @@ canvas {
   outline: none;
   background: #071016;
   box-shadow: 0 24px 90px rgba(0, 0, 0, 0.58);
+  transition: filter 280ms ease, opacity 280ms ease;
 }
 
 canvas:focus {
@@ -53,6 +54,10 @@ canvas:focus {
   box-shadow:
     0 24px 90px rgba(0, 0, 0, 0.58),
     0 0 0 2px rgba(167, 230, 230, 0.16);
+}
+
+.is-loading canvas {
+  filter: brightness(0.35) saturate(0.65);
 }
 
 .build-panel {
@@ -66,6 +71,85 @@ canvas:focus {
   border-radius: 8px;
   background: rgba(3, 9, 13, 0.96);
   pointer-events: none;
+}
+
+.loading-panel {
+  position: absolute;
+  z-index: 30;
+  top: 50%;
+  left: 50%;
+  width: min(430px, calc(100% - 56px));
+  padding: 24px 26px;
+  border: 1px solid rgba(151, 195, 205, 0.38);
+  border-radius: 10px;
+  background:
+    linear-gradient(145deg, rgba(11, 27, 33, 0.97), rgba(3, 8, 12, 0.98)),
+    #05090d;
+  box-shadow: 0 24px 90px rgba(0, 0, 0, 0.72);
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: opacity 260ms ease, visibility 260ms ease;
+}
+
+html[data-coreless-ready="true"] .loading-panel {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.loading-kicker {
+  margin: 0 0 7px;
+  color: #9bc7cf;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.22em;
+}
+
+.loading-panel h2 {
+  margin: 0;
+  color: #edf6f3;
+  font-size: clamp(20px, 2.3vw, 28px);
+  letter-spacing: -0.02em;
+}
+
+#loadingProgress,
+.loading-note {
+  margin: 13px 0 0;
+  color: #b8c9cd;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.loading-note {
+  margin-top: 9px;
+  color: #7f969c;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.loading-track {
+  height: 5px;
+  margin-top: 15px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(151, 195, 205, 0.13);
+}
+
+#loadingBar {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #719fa5, #d8bf78);
+  box-shadow: 0 0 18px rgba(216, 191, 120, 0.3);
+  transition: width 180ms ease;
+}
+
+.loading-panel[data-state="error"] {
+  border-color: rgba(255, 155, 155, 0.64);
+}
+
+.loading-panel[data-state="error"] #loadingProgress {
+  color: #ffb1b1;
 }
 
 .eyebrow {
@@ -120,6 +204,14 @@ h1 {
   opacity: 0;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  canvas,
+  .loading-panel,
+  #loadingBar {
+    transition: none;
+  }
+}
+
 @media (max-width: 720px) {
   .game-shell {
     padding: 4px;
@@ -135,5 +227,10 @@ h1 {
   .control-hint {
     right: 14px;
     bottom: 12px;
+  }
+
+  .loading-panel {
+    width: min(390px, calc(100% - 28px));
+    padding: 19px 20px;
   }
 }

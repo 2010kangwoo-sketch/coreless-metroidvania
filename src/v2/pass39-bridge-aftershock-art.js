@@ -4,15 +4,15 @@ const freezeList = items => Object.freeze(items.map(item => Object.freeze(item))
 
 export const PASS39_BRIDGE_ASSETS = freezeList([
   { id: "bridge_aftershock_far", src: "assets/v2/pass39/bridge-aftershock-far.webp", type: "image/webp", layer: "far_background", alpha: false, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new" },
-  { id: "bridge_entry", src: "assets/v2/pass39/bridge-entry.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.2133 },
-  { id: "bridge_mid", src: "assets/v2/pass39/bridge-mid.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.3284 },
-  { id: "bridge_final", src: "assets/v2/pass39/bridge-final.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.5089 },
-  { id: "aftershock_entry", src: "assets/v2/pass39/aftershock-entry.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.25 },
-  { id: "aftershock_mid", src: "assets/v2/pass39/aftershock-mid.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.2691 },
-  { id: "aftershock_exit", src: "assets/v2/pass39/aftershock-exit.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.4601 },
-  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.png", type: "image/png", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
-  { id: "route_girder", src: "assets/v2/pass29/route-girder.png", type: "image/png", layer: "playable_surface", alpha: true, expectedWidth: 1738, expectedHeight: 239, provenance: "pass29_shared" },
-  { id: "route_stone", src: "assets/v2/pass31/route-stone.png", type: "image/png", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
+  { id: "bridge_entry", src: "assets/v2/pass39/bridge-entry.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.2133 },
+  { id: "bridge_mid", src: "assets/v2/pass39/bridge-mid.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.3284 },
+  { id: "bridge_final", src: "assets/v2/pass39/bridge-final.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.5089 },
+  { id: "aftershock_entry", src: "assets/v2/pass39/aftershock-entry.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.25 },
+  { id: "aftershock_mid", src: "assets/v2/pass39/aftershock-mid.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.2691 },
+  { id: "aftershock_exit", src: "assets/v2/pass39/aftershock-exit.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass39_new", bottomEdgeCoverage: 0.4601 },
+  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.webp", type: "image/webp", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
+  { id: "route_girder", src: "assets/v2/pass29/route-girder.webp", type: "image/webp", layer: "playable_surface", alpha: true, expectedWidth: 1738, expectedHeight: 239, provenance: "pass29_shared" },
+  { id: "route_stone", src: "assets/v2/pass31/route-stone.webp", type: "image/webp", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
 ]);
 
 export const PASS39_BRIDGE_SCENES = freezeList([

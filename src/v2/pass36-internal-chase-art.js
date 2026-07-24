@@ -4,14 +4,14 @@ const freezeList = items => Object.freeze(items.map(item => Object.freeze(item))
 
 export const PASS36_INTERNAL_ASSETS = freezeList([
   { id: "internal_far", src: "assets/v2/pass36/internal-far.webp", type: "image/webp", layer: "far_background", alpha: false, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new" },
-  { id: "internal_descent", src: "assets/v2/pass36/internal-descent.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.4346 },
-  { id: "internal_lower", src: "assets/v2/pass36/internal-lower.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.4710 },
-  { id: "shaft_one", src: "assets/v2/pass36/shaft-one.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.8053 },
-  { id: "shaft_two", src: "assets/v2/pass36/shaft-two.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.4519 },
-  { id: "lower_hall", src: "assets/v2/pass36/lower-hall.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.3481 },
-  { id: "exit_rise", src: "assets/v2/pass36/exit-rise.png", type: "image/png", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.4171 },
-  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.png", type: "image/png", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
-  { id: "route_stone", src: "assets/v2/pass31/route-stone.png", type: "image/png", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
+  { id: "internal_descent", src: "assets/v2/pass36/internal-descent.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.4346 },
+  { id: "internal_lower", src: "assets/v2/pass36/internal-lower.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.4710 },
+  { id: "shaft_one", src: "assets/v2/pass36/shaft-one.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.8053 },
+  { id: "shaft_two", src: "assets/v2/pass36/shaft-two.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.4519 },
+  { id: "lower_hall", src: "assets/v2/pass36/lower-hall.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.3481 },
+  { id: "exit_rise", src: "assets/v2/pass36/exit-rise.webp", type: "image/webp", layer: "midground", alpha: true, expectedWidth: 1672, expectedHeight: 941, provenance: "pass36_new", bottomEdgeCoverage: 0.4171 },
+  { id: "foreground_frame", src: "assets/v2/pass33/foreground-frame.webp", type: "image/webp", layer: "foreground", alpha: true, expectedWidth: 1665, expectedHeight: 944, provenance: "pass33_shared" },
+  { id: "route_stone", src: "assets/v2/pass31/route-stone.webp", type: "image/webp", layer: "playable_surface", alpha: true, expectedWidth: 1748, expectedHeight: 202, provenance: "pass31_shared" },
 ]);
 
 export const PASS36_INTERNAL_SCENES = freezeList([
