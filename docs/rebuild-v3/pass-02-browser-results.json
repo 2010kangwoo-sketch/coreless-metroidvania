@@ -1,0 +1,188 @@
+{
+  "pass": 2,
+  "generatedAt": "2026-07-25T01:23:30.672Z",
+  "passed": true,
+  "passedCount": 15,
+  "totalCount": 15,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "structuralAudit",
+      "passed": true
+    },
+    {
+      "name": "startsInRoomOne",
+      "passed": true
+    },
+    {
+      "name": "actualKeyboardMovedPlayer",
+      "passed": true
+    },
+    {
+      "name": "visitedAllThreeRooms",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpUnlocked",
+      "passed": true
+    },
+    {
+      "name": "jumpEventsObserved",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpObserved",
+      "passed": true
+    },
+    {
+      "name": "landingsObserved",
+      "passed": true
+    },
+    {
+      "name": "finishReached",
+      "passed": true
+    },
+    {
+      "name": "topSpeedBounded",
+      "passed": true
+    },
+    {
+      "name": "cameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noUnexpectedReset",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "initial": {
+    "x": 170,
+    "y": 696,
+    "room": "r01",
+    "audit": {
+      "passed": true,
+      "passedCount": 13,
+      "totalCount": 13,
+      "checks": [
+        {
+          "name": "threePlayableRooms",
+          "passed": true
+        },
+        {
+          "name": "roomsMatchPass01",
+          "passed": true
+        },
+        {
+          "name": "worldMatchesThreeRooms",
+          "passed": true
+        },
+        {
+          "name": "spawnAboveFloor",
+          "passed": true
+        },
+        {
+          "name": "continuousFloors",
+          "passed": true
+        },
+        {
+          "name": "variableJumpPlatforms",
+          "passed": true
+        },
+        {
+          "name": "safeRecoveryStep",
+          "passed": true
+        },
+        {
+          "name": "doubleJumpPickup",
+          "passed": true
+        },
+        {
+          "name": "twoStageRise",
+          "passed": true
+        },
+        {
+          "name": "finishTrigger",
+          "passed": true
+        },
+        {
+          "name": "noFinalArt",
+          "passed": true
+        },
+        {
+          "name": "allSolidsPositive",
+          "passed": true
+        },
+        {
+          "name": "allGameplayInsideWorld",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "final": {
+    "player": {
+      "x": 4762,
+      "y": 656,
+      "previousX": 4762,
+      "previousY": 656,
+      "vx": 0,
+      "vy": 0,
+      "grounded": true,
+      "coyoteRemaining": 0.11,
+      "jumpBufferRemaining": 0,
+      "jumpsUsed": 0,
+      "facing": 1,
+      "landedThisFrame": true,
+      "abilities": {
+        "doubleJump": true
+      }
+    },
+    "camera": {
+      "x": 3599.999991332568,
+      "y": 167.13490729995888,
+      "targetX": 3600,
+      "targetY": 220
+    },
+    "room": "r03",
+    "audit": {
+      "fixedFrames": 1593,
+      "maximumHorizontalSpeed": 420,
+      "maximumCameraStep": 6.660891081153043,
+      "landings": 13,
+      "jumps": 13,
+      "doubleJumps": 2,
+      "roomTransitions": 2,
+      "resets": 0,
+      "doubleJumpUnlocked": true,
+      "finished": true
+    },
+    "ready": "true"
+  },
+  "jumpZonesUsed": [
+    "r1-low",
+    "r1-mid",
+    "r1-high",
+    "r1-exit",
+    "r2-low",
+    "r2-recovery",
+    "r3-altar",
+    "r3-rise-one",
+    "r3-rise-two",
+    "r3-landing",
+    "r3-landing"
+  ],
+  "sampleCount": 166,
+  "consoleErrors": [],
+  "pageErrors": []
+}

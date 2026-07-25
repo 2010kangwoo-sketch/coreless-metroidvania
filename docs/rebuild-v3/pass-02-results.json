@@ -1,0 +1,155 @@
+{
+  "pass": 2,
+  "generatedAt": "2026-07-25T01:24:23.471Z",
+  "passed": true,
+  "passedCount": 33,
+  "totalCount": 33,
+  "checks": [
+    {
+      "name": "threePlayableRooms",
+      "passed": true
+    },
+    {
+      "name": "roomsMatchPass01",
+      "passed": true
+    },
+    {
+      "name": "worldMatchesThreeRooms",
+      "passed": true
+    },
+    {
+      "name": "spawnAboveFloor",
+      "passed": true
+    },
+    {
+      "name": "continuousFloors",
+      "passed": true
+    },
+    {
+      "name": "variableJumpPlatforms",
+      "passed": true
+    },
+    {
+      "name": "safeRecoveryStep",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpPickup",
+      "passed": true
+    },
+    {
+      "name": "twoStageRise",
+      "passed": true
+    },
+    {
+      "name": "finishTrigger",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "allSolidsPositive",
+      "passed": true
+    },
+    {
+      "name": "allGameplayInsideWorld",
+      "passed": true
+    },
+    {
+      "name": "topSpeedInTarget",
+      "passed": true
+    },
+    {
+      "name": "accelerationTimeInTarget",
+      "passed": true
+    },
+    {
+      "name": "groundStopInTarget",
+      "passed": true
+    },
+    {
+      "name": "decelerationMonotonic",
+      "passed": true
+    },
+    {
+      "name": "shortJumpInTarget",
+      "passed": true
+    },
+    {
+      "name": "fullJumpInTarget",
+      "passed": true
+    },
+    {
+      "name": "variableJumpMeaningful",
+      "passed": true
+    },
+    {
+      "name": "singleJumpLands",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpInTarget",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpLands",
+      "passed": true
+    },
+    {
+      "name": "jumpBufferWorks",
+      "passed": true
+    },
+    {
+      "name": "coyoteJumpWorks",
+      "passed": true
+    },
+    {
+      "name": "landingWithoutPenetration",
+      "passed": true
+    },
+    {
+      "name": "landingVelocityCleared",
+      "passed": true
+    },
+    {
+      "name": "landingHeightExact",
+      "passed": true
+    },
+    {
+      "name": "cameraMovesGradually",
+      "passed": true
+    },
+    {
+      "name": "cameraConverges",
+      "passed": true
+    },
+    {
+      "name": "cameraHalfLifeInTarget",
+      "passed": true
+    },
+    {
+      "name": "coyoteTuningInTarget",
+      "passed": true
+    },
+    {
+      "name": "bufferTuningInTarget",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "rooms": 3,
+    "topSpeed": 420,
+    "timeToNinetyPercentSpeed": 0.425,
+    "groundStopTime": 0.133,
+    "shortJumpHeight": 81.2,
+    "fullJumpHeight": 133.44,
+    "doubleJumpHeight": 251.61,
+    "doubleJumpAdditionalHeight": 118.17,
+    "jumpBufferWorks": true,
+    "coyoteJumpWorks": true,
+    "cameraMaximumStepAt120Hz": 74.872,
+    "cameraFinalError": 1.303
+  }
+}
