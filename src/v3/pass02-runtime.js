@@ -11,6 +11,7 @@ import {
   createCamera,
   createPlayer,
   rectangleIntersectsPlayer,
+  slopeSurfaceYAt,
   stepCamera,
   stepPlayer,
 } from "./player-physics.js";
@@ -33,11 +34,30 @@ const FIXED_STEP = 1 / 120;
 const MAX_FRAME_DELTA = 1 / 15;
 
 export class Pass02Runtime {
-  constructor(canvas, statusNodes = {}) {
+  constructor(canvas, statusNodes = {}, runtimeConfig = {}) {
+    this.config = {
+      world: PASS02_WORLD,
+      solids: PASS02_SOLIDS,
+      triggers: PASS02_TRIGGERS,
+      roomSummaries: PASS02_ROOM_SUMMARIES,
+      roomResolver: position => roomAtX(position.x),
+      checkpoints: PASS06_CHECKPOINTS,
+      gate: PASS06_GATE,
+      optionalReward: PASS06_OPTIONAL_REWARD,
+      build: PASS06_BUILD,
+      finishMessage: "V3 튜토리얼 1~3번 방 완료",
+      parallax: Object.freeze({
+        farX: 0.12,
+        farY: 0.08,
+        midX: 0.28,
+        midY: 0.16,
+      }),
+      ...runtimeConfig,
+    };
     this.canvas = canvas;
     this.context = canvas.getContext("2d");
     this.statusNodes = statusNodes;
-    this.player = createPlayer(PASS02_WORLD.spawn.x, PASS02_WORLD.spawn.y);
+    this.player = createPlayer(this.config.world.spawn.x, this.config.world.spawn.y);
     this.player.grounded = true;
     this.camera = createCamera(this.player);
     this.keys = new Set();
@@ -78,6 +98,7 @@ export class Pass02Runtime {
       finishBlocked: 0,
       maximumPositionStep: 0,
       maximumGroundedPositionStep: 0,
+      maximumVerticalCameraStep: 0,
     };
     this.boundFrame = timestamp => this.frame(timestamp);
     this.boundKeyDown = event => this.onKeyDown(event);
@@ -115,9 +136,12 @@ export class Pass02Runtime {
   }
 
   activeSolids() {
+    const collisionSolids = this.config.solids.filter(
+      solid => solid.role !== "noncollision",
+    );
     return roomTwoGateOpen(this.tutorialProgress)
-      ? PASS02_SOLIDS
-      : [...PASS02_SOLIDS, PASS06_GATE];
+      ? collisionSolids
+      : [...collisionSolids, this.config.gate];
   }
 
   markTutorialLesson(id) {
@@ -137,10 +161,12 @@ export class Pass02Runtime {
   }
 
   activateCheckpoint() {
-    for (const checkpoint of PASS06_CHECKPOINTS) {
+    for (const checkpoint of this.config.checkpoints) {
       if (this.player.x < checkpoint.activateX || checkpoint.id === this.currentCheckpointId) continue;
-      const currentIndex = PASS06_CHECKPOINTS.findIndex(item => item.id === this.currentCheckpointId);
-      const nextIndex = PASS06_CHECKPOINTS.findIndex(item => item.id === checkpoint.id);
+      if (checkpoint.activateYMin !== undefined && this.player.y < checkpoint.activateYMin) continue;
+      if (checkpoint.activateYMax !== undefined && this.player.y > checkpoint.activateYMax) continue;
+      const currentIndex = this.config.checkpoints.findIndex(item => item.id === this.currentCheckpointId);
+      const nextIndex = this.config.checkpoints.findIndex(item => item.id === checkpoint.id);
       if (nextIndex <= currentIndex) continue;
       if (checkpoint.id === "altar" && !this.tutorialProgress.room2Gate) continue;
       this.currentCheckpointId = checkpoint.id;
@@ -236,7 +262,7 @@ export class Pass02Runtime {
       this.motionVisual.takeoff - dt / PASS03_MOTION_VISUAL.takeoffRecoverySeconds,
     );
 
-    for (const trigger of PASS02_TRIGGERS) {
+    for (const trigger of this.config.triggers) {
       if (!rectangleIntersectsPlayer(trigger, this.player)) continue;
       if (trigger.type === "ability" && !this.player.abilities.doubleJump) {
         this.player.abilities.doubleJump = true;
@@ -249,7 +275,7 @@ export class Pass02Runtime {
         if (canFinishTutorial(this.tutorialProgress)) {
           this.markTutorialLesson("finish");
           this.audit.finished = true;
-          this.message = "V3 튜토리얼 1~3번 방 완료";
+          this.message = this.config.finishMessage;
           this.messageTimer = 8;
         } else if (!this.finishBlockLatched) {
           this.finishBlockLatched = true;
@@ -262,7 +288,7 @@ export class Pass02Runtime {
 
     if (
       !this.optionalRewardCollected &&
-      rectangleIntersectsPlayer(PASS06_OPTIONAL_REWARD, this.player)
+      rectangleIntersectsPlayer(this.config.optionalReward, this.player)
     ) {
       this.optionalRewardCollected = true;
       this.audit.optionalRewardCollected = true;
@@ -282,22 +308,29 @@ export class Pass02Runtime {
       this.markTutorialLesson("room2Gate");
     }
 
-    if (this.player.y > PASS02_WORLD.height + 180) this.reset("낙하 회수");
+    if (this.player.y > this.config.world.height + 180) this.reset("낙하 회수");
 
-    const nextRoom = roomAtX(this.player.x + PLAYER_PHYSICS.width / 2).id;
+    const nextRoom = this.config.roomResolver({
+      x: this.player.x + PLAYER_PHYSICS.width / 2,
+      y: this.player.y + PLAYER_PHYSICS.height / 2,
+    }).id;
     if (nextRoom !== this.currentRoom) {
       this.currentRoom = nextRoom;
       this.audit.roomTransitions += 1;
-      const summary = PASS02_ROOM_SUMMARIES.find(room => room.id === nextRoom);
+      const summary = this.config.roomSummaries.find(room => room.id === nextRoom);
       this.message = `${summary.name} · ${summary.mechanic}`;
       this.messageTimer = 3;
     }
     this.activateCheckpoint();
     this.syncTutorialInstruction();
 
-    this.camera = stepCamera(this.camera, this.player, dt, PASS02_WORLD);
+    this.camera = stepCamera(this.camera, this.player, dt, this.config.world);
     const cameraStep = Math.hypot(this.camera.x - beforeCamera.x, this.camera.y - beforeCamera.y);
     this.audit.maximumCameraStep = Math.max(this.audit.maximumCameraStep, cameraStep);
+    this.audit.maximumVerticalCameraStep = Math.max(
+      this.audit.maximumVerticalCameraStep,
+      Math.abs(this.camera.y - beforeCamera.y),
+    );
     this.audit.maximumHorizontalSpeed = Math.max(this.audit.maximumHorizontalSpeed, Math.abs(this.player.vx));
     this.audit.fixedFrames += 1;
     this.messageTimer = Math.max(0, this.messageTimer - dt);
@@ -305,8 +338,8 @@ export class Pass02Runtime {
 
   reset(reason = "재시작") {
     const keepAbility = this.player.abilities.doubleJump;
-    const checkpoint = PASS06_CHECKPOINTS.find(item => item.id === this.currentCheckpointId) ??
-      PASS06_CHECKPOINTS[0];
+    const checkpoint = this.config.checkpoints.find(item => item.id === this.currentCheckpointId) ??
+      this.config.checkpoints[0];
     this.player = createPlayer(checkpoint.x, checkpoint.y);
     this.player.grounded = true;
     this.player.abilities.doubleJump = keepAbility;
@@ -346,6 +379,7 @@ export class Pass02Runtime {
   drawParallax() {
     const context = this.context;
     const cameraX = this.camera.x;
+    const cameraY = this.camera.y;
     const gradient = context.createLinearGradient(0, 0, 0, this.canvas.height);
     gradient.addColorStop(0, "#0b1820");
     gradient.addColorStop(1, "#071015");
@@ -353,7 +387,10 @@ export class Pass02Runtime {
     context.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
     context.save();
-    context.translate(-(cameraX * 0.12) % 360, 0);
+    context.translate(
+      -(cameraX * this.config.parallax.farX) % 360,
+      -(cameraY * this.config.parallax.farY) % 180,
+    );
     context.fillStyle = "#10242c";
     for (let x = -360; x < this.canvas.width + 720; x += 360) {
       context.fillRect(x + 40, 150, 190, 530);
@@ -364,7 +401,10 @@ export class Pass02Runtime {
     context.restore();
 
     context.save();
-    context.translate(-(cameraX * 0.28) % 270, 0);
+    context.translate(
+      -(cameraX * this.config.parallax.midX) % 270,
+      -(cameraY * this.config.parallax.midY) % 220,
+    );
     context.strokeStyle = "rgba(104, 145, 154, 0.2)";
     context.lineWidth = 2;
     for (let x = -270; x < this.canvas.width + 540; x += 270) {
@@ -381,19 +421,24 @@ export class Pass02Runtime {
     context.save();
     context.translate(-this.camera.x, -this.camera.y);
 
-    for (const room of PASS02_ROOM_SUMMARIES) {
+    for (const room of this.config.roomSummaries) {
       context.strokeStyle = "rgba(141, 194, 204, 0.22)";
       context.lineWidth = 3;
-      context.strokeRect(room.x + 2, 2, room.width - 4, PASS02_WORLD.height - 4);
+      context.strokeRect(
+        room.x + 2,
+        (room.y ?? 0) + 2,
+        room.width - 4,
+        (room.height ?? this.config.world.height) - 4,
+      );
       context.fillStyle = "rgba(144, 190, 198, 0.08)";
       context.font = "700 28px Arial, sans-serif";
-      context.fillText(`${room.id.toUpperCase()} · ${room.name}`, room.x + 48, 95);
+      context.fillText(`${room.id.toUpperCase()} · ${room.name}`, room.x + 48, (room.y ?? 0) + 95);
       context.font = "600 15px Arial, sans-serif";
       context.fillStyle = "rgba(170, 205, 210, 0.45)";
-      context.fillText(room.mechanic, room.x + 50, 122);
+      context.fillText(room.mechanic, room.x + 50, (room.y ?? 0) + 122);
     }
 
-    for (const solid of PASS02_SOLIDS) {
+    for (const solid of this.config.solids) {
       if (solid.role === "boundary") continue;
       const roleColors = {
         practice: ["#536b72", "#a8c3c7"],
@@ -403,9 +448,33 @@ export class Pass02Runtime {
         recovery: ["#526960", "#9bc6ab"],
         threshold: ["#5b625f", "#b8c5c0"],
         ceiling: ["#394d55", "#728e96"],
+        structure: ["#31464e", "#75929a"],
+        noncollision: ["#31464e", "#75929a"],
+        slope: ["#4f655e", "#a9c7ad"],
+        rest: ["#536660", "#a9c7ad"],
+        exit: ["#5b625f", "#d8c57e"],
         terrain: ["#40555d", "#849fa6"],
       };
       const [fill, edge] = roleColors[solid.role] ?? roleColors.terrain;
+      if (solid.role === "slope") {
+        const leftY = slopeSurfaceYAt(solid, solid.x);
+        const rightY = slopeSurfaceYAt(solid, solid.x + solid.width);
+        context.fillStyle = fill;
+        context.beginPath();
+        context.moveTo(solid.x, leftY);
+        context.lineTo(solid.x + solid.width, rightY);
+        context.lineTo(solid.x + solid.width, solid.y + solid.height);
+        context.lineTo(solid.x, solid.y + solid.height);
+        context.closePath();
+        context.fill();
+        context.strokeStyle = edge;
+        context.lineWidth = 7;
+        context.beginPath();
+        context.moveTo(solid.x, leftY);
+        context.lineTo(solid.x + solid.width, rightY);
+        context.stroke();
+        continue;
+      }
       context.fillStyle = fill;
       context.fillRect(solid.x, solid.y, solid.width, solid.height);
       context.fillStyle = edge;
@@ -421,21 +490,22 @@ export class Pass02Runtime {
     }
 
     if (!roomTwoGateOpen(this.tutorialProgress)) {
+      const gate = this.config.gate;
       context.fillStyle = "rgba(77, 93, 99, 0.92)";
-      context.fillRect(PASS06_GATE.x, PASS06_GATE.y, PASS06_GATE.width, PASS06_GATE.height);
+      context.fillRect(gate.x, gate.y, gate.width, gate.height);
       context.fillStyle = "#d8c57e";
-      for (let y = PASS06_GATE.y + 34; y < PASS06_GATE.y + PASS06_GATE.height; y += 70) {
-        context.fillRect(PASS06_GATE.x + 8, y, PASS06_GATE.width - 16, 6);
+      for (let y = gate.y + 34; y < gate.y + gate.height; y += 70) {
+        context.fillRect(gate.x + 8, y, gate.width - 16, 6);
       }
       context.fillStyle = "#e8dfbf";
       context.font = "700 14px Arial, sans-serif";
       context.textAlign = "center";
-      context.fillText("점프 확인문", PASS06_GATE.x + PASS06_GATE.width / 2, PASS06_GATE.y + 26);
+      context.fillText("점프 확인문", gate.x + gate.width / 2, gate.y + 26);
       context.textAlign = "left";
     }
 
     if (!this.optionalRewardCollected) {
-      const reward = PASS06_OPTIONAL_REWARD;
+      const reward = this.config.optionalReward;
       context.fillStyle = "rgba(226, 199, 112, 0.24)";
       context.fillRect(reward.x, reward.y, reward.width, reward.height);
       context.strokeStyle = "#dfc77c";
@@ -448,7 +518,7 @@ export class Pass02Runtime {
       context.textAlign = "left";
     }
 
-    const altar = PASS02_TRIGGERS.find(trigger => trigger.type === "ability");
+    const altar = this.config.triggers.find(trigger => trigger.type === "ability");
     context.fillStyle = this.player.abilities.doubleJump ? "rgba(115, 181, 179, 0.2)" : "rgba(157, 225, 221, 0.34)";
     context.fillRect(altar.x, altar.y, altar.width, altar.height);
     context.strokeStyle = "#9de1df";
@@ -460,7 +530,7 @@ export class Pass02Runtime {
     context.fillText(this.player.abilities.doubleJump ? "공명 완료" : "공명 날개", altar.x + altar.width / 2, altar.y + 88);
     context.textAlign = "left";
 
-    const finish = PASS02_TRIGGERS.find(trigger => trigger.type === "finish");
+    const finish = this.config.triggers.find(trigger => trigger.type === "finish");
     context.fillStyle = this.audit.finished ? "rgba(225, 201, 122, 0.28)" : "rgba(225, 201, 122, 0.12)";
     context.fillRect(finish.x, finish.y, finish.width, finish.height);
     context.strokeStyle = "#dfc77c";
@@ -534,7 +604,7 @@ export class Pass02Runtime {
     this.drawParallax();
     this.drawWorld();
     this.drawHud();
-    if (this.statusNodes.build) this.statusNodes.build.textContent = `${PASS06_BUILD.id.toUpperCase()} · ${this.currentRoom.toUpperCase()}`;
+    if (this.statusNodes.build) this.statusNodes.build.textContent = `${this.config.build.id.toUpperCase()} · ${this.currentRoom.toUpperCase()}`;
     if (this.statusNodes.audit) {
       this.statusNodes.audit.textContent = this.audit.finished ? "TUTORIAL COMPLETE" : "CANONICAL TUTORIAL ACTIVE";
       this.statusNodes.audit.dataset.state = this.audit.finished ? "pass" : "active";

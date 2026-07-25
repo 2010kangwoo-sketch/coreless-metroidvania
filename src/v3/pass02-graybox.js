@@ -39,7 +39,7 @@ export const PASS02_SOLIDS = Object.freeze([
   solid("room3-altar-base", 3390, 710, 300, 50, "ability"),
   solid("room3-rise-one", 3740, 610, 360, 150, "ability-test"),
   solid("room3-rise-two", 4130, 455, 230, 305, "ability-test"),
-  solid("room3-landing", 4470, 330, 250, 24, "recovery"),
+  solid("room3-landing", 4410, 330, 366, 24, "recovery"),
   solid("room3-exit-floor", 4470, 720, 330, 40, "threshold"),
 ]);
 

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="660" viewBox="0 0 1280 660">
+  <rect width="1280" height="660" fill="#071015"/>
+  <text x="60" y="58" fill="#edf3ee" font-family="Arial, sans-serif" font-size="28" font-weight="700">
+    PASS 07 · ACTUAL PLAYABLE LAYERS
+  </text>
+  <text x="60" y="87" fill="#91aeb4" font-family="Arial, sans-serif" font-size="15">
+    Runtime world 4,800 × 2,040 · solid coordinates and route direction
+  </text>
+
+  <g transform="translate(60 115) scale(0.24)">
+    <rect x="0" y="0" width="4800" height="2040" fill="#0b1820" stroke="#58737a" stroke-width="10"/>
+
+    <rect x="3200" y="0" width="1600" height="900" fill="#223c42" stroke="#9bc6ab" stroke-width="12"/>
+    <text x="3280" y="120" fill="#d9eee2" font-family="Arial, sans-serif" font-size="74" font-weight="700">R04 · GENTLE SLOPE GALLERY</text>
+    <text x="3280" y="215" fill="#a9c7ad" font-family="Arial, sans-serif" font-size="48">UPPER TIER · WESTBOUND</text>
+    <path d="M4580 690 H4080 L3880 570 H3610 L3390 750 H3250" fill="none" stroke="#d8c57e" stroke-width="28"/>
+    <path d="M3440 720 L3260 750 L3440 780" fill="none" stroke="#d8c57e" stroke-width="28"/>
+
+    <rect x="0" y="1140" width="1600" height="900" fill="#162b32" stroke="#6f969f" stroke-width="12"/>
+    <rect x="1600" y="1140" width="1600" height="900" fill="#1b3036" stroke="#6f969f" stroke-width="12"/>
+    <rect x="3200" y="1140" width="1600" height="900" fill="#162b32" stroke="#6f969f" stroke-width="12"/>
+    <text x="80" y="1260" fill="#d6e3e4" font-family="Arial, sans-serif" font-size="74" font-weight="700">R01 · ARRIVAL</text>
+    <text x="1680" y="1260" fill="#d6e3e4" font-family="Arial, sans-serif" font-size="74" font-weight="700">R02 · JUMP WORKSHOP</text>
+    <text x="3280" y="1260" fill="#d6e3e4" font-family="Arial, sans-serif" font-size="74" font-weight="700">R03 · RESONANCE ALTAR</text>
+    <text x="80" y="1370" fill="#91aeb4" font-family="Arial, sans-serif" font-size="48">LOWER TIER · EASTBOUND</text>
+    <path d="M250 1810 H4470" fill="none" stroke="#9de1df" stroke-width="28"/>
+    <path d="M4290 1780 L4470 1810 L4290 1840" fill="none" stroke="#9de1df" stroke-width="28"/>
+
+    <rect x="4440" y="700" width="24" height="1200" fill="#75929a"/>
+    <rect x="4776" y="700" width="24" height="1200" fill="#75929a"/>
+    <path d="M4660 1470 V700" fill="none" stroke="#e3c76f" stroke-width="26"/>
+    <path d="M4625 820 L4660 680 L4695 820" fill="none" stroke="#e3c76f" stroke-width="26"/>
+    <text x="3980" y="1030" fill="#e7d38a" font-family="Arial, sans-serif" font-size="54" font-weight="700">770px TIER LIFT</text>
+
+    <rect x="0" y="900" width="4800" height="240" fill="#0d1419"/>
+    <text x="120" y="1055" fill="#60777d" font-family="Arial, sans-serif" font-size="46">240px STRUCTURAL GAP · VERTICAL READABILITY</text>
+  </g>
+
+  <g font-family="Arial, sans-serif" font-size="15">
+    <rect x="60" y="620" width="18" height="18" fill="#162b32" stroke="#6f969f" stroke-width="2"/>
+    <text x="88" y="635" fill="#a9bdc1">PLAYABLE ROOM</text>
+    <line x1="250" y1="629" x2="300" y2="629" stroke="#9de1df" stroke-width="5"/>
+    <text x="312" y="635" fill="#a9bdc1">LOWER ROUTE</text>
+    <line x1="425" y1="629" x2="475" y2="629" stroke="#d8c57e" stroke-width="5"/>
+    <text x="487" y="635" fill="#a9bdc1">UPPER ROUTE</text>
+    <line x1="605" y1="629" x2="605" y2="611" stroke="#e3c76f" stroke-width="5"/>
+    <text x="620" y="635" fill="#a9bdc1">PLAYABLE LIFT</text>
+    <text x="925" y="635" fill="#718a90">FINAL ART NOT APPLIED</text>
+  </g>
+</svg>

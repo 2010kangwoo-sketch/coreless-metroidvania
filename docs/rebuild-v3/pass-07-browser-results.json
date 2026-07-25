@@ -1,0 +1,156 @@
+{
+  "pass": 7,
+  "generatedAt": "2026-07-25T07:28:08.144Z",
+  "passed": true,
+  "passedCount": 29,
+  "totalCount": 29,
+  "checks": [
+    {
+      "name": "documentReadyOnLowerTier",
+      "passed": true
+    },
+    {
+      "name": "startupAuditsPassed",
+      "passed": true
+    },
+    {
+      "name": "worldHeightContainsTwoTiers",
+      "passed": true
+    },
+    {
+      "name": "threeRoomsShareLowerTier",
+      "passed": true
+    },
+    {
+      "name": "roomFourOccupiesUpperTier",
+      "passed": true
+    },
+    {
+      "name": "roomFourStackedAboveRoomThree",
+      "passed": true
+    },
+    {
+      "name": "backgroundMovesSlowerThanTerrain",
+      "passed": true
+    },
+    {
+      "name": "tutorialJumpProfilesStillWork",
+      "passed": true
+    },
+    {
+      "name": "lowerTutorialCompleted",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpUsedBeforeLift",
+      "passed": true
+    },
+    {
+      "name": "liftStartedFromRoomThree",
+      "passed": true
+    },
+    {
+      "name": "liftShowsContinuousMiddleState",
+      "passed": true
+    },
+    {
+      "name": "liftCompletedOnUpperTier",
+      "passed": true
+    },
+    {
+      "name": "liftTravelMatchesTier",
+      "passed": true
+    },
+    {
+      "name": "oneTierTransition",
+      "passed": true
+    },
+    {
+      "name": "routeDirectionReversesWest",
+      "passed": true
+    },
+    {
+      "name": "gentleSlopeReached",
+      "passed": true
+    },
+    {
+      "name": "crestStopReadable",
+      "passed": true
+    },
+    {
+      "name": "steepReleaseMovesWest",
+      "passed": true
+    },
+    {
+      "name": "bothPurposefulSlopesVisited",
+      "passed": true
+    },
+    {
+      "name": "fourRoomsVisited",
+      "passed": true
+    },
+    {
+      "name": "layeredRouteFinished",
+      "passed": true
+    },
+    {
+      "name": "noUnexpectedReset",
+      "passed": true
+    },
+    {
+      "name": "groundedPositionStepBounded",
+      "passed": true
+    },
+    {
+      "name": "cameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "verticalCameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "liftCameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "worldWidth": 4800,
+    "worldHeight": 2040,
+    "lowerTierY": 1140,
+    "upperTierY": 0,
+    "tierGap": 240,
+    "shortJumpHeight": 83.9,
+    "fullJumpHeight": 133.65,
+    "gateOpenX": 3005.5,
+    "liftTravel": 770,
+    "liftFrames": 356,
+    "maximumLiftStep": 2.167,
+    "tierTransitions": 1,
+    "roomTransitions": 3,
+    "crestStopTravel": 30.8,
+    "steepReleaseTravel": 176.67,
+    "slopeSequence": [
+      "room4-gentle-climb",
+      "room4-steep-descent"
+    ],
+    "westwardRoomFourDistance": 1418.95,
+    "maximumGroundedPositionStep": 4.286,
+    "maximumCameraStep": 7.801,
+    "maximumVerticalCameraStep": 7.801,
+    "maximumLiftCameraStep": 2.167,
+    "resets": 0,
+    "finalX": 3276.23,
+    "finalY": 696
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

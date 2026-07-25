@@ -1,0 +1,172 @@
+{
+  "pass": 7,
+  "generatedAt": "2026-07-25T07:27:43.709Z",
+  "passed": true,
+  "passedCount": 36,
+  "totalCount": 36,
+  "checks": [
+    {
+      "name": "fourCanonicalRooms",
+      "passed": true
+    },
+    {
+      "name": "worldContainsTwoTiers",
+      "passed": true
+    },
+    {
+      "name": "threeLowerRooms",
+      "passed": true
+    },
+    {
+      "name": "oneUpperRoom",
+      "passed": true
+    },
+    {
+      "name": "upperRoomActuallyAboveLowerRooms",
+      "passed": true
+    },
+    {
+      "name": "roomFourStacksAboveRoomThree",
+      "passed": true
+    },
+    {
+      "name": "tierGapPreserved",
+      "passed": true
+    },
+    {
+      "name": "routeTurnsWestOnUpperTier",
+      "passed": true
+    },
+    {
+      "name": "continuousLiftHasPurpose",
+      "passed": true
+    },
+    {
+      "name": "liftTravelsFullTierChange",
+      "passed": true
+    },
+    {
+      "name": "liftDurationInTarget",
+      "passed": true
+    },
+    {
+      "name": "liftRailsContinueBetweenFloors",
+      "passed": true
+    },
+    {
+      "name": "missedLiftHasRecoveryRoute",
+      "passed": true
+    },
+    {
+      "name": "finalTutorialLandingIsGenerous",
+      "passed": true
+    },
+    {
+      "name": "gentleSlopePurposeful",
+      "passed": true
+    },
+    {
+      "name": "gentleGradeInTarget",
+      "passed": true
+    },
+    {
+      "name": "steepSlopePurposeful",
+      "passed": true
+    },
+    {
+      "name": "steepGradeInTarget",
+      "passed": true
+    },
+    {
+      "name": "wideArrivalPlatform",
+      "passed": true
+    },
+    {
+      "name": "wideBrakeExit",
+      "passed": true
+    },
+    {
+      "name": "noDamageHazardsInFirstTierTurn",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "roomResolverSeparatesSameColumnByHeight",
+      "passed": true
+    },
+    {
+      "name": "gentleMeetsArrival",
+      "passed": true
+    },
+    {
+      "name": "gentleMeetsCrest",
+      "passed": true
+    },
+    {
+      "name": "steepMeetsCrest",
+      "passed": true
+    },
+    {
+      "name": "steepMeetsBrake",
+      "passed": true
+    },
+    {
+      "name": "upperRouteVisitsBothPurposefulSlopes",
+      "passed": true
+    },
+    {
+      "name": "upperRouteStaysGrounded",
+      "passed": true
+    },
+    {
+      "name": "upperRouteMovesWestMeaningfully",
+      "passed": true
+    },
+    {
+      "name": "upperRouteEndsOnWestBrake",
+      "passed": true
+    },
+    {
+      "name": "upperRouteStepBounded",
+      "passed": true
+    },
+    {
+      "name": "gentleClimbNeverMovesDownUnexpectedly",
+      "passed": true
+    },
+    {
+      "name": "liftDurationReadable",
+      "passed": true
+    },
+    {
+      "name": "worldSpawnStartsOnLowerTier",
+      "passed": true
+    },
+    {
+      "name": "roomFourIsOnlyUpperPlayableRoom",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "worldWidth": 4800,
+    "worldHeight": 2040,
+    "playableTiers": 2,
+    "lowerRoomY": 1140,
+    "upperRoomY": 0,
+    "tierGap": 240,
+    "liftTravel": 770,
+    "liftDurationSeconds": 2.962,
+    "upperRouteWestwardDistance": 1451.6,
+    "upperRouteMaximumGroundedStep": 4.286,
+    "upperRouteAirborneFrames": 0,
+    "upperRouteFinalX": 3208.4,
+    "upperRouteFinalY": 696,
+    "visitedSlopes": [
+      "room4-gentle-climb",
+      "room4-steep-descent"
+    ]
+  }
+}
