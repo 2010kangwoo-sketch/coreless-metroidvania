@@ -1,0 +1,121 @@
+{
+  "pass": 3,
+  "generatedAt": "2026-07-25T05:35:29.305Z",
+  "passed": true,
+  "passedCount": 25,
+  "totalCount": 25,
+  "checks": [
+    {
+      "name": "separateTurnAcceleration",
+      "passed": true
+    },
+    {
+      "name": "airTurnStrongerThanAirAcceleration",
+      "passed": true
+    },
+    {
+      "name": "airMomentumPreserved",
+      "passed": true
+    },
+    {
+      "name": "edgeCorrectionStrictlyLimited",
+      "passed": true
+    },
+    {
+      "name": "apexGravityIsGentle",
+      "passed": true
+    },
+    {
+      "name": "verticalCameraSlowerThanHorizontal",
+      "passed": true
+    },
+    {
+      "name": "verticalDeadZoneDefined",
+      "passed": true
+    },
+    {
+      "name": "landingVisualShort",
+      "passed": true
+    },
+    {
+      "name": "takeoffVisualShort",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "groundReversalInTarget",
+      "passed": true
+    },
+    {
+      "name": "groundReversalCrossesZero",
+      "passed": true
+    },
+    {
+      "name": "airReversalSlowerThanGround",
+      "passed": true
+    },
+    {
+      "name": "airMomentumInTarget",
+      "passed": true
+    },
+    {
+      "name": "airDirectionChangeInTarget",
+      "passed": true
+    },
+    {
+      "name": "edgeCorrectionOccurs",
+      "passed": true
+    },
+    {
+      "name": "edgeCorrectionWithinLimit",
+      "passed": true
+    },
+    {
+      "name": "largeEdgeCorrectionRejected",
+      "passed": true
+    },
+    {
+      "name": "bufferedLandingJumpWorks",
+      "passed": true
+    },
+    {
+      "name": "landingPreservesDirectionInput",
+      "passed": true
+    },
+    {
+      "name": "cameraIgnoresInsideDeadZone",
+      "passed": true
+    },
+    {
+      "name": "cameraFollowsOutsideDeadZone",
+      "passed": true
+    },
+    {
+      "name": "cameraVerticalStepIsSoft",
+      "passed": true
+    },
+    {
+      "name": "cameraVerticalConverges",
+      "passed": true
+    },
+    {
+      "name": "landingVisualRecoveryInTarget",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "groundReversalZeroSeconds": 0.225,
+    "groundReversalToOppositeNinetySeconds": 0.425,
+    "airReversalToOppositeNinetySeconds": 0.625,
+    "airMomentumRetentionAfterHalfSecond": 0.786,
+    "airDirectionVelocityChangeAfterQuarterSecond": 320,
+    "edgeCorrectionPixels": 1,
+    "bufferedLandingHorizontalSpeed": 103.17,
+    "verticalCameraInsideDeadZoneMovement": 0,
+    "verticalCameraOutsideFirstStep": 4.255,
+    "verticalCameraFinalError": 0.02
+  }
+}

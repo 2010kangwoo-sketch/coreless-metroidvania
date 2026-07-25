@@ -1,5 +1,4 @@
 import {
-  PASS02_BUILD,
   PASS02_ROOM_SUMMARIES,
   PASS02_SOLIDS,
   PASS02_TRIGGERS,
@@ -15,6 +14,7 @@ import {
   stepCamera,
   stepPlayer,
 } from "./player-physics.js";
+import { PASS03_BUILD, PASS03_MOTION_VISUAL } from "./pass03-feel.js";
 
 const FIXED_STEP = 1 / 120;
 const MAX_FRAME_DELTA = 1 / 15;
@@ -35,6 +35,7 @@ export class Pass02Runtime {
     this.currentRoom = "r01";
     this.message = "A/D로 이동하고 SPACE로 점프하세요";
     this.messageTimer = 4;
+    this.motionVisual = { landing: 0, takeoff: 0 };
     this.audit = {
       fixedFrames: 0,
       maximumHorizontalSpeed: 0,
@@ -46,6 +47,8 @@ export class Pass02Runtime {
       resets: 0,
       doubleJumpUnlocked: false,
       finished: false,
+      directionReversals: 0,
+      edgeCorrections: 0,
     };
     this.boundFrame = timestamp => this.frame(timestamp);
     this.boundKeyDown = event => this.onKeyDown(event);
@@ -102,8 +105,25 @@ export class Pass02Runtime {
     if (this.player.jumpsUsed > before.jumpsUsed) {
       this.audit.jumps += 1;
       if (this.player.jumpsUsed === 2) this.audit.doubleJumps += 1;
+      this.motionVisual.takeoff = 1;
     }
-    if (this.player.landedThisFrame && !before.grounded) this.audit.landings += 1;
+    if (this.player.landedThisFrame && !before.grounded) {
+      this.audit.landings += 1;
+      this.motionVisual.landing = 1;
+    }
+    if (this.player.edgeCorrectedThisFrame) this.audit.edgeCorrections += 1;
+    const axis = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+    if (axis !== 0 && before.vx !== 0 && Math.sign(before.vx) !== axis && Math.sign(this.player.vx) === axis) {
+      this.audit.directionReversals += 1;
+    }
+    this.motionVisual.landing = Math.max(
+      0,
+      this.motionVisual.landing - dt / PASS03_MOTION_VISUAL.landingRecoverySeconds,
+    );
+    this.motionVisual.takeoff = Math.max(
+      0,
+      this.motionVisual.takeoff - dt / PASS03_MOTION_VISUAL.takeoffRecoverySeconds,
+    );
 
     for (const trigger of PASS02_TRIGGERS) {
       if (!rectangleIntersectsPlayer(trigger, this.player)) continue;
@@ -115,7 +135,7 @@ export class Pass02Runtime {
       }
       if (trigger.type === "finish" && !this.audit.finished) {
         this.audit.finished = true;
-        this.message = "V3 2차 회색박스 도착 · 첫 조작 구간 완료";
+        this.message = "V3 3차 조작감 확정 · 첫 조작 구간 완료";
         this.messageTimer = 8;
       }
     }
@@ -275,8 +295,23 @@ export class Pass02Runtime {
 
     const playerCenterX = this.player.x + PLAYER_PHYSICS.width / 2;
     const playerCenterY = this.player.y + PLAYER_PHYSICS.height / 2;
+    const airborneStretch = this.player.grounded
+      ? 0
+      : Math.min(1, Math.abs(this.player.vy) / PLAYER_PHYSICS.maximumFallSpeed) *
+        PASS03_MOTION_VISUAL.fallingStretch;
+    const scaleX =
+      1 +
+      this.motionVisual.landing * PASS03_MOTION_VISUAL.landingSquash -
+      this.motionVisual.takeoff * PASS03_MOTION_VISUAL.takeoffStretch -
+      airborneStretch * 0.45;
+    const scaleY =
+      1 -
+      this.motionVisual.landing * PASS03_MOTION_VISUAL.landingSquash +
+      this.motionVisual.takeoff * PASS03_MOTION_VISUAL.takeoffStretch +
+      airborneStretch;
     context.save();
     context.translate(playerCenterX, playerCenterY);
+    context.scale(scaleX, scaleY);
     context.fillStyle = "#eff5ef";
     context.fillRect(-PLAYER_PHYSICS.width / 2, -PLAYER_PHYSICS.height / 2, PLAYER_PHYSICS.width, PLAYER_PHYSICS.height);
     context.fillStyle = "#132129";
@@ -314,7 +349,7 @@ export class Pass02Runtime {
     this.drawParallax();
     this.drawWorld();
     this.drawHud();
-    if (this.statusNodes.build) this.statusNodes.build.textContent = `${PASS02_BUILD.id.toUpperCase()} · ${this.currentRoom.toUpperCase()}`;
+    if (this.statusNodes.build) this.statusNodes.build.textContent = `${PASS03_BUILD.id.toUpperCase()} · ${this.currentRoom.toUpperCase()}`;
     if (this.statusNodes.audit) {
       this.statusNodes.audit.textContent = this.audit.finished ? "FIRST CHAPTER COMPLETE" : "PHYSICS ACTIVE";
       this.statusNodes.audit.dataset.state = this.audit.finished ? "pass" : "active";

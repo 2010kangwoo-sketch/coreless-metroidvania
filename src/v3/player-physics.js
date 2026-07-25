@@ -3,25 +3,31 @@ export const PLAYER_PHYSICS = Object.freeze({
   height: 64,
   runSpeed: 420,
   groundAcceleration: 900,
-  airAcceleration: 1100,
+  turnAcceleration: 1900,
+  airAcceleration: 820,
+  airTurnAcceleration: 1280,
   groundDeceleration: 3300,
-  airDeceleration: 520,
+  airDeceleration: 180,
   jumpSpeed: 720,
   doubleJumpSpeed: 690,
   gravity: 1900,
+  apexGravityMultiplier: 0.86,
   fallingGravityMultiplier: 1.24,
   releasedJumpGravityMultiplier: 2.15,
   maximumFallSpeed: 1050,
   coyoteTime: 0.11,
   jumpBufferTime: 0.12,
+  maximumEdgeCorrection: 10,
 });
 
 export const CAMERA_PHYSICS = Object.freeze({
   viewportWidth: 1200,
   viewportHeight: 680,
   followHalfLife: 0.1,
+  verticalFollowHalfLife: 0.16,
   horizontalLookAhead: 115,
   verticalBias: 34,
+  verticalDeadZone: 64,
 });
 
 const clamp = (value, minimum, maximum) => Math.max(minimum, Math.min(maximum, value));
@@ -41,7 +47,9 @@ export function createPlayer(x, y) {
     jumpBufferRemaining: 0,
     jumpsUsed: 0,
     facing: 1,
+    turning: false,
     landedThisFrame: false,
+    edgeCorrectedThisFrame: false,
     abilities: { doubleJump: false },
   };
 }
@@ -56,6 +64,19 @@ function moveHorizontal(player, solids, dt) {
   player.x += player.vx * dt;
   for (const solid of solids) {
     if (!overlaps(player, solid)) continue;
+    const feetPenetration = player.y + PLAYER_PHYSICS.height - solid.y;
+    const canCorrectEdge =
+      solid.role !== "ceiling" &&
+      feetPenetration > 0 &&
+      feetPenetration <= PLAYER_PHYSICS.maximumEdgeCorrection &&
+      player.vy >= 0;
+    if (canCorrectEdge) {
+      player.y -= feetPenetration;
+      player.grounded = true;
+      player.jumpsUsed = 0;
+      player.edgeCorrectedThisFrame = true;
+      continue;
+    }
     if (player.vx > 0) player.x = solid.x - PLAYER_PHYSICS.width;
     else if (player.vx < 0) player.x = solid.x + solid.width;
     player.vx = 0;
@@ -87,14 +108,22 @@ export function stepPlayer(current, input, dt, solids) {
     previousX: current.x,
     previousY: current.y,
     landedThisFrame: false,
+    edgeCorrectedThisFrame: false,
   };
   const axis = (input.right ? 1 : 0) - (input.left ? 1 : 0);
 
   if (axis !== 0) {
-    const acceleration = player.grounded ? PLAYER_PHYSICS.groundAcceleration : PLAYER_PHYSICS.airAcceleration;
+    if (player.vx !== 0 && Math.sign(player.vx) !== axis) player.turning = true;
+    if (player.turning && Math.sign(player.vx) === axis && Math.abs(player.vx) >= PLAYER_PHYSICS.runSpeed * 0.9) {
+      player.turning = false;
+    }
+    const acceleration = player.grounded
+      ? (player.turning ? PLAYER_PHYSICS.turnAcceleration : PLAYER_PHYSICS.groundAcceleration)
+      : (player.turning ? PLAYER_PHYSICS.airTurnAcceleration : PLAYER_PHYSICS.airAcceleration);
     player.vx = approach(player.vx, axis * PLAYER_PHYSICS.runSpeed, acceleration * dt);
     player.facing = axis;
   } else {
+    player.turning = false;
     const deceleration = player.grounded ? PLAYER_PHYSICS.groundDeceleration : PLAYER_PHYSICS.airDeceleration;
     player.vx = approach(player.vx, 0, deceleration * dt);
   }
@@ -124,6 +153,7 @@ export function stepPlayer(current, input, dt, solids) {
   }
 
   let gravityMultiplier = player.vy > 0 ? PLAYER_PHYSICS.fallingGravityMultiplier : 1;
+  if (Math.abs(player.vy) < 80) gravityMultiplier *= PLAYER_PHYSICS.apexGravityMultiplier;
   if (player.vy < 0 && !input.jumpHeld) gravityMultiplier = PLAYER_PHYSICS.releasedJumpGravityMultiplier;
   player.vy = Math.min(
     PLAYER_PHYSICS.maximumFallSpeed,
@@ -136,7 +166,9 @@ export function stepPlayer(current, input, dt, solids) {
 }
 
 export function createCamera(player) {
-  return { x: Math.max(0, player.x - 260), y: 120, targetX: 0, targetY: 0 };
+  const x = Math.max(0, player.x - 260);
+  const y = 120;
+  return { x, y, targetX: x, targetY: y };
 }
 
 export function stepCamera(current, player, dt, world) {
@@ -147,16 +179,21 @@ export function stepCamera(current, player, dt, world) {
     0,
     Math.max(0, world.width - CAMERA_PHYSICS.viewportWidth),
   );
-  const targetY = clamp(
-    player.y + PLAYER_PHYSICS.height / 2 - CAMERA_PHYSICS.viewportHeight / 2 -
-      CAMERA_PHYSICS.verticalBias,
-    0,
-    Math.max(0, world.height - CAMERA_PHYSICS.viewportHeight),
-  );
-  const blend = 1 - 2 ** (-dt / CAMERA_PHYSICS.followHalfLife);
+  const desiredScreenY = CAMERA_PHYSICS.viewportHeight / 2 - CAMERA_PHYSICS.verticalBias;
+  const playerCenterY = player.y + PLAYER_PHYSICS.height / 2;
+  const playerScreenY = playerCenterY - current.y;
+  let targetY = current.targetY ?? current.y;
+  if (playerScreenY < desiredScreenY - CAMERA_PHYSICS.verticalDeadZone) {
+    targetY = playerCenterY - (desiredScreenY - CAMERA_PHYSICS.verticalDeadZone);
+  } else if (playerScreenY > desiredScreenY + CAMERA_PHYSICS.verticalDeadZone) {
+    targetY = playerCenterY - (desiredScreenY + CAMERA_PHYSICS.verticalDeadZone);
+  }
+  targetY = clamp(targetY, 0, Math.max(0, world.height - CAMERA_PHYSICS.viewportHeight));
+  const horizontalBlend = 1 - 2 ** (-dt / CAMERA_PHYSICS.followHalfLife);
+  const verticalBlend = 1 - 2 ** (-dt / CAMERA_PHYSICS.verticalFollowHalfLife);
   return {
-    x: current.x + (targetX - current.x) * blend,
-    y: current.y + (targetY - current.y) * blend,
+    x: current.x + (targetX - current.x) * horizontalBlend,
+    y: current.y + (targetY - current.y) * verticalBlend,
     targetX,
     targetY,
   };

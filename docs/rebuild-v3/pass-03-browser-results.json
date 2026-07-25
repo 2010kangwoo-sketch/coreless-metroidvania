@@ -1,0 +1,116 @@
+{
+  "pass": 3,
+  "generatedAt": "2026-07-25T05:34:25.337Z",
+  "passed": true,
+  "passedCount": 19,
+  "totalCount": 19,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "feelAuditReady",
+      "passed": true
+    },
+    {
+      "name": "forwardSpeedReached",
+      "passed": true
+    },
+    {
+      "name": "directionReversed",
+      "passed": true
+    },
+    {
+      "name": "directionReversalRecorded",
+      "passed": true
+    },
+    {
+      "name": "airControlChangedDirection",
+      "passed": true
+    },
+    {
+      "name": "airMomentumNotInstantlyCancelled",
+      "passed": true
+    },
+    {
+      "name": "fallingStateObserved",
+      "passed": true
+    },
+    {
+      "name": "bufferedLandingRelaunched",
+      "passed": true
+    },
+    {
+      "name": "verticalCameraStableDuringJump",
+      "passed": true
+    },
+    {
+      "name": "actualKeyboardCrossedThreeRooms",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpUnlocked",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpUsed",
+      "passed": true
+    },
+    {
+      "name": "finishReached",
+      "passed": true
+    },
+    {
+      "name": "noResetDuringFullRoute",
+      "passed": true
+    },
+    {
+      "name": "horizontalSpeedBounded",
+      "passed": true
+    },
+    {
+      "name": "cameraFrameStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "forwardVx": 420,
+    "reverseVx": -420,
+    "airVxBeforeTurn": 420,
+    "airVxAfterTurn": 78.67,
+    "bufferedLaunchVy": -525.25,
+    "verticalCameraRangeDuringJump": 5.06,
+    "finalX": 4762,
+    "finalY": 656,
+    "directionReversals": 1,
+    "edgeCorrections": 0,
+    "jumps": 16,
+    "doubleJumps": 2,
+    "landings": 14,
+    "resetsIncludingThreeTestResets": 3
+  },
+  "jumpAttempts": [
+    "r1-low",
+    "r1-mid",
+    "r1-high",
+    "r1-exit",
+    "r2-low",
+    "r2-recovery",
+    "r3-altar",
+    "r3-rise-one",
+    "r3-rise-two",
+    "r3-landing",
+    "r3-landing"
+  ],
+  "consoleErrors": [],
+  "pageErrors": []
+}

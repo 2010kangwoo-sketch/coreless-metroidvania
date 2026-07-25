@@ -25,4 +25,5 @@ jobs:
         run: node tools/verify-rebuild-v3-pass01.mjs
       - name: Verify V3 Pass 02 physics
         run: node tools/verify-rebuild-v3-pass02.mjs
-
+      - name: Verify V3 Pass 03 movement feel
+        run: node tools/verify-rebuild-v3-pass03.mjs
