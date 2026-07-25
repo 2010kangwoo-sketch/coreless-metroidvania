@@ -1,0 +1,151 @@
+{
+  "pass": 4,
+  "generatedAt": "2026-07-25T06:12:35.064Z",
+  "passed": true,
+  "passedCount": 32,
+  "totalCount": 32,
+  "checks": [
+    {
+      "name": "isolatedNonCanonicalRoom",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "twoVerticalWalls",
+      "passed": true
+    },
+    {
+      "name": "shaftWideEnough",
+      "passed": true
+    },
+    {
+      "name": "shaftNarrowEnoughForWallJump",
+      "passed": true
+    },
+    {
+      "name": "leftWallLowerAtTop",
+      "passed": true
+    },
+    {
+      "name": "threeRecoveryLedges",
+      "passed": true
+    },
+    {
+      "name": "exitOutsideShaft",
+      "passed": true
+    },
+    {
+      "name": "ceilingTestIncluded",
+      "passed": true
+    },
+    {
+      "name": "finishTriggerIncluded",
+      "passed": true
+    },
+    {
+      "name": "spawnInsideShaft",
+      "passed": true
+    },
+    {
+      "name": "wallSlideTargetSafe",
+      "passed": true
+    },
+    {
+      "name": "wallGraceShort",
+      "passed": true
+    },
+    {
+      "name": "reattachLockShort",
+      "passed": true
+    },
+    {
+      "name": "wallSlideDetected",
+      "passed": true
+    },
+    {
+      "name": "wallSlideSpeedInTarget",
+      "passed": true
+    },
+    {
+      "name": "wallSlideDoesNotAccelerateForever",
+      "passed": true
+    },
+    {
+      "name": "wallHoldDoesNotClimb",
+      "passed": true
+    },
+    {
+      "name": "wallJumpTriggered",
+      "passed": true
+    },
+    {
+      "name": "wallJumpMovesAway",
+      "passed": true
+    },
+    {
+      "name": "wallJumpMovesUp",
+      "passed": true
+    },
+    {
+      "name": "wallJumpClearsContact",
+      "passed": true
+    },
+    {
+      "name": "reattachLockSet",
+      "passed": true
+    },
+    {
+      "name": "contactGraceWorks",
+      "passed": true
+    },
+    {
+      "name": "expiredContactGraceRejected",
+      "passed": true
+    },
+    {
+      "name": "sameWallReattachBlocked",
+      "passed": true
+    },
+    {
+      "name": "wallJumpCreatesSeparation",
+      "passed": true
+    },
+    {
+      "name": "ceilingStopsHead",
+      "passed": true
+    },
+    {
+      "name": "recoveryPlatformPassesFromBelow",
+      "passed": true
+    },
+    {
+      "name": "recoveryPlatformCatchesFromAbove",
+      "passed": true
+    },
+    {
+      "name": "alternatingClimbReachesTarget",
+      "passed": true
+    },
+    {
+      "name": "alternatingClimbJumpCountReasonable",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "wallSlideSettledSpeed": 170,
+    "wallJumpVx": 390,
+    "wallJumpVy": -664.17,
+    "contactGraceWorked": true,
+    "expiredGraceRejected": true,
+    "sameWallTouchedDuringLock": false,
+    "ceilingMinimumY": 130,
+    "recoveryPlatformPassedUpward": true,
+    "recoveryPlatformLandedFromAbove": true,
+    "alternatingWallJumps": 9,
+    "alternatingClimbHeight": 858.4,
+    "alternatingMaximumSlideSpeed": 361.56
+  }
+}

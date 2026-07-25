@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko" data-coreless-v3-wall-ready="false">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071015">
+  <meta name="description" content="Coreless V3 벽 접촉과 벽 점프 독립 시험실">
+  <title>Coreless V3 · Wall Movement Pass 04</title>
+  <link rel="stylesheet" href="v3-style.css?v=pass04">
+</head>
+<body>
+  <main class="v3-shell">
+    <canvas
+      id="wallCanvas"
+      width="1200"
+      height="680"
+      tabindex="0"
+      aria-label="Coreless V3 isolated wall movement test chamber"
+      aria-busy="true"
+    ></canvas>
+    <header class="v3-panel" aria-live="polite">
+      <p>CORELESS · REBUILD V3</p>
+      <h1>PASS 04 / WALL MOVEMENT</h1>
+      <div>
+        <span id="wallBuildStatus">BOOTING</span>
+        <span id="wallAuditStatus">AUDIT PENDING</span>
+      </div>
+    </header>
+    <aside class="v3-note">
+      실제 본 경로가 아닌 벽 물리 검증 전용 시험실입니다.
+    </aside>
+  </main>
+  <noscript>JavaScript가 필요합니다.</noscript>
+  <script type="module" src="src/v3/pass04-main.js?v=pass04"></script>
+</body>
+</html>

@@ -9,6 +9,7 @@ on:
       - "src/v3/**"
       - "tools/verify-rebuild-v3-*.mjs"
       - "v3.html"
+      - "v3-wall-test.html"
       - "v3-style.css"
       - ".github/workflows/rebuild-v3-verify.yml"
 
@@ -27,3 +28,5 @@ jobs:
         run: node tools/verify-rebuild-v3-pass02.mjs
       - name: Verify V3 Pass 03 movement feel
         run: node tools/verify-rebuild-v3-pass03.mjs
+      - name: Verify V3 Pass 04 wall movement
+        run: node tools/verify-rebuild-v3-pass04.mjs

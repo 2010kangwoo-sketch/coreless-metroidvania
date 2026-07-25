@@ -1,0 +1,152 @@
+{
+  "pass": 4,
+  "generatedAt": "2026-07-25T06:12:43.494Z",
+  "passed": true,
+  "passedCount": 17,
+  "totalCount": 17,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "structuralAuditReady",
+      "passed": true
+    },
+    {
+      "name": "holdingWallDoesNotClimb",
+      "passed": true
+    },
+    {
+      "name": "holdingWallDoesNotJump",
+      "passed": true
+    },
+    {
+      "name": "wallContactsRecorded",
+      "passed": true
+    },
+    {
+      "name": "wallSlidesRecorded",
+      "passed": true
+    },
+    {
+      "name": "actualWallJumpsRecorded",
+      "passed": true
+    },
+    {
+      "name": "wallJumpMovesHorizontally",
+      "passed": true
+    },
+    {
+      "name": "wallJumpMovesUpward",
+      "passed": true
+    },
+    {
+      "name": "climbedVerticalShaft",
+      "passed": true
+    },
+    {
+      "name": "finishReached",
+      "passed": true
+    },
+    {
+      "name": "finishedOnExitPlatform",
+      "passed": true
+    },
+    {
+      "name": "onlyPlannedResetUsed",
+      "passed": true
+    },
+    {
+      "name": "edgeCorrectionNotUsedAsClimb",
+      "passed": true
+    },
+    {
+      "name": "cameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "noJumpHoldStartY": 1236,
+    "noJumpHoldEndY": 1236,
+    "wallContacts": 11,
+    "wallSlideFrames": 69,
+    "wallJumps": 9,
+    "minimumJumpHorizontalSpeed": 410.5,
+    "maximumJumpVerticalSpeed": 616.67,
+    "minimumY": 140.73,
+    "climbedHeight": 1095.27,
+    "settledSlideMaximum": 170,
+    "finalX": 923.28,
+    "finalY": 206,
+    "edgeCorrections": 0,
+    "resets": 1,
+    "maximumCameraStep": 9.366
+  },
+  "wallJumpSamples": [
+    {
+      "side": -1,
+      "vx": 420,
+      "vy": -584.9999999999998,
+      "y": 1077.414847222222
+    },
+    {
+      "side": 1,
+      "vx": -420,
+      "vy": -584.9999999999998,
+      "y": 985.9318777777765
+    },
+    {
+      "side": -1,
+      "vx": 420,
+      "vy": -584.9999999999998,
+      "y": 870.8271861111098
+    },
+    {
+      "side": 1,
+      "vx": -420,
+      "vy": -584.9999999999998,
+      "y": 754.2720888888875
+    },
+    {
+      "side": -1,
+      "vx": 410.49999999999994,
+      "vy": -616.6666666666665,
+      "y": 673.3738111111089
+    },
+    {
+      "side": 1,
+      "vx": -420,
+      "vy": -584.9999999999998,
+      "y": 549.885008333331
+    },
+    {
+      "side": -1,
+      "vx": 410.49999999999994,
+      "vy": -616.6666666666665,
+      "y": 446.16009444444217
+    },
+    {
+      "side": 1,
+      "vx": -410.49999999999994,
+      "vy": -616.6666666666665,
+      "y": 351.5165694444422
+    },
+    {
+      "side": -1,
+      "vx": 410.49999999999994,
+      "vy": -616.6666666666665,
+      "y": 237.9097111111089
+    }
+  ],
+  "consoleErrors": [],
+  "pageErrors": []
+}

@@ -18,6 +18,13 @@ export const PLAYER_PHYSICS = Object.freeze({
   coyoteTime: 0.11,
   jumpBufferTime: 0.12,
   maximumEdgeCorrection: 10,
+  wallProbeDistance: 3,
+  wallSlideSpeed: 170,
+  wallSlideAcceleration: 7200,
+  wallJumpHorizontalSpeed: 390,
+  wallJumpVerticalSpeed: 680,
+  wallContactGraceTime: 0.1,
+  wallReattachLockTime: 0.12,
 });
 
 export const CAMERA_PHYSICS = Object.freeze({
@@ -50,6 +57,12 @@ export function createPlayer(x, y) {
     turning: false,
     landedThisFrame: false,
     edgeCorrectedThisFrame: false,
+    wallSide: 0,
+    lastWallSide: 0,
+    wallContactRemaining: 0,
+    wallReattachRemaining: 0,
+    wallSliding: false,
+    wallJumpedThisFrame: false,
     abilities: { doubleJump: false },
   };
 }
@@ -60,13 +73,30 @@ const overlaps = (player, solid) =>
   player.y < solid.y + solid.height &&
   player.y + PLAYER_PHYSICS.height > solid.y;
 
+const overlapsAt = (player, solid, x, y) =>
+  x < solid.x + solid.width &&
+  x + PLAYER_PHYSICS.width > solid.x &&
+  y < solid.y + solid.height &&
+  y + PLAYER_PHYSICS.height > solid.y;
+
+function detectWallSide(player, solids) {
+  const wallSolids = solids.filter(solid => solid.role === "wall");
+  const probe = PLAYER_PHYSICS.wallProbeDistance;
+  const touchesLeft = wallSolids.some(solid => overlapsAt(player, solid, player.x - probe, player.y));
+  const touchesRight = wallSolids.some(solid => overlapsAt(player, solid, player.x + probe, player.y));
+  if (touchesLeft === touchesRight) return 0;
+  return touchesLeft ? -1 : 1;
+}
+
 function moveHorizontal(player, solids, dt) {
   player.x += player.vx * dt;
   for (const solid of solids) {
+    if (solid.role === "recovery") continue;
     if (!overlaps(player, solid)) continue;
     const feetPenetration = player.y + PLAYER_PHYSICS.height - solid.y;
     const canCorrectEdge =
       solid.role !== "ceiling" &&
+      solid.role !== "wall" &&
       feetPenetration > 0 &&
       feetPenetration <= PLAYER_PHYSICS.maximumEdgeCorrection &&
       player.vy >= 0;
@@ -87,6 +117,7 @@ function moveVertical(player, solids, dt) {
   player.grounded = false;
   player.y += player.vy * dt;
   for (const solid of solids) {
+    if (solid.role === "recovery" && player.vy < 0) continue;
     if (!overlaps(player, solid)) continue;
     if (player.vy >= 0 && player.previousY + PLAYER_PHYSICS.height <= solid.y + 3) {
       player.y = solid.y - PLAYER_PHYSICS.height;
@@ -109,8 +140,12 @@ export function stepPlayer(current, input, dt, solids) {
     previousY: current.y,
     landedThisFrame: false,
     edgeCorrectedThisFrame: false,
+    wallJumpedThisFrame: false,
   };
-  const axis = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+  player.wallContactRemaining = Math.max(0, player.wallContactRemaining - dt);
+  player.wallReattachRemaining = Math.max(0, player.wallReattachRemaining - dt);
+  let axis = (input.right ? 1 : 0) - (input.left ? 1 : 0);
+  if (player.wallReattachRemaining > 0 && axis === player.lastWallSide) axis = 0;
 
   if (axis !== 0) {
     if (player.vx !== 0 && Math.sign(player.vx) !== axis) player.turning = true;
@@ -143,6 +178,24 @@ export function stepPlayer(current, input, dt, solids) {
     player.jumpsUsed = 1;
   } else if (
     player.jumpBufferRemaining > 0 &&
+    !player.grounded &&
+    (player.wallSide !== 0 || player.wallContactRemaining > 0)
+  ) {
+    const jumpSide = player.wallSide || player.lastWallSide;
+    player.vx = -jumpSide * PLAYER_PHYSICS.wallJumpHorizontalSpeed;
+    player.vy = -PLAYER_PHYSICS.wallJumpVerticalSpeed;
+    player.facing = -jumpSide;
+    player.turning = false;
+    player.wallSide = 0;
+    player.lastWallSide = jumpSide;
+    player.wallContactRemaining = 0;
+    player.wallReattachRemaining = PLAYER_PHYSICS.wallReattachLockTime;
+    player.wallSliding = false;
+    player.wallJumpedThisFrame = true;
+    player.jumpBufferRemaining = 0;
+    player.jumpsUsed = 1;
+  } else if (
+    player.jumpBufferRemaining > 0 &&
     player.abilities.doubleJump &&
     !player.grounded &&
     player.jumpsUsed === 1
@@ -162,6 +215,23 @@ export function stepPlayer(current, input, dt, solids) {
 
   moveHorizontal(player, solids, dt);
   moveVertical(player, solids, dt);
+  const detectedWallSide = player.wallReattachRemaining > 0 ? 0 : detectWallSide(player, solids);
+  if (detectedWallSide !== 0) {
+    player.wallSide = detectedWallSide;
+    player.lastWallSide = detectedWallSide;
+    player.wallContactRemaining = PLAYER_PHYSICS.wallContactGraceTime;
+  } else {
+    player.wallSide = 0;
+  }
+  player.wallSliding = false;
+  if (!player.grounded && player.wallSide !== 0 && player.vy > 0) {
+    player.vy = approach(
+      player.vy,
+      PLAYER_PHYSICS.wallSlideSpeed,
+      PLAYER_PHYSICS.wallSlideAcceleration * dt,
+    );
+    player.wallSliding = true;
+  }
   return player;
 }
 
