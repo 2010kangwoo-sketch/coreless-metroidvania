@@ -1,0 +1,1299 @@
+{
+  "pass": 1,
+  "generatedAt": "2026-07-25T08:35:14.571Z",
+  "passed": true,
+  "passedCount": 35,
+  "totalCount": 35,
+  "checks": [
+    {
+      "name": "twentyMegaRooms",
+      "passed": true
+    },
+    {
+      "name": "thirtySixSpacesPerMegaRoom",
+      "passed": true
+    },
+    {
+      "name": "campaignHasSevenHundredTwentySpaces",
+      "passed": true
+    },
+    {
+      "name": "campaignTargetsFourHours",
+      "passed": true
+    },
+    {
+      "name": "firstMegaRoomHasThirtySixSpaces",
+      "passed": true
+    },
+    {
+      "name": "sixTiers",
+      "passed": true
+    },
+    {
+      "name": "sixSpacesPerTier",
+      "passed": true
+    },
+    {
+      "name": "twelveMinuteFirstRoom",
+      "passed": true
+    },
+    {
+      "name": "twentySecondAverage",
+      "passed": true
+    },
+    {
+      "name": "spacesNearTwoScreens",
+      "passed": true
+    },
+    {
+      "name": "zigzagDirectionsAlternate",
+      "passed": true
+    },
+    {
+      "name": "routeColumnsAreContiguous",
+      "passed": true
+    },
+    {
+      "name": "fiveAlternatingVerticalConnectors",
+      "passed": true
+    },
+    {
+      "name": "allZonesHavePurpose",
+      "passed": true
+    },
+    {
+      "name": "allZonesHaveDecision",
+      "passed": true
+    },
+    {
+      "name": "allZonesHaveRecovery",
+      "passed": true
+    },
+    {
+      "name": "allZonesAdvanceStory",
+      "passed": true
+    },
+    {
+      "name": "atLeastTenRoomCategories",
+      "passed": true
+    },
+    {
+      "name": "noThreeHighIntensitySpacesInRow",
+      "passed": true
+    },
+    {
+      "name": "checkpointsAtEveryTierBoundary",
+      "passed": true
+    },
+    {
+      "name": "attackBeforeMandatoryCombat",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpBeforeItsTests",
+      "passed": true
+    },
+    {
+      "name": "noPreAttackEnemyFight",
+      "passed": true
+    },
+    {
+      "name": "firstBossHasTwoReadablePhases",
+      "passed": true
+    },
+    {
+      "name": "campaignActsCoverFourRoomsEach",
+      "passed": true
+    },
+    {
+      "name": "enemyTiersNeverDecrease",
+      "passed": true
+    },
+    {
+      "name": "skillsSpreadAcrossCampaign",
+      "passed": true
+    },
+    {
+      "name": "finalRoomIsOriginCore",
+      "passed": true
+    },
+    {
+      "name": "finalRoomHasRootGuardian",
+      "passed": true
+    },
+    {
+      "name": "everyCampaignRoomHasStoryBeat",
+      "passed": true
+    },
+    {
+      "name": "placementIdsMatchZones",
+      "passed": true
+    },
+    {
+      "name": "sequenceIsContinuous",
+      "passed": true
+    },
+    {
+      "name": "nominalWorldIsMassive",
+      "passed": true
+    },
+    {
+      "name": "layoutBeforeFinalArt",
+      "passed": true
+    },
+    {
+      "name": "layoutBeforeRuntime",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "megaRooms": 20,
+    "spacesPerMegaRoom": 36,
+    "campaignSpaces": 720,
+    "firstMegaRoomSeconds": 720,
+    "campaignSeconds": 14400,
+    "averageSpaceSeconds": 20,
+    "tiers": 6,
+    "categories": 13,
+    "checkpoints": 7,
+    "nominalWorldWidth": 16800,
+    "nominalWorldHeight": 7400
+  },
+  "contract": {
+    "viewport": {
+      "width": 1400,
+      "height": 900
+    },
+    "megaRoomCount": 20,
+    "spacesPerMegaRoom": 36,
+    "tiersPerMegaRoom": 6,
+    "spacesPerTier": 6,
+    "targetSecondsPerSpace": 20,
+    "targetSecondsPerMegaRoom": 720,
+    "targetCampaignSeconds": 14400,
+    "nominalWorld": {
+      "width": 16800,
+      "height": 7400
+    },
+    "routeRule": "six spaces per tier, alternating east and west, with a vertical connector at each tier end"
+  },
+  "extentTypes": {
+    "wide": {
+      "width": 2800,
+      "height": 900,
+      "screenAreas": 2
+    },
+    "tall": {
+      "width": 1400,
+      "height": 1800,
+      "screenAreas": 2
+    },
+    "arena": {
+      "width": 2400,
+      "height": 1200,
+      "screenAreas": 2.29
+    },
+    "junction": {
+      "width": 2100,
+      "height": 1200,
+      "screenAreas": 2
+    }
+  },
+  "firstMegaRoom": [
+    {
+      "id": "S01",
+      "sequence": 1,
+      "name": "빈 도착실",
+      "category": "story",
+      "extent": "wide",
+      "targetSeconds": 12,
+      "intensity": 1,
+      "primaryMechanic": "안전한 이동과 목표 확인",
+      "decision": "동쪽의 원점 신호를 따라갈지 정지해 기록을 읽을지 선택",
+      "recovery": "낙하·피해 요소가 없는 시작 바닥",
+      "storyBeat": "코어리스가 기억과 중심 없이 깨어난다.",
+      "enemyRole": "없음",
+      "checkpoint": true,
+      "unlock": null
+    },
+    {
+      "id": "S02",
+      "sequence": 2,
+      "name": "부서진 계단",
+      "category": "navigation",
+      "extent": "wide",
+      "targetSeconds": 15,
+      "intensity": 1,
+      "primaryMechanic": "짧은 점프와 긴 점프 높이 비교",
+      "decision": "낮은 계단과 높은 발판 중 진입 높이를 선택",
+      "recovery": "모든 틈 아래에 연속된 회수 바닥",
+      "storyBeat": "비상 기동 회로가 아직 작동함을 확인한다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S03",
+      "sequence": 3,
+      "name": "낮은 천장 통로",
+      "category": "navigation",
+      "extent": "wide",
+      "targetSeconds": 16,
+      "intensity": 2,
+      "primaryMechanic": "점프 버튼 조기 해제로 머리 높이 제어",
+      "decision": "낮은 길과 위쪽 기억 파편 길 중 선택",
+      "recovery": "천장 충돌 뒤 같은 바닥에 착지",
+      "storyBeat": "몸이 점프 출력을 기억하지만 제어 기록은 손상되어 있다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S04",
+      "sequence": 4,
+      "name": "회수 우물",
+      "category": "recovery",
+      "extent": "tall",
+      "targetSeconds": 17,
+      "intensity": 2,
+      "primaryMechanic": "낙하 중 방향 전환과 안전 착지",
+      "decision": "중간 발판으로 내려갈지 곧장 바닥으로 낙하할지 선택",
+      "recovery": "우물 전체가 즉사 없는 완충 바닥으로 연결",
+      "storyBeat": "아래층에서도 원점 신호가 계속 들린다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S05",
+      "sequence": 5,
+      "name": "맥동 관측창",
+      "category": "story",
+      "extent": "wide",
+      "targetSeconds": 16,
+      "intensity": 1,
+      "primaryMechanic": "배경 신호와 진행 방향 읽기",
+      "decision": "기록 단말을 읽거나 바로 승강축으로 이동",
+      "recovery": "적과 움직이는 장애물이 없는 관찰 구간",
+      "storyBeat": "원점 코어의 맥동이 코어리스에게만 반응한다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S06",
+      "sequence": 6,
+      "name": "동부 승강축",
+      "category": "transition",
+      "extent": "tall",
+      "targetSeconds": 18,
+      "intensity": 2,
+      "primaryMechanic": "첫 수직 이동과 카메라 추종",
+      "decision": "빠른 승강기와 느린 발판 계단 중 선택",
+      "recovery": "승강기 아래 고정 안전대와 즉시 재호출 장치",
+      "storyBeat": "상층에서 절단 권한의 봉인 신호가 감지된다.",
+      "enemyRole": "없음",
+      "checkpoint": true,
+      "unlock": null
+    },
+    {
+      "id": "S07",
+      "sequence": 7,
+      "name": "잔향 회랑",
+      "category": "navigation",
+      "extent": "wide",
+      "targetSeconds": 16,
+      "intensity": 2,
+      "primaryMechanic": "진행 방향이 서쪽으로 뒤집히는 첫 지그재그",
+      "decision": "바닥의 안전 길과 위쪽 빠른 길 중 선택",
+      "recovery": "양쪽 길이 같은 출구 앞에서 합류",
+      "storyBeat": "뒤쪽에서 휴면 파수기의 움직임이 처음 보인다.",
+      "enemyRole": "처치 불필요 휴면 파수기",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S08",
+      "sequence": 8,
+      "name": "절단 권한실",
+      "category": "skill",
+      "extent": "wide",
+      "targetSeconds": 18,
+      "intensity": 1,
+      "primaryMechanic": "기본 공격 권한 회수와 정지 표적",
+      "decision": "가까운 표적과 높은 표적 중 먼저 시험",
+      "recovery": "공격하지 않아도 출구가 막히지 않는 안전실",
+      "storyBeat": "관리체를 손상하지 않으려 봉인했던 절단 권한을 회수한다.",
+      "enemyRole": "고정형 무해 표적",
+      "checkpoint": false,
+      "unlock": "basic_attack"
+    },
+    {
+      "id": "S09",
+      "sequence": 9,
+      "name": "휴면 표적실",
+      "category": "combat",
+      "extent": "arena",
+      "targetSeconds": 18,
+      "intensity": 2,
+      "primaryMechanic": "긴 예고 뒤 한 번 돌진하는 첫 적",
+      "decision": "후퇴 공간에서 기다리거나 먼저 접근해 공격",
+      "recovery": "적이 방 밖으로 나오지 않고 패배 시 입구에서 재시작",
+      "storyBeat": "검은 공명이 휴면 관리체를 강제로 깨운다.",
+      "enemyRole": "지상 크롤러 1체",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S10",
+      "sequence": 10,
+      "name": "왕복 운반대",
+      "category": "navigation",
+      "extent": "wide",
+      "targetSeconds": 20,
+      "intensity": 2,
+      "primaryMechanic": "움직이는 바닥 위 위치 유지",
+      "decision": "느린 고정 발판과 빠른 운반대 중 선택",
+      "recovery": "운반대 아래 전체 길이의 고정 회수 통로",
+      "storyBeat": "제련소 운반 장치가 여전히 원점 방향으로 자재를 옮긴다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S11",
+      "sequence": 11,
+      "name": "방패 파수기 둥지",
+      "category": "combat",
+      "extent": "arena",
+      "targetSeconds": 22,
+      "intensity": 3,
+      "primaryMechanic": "정면 방어와 등 뒤 약점",
+      "decision": "위 발판으로 돌아가거나 돌진 뒤를 노려 반격",
+      "recovery": "좌우 후퇴대와 공격 없는 재정비 구역",
+      "storyBeat": "파수기가 코어리스를 시설 침입자로 분류한다.",
+      "enemyRole": "방패 파수기 1체",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S12",
+      "sequence": 12,
+      "name": "서부 정비축",
+      "category": "transition",
+      "extent": "tall",
+      "targetSeconds": 18,
+      "intensity": 2,
+      "primaryMechanic": "서쪽 끝에서 위층으로 방향 전환",
+      "decision": "벽면 발판과 중앙 승강판 중 선택",
+      "recovery": "중간 높이마다 고정 휴식 홈 배치",
+      "storyBeat": "작업자 철수 기록의 첫 조각이 위층을 가리킨다.",
+      "enemyRole": "없음",
+      "checkpoint": true,
+      "unlock": null
+    },
+    {
+      "id": "S13",
+      "sequence": 13,
+      "name": "파손 주조장",
+      "category": "navigation",
+      "extent": "wide",
+      "targetSeconds": 18,
+      "intensity": 2,
+      "primaryMechanic": "높이가 다른 세 작업대 횡단",
+      "decision": "짧은 안전 점프와 긴 지름길 점프 중 선택",
+      "recovery": "모든 간격 아래 경사형 회수 바닥",
+      "storyBeat": "작업대에 코어리스의 정비 표식이 남아 있다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S14",
+      "sequence": 14,
+      "name": "환기 크롤러실",
+      "category": "combat",
+      "extent": "arena",
+      "targetSeconds": 18,
+      "intensity": 3,
+      "primaryMechanic": "낮은 환기구에서 나오는 적의 소리 예고",
+      "decision": "환기구를 먼저 봉쇄하거나 넓은 바닥에서 상대",
+      "recovery": "적 최대 2체, 출구 쪽 안전 발판 보장",
+      "storyBeat": "오염체는 소리와 열을 따라 움직인다.",
+      "enemyRole": "지상 크롤러 2체",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S15",
+      "sequence": 15,
+      "name": "매달린 기중기",
+      "category": "navigation",
+      "extent": "tall",
+      "targetSeconds": 20,
+      "intensity": 3,
+      "primaryMechanic": "수직·수평 이동 발판의 교차 타이밍",
+      "decision": "한 번에 건너거나 중간 고정 보에 대기",
+      "recovery": "움직이는 발판 아래 두 층의 고정 안전대",
+      "storyBeat": "기중기가 원점 봉인용 부품을 마지막으로 운반했다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S16",
+      "sequence": 16,
+      "name": "노출 증기관",
+      "category": "hazard",
+      "extent": "wide",
+      "targetSeconds": 22,
+      "intensity": 3,
+      "primaryMechanic": "빛과 소리로 예고되는 주기형 증기",
+      "decision": "짧은 창을 연속 통과하거나 안전 홈마다 정지",
+      "recovery": "각 분사기 사이에 캐릭터 두 명 폭의 안전 홈",
+      "storyBeat": "검은 공명이 설비 주기를 불규칙하게 흔든다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S17",
+      "sequence": 17,
+      "name": "세 갈래 전투뜰",
+      "category": "combat",
+      "extent": "arena",
+      "targetSeconds": 24,
+      "intensity": 4,
+      "primaryMechanic": "높이별 적을 공격 순서로 정리",
+      "decision": "포탑 전원·크롤러·방패 파수기 중 첫 목표 선택",
+      "recovery": "후퇴 엄폐물 두 개, 동시 활성 적 최대 3체",
+      "storyBeat": "파수기들이 하나의 공명 명령을 공유하기 시작한다.",
+      "enemyRole": "크롤러·방패 파수기·비활성 포탑",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S18",
+      "sequence": 18,
+      "name": "동부 기억 승강고",
+      "category": "transition",
+      "extent": "tall",
+      "targetSeconds": 18,
+      "intensity": 2,
+      "primaryMechanic": "전투 뒤 호흡 회복과 세 번째 층 전환",
+      "decision": "기록 재생 중 이동하거나 끝까지 들을지 선택",
+      "recovery": "적이 진입하지 못하는 체크포인트 승강고",
+      "storyBeat": "기능 기억 하나가 위층 제단에 격리되었다.",
+      "enemyRole": "없음",
+      "checkpoint": true,
+      "unlock": null
+    },
+    {
+      "id": "S19",
+      "sequence": 19,
+      "name": "공명 날개 제단",
+      "category": "skill",
+      "extent": "junction",
+      "targetSeconds": 12,
+      "intensity": 1,
+      "primaryMechanic": "이중 점프 기능 기억 회수",
+      "decision": "즉시 시험 우물로 가거나 기록을 확인",
+      "recovery": "능력 획득 방에는 피해와 낙사 없음",
+      "storyBeat": "공명 날개는 새 장비가 아니라 잃어버린 움직임이다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": "double_jump"
+    },
+    {
+      "id": "S20",
+      "sequence": 20,
+      "name": "이중 도약 우물",
+      "category": "navigation",
+      "extent": "tall",
+      "targetSeconds": 16,
+      "intensity": 2,
+      "primaryMechanic": "첫 점프 정점에서 두 번째 점프 사용",
+      "decision": "넓은 중간 발판과 높은 직행 발판 중 선택",
+      "recovery": "실패하면 우물 바닥에서 즉시 다시 시도",
+      "storyBeat": "복원된 기억이 몸의 공명 출력을 두 단계로 나눈다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S21",
+      "sequence": 21,
+      "name": "상하 분기 공방",
+      "category": "choice",
+      "extent": "junction",
+      "targetSeconds": 20,
+      "intensity": 3,
+      "primaryMechanic": "이중 점프를 이용한 두 경로 비교",
+      "decision": "아래 안전 전투 길과 위쪽 빠른 정밀 길 중 선택",
+      "recovery": "두 길 모두 중앙 회수 공간으로 연결",
+      "storyBeat": "작업자 기록과 능력 조각 중 무엇을 먼저 볼지 선택한다.",
+      "enemyRole": "아래 길 크롤러 1체",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S22",
+      "sequence": 22,
+      "name": "비행 파수기 온실",
+      "category": "combat",
+      "extent": "arena",
+      "targetSeconds": 20,
+      "intensity": 3,
+      "primaryMechanic": "높이를 바꾸는 비행 적과 공중 공격",
+      "decision": "낮은 엄폐물 뒤에서 유인하거나 위 발판에서 선제 공격",
+      "recovery": "비행 적은 방 경계와 화면 밖에서 공격 불가",
+      "storyBeat": "생체 온실의 관리 드론까지 검은 공명에 잠식되었다.",
+      "enemyRole": "비행 파수기 1체",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S23",
+      "sequence": 23,
+      "name": "무너지는 교량",
+      "category": "setpiece",
+      "extent": "wide",
+      "targetSeconds": 22,
+      "intensity": 4,
+      "primaryMechanic": "밟은 뒤 늦게 붕괴하는 넓은 다리",
+      "decision": "속도를 유지하거나 중간 지지탑에서 기다림",
+      "recovery": "다리 아래 연속 회수 통로와 재상승 승강판",
+      "storyBeat": "철수대가 원점 구역을 봉쇄하며 일부 교량을 끊었다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S24",
+      "sequence": 24,
+      "name": "서부 수직 회수로",
+      "category": "transition",
+      "extent": "tall",
+      "targetSeconds": 20,
+      "intensity": 2,
+      "primaryMechanic": "붕괴 구간 뒤 안전한 수직 회복",
+      "decision": "승강추를 작동하거나 이중 점프로 측면 발판 상승",
+      "recovery": "중간 휴식대 세 개와 낙하 완충 바닥",
+      "storyBeat": "위층에 마지막 철수자의 기억 신호가 남아 있다.",
+      "enemyRole": "없음",
+      "checkpoint": true,
+      "unlock": null
+    },
+    {
+      "id": "S25",
+      "sequence": 25,
+      "name": "작업자 기억못",
+      "category": "story",
+      "extent": "wide",
+      "targetSeconds": 14,
+      "intensity": 1,
+      "primaryMechanic": "직전 긴장 해소와 기억 재생",
+      "decision": "세 기록 중 하나를 먼저 복원",
+      "recovery": "전투·함정이 없는 완전 안전 구간",
+      "storyBeat": "작업자들은 코어리스가 원점 코어를 분리하는 일을 도왔다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S26",
+      "sequence": 26,
+      "name": "교차 압착기실",
+      "category": "hazard",
+      "extent": "wide",
+      "targetSeconds": 20,
+      "intensity": 3,
+      "primaryMechanic": "서로 어긋난 압착기 예고 읽기",
+      "decision": "한 주기를 기다리거나 빠른 위쪽 길로 우회",
+      "recovery": "각 압착기 전후 고정 안전대와 비치명 피해",
+      "storyBeat": "시설 방어가 코어리스의 진행을 직접 막기 시작한다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S27",
+      "sequence": 27,
+      "name": "용광로 갈비뼈",
+      "category": "navigation",
+      "extent": "tall",
+      "targetSeconds": 22,
+      "intensity": 3,
+      "primaryMechanic": "곡선 지지대 사이의 상승·하강",
+      "decision": "내부의 짧은 길과 외곽의 넓은 길 중 선택",
+      "recovery": "아래쪽 경사 회수면이 시작점으로 연결",
+      "storyBeat": "거대한 용광로의 형태가 원점 수호자의 골격과 닮아 있다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S28",
+      "sequence": 28,
+      "name": "역행 운반 회랑",
+      "category": "setpiece",
+      "extent": "wide",
+      "targetSeconds": 24,
+      "intensity": 4,
+      "primaryMechanic": "진행 반대 방향으로 움직이는 대형 운반대",
+      "decision": "운반대 위를 달리거나 아래 보수 통로로 우회",
+      "recovery": "아래 통로는 느리지만 피해 없이 출구에 도달",
+      "storyBeat": "봉인 부품이 이제 원점 쪽이 아니라 바깥쪽으로 밀려난다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S29",
+      "sequence": 29,
+      "name": "혼성 조립 경기장",
+      "category": "combat",
+      "extent": "arena",
+      "targetSeconds": 26,
+      "intensity": 4,
+      "primaryMechanic": "세 역할의 적과 높이 선택",
+      "decision": "포탑 전원 차단·비행 적·방패 적의 처리 순서 선택",
+      "recovery": "엄폐물 세 곳, 동시 활성 적 최대 3체, 입구 후퇴 가능",
+      "storyBeat": "공명 명령이 서로 다른 관리체를 하나의 전투군으로 묶는다.",
+      "enemyRole": "방패 파수기·비행 파수기·고정 포탑",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S30",
+      "sequence": 30,
+      "name": "동부 휴식 승강고",
+      "category": "rest",
+      "extent": "tall",
+      "targetSeconds": 18,
+      "intensity": 1,
+      "primaryMechanic": "최종 층 전 회복·저장·목표 확인",
+      "decision": "체력 회복과 기록 열람 순서 선택",
+      "recovery": "완전 안전 체크포인트와 즉시 승강기 재호출",
+      "storyBeat": "제련 수호자가 원점 신호를 가로막고 있음이 확인된다.",
+      "enemyRole": "없음",
+      "checkpoint": true,
+      "unlock": null
+    },
+    {
+      "id": "S31",
+      "sequence": 31,
+      "name": "고요한 근원 전실",
+      "category": "story",
+      "extent": "wide",
+      "targetSeconds": 12,
+      "intensity": 1,
+      "primaryMechanic": "보스 전 규칙과 약점 예고",
+      "decision": "연습 표적에서 공격하거나 바로 진입",
+      "recovery": "보스방과 분리된 안전 준비 공간",
+      "storyBeat": "수호자는 코어리스를 기억하지만 침입자로 판정한다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S32",
+      "sequence": 32,
+      "name": "수호자 외곽 고리",
+      "category": "combat",
+      "extent": "arena",
+      "targetSeconds": 28,
+      "intensity": 3,
+      "primaryMechanic": "보스의 두 핵심 공격을 약한 형태로 학습",
+      "decision": "낮은 엄폐와 높은 이중 점프 회피 중 선택",
+      "recovery": "피해 뒤 넓은 회복 창과 퇴장 가능한 입구",
+      "storyBeat": "외곽 방어체가 수호자의 공격 리듬을 전달한다.",
+      "enemyRole": "외곽 방어체 2체",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S33",
+      "sequence": 33,
+      "name": "제련 수호자 1막",
+      "category": "boss",
+      "extent": "arena",
+      "targetSeconds": 36,
+      "intensity": 5,
+      "primaryMechanic": "돌진·내려찍기 뒤 반격 창",
+      "decision": "지상 회피와 이중 점프 회피를 상황에 맞게 선택",
+      "recovery": "각 패턴 뒤 최소 1.2초 안전 반격 창",
+      "storyBeat": "수호자는 코어리스를 원점 폭주의 원인으로 기억한다.",
+      "enemyRole": "제련 수호자",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S34",
+      "sequence": 34,
+      "name": "제련 수호자 2막",
+      "category": "boss",
+      "extent": "arena",
+      "targetSeconds": 38,
+      "intensity": 5,
+      "primaryMechanic": "지형을 바꾸는 공명파와 약점 노출",
+      "decision": "상층 발판을 유지하거나 아래 넓은 바닥으로 이동",
+      "recovery": "낙하 시 전투 바닥 복귀, 즉사 구덩이 없음",
+      "storyBeat": "수호자의 손상된 기록에서 코어 분리가 자발적이었다는 단서가 나온다.",
+      "enemyRole": "강화 제련 수호자",
+      "checkpoint": false,
+      "unlock": null
+    },
+    {
+      "id": "S35",
+      "sequence": 35,
+      "name": "공명 회수실",
+      "category": "reward",
+      "extent": "wide",
+      "targetSeconds": 24,
+      "intensity": 1,
+      "primaryMechanic": "보상·회복·귀환 지름길 개방",
+      "decision": "기억 기록과 다음 지역 지도 중 먼저 확인",
+      "recovery": "체크포인트·회복 장치·입구 귀환 승강기",
+      "storyBeat": "첫 수호자 기록이 다음 초대형 방의 냉각 수로를 가리킨다.",
+      "enemyRole": "없음",
+      "checkpoint": true,
+      "unlock": "forge_access"
+    },
+    {
+      "id": "S36",
+      "sequence": 36,
+      "name": "서부 전망 출구",
+      "category": "exit",
+      "extent": "wide",
+      "targetSeconds": 22,
+      "intensity": 1,
+      "primaryMechanic": "완주 경로 조망과 다음 목표 확인",
+      "decision": "바로 나가거나 열린 지름길로 이전 층을 재탐색",
+      "recovery": "적과 피해 없는 출구 및 영구 지름길",
+      "storyBeat": "코어리스는 원점 코어까지 아직 열아홉 개의 거대 구역이 남았음을 본다.",
+      "enemyRole": "없음",
+      "checkpoint": false,
+      "unlock": null
+    }
+  ],
+  "placement": [
+    {
+      "id": "S01",
+      "tier": 1,
+      "column": 1,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S02",
+      "tier": 1,
+      "column": 2,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S03",
+      "tier": 1,
+      "column": 3,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S04",
+      "tier": 1,
+      "column": 4,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S05",
+      "tier": 1,
+      "column": 5,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S06",
+      "tier": 1,
+      "column": 6,
+      "direction": "east",
+      "connector": true
+    },
+    {
+      "id": "S07",
+      "tier": 2,
+      "column": 6,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S08",
+      "tier": 2,
+      "column": 5,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S09",
+      "tier": 2,
+      "column": 4,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S10",
+      "tier": 2,
+      "column": 3,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S11",
+      "tier": 2,
+      "column": 2,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S12",
+      "tier": 2,
+      "column": 1,
+      "direction": "west",
+      "connector": true
+    },
+    {
+      "id": "S13",
+      "tier": 3,
+      "column": 1,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S14",
+      "tier": 3,
+      "column": 2,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S15",
+      "tier": 3,
+      "column": 3,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S16",
+      "tier": 3,
+      "column": 4,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S17",
+      "tier": 3,
+      "column": 5,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S18",
+      "tier": 3,
+      "column": 6,
+      "direction": "east",
+      "connector": true
+    },
+    {
+      "id": "S19",
+      "tier": 4,
+      "column": 6,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S20",
+      "tier": 4,
+      "column": 5,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S21",
+      "tier": 4,
+      "column": 4,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S22",
+      "tier": 4,
+      "column": 3,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S23",
+      "tier": 4,
+      "column": 2,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S24",
+      "tier": 4,
+      "column": 1,
+      "direction": "west",
+      "connector": true
+    },
+    {
+      "id": "S25",
+      "tier": 5,
+      "column": 1,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S26",
+      "tier": 5,
+      "column": 2,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S27",
+      "tier": 5,
+      "column": 3,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S28",
+      "tier": 5,
+      "column": 4,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S29",
+      "tier": 5,
+      "column": 5,
+      "direction": "east",
+      "connector": false
+    },
+    {
+      "id": "S30",
+      "tier": 5,
+      "column": 6,
+      "direction": "east",
+      "connector": true
+    },
+    {
+      "id": "S31",
+      "tier": 6,
+      "column": 6,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S32",
+      "tier": 6,
+      "column": 5,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S33",
+      "tier": 6,
+      "column": 4,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S34",
+      "tier": 6,
+      "column": 3,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S35",
+      "tier": 6,
+      "column": 2,
+      "direction": "west",
+      "connector": false
+    },
+    {
+      "id": "S36",
+      "tier": 6,
+      "column": 1,
+      "direction": "west",
+      "connector": false
+    }
+  ],
+  "campaign": [
+    {
+      "id": "M01",
+      "number": 1,
+      "act": 1,
+      "name": "빈 제련소",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "절단 권한",
+        "공명 날개"
+      ],
+      "enemyTier": 1,
+      "climax": "제련 수호자",
+      "storyBeat": "코어리스가 깨어나 원점 코어의 신호를 처음 추적한다."
+    },
+    {
+      "id": "M02",
+      "number": 2,
+      "act": 1,
+      "name": "냉각 수로",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 1,
+      "climax": "수문 탈출",
+      "storyBeat": "검은 공명이 시설 전체로 흐르고 있음을 확인한다."
+    },
+    {
+      "id": "M03",
+      "number": 3,
+      "act": 1,
+      "name": "유리 온실",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "벽면 고정각"
+      ],
+      "enemyTier": 1,
+      "climax": "생체 온실체",
+      "storyBeat": "생체 잔재도 공명에 변형된다는 사실이 드러난다."
+    },
+    {
+      "id": "M04",
+      "number": 4,
+      "act": 1,
+      "name": "파수기 첨탑",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 2,
+      "climax": "첨탑 감독관",
+      "storyBeat": "원점으로 가는 첫 봉쇄망을 해제한다."
+    },
+    {
+      "id": "M05",
+      "number": 5,
+      "act": 2,
+      "name": "폐철도 심장부",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "맥동 대시"
+      ],
+      "enemyTier": 2,
+      "climax": "폭주 기관차",
+      "storyBeat": "철수대의 마지막 이동 경로를 따라간다."
+    },
+    {
+      "id": "M06",
+      "number": 6,
+      "act": 2,
+      "name": "침수 정거장",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "연결사 집게"
+      ],
+      "enemyTier": 2,
+      "climax": "수몰 추격",
+      "storyBeat": "코어리스가 시설 정비자였다는 기록을 얻는다."
+    },
+    {
+      "id": "M07",
+      "number": 7,
+      "act": 2,
+      "name": "공명 채석장",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 2,
+      "climax": "채굴 거신",
+      "storyBeat": "검은 공명이 원점에서 의도적으로 방출된 흔적을 찾는다."
+    },
+    {
+      "id": "M08",
+      "number": 8,
+      "act": 2,
+      "name": "봉인 기록고",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "기억 투시"
+      ],
+      "enemyTier": 3,
+      "climax": "기록 감시자",
+      "storyBeat": "누군가의 명령이 아니라 코어리스의 명령으로 코어가 분리됐음을 암시한다."
+    },
+    {
+      "id": "M09",
+      "number": 9,
+      "act": 3,
+      "name": "유기 제련로",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "낙하 절단"
+      ],
+      "enemyTier": 3,
+      "climax": "용광 생체체",
+      "storyBeat": "관리 기계와 생체 조직의 융합이 시작된다."
+    },
+    {
+      "id": "M10",
+      "number": 10,
+      "act": 3,
+      "name": "거울 저수지",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "공명 반격"
+      ],
+      "enemyTier": 3,
+      "climax": "반사 수호자",
+      "storyBeat": "원점 코어가 코어리스의 기억을 되비춘다."
+    },
+    {
+      "id": "M11",
+      "number": 11,
+      "act": 3,
+      "name": "터빈 묘지",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "공중 대시"
+      ],
+      "enemyTier": 3,
+      "climax": "폭풍 추격",
+      "storyBeat": "철수대가 원점 봉인에 실패한 이유를 확인한다."
+    },
+    {
+      "id": "M12",
+      "number": 12,
+      "act": 3,
+      "name": "기억 감옥",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 4,
+      "climax": "기억 간수",
+      "storyBeat": "코어리스가 폭주를 막기 위해 스스로 중심을 버렸음이 확정된다."
+    },
+    {
+      "id": "M13",
+      "number": 13,
+      "act": 4,
+      "name": "검은 주조소",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "공명 파쇄"
+      ],
+      "enemyTier": 4,
+      "climax": "장갑 주조왕",
+      "storyBeat": "검은 공명이 기억을 먹어 방어체를 강화한다."
+    },
+    {
+      "id": "M14",
+      "number": 14,
+      "act": 4,
+      "name": "붕괴 도시",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "집게 회수 강화"
+      ],
+      "enemyTier": 4,
+      "climax": "도시 붕괴 추격",
+      "storyBeat": "원점 방어가 주변 도시 구조까지 움직이기 시작한다."
+    },
+    {
+      "id": "M15",
+      "number": 15,
+      "act": 4,
+      "name": "방어 신경망",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [
+        "연속 대시"
+      ],
+      "enemyTier": 4,
+      "climax": "신경망 핵",
+      "storyBeat": "모든 수호자가 원점 코어의 한 방어 의식임을 안다."
+    },
+    {
+      "id": "M16",
+      "number": 16,
+      "act": 4,
+      "name": "거짓 원점",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 5,
+      "climax": "가짜 코어",
+      "storyBeat": "코어리스가 파괴를 선택하도록 유도한 거짓 근원을 거부한다."
+    },
+    {
+      "id": "M17",
+      "number": 17,
+      "act": 5,
+      "name": "근원 접근로",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 5,
+      "climax": "다중 파수기 공성",
+      "storyBeat": "원점 코어가 외부 물체가 아니라 자신의 중심임을 확인한다."
+    },
+    {
+      "id": "M18",
+      "number": 18,
+      "act": 5,
+      "name": "방어 나선",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 5,
+      "climax": "나선 붕괴석",
+      "storyBeat": "근원의 자가 방어체가 지면 전체를 뒤틀기 시작한다."
+    },
+    {
+      "id": "M19",
+      "number": 19,
+      "act": 5,
+      "name": "수호자의 태내",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 5,
+      "climax": "근원 수호자 전초전",
+      "storyBeat": "제련소의 마지막 기억들과 수호자의 탄생 이유를 회수한다."
+    },
+    {
+      "id": "M20",
+      "number": 20,
+      "act": 5,
+      "name": "원점 코어",
+      "spaces": 36,
+      "targetSeconds": 720,
+      "skillRewards": [],
+      "enemyTier": 5,
+      "climax": "근원 수호자·최종 접속",
+      "storyBeat": "근원 수호자를 넘어 기억을 지우지 않은 채 검은 공명의 역류를 안정화한다."
+    }
+  ]
+}

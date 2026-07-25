@@ -1,0 +1,83 @@
+{
+  "pass": 1,
+  "generatedAt": "2026-07-25T08:35:16.893Z",
+  "passed": true,
+  "passedCount": 15,
+  "totalCount": 15,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "staticAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsAuditPass",
+      "passed": true
+    },
+    {
+      "name": "megaRoomCanvasRendered",
+      "passed": true
+    },
+    {
+      "name": "campaignCanvasRendered",
+      "passed": true
+    },
+    {
+      "name": "canvasHasVisiblePixels",
+      "passed": true
+    },
+    {
+      "name": "thirtySixVisibleSpacesBackedByData",
+      "passed": true
+    },
+    {
+      "name": "sixTierPlacementsBackedByData",
+      "passed": true
+    },
+    {
+      "name": "zigzagRenderedFromPlacement",
+      "passed": true
+    },
+    {
+      "name": "firstRoomTimeBudgetIsTwelveMinutes",
+      "passed": true
+    },
+    {
+      "name": "twentyMegaRoomsBackCampaign",
+      "passed": true
+    },
+    {
+      "name": "campaignTimeBudgetIsFourHours",
+      "passed": true
+    },
+    {
+      "name": "nominalWorldIsSixTierScale",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "spaces": 36,
+    "tiers": 6,
+    "firstMegaRoomSeconds": 720,
+    "megaRooms": 20,
+    "campaignSeconds": 14400,
+    "nominalWorldWidth": 16800,
+    "nominalWorldHeight": 7400,
+    "visiblePixelSamples": 784,
+    "megaCanvasClientWidth": 1630,
+    "megaCanvasClientHeight": 998
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

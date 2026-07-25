@@ -1,0 +1,25 @@
+name: Rebuild V4 verification
+
+on:
+  push:
+    branches:
+      - rebuild/mega-room-v4-40pass
+  pull_request:
+    paths:
+      - "src/v4/**"
+      - "tools/verify-rebuild-v4-*.mjs"
+      - "v4.html"
+      - "v4-style.css"
+      - ".github/workflows/rebuild-v4-verify.yml"
+
+jobs:
+  scale-and-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Verify V4 Pass 01 scale layout
+        run: node tools/verify-rebuild-v4-pass01.mjs
