@@ -1,0 +1,165 @@
+{
+  "pass": 5,
+  "generatedAt": "2026-07-25T06:37:56.410Z",
+  "passed": true,
+  "passedCount": 34,
+  "totalCount": 34,
+  "checks": [
+    {
+      "name": "isolatedNonCanonicalRoom",
+      "passed": true
+    },
+    {
+      "name": "releasePurposeRecorded",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "threePurposefulSlopes",
+      "passed": true
+    },
+    {
+      "name": "gentleGradeInTarget",
+      "passed": true
+    },
+    {
+      "name": "steepGradeInTarget",
+      "passed": true
+    },
+    {
+      "name": "recoveryGradeMatchesLesson",
+      "passed": true
+    },
+    {
+      "name": "startSeamContinuous",
+      "passed": true
+    },
+    {
+      "name": "crestSeamContinuous",
+      "passed": true
+    },
+    {
+      "name": "descentStartsAtCrest",
+      "passed": true
+    },
+    {
+      "name": "descentEndsAtBrakeZone",
+      "passed": true
+    },
+    {
+      "name": "recoveryStartsAtLowerFloor",
+      "passed": true
+    },
+    {
+      "name": "recoveryEndsAtExit",
+      "passed": true
+    },
+    {
+      "name": "wideBrakeZone",
+      "passed": true
+    },
+    {
+      "name": "noHazardsInFirstLesson",
+      "passed": true
+    },
+    {
+      "name": "finishOnWidePlateau",
+      "passed": true
+    },
+    {
+      "name": "gentleSlopeStayedGrounded",
+      "passed": true
+    },
+    {
+      "name": "gentleSlopeNeverMovedDownhillWhileClimbing",
+      "passed": true
+    },
+    {
+      "name": "gentleSlopeStepBounded",
+      "passed": true
+    },
+    {
+      "name": "gentleSlopeVerticalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "gentleReleaseStops",
+      "passed": true
+    },
+    {
+      "name": "gentleReleaseTravelShort",
+      "passed": true
+    },
+    {
+      "name": "jumpDetachesFromSlope",
+      "passed": true
+    },
+    {
+      "name": "jumpLandsBackOnSlope",
+      "passed": true
+    },
+    {
+      "name": "jumpHasVisibleArc",
+      "passed": true
+    },
+    {
+      "name": "slopePassesPlayerFromBelow",
+      "passed": true
+    },
+    {
+      "name": "slopeCatchesPlayerFromAbove",
+      "passed": true
+    },
+    {
+      "name": "steepReleaseMovesDownhill",
+      "passed": true
+    },
+    {
+      "name": "steepReleaseKeepsNaturalSlide",
+      "passed": true
+    },
+    {
+      "name": "steepDescentNeverMovesUp",
+      "passed": true
+    },
+    {
+      "name": "steepDescentStepBounded",
+      "passed": true
+    },
+    {
+      "name": "wholeRouteVisitsAllPurposefulSlopes",
+      "passed": true
+    },
+    {
+      "name": "wholeRouteNeverDropsGroundContact",
+      "passed": true
+    },
+    {
+      "name": "wholeRouteEndsOnExit",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "gentleMaximumGroundStep": 3.543,
+    "gentleMaximumVerticalStep": 0.859,
+    "gentleReleasedSpeed": 0,
+    "gentleReleaseTravel": 25,
+    "jumpLandingX": 657.02,
+    "jumpLandingY": 596.99,
+    "jumpMinimumY": 504.76,
+    "steepReleaseTravel": 200.05,
+    "steepReleaseFinalSpeed": 233.8,
+    "steepMaximumVerticalStep": 2.17,
+    "visitedSlopes": [
+      "gentle-climb",
+      "steep-descent",
+      "gentle-recovery"
+    ],
+    "wholeRouteMaximumGroundStep": 4.286,
+    "wholeRouteFinalX": 2752.33,
+    "wholeRouteFinalY": 636
+  }
+}

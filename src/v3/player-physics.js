@@ -25,6 +25,13 @@ export const PLAYER_PHYSICS = Object.freeze({
   wallJumpVerticalSpeed: 680,
   wallContactGraceTime: 0.1,
   wallReattachLockTime: 0.12,
+  slopeSnapDistance: 8,
+  slopeRestGrade: 0.32,
+  slopeGroundDeceleration: 1400,
+  slopeGravityAcceleration: 620,
+  slopeMaximumSlideSpeed: 280,
+  slopeUphillSpeedFactor: 0.82,
+  slopeDownhillSpeedFactor: 1.05,
 });
 
 export const CAMERA_PHYSICS = Object.freeze({
@@ -63,6 +70,9 @@ export function createPlayer(x, y) {
     wallReattachRemaining: 0,
     wallSliding: false,
     wallJumpedThisFrame: false,
+    standingSlopeId: null,
+    slopeGrade: 0,
+    slopeLandedThisFrame: false,
     abilities: { doubleJump: false },
   };
 }
@@ -79,6 +89,31 @@ const overlapsAt = (player, solid, x, y) =>
   y < solid.y + solid.height &&
   y + PLAYER_PHYSICS.height > solid.y;
 
+export function slopeSurfaceYAt(slope, worldX) {
+  const progress = clamp((worldX - slope.x) / slope.width, 0, 1);
+  return slope.direction === "up-right"
+    ? slope.y + slope.height * (1 - progress)
+    : slope.y + slope.height * progress;
+}
+
+function slopeGradeOf(slope) {
+  const grade = slope.height / slope.width;
+  return slope.direction === "up-right" ? -grade : grade;
+}
+
+const isFlatGroundRole = role => role === "terrain" || role === "rest" || role === "exit";
+
+function isFlatConnectedToSlope(solid, slope) {
+  if (!slope || !isFlatGroundRole(solid.role)) return false;
+  const leftConnected =
+    Math.abs(solid.x + solid.width - slope.x) < 0.01 &&
+    Math.abs(solid.y - slopeSurfaceYAt(slope, slope.x)) < 0.01;
+  const rightConnected =
+    Math.abs(solid.x - (slope.x + slope.width)) < 0.01 &&
+    Math.abs(solid.y - slopeSurfaceYAt(slope, slope.x + slope.width)) < 0.01;
+  return leftConnected || rightConnected;
+}
+
 function detectWallSide(player, solids) {
   const wallSolids = solids.filter(solid => solid.role === "wall");
   const probe = PLAYER_PHYSICS.wallProbeDistance;
@@ -90,11 +125,15 @@ function detectWallSide(player, solids) {
 
 function moveHorizontal(player, solids, dt) {
   player.x += player.vx * dt;
+  const standingSlope = solids.find(solid =>
+    solid.role === "slope" && solid.id === player.standingSlopeId);
   for (const solid of solids) {
-    if (solid.role === "recovery") continue;
+    if (solid.role === "recovery" || solid.role === "slope") continue;
+    if (isFlatConnectedToSlope(solid, standingSlope)) continue;
     if (!overlaps(player, solid)) continue;
     const feetPenetration = player.y + PLAYER_PHYSICS.height - solid.y;
     const canCorrectEdge =
+      !player.standingSlopeId &&
       solid.role !== "ceiling" &&
       solid.role !== "wall" &&
       feetPenetration > 0 &&
@@ -116,8 +155,12 @@ function moveHorizontal(player, solids, dt) {
 function moveVertical(player, solids, dt) {
   player.grounded = false;
   player.y += player.vy * dt;
+  const standingSlope = solids.find(solid =>
+    solid.role === "slope" && solid.id === player.standingSlopeId);
   for (const solid of solids) {
+    if (solid.role === "slope") continue;
     if (solid.role === "recovery" && player.vy < 0) continue;
+    if (isFlatConnectedToSlope(solid, standingSlope)) continue;
     if (!overlaps(player, solid)) continue;
     if (player.vy >= 0 && player.previousY + PLAYER_PHYSICS.height <= solid.y + 3) {
       player.y = solid.y - PLAYER_PHYSICS.height;
@@ -132,6 +175,63 @@ function moveVertical(player, solids, dt) {
   }
 }
 
+function resolveSlopes(player, current, solids) {
+  if (player.vy < 0) {
+    player.standingSlopeId = null;
+    player.slopeGrade = 0;
+    return;
+  }
+  const feetX = player.x + PLAYER_PHYSICS.width / 2;
+  const previousFeetY = current.y + PLAYER_PHYSICS.height;
+  const currentFeetY = player.y + PLAYER_PHYSICS.height;
+  let candidate = null;
+  for (const slope of solids) {
+    if (slope.role !== "slope" || feetX < slope.x || feetX > slope.x + slope.width) continue;
+    const surfaceY = slopeSurfaceYAt(slope, feetX);
+    const wasStanding = current.standingSlopeId === slope.id;
+    const crossedFromAbove = previousFeetY <= surfaceY + 2 && currentFeetY >= surfaceY;
+    const walkedFromGround =
+      current.grounded &&
+      previousFeetY <= surfaceY + 2 &&
+      currentFeetY >= surfaceY - PLAYER_PHYSICS.slopeSnapDistance;
+    const followedSurface =
+      wasStanding &&
+      currentFeetY >= surfaceY - PLAYER_PHYSICS.slopeSnapDistance &&
+      currentFeetY <= surfaceY + PLAYER_PHYSICS.slopeSnapDistance;
+    if (!crossedFromAbove && !walkedFromGround && !followedSurface) continue;
+    if (!candidate || surfaceY < candidate.surfaceY) candidate = { slope, surfaceY };
+  }
+  if (!candidate) {
+    player.standingSlopeId = null;
+    player.slopeGrade = 0;
+    return;
+  }
+  player.y = candidate.surfaceY - PLAYER_PHYSICS.height;
+  player.vy = 0;
+  player.grounded = true;
+  player.jumpsUsed = 0;
+  player.slopeLandedThisFrame = current.standingSlopeId !== candidate.slope.id;
+  player.landedThisFrame ||= player.slopeLandedThisFrame;
+  player.standingSlopeId = candidate.slope.id;
+  player.slopeGrade = slopeGradeOf(candidate.slope);
+}
+
+function resolveSlopeToFlatTransition(player, current, solids) {
+  if (player.grounded || !current.grounded || !current.standingSlopeId) return;
+  const feetX = player.x + PLAYER_PHYSICS.width / 2;
+  const feetY = player.y + PLAYER_PHYSICS.height;
+  const floor = solids.find(solid =>
+    isFlatGroundRole(solid.role) &&
+    feetX >= solid.x &&
+    feetX <= solid.x + solid.width &&
+    Math.abs(solid.y - feetY) <= PLAYER_PHYSICS.slopeSnapDistance);
+  if (!floor) return;
+  player.y = floor.y - PLAYER_PHYSICS.height;
+  player.vy = 0;
+  player.grounded = true;
+  player.jumpsUsed = 0;
+}
+
 export function stepPlayer(current, input, dt, solids) {
   const player = {
     ...current,
@@ -141,12 +241,24 @@ export function stepPlayer(current, input, dt, solids) {
     landedThisFrame: false,
     edgeCorrectedThisFrame: false,
     wallJumpedThisFrame: false,
+    slopeLandedThisFrame: false,
   };
   player.wallContactRemaining = Math.max(0, player.wallContactRemaining - dt);
   player.wallReattachRemaining = Math.max(0, player.wallReattachRemaining - dt);
   let axis = (input.right ? 1 : 0) - (input.left ? 1 : 0);
   if (player.wallReattachRemaining > 0 && axis === player.lastWallSide) axis = 0;
 
+  const standingSlope = solids.find(solid =>
+    solid.role === "slope" && solid.id === current.standingSlopeId);
+  const standingGrade = standingSlope ? slopeGradeOf(standingSlope) : 0;
+  const standingSlopeIntensity = standingSlope
+    ? clamp(
+      (Math.abs(standingGrade) - PLAYER_PHYSICS.slopeRestGrade) /
+        (0.72 - PLAYER_PHYSICS.slopeRestGrade),
+      0,
+      1,
+    )
+    : 0;
   if (axis !== 0) {
     if (player.vx !== 0 && Math.sign(player.vx) !== axis) player.turning = true;
     if (player.turning && Math.sign(player.vx) === axis && Math.abs(player.vx) >= PLAYER_PHYSICS.runSpeed * 0.9) {
@@ -155,12 +267,44 @@ export function stepPlayer(current, input, dt, solids) {
     const acceleration = player.grounded
       ? (player.turning ? PLAYER_PHYSICS.turnAcceleration : PLAYER_PHYSICS.groundAcceleration)
       : (player.turning ? PLAYER_PHYSICS.airTurnAcceleration : PLAYER_PHYSICS.airAcceleration);
-    player.vx = approach(player.vx, axis * PLAYER_PHYSICS.runSpeed, acceleration * dt);
+    const uphill = axis * standingGrade < 0;
+    const downhill = axis * standingGrade > 0;
+    const speedFactor = uphill
+      ? PLAYER_PHYSICS.slopeUphillSpeedFactor
+      : downhill
+        ? PLAYER_PHYSICS.slopeDownhillSpeedFactor
+        : 1;
+    player.vx = approach(player.vx, axis * PLAYER_PHYSICS.runSpeed * speedFactor, acceleration * dt);
     player.facing = axis;
   } else {
     player.turning = false;
-    const deceleration = player.grounded ? PLAYER_PHYSICS.groundDeceleration : PLAYER_PHYSICS.airDeceleration;
-    player.vx = approach(player.vx, 0, deceleration * dt);
+    if (player.grounded && standingSlopeIntensity > 0) {
+      const downhillDirection = Math.sign(standingGrade);
+      const slideTarget =
+        downhillDirection *
+        PLAYER_PHYSICS.slopeMaximumSlideSpeed *
+        (0.45 + standingSlopeIntensity * 0.55);
+      player.vx = approach(
+        player.vx,
+        slideTarget,
+        PLAYER_PHYSICS.slopeGroundDeceleration * 0.6 * dt,
+      );
+    } else {
+      const deceleration = player.grounded
+        ? (standingSlope ? PLAYER_PHYSICS.slopeGroundDeceleration : PLAYER_PHYSICS.groundDeceleration)
+        : PLAYER_PHYSICS.airDeceleration;
+      player.vx = approach(player.vx, 0, deceleration * dt);
+    }
+  }
+  if (standingSlope && standingSlopeIntensity > 0 && axis !== 0) {
+    const downhillDirection = Math.sign(standingGrade);
+    player.vx +=
+      downhillDirection *
+      PLAYER_PHYSICS.slopeGravityAcceleration *
+      standingSlopeIntensity *
+      dt;
+    const slopeSpeedLimit = PLAYER_PHYSICS.runSpeed * PLAYER_PHYSICS.slopeDownhillSpeedFactor;
+    player.vx = clamp(player.vx, -slopeSpeedLimit, slopeSpeedLimit);
   }
 
   player.coyoteRemaining = player.grounded
@@ -173,6 +317,8 @@ export function stepPlayer(current, input, dt, solids) {
   if (player.jumpBufferRemaining > 0 && (player.grounded || player.coyoteRemaining > 0)) {
     player.vy = -PLAYER_PHYSICS.jumpSpeed;
     player.grounded = false;
+    player.standingSlopeId = null;
+    player.slopeGrade = 0;
     player.coyoteRemaining = 0;
     player.jumpBufferRemaining = 0;
     player.jumpsUsed = 1;
@@ -215,6 +361,8 @@ export function stepPlayer(current, input, dt, solids) {
 
   moveHorizontal(player, solids, dt);
   moveVertical(player, solids, dt);
+  resolveSlopeToFlatTransition(player, current, solids);
+  resolveSlopes(player, current, solids);
   const detectedWallSide = player.wallReattachRemaining > 0 ? 0 : detectWallSide(player, solids);
   if (detectedWallSide !== 0) {
     player.wallSide = detectedWallSide;

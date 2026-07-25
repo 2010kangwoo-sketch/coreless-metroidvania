@@ -1,0 +1,124 @@
+{
+  "pass": 5,
+  "generatedAt": "2026-07-25T06:38:07.047Z",
+  "passed": true,
+  "passedCount": 22,
+  "totalCount": 22,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "structuralAuditReady",
+      "passed": true
+    },
+    {
+      "name": "gentleSlopeReached",
+      "passed": true
+    },
+    {
+      "name": "jumpActuallyDetached",
+      "passed": true
+    },
+    {
+      "name": "jumpLandedBackOnSlope",
+      "passed": true
+    },
+    {
+      "name": "crestStopsWithoutStickyDrift",
+      "passed": true
+    },
+    {
+      "name": "crestStoppingDistanceShort",
+      "passed": true
+    },
+    {
+      "name": "steepSlopeReached",
+      "passed": true
+    },
+    {
+      "name": "steepReleaseMovesDownhill",
+      "passed": true
+    },
+    {
+      "name": "steepReleaseKeepsSliding",
+      "passed": true
+    },
+    {
+      "name": "steepReleaseStaysGrounded",
+      "passed": true
+    },
+    {
+      "name": "allPurposefulSlopesVisited",
+      "passed": true
+    },
+    {
+      "name": "finishReached",
+      "passed": true
+    },
+    {
+      "name": "finishedOnExitPlateau",
+      "passed": true
+    },
+    {
+      "name": "airbornePositionStepBounded",
+      "passed": true
+    },
+    {
+      "name": "groundedPositionStepBounded",
+      "passed": true
+    },
+    {
+      "name": "slopeVerticalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "edgeCorrectionNotUsed",
+      "passed": true
+    },
+    {
+      "name": "cameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noResets",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "gentleX": 505.69,
+    "airborneVy": -435,
+    "slopeLandingX": 813.81,
+    "crestReleaseTravel": 25,
+    "crestReleasedSpeed": 0,
+    "steepReleaseTravel": 200.05,
+    "steepReleasedSpeed": 233.8,
+    "slopeContacts": 3,
+    "slopeLandings": 4,
+    "jumps": 1,
+    "visitedSlopes": [
+      "gentle-climb",
+      "steep-descent",
+      "gentle-recovery"
+    ],
+    "maximumPositionStep": 6.532,
+    "maximumGroundedPositionStep": 4.286,
+    "maximumVerticalStepOnSlope": 2.205,
+    "maximumCameraStep": 4.463,
+    "edgeCorrections": 0,
+    "resets": 0,
+    "finalX": 2681.25,
+    "finalY": 636
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

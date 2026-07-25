@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ko" data-coreless-v3-slope-ready="false">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071015">
+  <meta name="description" content="Coreless V3 경사 접지와 제동 독립 시험실">
+  <title>Coreless V3 · Slope Movement Pass 05</title>
+  <link rel="stylesheet" href="v3-style.css?v=pass05">
+</head>
+<body>
+  <main class="v3-shell">
+    <canvas
+      id="slopeCanvas"
+      width="1200"
+      height="680"
+      tabindex="0"
+      aria-label="Coreless V3 isolated slope movement test chamber"
+      aria-busy="true"
+    ></canvas>
+    <header class="v3-panel" aria-live="polite">
+      <p>CORELESS · REBUILD V3</p>
+      <h1>PASS 05 / SLOPE MOVEMENT</h1>
+      <div>
+        <span id="slopeBuildStatus">BOOTING</span>
+        <span id="slopeAuditStatus">AUDIT PENDING</span>
+      </div>
+    </header>
+    <aside class="v3-note">
+      4번 방에 필요한 경사 물리만 검증하며, 이유 없는 경사와 장애물은 포함하지 않습니다.
+    </aside>
+  </main>
+  <noscript>JavaScript가 필요합니다.</noscript>
+  <script type="module" src="src/v3/pass05-main.js?v=pass05"></script>
+</body>
+</html>
