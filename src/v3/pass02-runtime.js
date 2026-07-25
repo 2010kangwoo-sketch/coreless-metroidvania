@@ -14,7 +14,20 @@ import {
   stepCamera,
   stepPlayer,
 } from "./player-physics.js";
-import { PASS03_BUILD, PASS03_MOTION_VISUAL } from "./pass03-feel.js";
+import { PASS03_MOTION_VISUAL } from "./pass03-feel.js";
+import {
+  PASS06_BUILD,
+  PASS06_CHECKPOINTS,
+  PASS06_GATE,
+  PASS06_JUMP_TARGETS,
+  PASS06_LESSONS,
+  PASS06_OPTIONAL_REWARD,
+  canFinishTutorial,
+  createTutorialProgress,
+  requiredLessonCount,
+  roomTwoGateOpen,
+  tutorialInstruction,
+} from "./pass06-tutorial.js";
 
 const FIXED_STEP = 1 / 120;
 const MAX_FRAME_DELTA = 1 / 15;
@@ -33,7 +46,13 @@ export class Pass02Runtime {
     this.accumulator = 0;
     this.lastTime = 0;
     this.currentRoom = "r01";
-    this.message = "A/D로 이동하고 SPACE로 점프하세요";
+    this.tutorialProgress = createTutorialProgress();
+    this.currentCheckpointId = "arrival";
+    this.activeJumpProfile = null;
+    this.currentInstructionId = "move";
+    this.optionalRewardCollected = false;
+    this.finishBlockLatched = false;
+    this.message = tutorialInstruction(this.tutorialProgress, this.currentRoom).text;
     this.messageTimer = 4;
     this.motionVisual = { landing: 0, takeoff: 0 };
     this.audit = {
@@ -49,6 +68,16 @@ export class Pass02Runtime {
       finished: false,
       directionReversals: 0,
       edgeCorrections: 0,
+      tutorialLessonsCompleted: 0,
+      tutorialPromptsShown: 1,
+      checkpointActivations: 0,
+      gateOpened: false,
+      shortJumpHeight: null,
+      fullJumpHeight: null,
+      optionalRewardCollected: false,
+      finishBlocked: 0,
+      maximumPositionStep: 0,
+      maximumGroundedPositionStep: 0,
     };
     this.boundFrame = timestamp => this.frame(timestamp);
     this.boundKeyDown = event => this.onKeyDown(event);
@@ -85,6 +114,40 @@ export class Pass02Runtime {
     this.keys.delete(event.code);
   }
 
+  activeSolids() {
+    return roomTwoGateOpen(this.tutorialProgress)
+      ? PASS02_SOLIDS
+      : [...PASS02_SOLIDS, PASS06_GATE];
+  }
+
+  markTutorialLesson(id) {
+    if (this.tutorialProgress[id]) return false;
+    this.tutorialProgress[id] = true;
+    this.audit.tutorialLessonsCompleted = requiredLessonCount(this.tutorialProgress);
+    return true;
+  }
+
+  syncTutorialInstruction() {
+    const instruction = tutorialInstruction(this.tutorialProgress, this.currentRoom);
+    if (instruction.id === this.currentInstructionId) return;
+    this.currentInstructionId = instruction.id;
+    this.audit.tutorialPromptsShown += 1;
+    this.message = instruction.text;
+    this.messageTimer = instruction.id === "complete" ? 8 : 4.5;
+  }
+
+  activateCheckpoint() {
+    for (const checkpoint of PASS06_CHECKPOINTS) {
+      if (this.player.x < checkpoint.activateX || checkpoint.id === this.currentCheckpointId) continue;
+      const currentIndex = PASS06_CHECKPOINTS.findIndex(item => item.id === this.currentCheckpointId);
+      const nextIndex = PASS06_CHECKPOINTS.findIndex(item => item.id === checkpoint.id);
+      if (nextIndex <= currentIndex) continue;
+      if (checkpoint.id === "altar" && !this.tutorialProgress.room2Gate) continue;
+      this.currentCheckpointId = checkpoint.id;
+      this.audit.checkpointActivations += 1;
+    }
+  }
+
   inputSnapshot(override = null) {
     if (override) return override;
     return {
@@ -100,16 +163,64 @@ export class Pass02Runtime {
     this.pendingJump = false;
     const before = this.player;
     const beforeCamera = this.camera;
-    this.player = stepPlayer(this.player, input, dt, PASS02_SOLIDS);
+    this.player = stepPlayer(this.player, input, dt, this.activeSolids());
+    const positionStep = Math.hypot(
+      this.player.x - before.x,
+      this.player.y - before.y,
+    );
+    this.audit.maximumPositionStep = Math.max(
+      this.audit.maximumPositionStep,
+      positionStep,
+    );
+    if (before.grounded && this.player.grounded) {
+      this.audit.maximumGroundedPositionStep = Math.max(
+        this.audit.maximumGroundedPositionStep,
+        positionStep,
+      );
+    }
 
     if (this.player.jumpsUsed > before.jumpsUsed) {
       this.audit.jumps += 1;
       if (this.player.jumpsUsed === 2) this.audit.doubleJumps += 1;
       this.motionVisual.takeoff = 1;
+      if (this.player.jumpsUsed === 1) {
+        this.activeJumpProfile = {
+          room: this.currentRoom,
+          startY: before.y,
+          minimumY: this.player.y,
+        };
+      }
+      if (this.player.jumpsUsed === 2 && this.player.abilities.doubleJump) {
+        this.markTutorialLesson("doubleJumpUse");
+      }
+    }
+    if (this.activeJumpProfile) {
+      this.activeJumpProfile.minimumY = Math.min(
+        this.activeJumpProfile.minimumY,
+        this.player.y,
+      );
     }
     if (this.player.landedThisFrame && !before.grounded) {
       this.audit.landings += 1;
       this.motionVisual.landing = 1;
+      if (this.activeJumpProfile?.room === "r02") {
+        const jumpHeight = this.activeJumpProfile.startY - this.activeJumpProfile.minimumY;
+        if (
+          jumpHeight >= PASS06_JUMP_TARGETS.shortHeight[0] &&
+          jumpHeight <= PASS06_JUMP_TARGETS.shortHeight[1]
+        ) {
+          this.audit.shortJumpHeight = jumpHeight;
+          this.markTutorialLesson("shortJump");
+        }
+        if (
+          jumpHeight >= PASS06_JUMP_TARGETS.fullHeight[0] &&
+          jumpHeight <= PASS06_JUMP_TARGETS.fullHeight[1]
+        ) {
+          this.audit.fullJumpHeight = jumpHeight;
+          this.markTutorialLesson("fullJump");
+        }
+      }
+      this.activeJumpProfile = null;
     }
     if (this.player.edgeCorrectedThisFrame) this.audit.edgeCorrections += 1;
     const axis = (input.right ? 1 : 0) - (input.left ? 1 : 0);
@@ -130,14 +241,45 @@ export class Pass02Runtime {
       if (trigger.type === "ability" && !this.player.abilities.doubleJump) {
         this.player.abilities.doubleJump = true;
         this.audit.doubleJumpUnlocked = true;
+        this.markTutorialLesson("doubleJumpUnlock");
         this.message = "공명 날개 획득 · 공중에서 SPACE를 한 번 더 누르세요";
         this.messageTimer = 5;
       }
       if (trigger.type === "finish" && !this.audit.finished) {
-        this.audit.finished = true;
-        this.message = "V3 3차 조작감 확정 · 첫 조작 구간 완료";
-        this.messageTimer = 8;
+        if (canFinishTutorial(this.tutorialProgress)) {
+          this.markTutorialLesson("finish");
+          this.audit.finished = true;
+          this.message = "V3 튜토리얼 1~3번 방 완료";
+          this.messageTimer = 8;
+        } else if (!this.finishBlockLatched) {
+          this.finishBlockLatched = true;
+          this.audit.finishBlocked += 1;
+          this.message = tutorialInstruction(this.tutorialProgress, this.currentRoom).text;
+          this.messageTimer = 4;
+        }
       }
+    }
+
+    if (
+      !this.optionalRewardCollected &&
+      rectangleIntersectsPlayer(PASS06_OPTIONAL_REWARD, this.player)
+    ) {
+      this.optionalRewardCollected = true;
+      this.audit.optionalRewardCollected = true;
+      this.message = "숙련의 인장 획득 · 필수 진행과 무관한 선택 보상";
+      this.messageTimer = 4;
+    }
+
+    if (this.player.x >= 430) this.markTutorialLesson("move");
+    if (
+      this.player.x >= 1450 &&
+      this.audit.jumps >= PASS06_JUMP_TARGETS.roomOneMinimumJumps
+    ) {
+      this.markTutorialLesson("basicJumps");
+    }
+    this.audit.gateOpened = roomTwoGateOpen(this.tutorialProgress);
+    if (this.player.x >= 3200 && this.audit.gateOpened) {
+      this.markTutorialLesson("room2Gate");
     }
 
     if (this.player.y > PASS02_WORLD.height + 180) this.reset("낙하 회수");
@@ -150,6 +292,8 @@ export class Pass02Runtime {
       this.message = `${summary.name} · ${summary.mechanic}`;
       this.messageTimer = 3;
     }
+    this.activateCheckpoint();
+    this.syncTutorialInstruction();
 
     this.camera = stepCamera(this.camera, this.player, dt, PASS02_WORLD);
     const cameraStep = Math.hypot(this.camera.x - beforeCamera.x, this.camera.y - beforeCamera.y);
@@ -161,13 +305,15 @@ export class Pass02Runtime {
 
   reset(reason = "재시작") {
     const keepAbility = this.player.abilities.doubleJump;
-    const spawn = this.currentRoom === "r03"
-      ? { x: 3260, y: PASS02_WORLD.spawn.y }
-      : PASS02_WORLD.spawn;
-    this.player = createPlayer(spawn.x, spawn.y);
+    const checkpoint = PASS06_CHECKPOINTS.find(item => item.id === this.currentCheckpointId) ??
+      PASS06_CHECKPOINTS[0];
+    this.player = createPlayer(checkpoint.x, checkpoint.y);
     this.player.grounded = true;
     this.player.abilities.doubleJump = keepAbility;
     this.camera = createCamera(this.player);
+    this.currentRoom = checkpoint.room;
+    this.activeJumpProfile = null;
+    this.finishBlockLatched = false;
     this.audit.resets += 1;
     this.message = reason;
     this.messageTimer = 2;
@@ -274,6 +420,34 @@ export class Pass02Runtime {
       }
     }
 
+    if (!roomTwoGateOpen(this.tutorialProgress)) {
+      context.fillStyle = "rgba(77, 93, 99, 0.92)";
+      context.fillRect(PASS06_GATE.x, PASS06_GATE.y, PASS06_GATE.width, PASS06_GATE.height);
+      context.fillStyle = "#d8c57e";
+      for (let y = PASS06_GATE.y + 34; y < PASS06_GATE.y + PASS06_GATE.height; y += 70) {
+        context.fillRect(PASS06_GATE.x + 8, y, PASS06_GATE.width - 16, 6);
+      }
+      context.fillStyle = "#e8dfbf";
+      context.font = "700 14px Arial, sans-serif";
+      context.textAlign = "center";
+      context.fillText("점프 확인문", PASS06_GATE.x + PASS06_GATE.width / 2, PASS06_GATE.y + 26);
+      context.textAlign = "left";
+    }
+
+    if (!this.optionalRewardCollected) {
+      const reward = PASS06_OPTIONAL_REWARD;
+      context.fillStyle = "rgba(226, 199, 112, 0.24)";
+      context.fillRect(reward.x, reward.y, reward.width, reward.height);
+      context.strokeStyle = "#dfc77c";
+      context.lineWidth = 4;
+      context.strokeRect(reward.x + 10, reward.y + 10, reward.width - 20, reward.height - 20);
+      context.fillStyle = "#f0df9c";
+      context.font = "700 13px Arial, sans-serif";
+      context.textAlign = "center";
+      context.fillText("숙련 인장", reward.x + reward.width / 2, reward.y + 47);
+      context.textAlign = "left";
+    }
+
     const altar = PASS02_TRIGGERS.find(trigger => trigger.type === "ability");
     context.fillStyle = this.player.abilities.doubleJump ? "rgba(115, 181, 179, 0.2)" : "rgba(157, 225, 221, 0.34)";
     context.fillRect(altar.x, altar.y, altar.width, altar.height);
@@ -325,10 +499,21 @@ export class Pass02Runtime {
   drawHud() {
     const context = this.context;
     context.fillStyle = "rgba(3, 9, 13, 0.82)";
-    context.fillRect(20, this.canvas.height - 54, 485, 34);
+    context.fillRect(20, this.canvas.height - 54, 520, 34);
     context.fillStyle = "#b9c9cc";
     context.font = "650 12px Arial, sans-serif";
     context.fillText("A/D 이동 · SPACE 가변 점프/이중 점프 · R 재시작", 36, this.canvas.height - 32);
+    const lessonCount = requiredLessonCount(this.tutorialProgress);
+    context.fillStyle = "rgba(3, 9, 13, 0.82)";
+    context.fillRect(this.canvas.width - 230, this.canvas.height - 54, 210, 34);
+    context.fillStyle = "#d8c57e";
+    context.textAlign = "center";
+    context.fillText(
+      `튜토리얼 ${lessonCount}/${PASS06_LESSONS.length} · 체크포인트 ${this.currentCheckpointId}`,
+      this.canvas.width - 125,
+      this.canvas.height - 32,
+    );
+    context.textAlign = "left";
 
     if (this.messageTimer > 0) {
       const width = Math.min(680, Math.max(330, this.message.length * 17));
@@ -349,9 +534,9 @@ export class Pass02Runtime {
     this.drawParallax();
     this.drawWorld();
     this.drawHud();
-    if (this.statusNodes.build) this.statusNodes.build.textContent = `${PASS03_BUILD.id.toUpperCase()} · ${this.currentRoom.toUpperCase()}`;
+    if (this.statusNodes.build) this.statusNodes.build.textContent = `${PASS06_BUILD.id.toUpperCase()} · ${this.currentRoom.toUpperCase()}`;
     if (this.statusNodes.audit) {
-      this.statusNodes.audit.textContent = this.audit.finished ? "FIRST CHAPTER COMPLETE" : "PHYSICS ACTIVE";
+      this.statusNodes.audit.textContent = this.audit.finished ? "TUTORIAL COMPLETE" : "CANONICAL TUTORIAL ACTIVE";
       this.statusNodes.audit.dataset.state = this.audit.finished ? "pass" : "active";
     }
   }

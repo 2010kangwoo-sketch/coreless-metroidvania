@@ -1,0 +1,163 @@
+{
+  "pass": 6,
+  "generatedAt": "2026-07-25T07:05:31.152Z",
+  "passed": true,
+  "passedCount": 33,
+  "totalCount": 33,
+  "checks": [
+    {
+      "name": "canonicalFirstThreeRooms",
+      "passed": true
+    },
+    {
+      "name": "tutorialMilestoneRecorded",
+      "passed": true
+    },
+    {
+      "name": "eightRequiredLessons",
+      "passed": true
+    },
+    {
+      "name": "safeMovementStart",
+      "passed": true
+    },
+    {
+      "name": "threeWidePracticeSteps",
+      "passed": true
+    },
+    {
+      "name": "roomTwoHasThreeRoutes",
+      "passed": true
+    },
+    {
+      "name": "jumpPracticeOnContinuousFloor",
+      "passed": true
+    },
+    {
+      "name": "singlePurposefulGate",
+      "passed": true
+    },
+    {
+      "name": "gateAfterPractice",
+      "passed": true
+    },
+    {
+      "name": "gateNeverCreatesFall",
+      "passed": true
+    },
+    {
+      "name": "threeCheckpoints",
+      "passed": true
+    },
+    {
+      "name": "checkpointsFollowRooms",
+      "passed": true
+    },
+    {
+      "name": "optionalRewardIsNonBlocking",
+      "passed": true
+    },
+    {
+      "name": "optionalRewardHasPurpose",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpStillGranted",
+      "passed": true
+    },
+    {
+      "name": "altarUnlocksBeforeItsBaseBlocks",
+      "passed": true
+    },
+    {
+      "name": "firstAbilityLandingIsGenerous",
+      "passed": true
+    },
+    {
+      "name": "finishStillPresent",
+      "passed": true
+    },
+    {
+      "name": "shortJumpTargetDistinct",
+      "passed": true
+    },
+    {
+      "name": "noTutorialHazards",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "shortJumpPhysicsInTarget",
+      "passed": true
+    },
+    {
+      "name": "fullJumpPhysicsInTarget",
+      "passed": true
+    },
+    {
+      "name": "jumpProfilesSeparated",
+      "passed": true
+    },
+    {
+      "name": "closedGateStopsPlayer",
+      "passed": true
+    },
+    {
+      "name": "openGateLetsPlayerPass",
+      "passed": true
+    },
+    {
+      "name": "oneJumpDoesNotOpenGate",
+      "passed": true
+    },
+    {
+      "name": "twoProfilesOpenGate",
+      "passed": true
+    },
+    {
+      "name": "allPrerequisitesAllowFinish",
+      "passed": true
+    },
+    {
+      "name": "allLessonsCounted",
+      "passed": true
+    },
+    {
+      "name": "instructionOrderComplete",
+      "passed": true
+    },
+    {
+      "name": "checkpointSpawnsOnSafeFloor",
+      "passed": true
+    },
+    {
+      "name": "optionalRewardAboveRequiredFloor",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "shortJumpHeight": 83.9,
+    "fullJumpHeight": 133.65,
+    "lockedGateMaximumX": 3102,
+    "openGateMaximumX": 3352,
+    "lessonSequence": [
+      "move",
+      "basicJumps",
+      "shortJump",
+      "fullJump",
+      "room2Gate",
+      "doubleJumpUnlock",
+      "doubleJumpUse",
+      "finish",
+      "complete"
+    ],
+    "checkpoints": [
+      "arrival",
+      "workshop",
+      "altar"
+    ]
+  }
+}

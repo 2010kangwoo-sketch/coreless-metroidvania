@@ -33,3 +33,5 @@ jobs:
         run: node tools/verify-rebuild-v3-pass04.mjs
       - name: Verify V3 Pass 05 slope movement
         run: node tools/verify-rebuild-v3-pass05.mjs
+      - name: Verify V3 Pass 06 canonical tutorial
+        run: node tools/verify-rebuild-v3-pass06.mjs

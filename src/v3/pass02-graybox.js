@@ -28,16 +28,16 @@ export const PASS02_SOLIDS = Object.freeze([
   solid("room1-exit-lip", 1430, 720, 170, 40, "threshold"),
 
   solid("room2-floor", 1600, 760, 1600, 140),
-  solid("room2-platform-low", 1790, 675, 190, 24, "practice"),
-  solid("room2-platform-mid", 2090, 585, 190, 24, "practice"),
-  solid("room2-platform-high", 2410, 480, 190, 24, "practice"),
+  solid("room2-platform-low", 1790, 675, 190, 24, "recovery"),
+  solid("room2-platform-mid", 2090, 585, 190, 24, "recovery"),
+  solid("room2-platform-high", 2410, 480, 190, 24, "recovery"),
   solid("room2-reward-shelf", 2710, 380, 260, 24, "optional"),
   solid("room2-ceiling-gauge", 2130, 260, 560, 24, "ceiling"),
   solid("room2-recovery-step", 2920, 650, 180, 110, "recovery"),
 
   solid("room3-floor", 3200, 760, 1600, 140),
   solid("room3-altar-base", 3390, 710, 300, 50, "ability"),
-  solid("room3-rise-one", 3800, 610, 230, 150, "ability-test"),
+  solid("room3-rise-one", 3740, 610, 360, 150, "ability-test"),
   solid("room3-rise-two", 4130, 455, 230, 305, "ability-test"),
   solid("room3-landing", 4470, 330, 250, 24, "recovery"),
   solid("room3-exit-floor", 4470, 720, 330, 40, "threshold"),
@@ -48,9 +48,9 @@ export const PASS02_TRIGGERS = Object.freeze([
     id: "double-jump-altar",
     type: "ability",
     ability: "doubleJump",
-    x: 3415,
+    x: 3330,
     y: 620,
-    width: 250,
+    width: 335,
     height: 140,
   }),
   Object.freeze({
@@ -113,4 +113,3 @@ export function validatePass02Graybox() {
     checks: Object.freeze(checks),
   });
 }
-

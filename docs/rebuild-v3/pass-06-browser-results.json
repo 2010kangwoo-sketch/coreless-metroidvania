@@ -1,0 +1,116 @@
+{
+  "pass": 6,
+  "generatedAt": "2026-07-25T07:05:47.965Z",
+  "passed": true,
+  "passedCount": 21,
+  "totalCount": 21,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "tutorialAuditReady",
+      "passed": true
+    },
+    {
+      "name": "startsWithNoLessonsCompleted",
+      "passed": true
+    },
+    {
+      "name": "roomOneMovementLearned",
+      "passed": true
+    },
+    {
+      "name": "shortJumpRecognized",
+      "passed": true
+    },
+    {
+      "name": "fullJumpRecognized",
+      "passed": true
+    },
+    {
+      "name": "gateOpenedAfterBothProfiles",
+      "passed": true
+    },
+    {
+      "name": "enteredRoomThree",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpUnlocked",
+      "passed": true
+    },
+    {
+      "name": "doubleJumpActuallyUsed",
+      "passed": true
+    },
+    {
+      "name": "allLessonsCompleted",
+      "passed": true
+    },
+    {
+      "name": "tutorialFinishReached",
+      "passed": true
+    },
+    {
+      "name": "threeRoomsVisited",
+      "passed": true
+    },
+    {
+      "name": "twoCheckpointsActivated",
+      "passed": true
+    },
+    {
+      "name": "noFinishBacktracking",
+      "passed": true
+    },
+    {
+      "name": "noUnexpectedReset",
+      "passed": true
+    },
+    {
+      "name": "airbornePositionStepBounded",
+      "passed": true
+    },
+    {
+      "name": "groundedPositionStepBounded",
+      "passed": true
+    },
+    {
+      "name": "cameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "roomOneJumps": 4,
+    "shortJumpHeight": 83.9,
+    "fullJumpHeight": 133.65,
+    "gateOpenX": 3005.5,
+    "tutorialLessonsCompleted": 8,
+    "promptsShown": 10,
+    "checkpointActivations": 2,
+    "jumps": 14,
+    "doubleJumps": 4,
+    "landings": 10,
+    "roomTransitions": 2,
+    "maximumPositionStep": 9.424,
+    "maximumGroundedPositionStep": 3.5,
+    "maximumCameraStep": 4.463,
+    "resets": 0,
+    "finishBlocked": 0,
+    "optionalRewardCollected": false,
+    "finalX": 4696.77,
+    "finalY": 266
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}
