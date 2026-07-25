@@ -6,7 +6,8 @@ import chromium from "/tmp/coreless-browser-runtime/node_modules/@sparticuz/chro
 
 const outputPath = process.env.CORELESS_V3_PASS07_BROWSER_RESULT ??
   "docs/rebuild-v3/pass-07-browser-results.json";
-const artifactDirectory = "browser-artifacts/v3-pass07";
+const artifactDirectory = process.env.CORELESS_V3_BROWSER_ARTIFACT_DIR ??
+  "browser-artifacts/v3-pass07";
 fs.mkdirSync(artifactDirectory, { recursive: true });
 
 const server = spawn("python3", ["-m", "http.server", "4250"], {
@@ -26,6 +27,10 @@ const getState = page => page.evaluate(() => ({
   room: window.__corelessV3.runtime.currentRoom,
   checkpoint: window.__corelessV3.runtime.currentCheckpointId,
   liftActive: window.__corelessV3.runtime.liftActive,
+  storyStarted: window.__corelessV3.runtime.storyStarted ?? true,
+  storyJournalOpen: window.__corelessV3.runtime.storyJournalOpen ?? false,
+  storyObjective: window.__corelessV3.runtime.storyObjective ?? null,
+  storyProgress: { ...(window.__corelessV3.runtime.storyProgress ?? {}) },
   progress: { ...window.__corelessV3.runtime.tutorialProgress },
   audit: {
     ...window.__corelessV3.runtime.audit,
@@ -88,6 +93,17 @@ try {
   await page.waitForTimeout(250);
   const initial = await getState(page);
   await page.screenshot({ path: `${artifactDirectory}/lower-tier-entry.png` });
+  if (!initial.storyStarted) {
+    await page.keyboard.press("Enter");
+    await waitForState(page, state => state.storyStarted, 1500);
+    await page.keyboard.press("Tab");
+    const journalOpen = await waitForState(page, state => state.storyJournalOpen, 1500);
+    if (journalOpen.storyJournalOpen) {
+      await page.screenshot({ path: `${artifactDirectory}/story-journal.png` });
+    }
+    await page.keyboard.press("Tab");
+    await waitForState(page, state => !state.storyJournalOpen, 1500);
+  }
 
   const roomOnePlan = [
     ["low", 390, 520],
@@ -317,6 +333,11 @@ try {
       resets: final.audit.resets,
       finalX: Number(final.x.toFixed(2)),
       finalY: Number(final.y.toFixed(2)),
+      storyBeatsDiscovered: final.audit.storyBeatsDiscovered ?? 0,
+      storyOrder: final.audit.storyOrder ?? [],
+      prologueDismissed: final.audit.prologueDismissed ?? false,
+      journalOpened: final.audit.journalOpened ?? 0,
+      storyObjective: final.storyObjective,
     },
     consoleErrors,
     pageErrors,

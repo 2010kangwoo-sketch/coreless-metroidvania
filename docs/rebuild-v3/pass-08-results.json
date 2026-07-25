@@ -1,0 +1,152 @@
+{
+  "pass": 8,
+  "generatedAt": "2026-07-25T08:14:38.384Z",
+  "passed": true,
+  "passedCount": 33,
+  "totalCount": 33,
+  "checks": [
+    {
+      "name": "clearProtagonistIdentity",
+      "passed": true
+    },
+    {
+      "name": "clearStartingState",
+      "passed": true
+    },
+    {
+      "name": "clearVisibleGoal",
+      "passed": true
+    },
+    {
+      "name": "clearConflict",
+      "passed": true
+    },
+    {
+      "name": "skillsHaveNarrativeCause",
+      "passed": true
+    },
+    {
+      "name": "rootIsFinalDestination",
+      "passed": true
+    },
+    {
+      "name": "fiveStoryChapters",
+      "passed": true
+    },
+    {
+      "name": "chaptersCoverAllRooms",
+      "passed": true
+    },
+    {
+      "name": "everyRoomHasOneRequiredBeat",
+      "passed": true
+    },
+    {
+      "name": "storyBeatsCauseGameplay",
+      "passed": true
+    },
+    {
+      "name": "sixAbilityMemories",
+      "passed": true
+    },
+    {
+      "name": "abilitiesIntroducedInOrder",
+      "passed": true
+    },
+    {
+      "name": "combatStartsWithAttackAuthority",
+      "passed": true
+    },
+    {
+      "name": "enemyEscalationHasSixTiers",
+      "passed": true
+    },
+    {
+      "name": "enemyTiersStrictlyIncrease",
+      "passed": true
+    },
+    {
+      "name": "noMandatoryCombatBeforeAttack",
+      "passed": true
+    },
+    {
+      "name": "finalEnemyIsRootGuardian",
+      "passed": true
+    },
+    {
+      "name": "playableStoryCoversRoomsOneToFour",
+      "passed": true
+    },
+    {
+      "name": "playableStoryStartsWithGoal",
+      "passed": true
+    },
+    {
+      "name": "playableStoryEndsWithThreatForeshadow",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "storyProgressStartsEmpty",
+      "passed": true
+    },
+    {
+      "name": "sixPlayableBeatsHaveUniqueIds",
+      "passed": true
+    },
+    {
+      "name": "playableBeatOrderMatchesRoute",
+      "passed": true
+    },
+    {
+      "name": "chapterOrderMatchesRoomOrder",
+      "passed": true
+    },
+    {
+      "name": "roomStoryOrderMatchesRoomOrder",
+      "passed": true
+    },
+    {
+      "name": "allGameplayAbilitiesHaveMemoryCause",
+      "passed": true
+    },
+    {
+      "name": "memoryRelicsHaveUniqueRoomsExceptInnate",
+      "passed": true
+    },
+    {
+      "name": "enemyDifficultyNeverDecreases",
+      "passed": true
+    },
+    {
+      "name": "preCombatTierUsesAvoidance",
+      "passed": true
+    },
+    {
+      "name": "firstCombatRoomMatchesAttackMemory",
+      "passed": true
+    },
+    {
+      "name": "finalStoryAndEnemyMeetAtRoom15",
+      "passed": true
+    },
+    {
+      "name": "endingResolvesVisibleGoal",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "storyChapters": 5,
+    "roomStoryBeats": 15,
+    "abilityMemoryRelics": 6,
+    "enemyEscalationTiers": 6,
+    "playableStoryBeats": 6,
+    "finalRoom": "r15",
+    "finalEnemy": "근원 수호자",
+    "visibleGoal": "원점 코어가 보내는 신호를 따라가며 잃어버린 기억 조각과 시설 접근 권한을 회수한다.",
+    "endingGoal": "근원 수호자를 쓰러뜨리고 원점 코어에 도달해, 갇힌 기억을 지우지 않은 채 검은 공명의 역류를 안정화한다."
+  }
+}

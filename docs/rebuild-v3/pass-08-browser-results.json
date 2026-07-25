@@ -1,0 +1,97 @@
+{
+  "pass": 8,
+  "generatedAt": "2026-07-25T08:16:22.118Z",
+  "passed": true,
+  "passedCount": 16,
+  "totalCount": 16,
+  "checks": [
+    {
+      "name": "underlyingLayeredRoutePassed",
+      "passed": true
+    },
+    {
+      "name": "storyStructurePassed",
+      "passed": true
+    },
+    {
+      "name": "prologueWasDismissed",
+      "passed": true
+    },
+    {
+      "name": "journalOpenedWithTab",
+      "passed": true
+    },
+    {
+      "name": "allPlayableStoryBeatsDiscovered",
+      "passed": true
+    },
+    {
+      "name": "storyBeatsDiscoveredInOrder",
+      "passed": true
+    },
+    {
+      "name": "storyBeginsWithCorelessGoal",
+      "passed": true
+    },
+    {
+      "name": "abilityExplainedAsRecoveredMemory",
+      "passed": true
+    },
+    {
+      "name": "firstMonsterClearlyForeshadowed",
+      "passed": true
+    },
+    {
+      "name": "objectiveAdvancesAfterWarning",
+      "passed": true
+    },
+    {
+      "name": "endingStillTargetsOriginCore",
+      "passed": true
+    },
+    {
+      "name": "routeStillHasNoReset",
+      "passed": true
+    },
+    {
+      "name": "routeStillVisitsFourRooms",
+      "passed": true
+    },
+    {
+      "name": "liftStillConnectsTiers",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "storyBeatsDiscovered": 6,
+    "storyOrder": [
+      "prologue",
+      "awakeningEcho",
+      "separationRecord",
+      "resonanceWing",
+      "upperSignal",
+      "hunterWarning"
+    ],
+    "journalOpened": 1,
+    "storyObjective": "서쪽의 깨어난 파수기 신호를 확인하라",
+    "roomTransitions": 3,
+    "tierTransitions": 1,
+    "liftTravel": 770,
+    "westwardRoomFourDistance": 1413.07,
+    "maximumGroundedPositionStep": 4.286,
+    "maximumCameraStep": 7.801,
+    "resets": 0,
+    "finalX": 3278.61,
+    "finalY": 696
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

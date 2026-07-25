@@ -37,3 +37,5 @@ jobs:
         run: node tools/verify-rebuild-v3-pass06.mjs
       - name: Verify V3 Pass 07 layered tier turn
         run: node tools/verify-rebuild-v3-pass07.mjs
+      - name: Verify V3 Pass 08 story foundation
+        run: node tools/verify-rebuild-v3-pass08.mjs
