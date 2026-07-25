@@ -1,0 +1,273 @@
+{
+  "pass": 1,
+  "branch": "rebuild/mega-room-v3-40pass",
+  "generatedAt": "2026-07-25T00:52:58.842Z",
+  "passed": true,
+  "passedCount": 51,
+  "totalCount": 51,
+  "checks": [
+    {
+      "name": "fifteenMainRooms",
+      "passed": true
+    },
+    {
+      "name": "uniqueRoomIds",
+      "passed": true
+    },
+    {
+      "name": "uniqueRoomOrders",
+      "passed": true
+    },
+    {
+      "name": "contiguousOrders",
+      "passed": true
+    },
+    {
+      "name": "fiveTiers",
+      "passed": true
+    },
+    {
+      "name": "threeRoomsPerTier",
+      "passed": true
+    },
+    {
+      "name": "fixedRoomDimensions",
+      "passed": true
+    },
+    {
+      "name": "threeColumnsPerTier",
+      "passed": true
+    },
+    {
+      "name": "alternatingTierDirections",
+      "passed": true
+    },
+    {
+      "name": "mainRouteCoversEveryRoom",
+      "passed": true
+    },
+    {
+      "name": "routeLinksContiguous",
+      "passed": true
+    },
+    {
+      "name": "fourAlternatingAscents",
+      "passed": true
+    },
+    {
+      "name": "roomRolesVaried",
+      "passed": true
+    },
+    {
+      "name": "mechanicsUnique",
+      "passed": true
+    },
+    {
+      "name": "everyRoomHasStructures",
+      "passed": true
+    },
+    {
+      "name": "structureVariety",
+      "passed": true
+    },
+    {
+      "name": "enemyVariety",
+      "passed": true
+    },
+    {
+      "name": "checkpointCount",
+      "passed": true
+    },
+    {
+      "name": "threeOptionalAlcoves",
+      "passed": true
+    },
+    {
+      "name": "threeUnlockableShortcuts",
+      "passed": true
+    },
+    {
+      "name": "startsSafe",
+      "passed": true
+    },
+    {
+      "name": "endsAtExit",
+      "passed": true
+    },
+    {
+      "name": "boulderGroundedByDesign",
+      "passed": true
+    },
+    {
+      "name": "bridgeSupportsSpecified",
+      "passed": true
+    },
+    {
+      "name": "noFinalArtInPass01",
+      "passed": true
+    },
+    {
+      "name": "gameplayDetailForEveryRoom",
+      "passed": true
+    },
+    {
+      "name": "threeBeatsPerRoom",
+      "passed": true
+    },
+    {
+      "name": "noAdjacentRhythmRepeat",
+      "passed": true
+    },
+    {
+      "name": "roomDurationsReasonable",
+      "passed": true
+    },
+    {
+      "name": "targetPlaytimeFifteenToTwentyMinutes",
+      "passed": true
+    },
+    {
+      "name": "tensionValuesValid",
+      "passed": true
+    },
+    {
+      "name": "limitedHighTensionRun",
+      "passed": true
+    },
+    {
+      "name": "recoveryAfterEarlyPeaks",
+      "passed": true
+    },
+    {
+      "name": "calmBeforeChase",
+      "passed": true
+    },
+    {
+      "name": "chaseIsTensionPeak",
+      "passed": true
+    },
+    {
+      "name": "finaleChangesRhythm",
+      "passed": true
+    },
+    {
+      "name": "fivePacingChapters",
+      "passed": true
+    },
+    {
+      "name": "chaptersCoverRouteOnce",
+      "passed": true
+    },
+    {
+      "name": "chapterShapesUnique",
+      "passed": true
+    },
+    {
+      "name": "everyRoomHasChoice",
+      "passed": true
+    },
+    {
+      "name": "everyRoomHasRecovery",
+      "passed": true
+    },
+    {
+      "name": "everyRoomForeshadows",
+      "passed": true
+    },
+    {
+      "name": "abilityProgressionValid",
+      "passed": true
+    },
+    {
+      "name": "sevenAbilityProgressions",
+      "passed": true
+    },
+    {
+      "name": "structureFunctionsCoverEveryStructure",
+      "passed": true
+    },
+    {
+      "name": "structurePurposesAreMeaningful",
+      "passed": true
+    },
+    {
+      "name": "encounterCapIsReadable",
+      "passed": true
+    },
+    {
+      "name": "attackTelegraphIsReadable",
+      "passed": true
+    },
+    {
+      "name": "newMechanicStartsSafe",
+      "passed": true
+    },
+    {
+      "name": "noUnfairEnemyRules",
+      "passed": true
+    },
+    {
+      "name": "antiRepetitionRulesActive",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "rooms": 15,
+    "tiers": 5,
+    "requiredLinks": 14,
+    "ascents": 4,
+    "optionalAlcoves": 3,
+    "shortcuts": 3,
+    "checkpoints": 7,
+    "roomRoles": 13,
+    "uniqueMechanics": 15,
+    "structureFamilies": 59,
+    "enemyRoles": [
+      "crawler",
+      "flying_sentry",
+      "hanging_ambusher",
+      "armored_guard",
+      "ranged_turret",
+      "room_guardian"
+    ],
+    "meaningfulStructureFunctions": 59,
+    "abilityProgressions": 7,
+    "expectedPlaytimeSeconds": 1150,
+    "expectedPlaytimeMinutes": 19.17,
+    "tensionCurve": [
+      1,
+      2,
+      1.5,
+      2,
+      3,
+      4,
+      3,
+      4,
+      3,
+      4,
+      3,
+      4.5,
+      1.5,
+      5,
+      4.5
+    ],
+    "rhythms": [
+      "orientation",
+      "precision_learning",
+      "ability_reward",
+      "momentum_flow",
+      "aerial_swing",
+      "timed_dash",
+      "vertical_mastery",
+      "arena_combat",
+      "spectacle_crossing",
+      "hazard_timing",
+      "platform_puzzle",
+      "ability_combo",
+      "calm_preparation",
+      "continuous_chase",
+      "guardian_finale"
+    ],
+    "longestHighTensionRun": 2
+  }
+}

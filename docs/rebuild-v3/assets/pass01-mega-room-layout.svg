@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1490" viewBox="0 0 1800 1490">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#06151c"/>
+      <stop offset="1" stop-color="#02080c"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#8dc2cc" stroke-opacity=".055" stroke-width="1"/>
+    </pattern>
+    <filter id="glow"><feGaussianBlur stdDeviation="5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 z" fill="#f0c974"/>
+    </marker>
+    <style>
+      text { font-family: "Noto Sans KR", "Malgun Gothic", sans-serif; }
+      .title { font-size: 38px; font-weight: 800; fill: #edf5f2; letter-spacing: .5px; }
+      .subtitle { font-size: 17px; fill: #9dbac0; }
+      .tier { font-size: 14px; font-weight: 700; fill: #7099a3; letter-spacing: 2px; }
+      .room-name { font-size: 21px; font-weight: 750; fill: #edf5f2; }
+      .mechanic { font-size: 13px; fill: #8eb2ba; }
+      .structure { font-size: 13px; fill: #c3d4d5; }
+      .enemy { font-size: 11px; fill: #7fa0a8; }
+      .number { font-size: 16px; font-weight: 900; fill: #071318; }
+      .tension { font-size: 11px; font-weight: 700; fill: #dfe9e6; }
+      .route, .ascent { fill: none; stroke: #f0c974; stroke-width: 5; stroke-linecap: round; filter: url(#glow); }
+      .ascent { stroke-dasharray: 9 8; }
+      .legend { font-size: 14px; fill: #b8cccf; }
+      .legend-title { font-size: 18px; font-weight: 750; fill: #e7efed; }
+      .curve-label { font-size: 11px; fill: #8caab0; }
+    </style>
+  </defs>
+  <rect width="1800" height="1490" fill="url(#bg)"/>
+  <rect width="1800" height="1490" fill="url(#grid)"/>
+  <text x="92" y="75" class="title">CORELESS · 초대형 방 V3 상세 1차</text>
+  <text x="94" y="108" class="subtitle">그래픽 제작 전 플레이 구조 청사진 · 5층 × 3방 · 지그재그 상승 · 예상 19분 10초</text>
+  <text x="26" y="265" class="tier">T5</text><text x="26" y="478" class="tier">T4</text><text x="26" y="691" class="tier">T3</text><text x="26" y="904" class="tier">T2</text><text x="26" y="1117" class="tier">T1</text>
+  <g><path d="M 535 1111 L 580 1111" class="route" marker-end="url(#arrow)"/><path d="M 1010 1111 L 1055 1111" class="route" marker-end="url(#arrow)"/><path d="M 1503 1111 L 1503 898" class="ascent" marker-end="url(#arrow)"/><path d="M 1055 898 L 1010 898" class="route" marker-end="url(#arrow)"/><path d="M 580 898 L 535 898" class="route" marker-end="url(#arrow)"/><path d="M 87 898 L 87 685" class="ascent" marker-end="url(#arrow)"/><path d="M 535 685 L 580 685" class="route" marker-end="url(#arrow)"/><path d="M 1010 685 L 1055 685" class="route" marker-end="url(#arrow)"/><path d="M 1503 685 L 1503 472" class="ascent" marker-end="url(#arrow)"/><path d="M 1055 472 L 1010 472" class="route" marker-end="url(#arrow)"/><path d="M 580 472 L 535 472" class="route" marker-end="url(#arrow)"/><path d="M 87 472 L 87 259" class="ascent" marker-end="url(#arrow)"/><path d="M 535 259 L 580 259" class="route" marker-end="url(#arrow)"/><path d="M 1010 259 L 1055 259" class="route" marker-end="url(#arrow)"/></g>
+  <g>
+    <g class="room-card">
+      <rect x="105" y="1032" width="430" height="158" rx="18" fill="#102932" stroke="#8fd0b5" stroke-width="3"/>
+      <rect x="105" y="1032" width="12" height="158" rx="6" fill="#8fd0b5"/>
+      <circle cx="147" cy="1067" r="20" fill="#8fd0b5"/>
+      <text x="147" y="1074" text-anchor="middle" class="number">1</text>
+      <text x="179" y="1066" class="room-name">도착 전실</text>
+      <text x="179" y="1089" class="mechanic">move_and_jump · 50s</text>
+      <rect x="438" y="1050" width="72" height="28" rx="14" fill="#8fd0b5" opacity=".18"/>
+      <text x="474" y="1069" text-anchor="middle" class="tension">긴장 1</text>
+      <text x="133" y="1125" class="structure">• 넓은 안전 바닥</text><text x="133" y="1143" class="structure">• 낮은 연습 단차</text><text x="133" y="1161" class="structure">• 입구 회귀 방지문</text>
+      <text x="133" y="1180" class="enemy">안전 구역</text>
+      <path d="M 493 1152 l 10 10 20 -24" fill="none" stroke="#f2d789" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g class="room-card">
+      <rect x="580" y="1032" width="430" height="158" rx="18" fill="#102932" stroke="#88c5da" stroke-width="3"/>
+      <rect x="580" y="1032" width="12" height="158" rx="6" fill="#88c5da"/>
+      <circle cx="622" cy="1067" r="20" fill="#88c5da"/>
+      <text x="622" y="1074" text-anchor="middle" class="number">2</text>
+      <text x="654" y="1066" class="room-name">도약 공방</text>
+      <text x="654" y="1089" class="mechanic">variable_jump · 60s</text>
+      <rect x="913" y="1050" width="72" height="28" rx="14" fill="#88c5da" opacity=".18"/>
+      <text x="949" y="1069" text-anchor="middle" class="tension">긴장 2</text>
+      <text x="608" y="1125" class="structure">• 높이가 다른 세 발판</text><text x="608" y="1143" class="structure">• 천장 높이 비교 통로</text><text x="608" y="1161" class="structure">• 안전 낙하 웅덩이</text>
+      <text x="608" y="1180" class="enemy">안전 구역</text>
+      
+    </g>
+    <g class="room-card">
+      <rect x="1055" y="1032" width="430" height="158" rx="18" fill="#102932" stroke="#e6c56c" stroke-width="3"/>
+      <rect x="1055" y="1032" width="12" height="158" rx="6" fill="#e6c56c"/>
+      <circle cx="1097" cy="1067" r="20" fill="#e6c56c"/>
+      <text x="1097" y="1074" text-anchor="middle" class="number">3</text>
+      <text x="1129" y="1066" class="room-name">공명 날개 제단</text>
+      <text x="1129" y="1089" class="mechanic">double_jump · 55s</text>
+      <rect x="1388" y="1050" width="72" height="28" rx="14" fill="#e6c56c" opacity=".18"/>
+      <text x="1424" y="1069" text-anchor="middle" class="tension">긴장 1.5</text>
+      <text x="1083" y="1125" class="structure">• 이중 점프 제단</text><text x="1083" y="1143" class="structure">• 두 단계 상승벽</text><text x="1083" y="1161" class="structure">• 착지 회복대</text>
+      <text x="1083" y="1180" class="enemy">안전 구역</text>
+      <path d="M 1443 1152 l 10 10 20 -24" fill="none" stroke="#f2d789" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g class="room-card">
+      <rect x="1055" y="819" width="430" height="158" rx="18" fill="#102932" stroke="#7cb4c8" stroke-width="3"/>
+      <rect x="1055" y="819" width="12" height="158" rx="6" fill="#7cb4c8"/>
+      <circle cx="1097" cy="854" r="20" fill="#7cb4c8"/>
+      <text x="1097" y="861" text-anchor="middle" class="number">4</text>
+      <text x="1129" y="853" class="room-name">완경사 회랑</text>
+      <text x="1129" y="876" class="mechanic">slope_control · 65s</text>
+      <rect x="1388" y="837" width="72" height="28" rx="14" fill="#7cb4c8" opacity=".18"/>
+      <text x="1424" y="856" text-anchor="middle" class="tension">긴장 2</text>
+      <text x="1083" y="912" class="structure">• 완만한 오르막</text><text x="1083" y="930" class="structure">• 짧은 내리막</text><text x="1083" y="948" class="structure">• 경사 정지대</text>
+      <text x="1083" y="967" class="enemy">crawler</text>
+      
+    </g>
+    <g class="room-card">
+      <rect x="580" y="819" width="430" height="158" rx="18" fill="#102932" stroke="#7cb4c8" stroke-width="3"/>
+      <rect x="580" y="819" width="12" height="158" rx="6" fill="#7cb4c8"/>
+      <circle cx="622" cy="854" r="20" fill="#7cb4c8"/>
+      <text x="622" y="861" text-anchor="middle" class="number">5</text>
+      <text x="654" y="853" class="room-name">진자 집게실</text>
+      <text x="654" y="876" class="mechanic">grapple_release · 80s</text>
+      <rect x="913" y="837" width="72" height="28" rx="14" fill="#7cb4c8" opacity=".18"/>
+      <text x="949" y="856" text-anchor="middle" class="tension">긴장 3</text>
+      <text x="608" y="912" class="structure">• 천장 집게 레일</text><text x="608" y="930" class="structure">• 세 개의 안전 착지대</text><text x="608" y="948" class="structure">• 낮은 위험 바닥</text>
+      <text x="608" y="967" class="enemy">flying_sentry</text>
+      
+    </g>
+    <g class="room-card">
+      <rect x="105" y="819" width="430" height="158" rx="18" fill="#102932" stroke="#d99374" stroke-width="3"/>
+      <rect x="105" y="819" width="12" height="158" rx="6" fill="#d99374"/>
+      <circle cx="147" cy="854" r="20" fill="#d99374"/>
+      <text x="147" y="861" text-anchor="middle" class="number">6</text>
+      <text x="179" y="853" class="room-name">대시 수문</text>
+      <text x="179" y="876" class="mechanic">dash_timing · 75s</text>
+      <rect x="438" y="837" width="72" height="28" rx="14" fill="#d99374" opacity=".18"/>
+      <text x="474" y="856" text-anchor="middle" class="tension">긴장 4</text>
+      <text x="133" y="912" class="structure">• 간헐 수문 두 개</text><text x="133" y="930" class="structure">• 대시 통과창</text><text x="133" y="948" class="structure">• 실패 회수 통로</text>
+      <text x="133" y="967" class="enemy">안전 구역</text>
+      <path d="M 493 939 l 10 10 20 -24" fill="none" stroke="#f2d789" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g class="room-card">
+      <rect x="105" y="606" width="430" height="158" rx="18" fill="#102932" stroke="#9f9bd8" stroke-width="3"/>
+      <rect x="105" y="606" width="12" height="158" rx="6" fill="#9f9bd8"/>
+      <circle cx="147" cy="641" r="20" fill="#9f9bd8"/>
+      <text x="147" y="648" text-anchor="middle" class="number">7</text>
+      <text x="179" y="640" class="room-name">쌍벽 상승축</text>
+      <text x="179" y="663" class="mechanic">wall_jump · 70s</text>
+      <rect x="438" y="624" width="72" height="28" rx="14" fill="#9f9bd8" opacity=".18"/>
+      <text x="474" y="643" text-anchor="middle" class="tension">긴장 3</text>
+      <text x="133" y="699" class="structure">• 폭이 일정한 쌍벽</text><text x="133" y="717" class="structure">• 중간 휴식 홈</text><text x="133" y="735" class="structure">• 낙하 회수 발판</text>
+      <text x="133" y="754" class="enemy">hanging_ambusher</text>
+      
+    </g>
+    <g class="room-card">
+      <rect x="580" y="606" width="430" height="158" rx="18" fill="#102932" stroke="#d77f76" stroke-width="3"/>
+      <rect x="580" y="606" width="12" height="158" rx="6" fill="#d77f76"/>
+      <circle cx="622" cy="641" r="20" fill="#d77f76"/>
+      <text x="622" y="648" text-anchor="middle" class="number">8</text>
+      <text x="654" y="640" class="room-name">파수꾼 조립실</text>
+      <text x="654" y="663" class="mechanic">arena_combat · 95s</text>
+      <rect x="913" y="624" width="72" height="28" rx="14" fill="#d77f76" opacity=".18"/>
+      <text x="949" y="643" text-anchor="middle" class="tension">긴장 4</text>
+      <text x="608" y="699" class="structure">• 낮은 엄폐벽</text><text x="608" y="717" class="structure">• 상·하단 전투 발코니</text><text x="608" y="735" class="structure">• 파괴 가능한 상자벽</text>
+      <text x="608" y="754" class="enemy">armored_guard · flying_sentry · crawler</text>
+      <path d="M 968 726 l 10 10 20 -24" fill="none" stroke="#f2d789" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g class="room-card">
+      <rect x="1055" y="606" width="430" height="158" rx="18" fill="#102932" stroke="#c69bd8" stroke-width="3"/>
+      <rect x="1055" y="606" width="12" height="158" rx="6" fill="#c69bd8"/>
+      <circle cx="1097" cy="641" r="20" fill="#c69bd8"/>
+      <text x="1097" y="648" text-anchor="middle" class="number">9</text>
+      <text x="1129" y="640" class="room-name">심연 교량</text>
+      <text x="1129" y="663" class="mechanic">bridge_crossing · 75s</text>
+      <rect x="1388" y="624" width="72" height="28" rx="14" fill="#c69bd8" opacity=".18"/>
+      <text x="1424" y="643" text-anchor="middle" class="tension">긴장 3</text>
+      <text x="1083" y="699" class="structure">• 세 구간 교량</text><text x="1083" y="717" class="structure">• 화면 아래로 이어지는 교각</text><text x="1083" y="735" class="structure">• 무너지는 중앙판</text>
+      <text x="1083" y="754" class="enemy">ranged_turret</text>
+      
+    </g>
+    <g class="room-card">
+      <rect x="1055" y="393" width="430" height="158" rx="18" fill="#102932" stroke="#dc9a65" stroke-width="3"/>
+      <rect x="1055" y="393" width="12" height="158" rx="6" fill="#dc9a65"/>
+      <circle cx="1097" cy="428" r="20" fill="#dc9a65"/>
+      <text x="1097" y="435" text-anchor="middle" class="number">10</text>
+      <text x="1129" y="427" class="room-name">압착 주조실</text>
+      <text x="1129" y="450" class="mechanic">crusher_timing · 80s</text>
+      <rect x="1388" y="411" width="72" height="28" rx="14" fill="#dc9a65" opacity=".18"/>
+      <text x="1424" y="430" text-anchor="middle" class="tension">긴장 4</text>
+      <text x="1083" y="486" class="structure">• 예고등 압착기 세 개</text><text x="1083" y="504" class="structure">• 안전 대기 홈</text><text x="1083" y="522" class="structure">• 상부 우회 선반</text>
+      <text x="1083" y="541" class="enemy">crawler</text>
+      
+    </g>
+    <g class="room-card">
+      <rect x="580" y="393" width="430" height="158" rx="18" fill="#102932" stroke="#7cb4c8" stroke-width="3"/>
+      <rect x="580" y="393" width="12" height="158" rx="6" fill="#7cb4c8"/>
+      <circle cx="622" cy="428" r="20" fill="#7cb4c8"/>
+      <text x="622" y="435" text-anchor="middle" class="number">11</text>
+      <text x="654" y="427" class="room-name">균형 승강고</text>
+      <text x="654" y="450" class="mechanic">moving_platforms · 75s</text>
+      <rect x="913" y="411" width="72" height="28" rx="14" fill="#7cb4c8" opacity=".18"/>
+      <text x="949" y="430" text-anchor="middle" class="tension">긴장 3</text>
+      <text x="608" y="486" class="structure">• 균형추 승강기</text><text x="608" y="504" class="structure">• 교차 이동 발판</text><text x="608" y="522" class="structure">• 고정 안전대</text>
+      <text x="608" y="541" class="enemy">ranged_turret</text>
+      <path d="M 968 513 l 10 10 20 -24" fill="none" stroke="#f2d789" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g class="room-card">
+      <rect x="105" y="393" width="430" height="158" rx="18" fill="#102932" stroke="#ad88cf" stroke-width="3"/>
+      <rect x="105" y="393" width="12" height="158" rx="6" fill="#ad88cf"/>
+      <circle cx="147" cy="428" r="20" fill="#ad88cf"/>
+      <text x="147" y="435" text-anchor="middle" class="number">12</text>
+      <text x="179" y="427" class="room-name">회귀 집게실</text>
+      <text x="179" y="450" class="mechanic">grapple_dash_combo · 90s</text>
+      <rect x="438" y="411" width="72" height="28" rx="14" fill="#ad88cf" opacity=".18"/>
+      <text x="474" y="430" text-anchor="middle" class="tension">긴장 4.5</text>
+      <text x="133" y="486" class="structure">• 서로 다른 길이의 집게 두 개</text><text x="133" y="504" class="structure">• 대시 착지창</text><text x="133" y="522" class="structure">• 파괴 가능한 옆방</text>
+      <text x="133" y="541" class="enemy">flying_sentry · hanging_ambusher</text>
+      
+    </g>
+    <g class="room-card">
+      <rect x="105" y="180" width="430" height="158" rx="18" fill="#102932" stroke="#90c8a1" stroke-width="3"/>
+      <rect x="105" y="180" width="12" height="158" rx="6" fill="#90c8a1"/>
+      <circle cx="147" cy="215" r="20" fill="#90c8a1"/>
+      <text x="147" y="222" text-anchor="middle" class="number">13</text>
+      <text x="179" y="214" class="room-name">추격 전실</text>
+      <text x="179" y="237" class="mechanic">chase_warning · 50s</text>
+      <rect x="438" y="198" width="72" height="28" rx="14" fill="#90c8a1" opacity=".18"/>
+      <text x="474" y="217" text-anchor="middle" class="tension">긴장 1.5</text>
+      <text x="133" y="273" class="structure">• 넓은 준비 바닥</text><text x="133" y="291" class="structure">• 추격 경고문</text><text x="133" y="309" class="structure">• 최종 체크포인트</text>
+      <text x="133" y="328" class="enemy">안전 구역</text>
+      <path d="M 493 300 l 10 10 20 -24" fill="none" stroke="#f2d789" stroke-width="5" stroke-linecap="round"/>
+    </g>
+    <g class="room-card">
+      <rect x="580" y="180" width="430" height="158" rx="18" fill="#102932" stroke="#e17462" stroke-width="3"/>
+      <rect x="580" y="180" width="12" height="158" rx="6" fill="#e17462"/>
+      <circle cx="622" cy="215" r="20" fill="#e17462"/>
+      <text x="622" y="222" text-anchor="middle" class="number">14</text>
+      <text x="654" y="214" class="room-name">붕괴석 추격로</text>
+      <text x="654" y="237" class="mechanic">grounded_boulder_chase · 110s</text>
+      <rect x="913" y="198" width="72" height="28" rx="14" fill="#e17462" opacity=".18"/>
+      <text x="949" y="217" text-anchor="middle" class="tension">긴장 5</text>
+      <text x="608" y="273" class="structure">• 연속 접지 경사</text><text x="608" y="291" class="structure">• 짧은 점프턱</text><text x="608" y="309" class="structure">• 파괴 지지대</text>
+      <text x="608" y="328" class="enemy">안전 구역</text>
+      
+    </g>
+    <g class="room-card">
+      <rect x="1055" y="180" width="430" height="158" rx="18" fill="#102932" stroke="#efd282" stroke-width="3"/>
+      <rect x="1055" y="180" width="12" height="158" rx="6" fill="#efd282"/>
+      <circle cx="1097" cy="215" r="20" fill="#efd282"/>
+      <text x="1097" y="222" text-anchor="middle" class="number">15</text>
+      <text x="1129" y="214" class="room-name">상승 관문</text>
+      <text x="1129" y="237" class="mechanic">guardian_and_exit · 120s</text>
+      <rect x="1388" y="198" width="72" height="28" rx="14" fill="#efd282" opacity=".18"/>
+      <text x="1424" y="217" text-anchor="middle" class="tension">긴장 4.5</text>
+      <text x="1083" y="273" class="structure">• 다층 출구대</text><text x="1083" y="291" class="structure">• 수호자 원형대</text><text x="1083" y="309" class="structure">• 완주 지름길 레버</text>
+      <text x="1083" y="328" class="enemy">room_guardian</text>
+      <path d="M 1443 300 l 10 10 20 -24" fill="none" stroke="#f2d789" stroke-width="5" stroke-linecap="round"/>
+    </g></g>
+  <g transform="translate(1530 182)">
+    <rect width="220" height="530" rx="20" fill="#0d2028" stroke="#315561"/>
+    <text x="24" y="42" class="legend-title">설계 규칙</text>
+    <text x="24" y="76" class="legend">15개 본방</text>
+    <text x="24" y="103" class="legend">14개 필수 연결</text>
+    <text x="24" y="130" class="legend">4개 교대 상승축</text>
+    <text x="24" y="157" class="legend">3개 선택 옆방</text>
+    <text x="24" y="184" class="legend">3개 해금 지름길</text>
+    <text x="24" y="211" class="legend">7개 체크포인트</text>
+    <line x1="24" y1="238" x2="196" y2="238" stroke="#315561"/>
+    <text x="24" y="274" class="legend-title">공정성 기준</text>
+    <text x="24" y="310" class="legend">첫 시도는 안전하게</text>
+    <text x="24" y="337" class="legend">화면 밖 공격 금지</text>
+    <text x="24" y="364" class="legend">맹목 착지 적 배치 금지</text>
+    <text x="24" y="391" class="legend">실패 즉시 회수</text>
+    <text x="24" y="418" class="legend">고긴장 최대 2방 연속</text>
+    <text x="24" y="445" class="legend">방마다 선택 또는 변주</text>
+    <text x="24" y="482" class="legend">✓ 체크포인트</text>
+  </g>
+  <g>
+    <text x="94" y="1260" class="legend-title">긴장도 곡선 — 학습 → 보상 → 압박 → 회복 → 추격 → 결전</text>
+    <line x1="150" y1="1412" x2="1435" y2="1412" stroke="#315561"/>
+    <polyline points="170,1385 258,1360 346,1372.5 434,1360 522,1335 610,1310 698,1335 786,1310 874,1335 962,1310 1050,1335 1138,1297.5 1226,1372.5 1314,1285 1402,1297.5" fill="none" stroke="#e6a466" stroke-width="4" stroke-linejoin="round"/>
+    <circle cx="170" cy="1385" r="5" fill="#f0c974"/><text x="170" y="1440" text-anchor="middle" class="curve-label">r01</text><circle cx="258" cy="1360" r="5" fill="#f0c974"/><text x="258" y="1440" text-anchor="middle" class="curve-label">r02</text><circle cx="346" cy="1372.5" r="5" fill="#f0c974"/><text x="346" y="1440" text-anchor="middle" class="curve-label">r03</text><circle cx="434" cy="1360" r="5" fill="#f0c974"/><text x="434" y="1440" text-anchor="middle" class="curve-label">r04</text><circle cx="522" cy="1335" r="5" fill="#f0c974"/><text x="522" y="1440" text-anchor="middle" class="curve-label">r05</text><circle cx="610" cy="1310" r="5" fill="#f0c974"/><text x="610" y="1440" text-anchor="middle" class="curve-label">r06</text><circle cx="698" cy="1335" r="5" fill="#f0c974"/><text x="698" y="1440" text-anchor="middle" class="curve-label">r07</text><circle cx="786" cy="1310" r="5" fill="#f0c974"/><text x="786" y="1440" text-anchor="middle" class="curve-label">r08</text><circle cx="874" cy="1335" r="5" fill="#f0c974"/><text x="874" y="1440" text-anchor="middle" class="curve-label">r09</text><circle cx="962" cy="1310" r="5" fill="#f0c974"/><text x="962" y="1440" text-anchor="middle" class="curve-label">r10</text><circle cx="1050" cy="1335" r="5" fill="#f0c974"/><text x="1050" y="1440" text-anchor="middle" class="curve-label">r11</text><circle cx="1138" cy="1297.5" r="5" fill="#f0c974"/><text x="1138" y="1440" text-anchor="middle" class="curve-label">r12</text><circle cx="1226" cy="1372.5" r="5" fill="#f0c974"/><text x="1226" y="1440" text-anchor="middle" class="curve-label">r13</text><circle cx="1314" cy="1285" r="5" fill="#f0c974"/><text x="1314" y="1440" text-anchor="middle" class="curve-label">r14</text><circle cx="1402" cy="1297.5" r="5" fill="#f0c974"/><text x="1402" y="1440" text-anchor="middle" class="curve-label">r15</text>
+  </g>
+  <text x="1530" y="760" class="legend-title">경로 읽기</text>
+  <text x="1530" y="792" class="legend">아래 왼쪽에서 시작</text>
+  <text x="1530" y="819" class="legend">동 → 상승 → 서</text>
+  <text x="1530" y="846" class="legend">한 층마다 방향 전환</text>
+  <text x="1530" y="873" class="legend">위 오른쪽에서 종료</text>
+  <text x="1530" y="925" class="legend-title">1차 범위</text>
+  <text x="1530" y="957" class="legend">구조·동선·리듬 확정</text>
+  <text x="1530" y="984" class="legend">최종 그래픽은 미포함</text>
+  <text x="1530" y="1011" class="legend">다음 차수부터 회색박스</text>
+</svg>
