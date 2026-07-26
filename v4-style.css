@@ -74,6 +74,20 @@ body {
   height: auto;
 }
 
+.v4-lab-panel canvas {
+  aspect-ratio: 14 / 9;
+  cursor: crosshair;
+  outline: none;
+}
+
+.v4-lab-panel canvas:focus {
+  box-shadow: inset 0 0 0 3px rgba(216, 197, 126, 0.7);
+}
+
+.v4-lab-note {
+  margin: -12px 4px 26px;
+}
+
 .v4-note {
   margin: 14px 4px 0;
   color: #92a9ac;

@@ -1,0 +1,108 @@
+{
+  "pass": 2,
+  "generatedAt": "2026-07-26T01:35:46.680Z",
+  "passed": true,
+  "passedCount": 21,
+  "totalCount": 21,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "pass01StillValid",
+      "passed": true
+    },
+    {
+      "name": "staticMovementAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsMovementPass",
+      "passed": true
+    },
+    {
+      "name": "movementCanvasHasExpectedResolution",
+      "passed": true
+    },
+    {
+      "name": "realKeyboardShortJumpInBand",
+      "passed": true
+    },
+    {
+      "name": "realKeyboardFullJumpInBand",
+      "passed": true
+    },
+    {
+      "name": "realKeyboardJumpProfilesDiffer",
+      "passed": true
+    },
+    {
+      "name": "realKeyboardDirectRunCompleted",
+      "passed": true
+    },
+    {
+      "name": "realKeyboardDirectRunWithinBand",
+      "passed": true
+    },
+    {
+      "name": "directRunReachesFinish",
+      "passed": true
+    },
+    {
+      "name": "directRunHasNoTeleport",
+      "passed": true
+    },
+    {
+      "name": "cameraFollowIsSmooth",
+      "passed": true
+    },
+    {
+      "name": "realKeyboardAttackRunCompleted",
+      "passed": true
+    },
+    {
+      "name": "attackRunUsedAttacks",
+      "passed": true
+    },
+    {
+      "name": "attackRunSlowerThanDirect",
+      "passed": true
+    },
+    {
+      "name": "attackRunDoesNotStopMovement",
+      "passed": true
+    },
+    {
+      "name": "deterministicAndBrowserDirectTimesAgree",
+      "passed": true
+    },
+    {
+      "name": "twentySecondBudgetStillNeedsAuthoredPlay",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "deterministicDirectSeconds": 6.900000000000133,
+    "browserShortJumpHeight": 83.90243055555561,
+    "browserFullJumpHeight": 133.64513888888882,
+    "browserDirectSeconds": 6.900000000000133,
+    "browserAttackSeconds": 7.98333333333352,
+    "attackCount": 19,
+    "directMaximumSpeed": 420,
+    "directMaximumPositionStep": 3.5,
+    "directMaximumCameraStep": 3.4999999999995453,
+    "requiredAuthoredSeconds": 13.099999999999866,
+    "resets": 3
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

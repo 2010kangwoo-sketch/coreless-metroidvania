@@ -23,3 +23,5 @@ jobs:
           node-version: 24
       - name: Verify V4 Pass 01 scale layout
         run: node tools/verify-rebuild-v4-pass01.mjs
+      - name: Verify V4 Pass 02 movement budget
+        run: node tools/verify-rebuild-v4-pass02.mjs

@@ -1,0 +1,199 @@
+{
+  "pass": 2,
+  "generatedAt": "2026-07-26T01:36:20.926Z",
+  "passed": true,
+  "passedCount": 29,
+  "totalCount": 29,
+  "checks": [
+    {
+      "name": "pass01ScaleStillValid",
+      "passed": true
+    },
+    {
+      "name": "pass01PrecedesPass02",
+      "passed": true
+    },
+    {
+      "name": "measuredDistanceIsTwoViewports",
+      "passed": true
+    },
+    {
+      "name": "labWiderThanMeasuredSpace",
+      "passed": true
+    },
+    {
+      "name": "fixedStepIsOneTwenty",
+      "passed": true
+    },
+    {
+      "name": "runSpeedPreserved",
+      "passed": true
+    },
+    {
+      "name": "sprintCompletes",
+      "passed": true
+    },
+    {
+      "name": "sprintTakesMoreThanSixSeconds",
+      "passed": true
+    },
+    {
+      "name": "sprintTakesLessThanSevenPointFiveSeconds",
+      "passed": true
+    },
+    {
+      "name": "distanceDoesNotPretendToFillTwentySeconds",
+      "passed": true
+    },
+    {
+      "name": "attackAllowsMovement",
+      "passed": true
+    },
+    {
+      "name": "attackRunSlowerThanSprint",
+      "passed": true
+    },
+    {
+      "name": "attackRunNotAForcedStop",
+      "passed": true
+    },
+    {
+      "name": "attackCycleIsResponsive",
+      "passed": true
+    },
+    {
+      "name": "attackHasReadableActiveWindow",
+      "passed": true
+    },
+    {
+      "name": "shortJumpAboveSixty",
+      "passed": true
+    },
+    {
+      "name": "shortJumpBelowOneHundred",
+      "passed": true
+    },
+    {
+      "name": "fullJumpAboveOneHundredTwenty",
+      "passed": true
+    },
+    {
+      "name": "fullJumpBelowOneHundredFifty",
+      "passed": true
+    },
+    {
+      "name": "jumpProfilesAreMeaningfullyDifferent",
+      "passed": true
+    },
+    {
+      "name": "reversalResponsive",
+      "passed": true
+    },
+    {
+      "name": "reversalDoesNotTeleport",
+      "passed": true
+    },
+    {
+      "name": "groundStopUnderOneFifthSecond",
+      "passed": true
+    },
+    {
+      "name": "groundStopDistanceBounded",
+      "passed": true
+    },
+    {
+      "name": "authoredTimeRequired",
+      "passed": true
+    },
+    {
+      "name": "budgetModelMatchesMissingTime",
+      "passed": true
+    },
+    {
+      "name": "distanceShareUnderFortyPercent",
+      "passed": true
+    },
+    {
+      "name": "allThirtySixZonesRetainTimeTargets",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "sprint": {
+      "seconds": 6.900000000000133,
+      "distance": 2801.75,
+      "averageSpeed": 406.05072463767334,
+      "attacks": 0,
+      "finishX": 2901.75
+    },
+    "attackRun": {
+      "seconds": 7.991666666666854,
+      "distance": 2800.4999999999336,
+      "averageSpeed": 350.42752867568737,
+      "attacks": 20,
+      "finishX": 2900.4999999999336
+    },
+    "shortJump": {
+      "holdSeconds": 0.065,
+      "height": 83.90243055555561,
+      "airtimeSeconds": 0.483333333333334
+    },
+    "fullJump": {
+      "holdSeconds": 0.42,
+      "height": 133.64513888888882,
+      "airtimeSeconds": 0.7333333333333332
+    },
+    "reversal": {
+      "startSpeed": 420,
+      "secondsToOppositeNinety": 0.4250000000000005,
+      "displacement": 3.5416666666666288,
+      "endSpeed": -387.4999999999998
+    },
+    "stop": {
+      "startSpeed": 420,
+      "stopSeconds": 0.13333333333333333,
+      "stopDistance": 25
+    },
+    "spaceBudget": {
+      "targetSeconds": 20,
+      "measuredDirectSeconds": 6.900000000000133,
+      "requiredAuthoredSeconds": 13.099999999999866,
+      "modeledAuthoredSeconds": 13.100000000000001,
+      "distanceShare": 0.34500000000000663
+    }
+  },
+  "movementLab": {
+    "width": 3200,
+    "height": 900,
+    "floorY": 780,
+    "spawnX": 100,
+    "finishX": 2900,
+    "measuredDistance": 2800,
+    "fixedStep": 0.008333333333333333
+  },
+  "basicAttack": {
+    "input": "KeyB",
+    "startupSeconds": 0.07,
+    "activeSeconds": 0.09,
+    "recoverySeconds": 0.18,
+    "totalSeconds": 0.34,
+    "repeatIntervalSeconds": 0.42,
+    "movementSpeedFactor": 0.82,
+    "minimumTelegraphSeconds": 0.07
+  },
+  "twentySecondBudget": {
+    "targetSeconds": 20,
+    "parts": {
+      "directTraversal": "measured",
+      "terrainReading": 2.6,
+      "routeDecision": 2.2,
+      "interactionOrCombat": 5.3,
+      "recoveryMargin": 3
+    },
+    "rule": "distance alone never supplies the missing time; use readable terrain, a real decision, or a distinct interaction"
+  }
+}
