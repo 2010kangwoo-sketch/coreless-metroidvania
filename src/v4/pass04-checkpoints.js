@@ -163,6 +163,15 @@ export function createCheckpointStore(storage) {
     write(checkpointId) {
       const record = createSaveRecord(checkpointId);
       const persisted = writeRaw(JSON.stringify(record));
+      if (
+        typeof globalThis.dispatchEvent === "function" &&
+        typeof globalThis.CustomEvent === "function"
+      ) {
+        globalThis.dispatchEvent(new CustomEvent(
+          "coreless:v4-checkpoint-save",
+          { detail: { record, persisted } },
+        ));
+      }
       return Object.freeze({ record, persisted });
     },
     clear() {

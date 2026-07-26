@@ -38,6 +38,11 @@ import {
   inspectStartScreenSave,
   validateV4StartScreen,
 } from "./start-screen.js";
+import {
+  V4_ACCOUNT,
+  V4AccountController,
+  validateV4AccountSave,
+} from "./account-save.js";
 
 const pass01Audit = validatePass01ScaleLayout();
 const pass02Audit = validatePass02Movement();
@@ -45,6 +50,7 @@ const pass03Audit = validatePass03WorldStreaming();
 const pass04Audit = validatePass04Checkpoints();
 const audit = validatePass05StoryGuidance();
 const startScreenAudit = validateV4StartScreen();
+const accountAudit = validateV4AccountSave();
 const runtimeCanvas = document.querySelector("#v4StoryLab");
 const megaRoomCanvas = document.querySelector("#v4MegaRoomBlueprint");
 const campaignCanvas = document.querySelector("#v4CampaignBlueprint");
@@ -67,6 +73,7 @@ const startScreen = new V4StartScreenController(startScreenRoot, {
     runtime.start();
   },
 });
+const account = new V4AccountController(startScreenRoot);
 
 status.textContent = audit.passed
   ? `STORY ${audit.passedCount}/${audit.totalCount}`
@@ -85,6 +92,7 @@ window.__corelessV4 = Object.freeze({
   pass04Audit,
   audit,
   startScreenAudit,
+  accountAudit,
   streaming: Object.freeze({
     config: PASS03_STREAMING,
     tiers: PASS03_TIERS,
@@ -104,6 +112,8 @@ window.__corelessV4 = Object.freeze({
   }),
   startScreenContract: V4_START_SCREEN,
   startScreen,
+  accountContract: V4_ACCOUNT,
+  account,
   runtime,
 });
 document.documentElement.dataset.corelessV4Ready = "true";

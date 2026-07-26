@@ -11,6 +11,7 @@ on:
       - "v4.html"
       - "v4-style.css"
       - ".github/workflows/rebuild-v4-verify.yml"
+      - "server/**"
 
 jobs:
   scale-and-layout:
@@ -35,3 +36,10 @@ jobs:
         run: node tools/verify-rebuild-v4-quality-foundation.mjs
       - name: Verify V4 start screen
         run: node tools/verify-rebuild-v4-start-screen.mjs
+      - name: Verify V4 account and save contract
+        run: node tools/verify-rebuild-v4-account-save.mjs
+      - name: Install account server dependencies
+        working-directory: server
+        run: npm ci
+      - name: Verify V4 account server
+        run: node tools/verify-rebuild-v4-account-server.mjs

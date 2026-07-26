@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#071015">
   <meta name="description" content="Coreless V4 · 중심 없이 깨어난 자">
+  <meta name="coreless-auth-enabled" content="false">
+  <meta name="coreless-auth-origin" content="">
   <title>Coreless</title>
   <link rel="stylesheet" href="v4-style.css?v=start-screen">
 </head>
@@ -55,8 +57,15 @@
             <small>빈 제련소에서 시작</small>
           </span>
         </button>
-        <button type="button" data-start-action="controls">
+        <button type="button" data-start-action="account">
           <span class="v4-start-button-index">03</span>
+          <span>
+            <strong>계정 및 저장</strong>
+            <small data-account-status>게스트 · 이 기기에 저장</small>
+          </span>
+        </button>
+        <button type="button" data-start-action="controls">
+          <span class="v4-start-button-index">04</span>
           <span>
             <strong>조작 안내</strong>
             <small>이동과 기록 확인</small>
@@ -70,6 +79,56 @@
         <span>마우스 지원</span>
       </footer>
     </div>
+
+    <aside
+      class="v4-start-dialog v4-account-dialog"
+      data-start-dialog="account"
+      aria-label="계정 및 저장"
+      aria-hidden="true"
+    >
+      <p>PLAYER MEMORY</p>
+      <h2>계정 및 저장</h2>
+      <div class="v4-account-current">
+        <span>현재 플레이 방식</span>
+        <strong data-account-status>게스트 · 이 기기에 저장</strong>
+        <small>
+          게스트 기록은 이 브라우저에만 남습니다. 나중에 로그인하면
+          현재 진행 기록을 계정으로 옮길 수 있습니다.
+        </small>
+      </div>
+      <div class="v4-account-providers" aria-label="소셜 로그인">
+        <button type="button" data-account-provider="google">
+          <span aria-hidden="true">G</span>Google로 로그인
+        </button>
+        <button type="button" data-account-provider="kakao">
+          <span aria-hidden="true">K</span>카카오로 로그인
+        </button>
+        <button type="button" data-account-provider="facebook">
+          <span aria-hidden="true">f</span>Facebook으로 로그인
+        </button>
+        <button type="button" data-account-provider="naver">
+          <span aria-hidden="true">N</span>네이버로 로그인
+        </button>
+      </div>
+      <span class="v4-account-notice" data-account-notice>
+        최종 사이트 주소 확정 후 연결됩니다.
+      </span>
+      <div class="v4-account-conflict" data-account-conflict hidden>
+        <strong>저장 기록 선택</strong>
+        <span>자동으로 덮어쓰지 않습니다.</span>
+        <div>
+          <button type="button" data-account-resolution="local">
+            이 기기 기록 사용
+          </button>
+          <button type="button" data-account-resolution="cloud">
+            클라우드 기록 사용
+          </button>
+        </div>
+      </div>
+      <button type="button" data-start-action="close-dialog">
+        게스트로 계속
+      </button>
+    </aside>
 
     <aside
       class="v4-start-dialog"

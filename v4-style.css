@@ -484,6 +484,113 @@ body[data-start-screen="open"] {
   gap: 10px;
 }
 
+.v4-account-dialog {
+  width: min(610px, calc(100vw - 40px));
+}
+
+.v4-account-current {
+  display: grid;
+  gap: 7px;
+  margin: -8px 0 22px;
+  padding: 16px 18px;
+  border-left: 2px solid var(--start-gold);
+  background: rgba(130, 192, 192, 0.07);
+}
+
+.v4-account-current > span {
+  color: #708b8b;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+}
+
+.v4-account-current strong {
+  color: #e9f0eb;
+  font-size: 16px;
+}
+
+.v4-account-current small {
+  color: #91a6a3;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.v4-account-providers {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  margin-bottom: 14px;
+}
+
+.v4-account-providers button {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  min-height: 52px;
+  background: rgba(91, 143, 143, 0.12);
+}
+
+.v4-account-providers button > span {
+  display: grid;
+  flex: 0 0 25px;
+  width: 25px;
+  height: 25px;
+  place-items: center;
+  border: 1px solid rgba(214, 228, 222, 0.3);
+  border-radius: 50%;
+  color: #eef3ee;
+  font-size: 12px;
+}
+
+.v4-account-providers button:disabled {
+  border-color: rgba(105, 131, 129, 0.18);
+  background: rgba(52, 72, 72, 0.1);
+  color: #536563;
+  cursor: not-allowed;
+}
+
+.v4-account-notice {
+  display: block;
+  margin: 0 0 20px;
+  color: #c8b978;
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.v4-account-conflict {
+  margin: -6px 0 18px;
+  padding: 14px;
+  border: 1px solid rgba(228, 207, 134, 0.38);
+  background: rgba(228, 207, 134, 0.06);
+}
+
+.v4-account-conflict[hidden] {
+  display: none;
+}
+
+.v4-account-conflict > strong,
+.v4-account-conflict > span {
+  display: block;
+}
+
+.v4-account-conflict > strong {
+  color: #e8d998;
+  font-size: 13px;
+}
+
+.v4-account-conflict > span {
+  margin: 4px 0 12px;
+  color: #8fa19e;
+  font-size: 11px;
+}
+
+.v4-account-conflict > div {
+  display: flex;
+  gap: 8px;
+}
+
 @keyframes v4-start-breathe {
   0%,
   100% { opacity: 0.68; transform: scale(0.96); }
@@ -604,6 +711,16 @@ body[data-start-screen="open"] {
 
   .v4-start-menu {
     width: 100%;
+  }
+
+  .v4-account-providers {
+    grid-template-columns: 1fr;
+  }
+
+  .v4-account-dialog {
+    max-height: calc(100vh - 28px);
+    overflow-y: auto;
+    padding: 24px;
   }
 
   .v4-shell {

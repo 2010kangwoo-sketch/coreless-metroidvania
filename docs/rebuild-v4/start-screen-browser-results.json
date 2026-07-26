@@ -1,9 +1,9 @@
 {
   "build": "coreless-v4-start-screen",
-  "generatedAt": "2026-07-26T08:02:57.525Z",
+  "generatedAt": "2026-07-26T09:51:24.182Z",
   "passed": true,
-  "passedCount": 21,
-  "totalCount": 21,
+  "passedCount": 22,
+  "totalCount": 22,
   "checks": [
     {
       "name": "staticStartScreenAuditPasses",
@@ -14,7 +14,7 @@
       "passed": true
     },
     {
-      "name": "threeRealMenuActions",
+      "name": "fourRealMenuActions",
       "passed": true
     },
     {
@@ -78,6 +78,10 @@
       "passed": true
     },
     {
+      "name": "accountDialogExists",
+      "passed": true
+    },
+    {
       "name": "overwriteDialogExists",
       "passed": true
     },
@@ -94,9 +98,11 @@
     "menuActions": [
       "continue",
       "new",
+      "account",
       "controls"
     ],
     "dialogs": [
+      "account",
       "controls",
       "new-confirm"
     ],

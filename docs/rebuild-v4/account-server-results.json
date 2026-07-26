@@ -1,0 +1,91 @@
+{
+  "build": "coreless-v4-account-server-foundation",
+  "generatedAt": "2026-07-26T09:50:20.203Z",
+  "passed": true,
+  "passedCount": 10,
+  "totalCount": 10,
+  "checks": [
+    {
+      "name": "fourProvidersConfigured",
+      "passed": true
+    },
+    {
+      "name": "authUsesDatabaseSessions",
+      "passed": true
+    },
+    {
+      "name": "fourCallbackUrls",
+      "passed": true
+    },
+    {
+      "name": "callbackUrlsUseHttps",
+      "passed": true
+    },
+    {
+      "name": "validSaveAccepted",
+      "passed": true
+    },
+    {
+      "name": "wrongOrderRejected",
+      "passed": true
+    },
+    {
+      "name": "authTablesPresent",
+      "passed": true
+    },
+    {
+      "name": "gameSavesPresent",
+      "passed": true
+    },
+    {
+      "name": "revisionPresent",
+      "passed": true
+    },
+    {
+      "name": "secretFileIgnored",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "providers": [
+      {
+        "id": "google",
+        "label": "Google",
+        "enabled": true
+      },
+      {
+        "id": "kakao",
+        "label": "카카오",
+        "enabled": true
+      },
+      {
+        "id": "facebook",
+        "label": "Facebook",
+        "enabled": true
+      },
+      {
+        "id": "naver",
+        "label": "네이버",
+        "enabled": true
+      }
+    ],
+    "callbacks": [
+      {
+        "id": "google",
+        "url": "https://game.example.com/auth/callback/google"
+      },
+      {
+        "id": "kakao",
+        "url": "https://game.example.com/auth/callback/kakao"
+      },
+      {
+        "id": "facebook",
+        "url": "https://game.example.com/auth/callback/facebook"
+      },
+      {
+        "id": "naver",
+        "url": "https://game.example.com/auth/callback/naver"
+      }
+    ]
+  }
+}

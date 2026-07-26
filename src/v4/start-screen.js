@@ -9,7 +9,7 @@ export const V4_START_SCREEN = Object.freeze({
   title: "CORELESS",
   subtitle: "중심 없이 깨어난 자",
   fadeOutMilliseconds: 620,
-  menuActions: Object.freeze(["continue", "new", "controls"]),
+  menuActions: Object.freeze(["continue", "new", "account", "controls"]),
   keyboardNavigation: Object.freeze([
     "ArrowUp",
     "ArrowDown",
@@ -51,8 +51,8 @@ export function inspectStartScreenSave(storage) {
 
 export function validateV4StartScreen() {
   const checks = [
-    ["threeRealMenuActions", V4_START_SCREEN.menuActions.join(",") ===
-      "continue,new,controls"],
+    ["fourRealMenuActions", V4_START_SCREEN.menuActions.join(",") ===
+      "continue,new,account,controls"],
     ["continueRequiresSave", V4_START_SCREEN.continueRequiresValidSave],
     ["newGameConfirmsOverwrite", V4_START_SCREEN.confirmsBeforeOverwrite],
     ["keyboardNavigationComplete",
@@ -94,7 +94,7 @@ export class V4StartScreenController {
     this.onNewGame = onNewGame;
     this.onStart = onStart;
     this.menuButtons = [...root.querySelectorAll("[data-start-action]")]
-      .filter(button => ["continue", "new", "controls"]
+      .filter(button => ["continue", "new", "account", "controls"]
         .includes(button.dataset.startAction));
     this.continueButton = root.querySelector('[data-start-action="continue"]');
     this.saveLabel = root.querySelector("[data-start-save-label]");
@@ -182,6 +182,8 @@ export class V4StartScreenController {
     } else if (action === "new") {
       if (this.initialSave.hasSave) this.openDialog("new-confirm");
       else this.begin("new");
+    } else if (action === "account") {
+      this.openDialog("account");
     } else if (action === "controls") {
       this.openDialog("controls");
     } else if (action === "confirm-new") {

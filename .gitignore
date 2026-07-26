@@ -1,0 +1,6 @@
+browser-artifacts/
+server/node_modules/
+server/.env
+server/.env.*
+!server/.env.example
+npm-debug.log*

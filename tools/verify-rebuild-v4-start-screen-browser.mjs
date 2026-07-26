@@ -104,7 +104,9 @@ try {
 
   await page.focus('[data-start-action="new"]');
   await page.keyboard.press("ArrowDown");
+  await page.keyboard.press("ArrowDown");
   const selectedControls = await startSnapshot();
+  await page.keyboard.press("ArrowUp");
   await page.keyboard.press("ArrowUp");
   await page.keyboard.press("Enter");
   await waitClosed();
@@ -160,8 +162,8 @@ try {
     ["staticStartScreenAuditPasses", state.audit.passed],
     ["modernTitleIsVisible", emptyDom.title === "CORELESS" &&
       emptyDom.subtitle === "중심 없이 깨어난 자"],
-    ["threeRealMenuActions", state.menuButtons.join(",") ===
-      "continue,new,controls"],
+    ["fourRealMenuActions", state.menuButtons.join(",") ===
+      "continue,new,account,controls"],
     ["emptySaveDisablesContinue", !empty.continueEnabled &&
       emptyDom.continueDisabled &&
       emptyDom.saveLabel === "저장 기록 없음"],
@@ -192,6 +194,7 @@ try {
       continued.startedMode === "continue" &&
       continuedRuntime.checkpointId === "S35"],
     ["controlsDialogExists", state.dialogs.includes("controls")],
+    ["accountDialogExists", state.dialogs.includes("account")],
     ["overwriteDialogExists", state.dialogs.includes("new-confirm")],
     ["consoleErrorsZero", consoleErrors.length === 0],
     ["pageErrorsZero", pageErrors.length === 0],

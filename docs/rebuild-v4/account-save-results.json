@@ -1,0 +1,69 @@
+{
+  "build": "coreless-v4-account-save-foundation",
+  "generatedAt": "2026-07-26T09:50:20.158Z",
+  "passed": true,
+  "passedCount": 15,
+  "totalCount": 15,
+  "checks": [
+    {
+      "name": "fourOAuthProviders",
+      "passed": true
+    },
+    {
+      "name": "guestIsLocal",
+      "passed": true
+    },
+    {
+      "name": "guestMigratesAfterSignIn",
+      "passed": true
+    },
+    {
+      "name": "providerTokensNotStoredInBrowser",
+      "passed": true
+    },
+    {
+      "name": "guestCreatedOnce",
+      "passed": true
+    },
+    {
+      "name": "guestIdentityStable",
+      "passed": true
+    },
+    {
+      "name": "cloudRecordValid",
+      "passed": true
+    },
+    {
+      "name": "revisionPreserved",
+      "passed": true
+    },
+    {
+      "name": "sameProgressDetected",
+      "passed": true
+    },
+    {
+      "name": "cloudAheadDetected",
+      "passed": true
+    },
+    {
+      "name": "localAheadDetected",
+      "passed": true
+    },
+    {
+      "name": "invalidRevisionRejected",
+      "passed": true
+    },
+    {
+      "name": "guestStoredUnderDedicatedKey",
+      "passed": true
+    },
+    {
+      "name": "cloudRoundTrip",
+      "passed": true
+    },
+    {
+      "name": "unconfiguredClientDoesNotFetch",
+      "passed": true
+    }
+  ]
+}

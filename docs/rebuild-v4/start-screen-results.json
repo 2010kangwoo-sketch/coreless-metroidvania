@@ -7,6 +7,7 @@
     "menuActions": [
       "continue",
       "new",
+      "account",
       "controls"
     ],
     "keyboardNavigation": [
@@ -23,13 +24,13 @@
     "fakeSettingsAllowed": false,
     "reducedMotionSupported": true
   },
-  "generatedAt": "2026-07-26T08:00:23.372Z",
+  "generatedAt": "2026-07-26T09:50:20.251Z",
   "passed": true,
   "passedCount": 12,
   "totalCount": 12,
   "checks": [
     {
-      "name": "threeRealMenuActions",
+      "name": "fourRealMenuActions",
       "passed": true
     },
     {
@@ -78,7 +79,7 @@
     }
   ],
   "measurements": {
-    "menuActions": 3,
+    "menuActions": 4,
     "keyboardBindings": 6,
     "fadeOutMilliseconds": 620,
     "emptySave": {

@@ -1,0 +1,55 @@
+{
+  "build": "coreless-v4-account-browser",
+  "generatedAt": "2026-07-26T09:51:11.723Z",
+  "passed": true,
+  "passedCount": 10,
+  "totalCount": 10,
+  "checks": [
+    {
+      "name": "guestMode",
+      "passed": true
+    },
+    {
+      "name": "guestIdentityStable",
+      "passed": true
+    },
+    {
+      "name": "accountDialogOpens",
+      "passed": true
+    },
+    {
+      "name": "accountTitleVisible",
+      "passed": true
+    },
+    {
+      "name": "guestStatusVisible",
+      "passed": true
+    },
+    {
+      "name": "fourProviders",
+      "passed": true
+    },
+    {
+      "name": "providersDisabledWithoutDomain",
+      "passed": true
+    },
+    {
+      "name": "waitingReasonVisible",
+      "passed": true
+    },
+    {
+      "name": "consoleErrorsZero",
+      "passed": true
+    },
+    {
+      "name": "pageErrorsZero",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "providerCount": 4,
+    "guestStable": true,
+    "consoleErrors": [],
+    "pageErrors": []
+  }
+}
