@@ -29,3 +29,5 @@ jobs:
         run: node tools/verify-rebuild-v4-pass03.mjs
       - name: Verify V4 Pass 04 checkpoints and save
         run: node tools/verify-rebuild-v4-pass04.mjs
+      - name: Verify V4 Pass 05 story and guidance
+        run: node tools/verify-rebuild-v4-pass05.mjs

@@ -1,0 +1,198 @@
+{
+  "pass": 5,
+  "generatedAt": "2026-07-26T04:10:55.673Z",
+  "passed": true,
+  "passedCount": 39,
+  "totalCount": 39,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "allStaticAuditsPass",
+      "passed": true
+    },
+    {
+      "name": "statusShowsStoryPass",
+      "passed": true
+    },
+    {
+      "name": "canvasHasExpectedResolution",
+      "passed": true
+    },
+    {
+      "name": "prologueIsExplicit",
+      "passed": true
+    },
+    {
+      "name": "allThirtySixGuidesExposed",
+      "passed": true
+    },
+    {
+      "name": "sixTutorialLessonsExposed",
+      "passed": true
+    },
+    {
+      "name": "sixTierArcsExposed",
+      "passed": true
+    },
+    {
+      "name": "initialObjectiveIsWake",
+      "passed": true
+    },
+    {
+      "name": "initialPrologueDisplayed",
+      "passed": true
+    },
+    {
+      "name": "initialTutorialIsMovement",
+      "passed": true
+    },
+    {
+      "name": "bannerDoesNotBlockMovement",
+      "passed": true
+    },
+    {
+      "name": "logOpenedWithoutPause",
+      "passed": true
+    },
+    {
+      "name": "bannerAllowsMovement",
+      "passed": true
+    },
+    {
+      "name": "logClosedAfterTest",
+      "passed": true
+    },
+    {
+      "name": "tierOneAnnouncesSixSpaces",
+      "passed": true
+    },
+    {
+      "name": "tierOneObjectiveTurnsAtS06",
+      "passed": true
+    },
+    {
+      "name": "allSixTiersComplete",
+      "passed": true
+    },
+    {
+      "name": "allThirtySixSpacesVisited",
+      "passed": true
+    },
+    {
+      "name": "allThirtySixSpacesAnnounced",
+      "passed": true
+    },
+    {
+      "name": "objectiveOrderComplete",
+      "passed": true
+    },
+    {
+      "name": "elevenObjectiveStagesReached",
+      "passed": true
+    },
+    {
+      "name": "finalObjectiveNamesNextRegion",
+      "passed": true
+    },
+    {
+      "name": "messageQueueRemainsBounded",
+      "passed": true
+    },
+    {
+      "name": "noGuidanceQueueDrops",
+      "passed": true
+    },
+    {
+      "name": "storyLogRemainsBounded",
+      "passed": true
+    },
+    {
+      "name": "guidanceNeverBlocksSimulation",
+      "passed": true
+    },
+    {
+      "name": "streamingStillBounded",
+      "passed": true
+    },
+    {
+      "name": "allCheckpointsStillActivate",
+      "passed": true
+    },
+    {
+      "name": "s35ReloadRestoresRewardObjective",
+      "passed": true
+    },
+    {
+      "name": "s35ReloadMarksPastGuidesSeen",
+      "passed": true
+    },
+    {
+      "name": "s35ReloadOnlyAnnouncesCurrentZone",
+      "passed": true
+    },
+    {
+      "name": "s35ReloadDoesNotFloodQueue",
+      "passed": true
+    },
+    {
+      "name": "s35RestoredLogBounded",
+      "passed": true
+    },
+    {
+      "name": "shortFinalReplayCompletes",
+      "passed": true
+    },
+    {
+      "name": "finalReplayUpdatesExitObjective",
+      "passed": true
+    },
+    {
+      "name": "tierEndsPreserveAlternation",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "movementWhileGuidedPixels": 1373.75,
+    "movementFramesWithBanner": 420,
+    "movementFramesWithLogOpen": 240,
+    "fullRouteCompletionSeconds": 253.0583333332675,
+    "visitedZones": 36,
+    "announcedZones": 36,
+    "objectiveChanges": 10,
+    "objectiveIds": [
+      "wake",
+      "ascend-east",
+      "recover-cut",
+      "test-cut",
+      "trace-workers",
+      "recover-wings",
+      "find-last-memory",
+      "prepare-guardian",
+      "defeat-guardian",
+      "claim-record",
+      "leave-for-waterway"
+    ],
+    "maximumQueueDepth": 3,
+    "queueDrops": 0,
+    "finalStoryLogEntries": 6,
+    "restoredCheckpoint": "S35",
+    "restoredSeenGuides": 35,
+    "restoredSessionAnnouncements": [
+      "S35"
+    ],
+    "finalReplaySeconds": 7.033333333333473
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}
