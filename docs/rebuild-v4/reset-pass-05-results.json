@@ -1,0 +1,248 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass05-combat",
+    "pass": 5,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "basic attack phases, hit reaction, recovery, invulnerability, and cancel rules",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-26T12:37:04.603Z",
+  "passed": true,
+  "passedCount": 25,
+  "totalCount": 25,
+  "checks": [
+    {
+      "name": "previousCollisionContractPasses",
+      "passed": true
+    },
+    {
+      "name": "attackUsesExistingBInput",
+      "passed": true
+    },
+    {
+      "name": "attackHasThreeReadablePhases",
+      "passed": true
+    },
+    {
+      "name": "attackTotalIsResponsive",
+      "passed": true
+    },
+    {
+      "name": "attackTimingSumsExactly",
+      "passed": true
+    },
+    {
+      "name": "activeWindowIsReadable",
+      "passed": true
+    },
+    {
+      "name": "movementIsNotStoppedDuringAttack",
+      "passed": true
+    },
+    {
+      "name": "attackMovementSpeedIsBounded",
+      "passed": true
+    },
+    {
+      "name": "startupCancelsIntoJump",
+      "passed": true
+    },
+    {
+      "name": "activeCannotGhostCancelIntoJump",
+      "passed": true
+    },
+    {
+      "name": "recoveryCancelsIntoJump",
+      "passed": true
+    },
+    {
+      "name": "onlyOneBufferedAttackAllowed",
+      "passed": true
+    },
+    {
+      "name": "bufferedAttackStartsExactlyOnce",
+      "passed": true
+    },
+    {
+      "name": "heldAttackDoesNotAutoRepeat",
+      "passed": true
+    },
+    {
+      "name": "attackHitsTargetOnlyOncePerSerial",
+      "passed": true
+    },
+    {
+      "name": "incomingHitCancelsAttack",
+      "passed": true
+    },
+    {
+      "name": "hitDealsExactlyOneDamage",
+      "passed": true
+    },
+    {
+      "name": "knockbackPointsAwayFromSource",
+      "passed": true
+    },
+    {
+      "name": "hitstunIsShorterThanInvulnerability",
+      "passed": true
+    },
+    {
+      "name": "repeatedContactIgnoredDuringInvulnerability",
+      "passed": true
+    },
+    {
+      "name": "controlReturnsBeforeInvulnerabilityEnds",
+      "passed": true
+    },
+    {
+      "name": "playerHasRecoveryMovement",
+      "passed": true
+    },
+    {
+      "name": "gateRequiresBothCalibrationTargets",
+      "passed": true
+    },
+    {
+      "name": "maximumHealthSupportsReadableMistakes",
+      "passed": true
+    },
+    {
+      "name": "passFiveRuntimeAndEvidenceExist",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "attackTimeline": {
+      "phases": [
+        "startup",
+        "active",
+        "recovery"
+      ],
+      "durations": {
+        "startup": 0.06666666666666667,
+        "active": 0.09166666666666666,
+        "recovery": 0.175
+      },
+      "totalSeconds": 0.3416666666666669,
+      "serial": 1
+    },
+    "movementDuringAttack": {
+      "distance": 141.56666666666638,
+      "maximumSpeed": 328,
+      "minimumMovingSpeed": 328,
+      "endX": 231.56666666666638
+    },
+    "cancelRules": {
+      "startup": {
+        "phase": "idle",
+        "jumped": true,
+        "cancel": "jump-from-startup"
+      },
+      "active": {
+        "phase": "active",
+        "jumped": false,
+        "blocked": true
+      },
+      "recovery": {
+        "phase": "idle",
+        "jumped": true,
+        "cancel": "jump-from-recovery"
+      }
+    },
+    "bufferedChain": {
+      "attackSerial": 2,
+      "queued": 1,
+      "started": 2,
+      "frames": 82
+    },
+    "hitRecovery": {
+      "beforeHealth": 4,
+      "afterFirst": {
+        "health": 3,
+        "vx": -298.56666666666666,
+        "vy": -308.25,
+        "attackPhase": "idle",
+        "hitstunRemaining": 0.21166666666666667,
+        "invulnerabilityRemaining": 0.8416666666666667
+      },
+      "finalHealth": 3,
+      "ignored": 65,
+      "regainedControlAt": 0.22499999999999998,
+      "recoveryDisplacement": 66.09236111111022,
+      "invulnerabilityStillActive": true
+    },
+    "oneHitPerAttack": {
+      "targetHealth": 1,
+      "targetHits": 1,
+      "attackSerial": 1
+    }
+  },
+  "contract": {
+    "attackInput": "KeyB",
+    "startupSeconds": 0.07,
+    "activeSeconds": 0.09,
+    "recoverySeconds": 0.18,
+    "totalSeconds": 0.34,
+    "recoveryBufferSeconds": 0.12,
+    "movementSpeedFactor": 0.82,
+    "attackReach": 92,
+    "attackHeightInset": 6,
+    "attackDamage": 1,
+    "maximumBufferedAttacks": 1,
+    "hitstunSeconds": 0.22,
+    "invulnerabilitySeconds": 0.85,
+    "knockbackHorizontalSpeed": 310,
+    "knockbackVerticalSpeed": 360,
+    "maximumHealth": 4,
+    "startupJumpCancelAllowed": true,
+    "activeJumpCancelAllowed": false,
+    "recoveryJumpCancelAllowed": true,
+    "incomingHitCancelsAttack": true,
+    "heldAttackAutoRepeats": false
+  },
+  "lab": {
+    "width": 2700,
+    "height": 900,
+    "viewportWidth": 1400,
+    "viewportHeight": 900,
+    "floorY": 720,
+    "spawnX": 90,
+    "finishX": 2520,
+    "gateX": 1480,
+    "leftBoundary": 20,
+    "rightBoundary": 2670
+  },
+  "targets": [
+    {
+      "id": "low-calibration-target",
+      "role": "low",
+      "x": 700,
+      "y": 656,
+      "width": 50,
+      "height": 64,
+      "maximumHealth": 2
+    },
+    {
+      "id": "high-calibration-target",
+      "role": "high",
+      "x": 1280,
+      "y": 545,
+      "width": 50,
+      "height": 52,
+      "maximumHealth": 1
+    }
+  ],
+  "hazards": [
+    {
+      "id": "impact-pad",
+      "x": 1850,
+      "y": 704,
+      "width": 110,
+      "height": 16,
+      "sourceX": 1905,
+      "damage": 1
+    }
+  ],
+  "missingFiles": []
+}

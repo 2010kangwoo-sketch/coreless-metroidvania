@@ -1,0 +1,411 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass05-combat",
+    "pass": 5,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "basic attack phases, hit reaction, recovery, invulnerability, and cancel rules",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-26T12:37:04.501Z",
+  "passed": true,
+  "passedCount": 29,
+  "totalCount": 29,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "staticAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsPass",
+      "passed": true
+    },
+    {
+      "name": "canvasResolutionCorrect",
+      "passed": true
+    },
+    {
+      "name": "actualMovementKeysRecorded",
+      "passed": true
+    },
+    {
+      "name": "actualJumpKeyRecorded",
+      "passed": true
+    },
+    {
+      "name": "actualAttackKeyRecorded",
+      "passed": true
+    },
+    {
+      "name": "allAttackPhasesObserved",
+      "passed": true
+    },
+    {
+      "name": "lowTargetNeededTwoAttacks",
+      "passed": true
+    },
+    {
+      "name": "highTargetHitInAir",
+      "passed": true
+    },
+    {
+      "name": "allCalibrationTargetsDestroyed",
+      "passed": true
+    },
+    {
+      "name": "bufferedAttackQueuedOnce",
+      "passed": true
+    },
+    {
+      "name": "bufferedAttackStartedOnce",
+      "passed": true
+    },
+    {
+      "name": "gateOpenedOnlyAfterTargets",
+      "passed": true
+    },
+    {
+      "name": "incomingHitObserved",
+      "passed": true
+    },
+    {
+      "name": "incomingHitCancelledAttack",
+      "passed": true
+    },
+    {
+      "name": "knockbackMovesAwayAndUp",
+      "passed": true
+    },
+    {
+      "name": "repeatedContactIgnoredDuringInvulnerability",
+      "passed": true
+    },
+    {
+      "name": "controlRecoveredBeforeInvulnerabilityEnded",
+      "passed": true
+    },
+    {
+      "name": "attackMovementSpeedBounded",
+      "passed": true
+    },
+    {
+      "name": "healthDidNotRapidlyDrain",
+      "passed": true
+    },
+    {
+      "name": "horizontalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "verticalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "combinedStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noBoundaryCorrection",
+      "passed": true
+    },
+    {
+      "name": "noResetUsed",
+      "passed": true
+    },
+    {
+      "name": "routeCompleted",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "attackStarts": 4,
+    "attackActivations": 4,
+    "attackRecoveries": 3,
+    "attackPhaseSequence": [
+      "idle",
+      "startup",
+      "active",
+      "recovery",
+      "startup",
+      "active",
+      "recovery",
+      "idle",
+      "startup",
+      "active",
+      "recovery",
+      "idle",
+      "startup",
+      "active",
+      "idle"
+    ],
+    "targetHits": 3,
+    "targetsDestroyed": 2,
+    "bufferedAttacksQueued": 1,
+    "bufferedAttacksStarted": 1,
+    "hitCancels": 1,
+    "damageTaken": 1,
+    "damageIgnored": 5,
+    "recoveryInvulnerabilityRemaining": 0.4416666666666677,
+    "finalHealth": 3,
+    "maximumAttackSpeed": 328,
+    "maximumHorizontalStep": 3.333333333333485,
+    "maximumVerticalStep": 6.892361111111086,
+    "maximumPositionStep": 7.5850128189564225,
+    "maximumCameraStep": 3.331790406311029,
+    "boundaryContacts": 0,
+    "fixedFrames": 970,
+    "keyEvents": [
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 0.5167,
+        "x": 90,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 1.9,
+        "x": 610,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "down",
+        "code": "KeyB",
+        "at": 1.9,
+        "x": 610,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "up",
+        "code": "KeyB",
+        "at": 1.9333,
+        "x": 619.9333,
+        "y": 656,
+        "attackPhase": "startup",
+        "health": 4
+      },
+      {
+        "type": "down",
+        "code": "KeyB",
+        "at": 2.1333,
+        "x": 629.5667,
+        "y": 656,
+        "attackPhase": "recovery",
+        "health": 4
+      },
+      {
+        "type": "up",
+        "code": "KeyB",
+        "at": 2.1667,
+        "x": 629.5667,
+        "y": 656,
+        "attackPhase": "recovery",
+        "health": 4
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 2.5833,
+        "x": 629.5667,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 4,
+        "x": 1162.9,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "down",
+        "code": "KeyB",
+        "at": 4.1167,
+        "x": 1207.3792,
+        "y": 575.9861,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "up",
+        "code": "KeyB",
+        "at": 4.15,
+        "x": 1218.3125,
+        "y": 558.875,
+        "attackPhase": "startup",
+        "health": 4
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 4.2,
+        "x": 1234.7125,
+        "y": 538,
+        "attackPhase": "active",
+        "health": 4
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 4.2,
+        "x": 1234.7125,
+        "y": 538,
+        "attackPhase": "active",
+        "health": 4
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 4.5833,
+        "x": 1344.2819,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 5.65,
+        "x": 1765.8444,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "down",
+        "code": "KeyB",
+        "at": 5.65,
+        "x": 1765.8444,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 5.65,
+        "x": 1765.8444,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 4
+      },
+      {
+        "type": "up",
+        "code": "KeyB",
+        "at": 5.8,
+        "x": 1809.7354,
+        "y": 653.2156,
+        "attackPhase": "idle",
+        "health": 3
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 5.8,
+        "x": 1809.7354,
+        "y": 653.2156,
+        "attackPhase": "idle",
+        "health": 3
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 5.95,
+        "x": 1779.7689,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 3
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 6.2,
+        "x": 1819.1611,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 3
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 6.2,
+        "x": 1819.1611,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 3
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 6.2,
+        "x": 1819.1611,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 3
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 6.8167,
+        "x": 2053.6403,
+        "y": 594.3264,
+        "attackPhase": "idle",
+        "health": 3
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 8,
+        "x": 2525.2236,
+        "y": 656,
+        "attackPhase": "idle",
+        "health": 3
+      }
+    ],
+    "targetHitEvents": [
+      {
+        "id": "low-calibration-target",
+        "health": 1,
+        "attackSerial": 1,
+        "at": 1.9667
+      },
+      {
+        "id": "low-calibration-target",
+        "health": 0,
+        "attackSerial": 2,
+        "at": 2.3083
+      },
+      {
+        "id": "high-calibration-target",
+        "health": 0,
+        "attackSerial": 3,
+        "at": 4.1833
+      }
+    ]
+  },
+  "errors": {
+    "console": [],
+    "page": []
+  }
+}

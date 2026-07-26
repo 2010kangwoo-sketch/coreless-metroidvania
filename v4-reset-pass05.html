@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071217">
+  <meta
+    name="description"
+    content="Coreless V4 새 5차 기본 공격·피격·회복 시험장"
+  >
+  <title>Coreless · Reset Pass 05 Combat</title>
+  <link rel="stylesheet" href="v4-reset-pass05.css">
+</head>
+<body>
+  <main class="reset-pass05-shell">
+    <header class="reset-pass05-header">
+      <div>
+        <p>CORELESS · NEW 40-PASS RESET</p>
+        <h1>5차 · 기본 공격·피격·회복</h1>
+      </div>
+      <span id="resetPass05AuditStatus">AUDIT PENDING</span>
+    </header>
+
+    <section class="reset-pass05-panel" aria-label="전투 시험장">
+      <canvas
+        id="resetPass05CombatLab"
+        width="1400"
+        height="900"
+        tabindex="0"
+      ></canvas>
+    </section>
+
+    <section class="reset-pass05-notes" aria-label="전투 기준">
+      <article>
+        <strong>01 · 공격 세 단계</strong>
+        <span>선딜·실제 판정·후딜이 분리되어 공격 시점과 빈틈을 읽을 수 있습니다.</span>
+      </article>
+      <article>
+        <strong>02 · 이동 유지</strong>
+        <span>공격 중에도 최고 이동 속도의 82%를 유지하며 제자리에 고정되지 않습니다.</span>
+      </article>
+      <article>
+        <strong>03 · 피격과 무적</strong>
+        <span>피격 경직 뒤 조작이 먼저 돌아오고, 짧은 무적 시간 동안 연속 피해를 막습니다.</span>
+      </article>
+      <article>
+        <strong>04 · 과제 잠금</strong>
+        <span>낮은 표적과 높은 표적을 모두 제거해야 다음 구간의 문이 열립니다.</span>
+      </article>
+    </section>
+
+    <p class="reset-pass05-footer">
+      실제 적의 추적·공격 예고·회복 상태는 16차에서 검증합니다. 이번
+      차수는 모든 적과 보스가 공유할 플레이어 공격·피격 규칙만 고정합니다.
+    </p>
+  </main>
+  <script type="module" src="src/v4/reset-pass05-main.js"></script>
+</body>
+</html>
