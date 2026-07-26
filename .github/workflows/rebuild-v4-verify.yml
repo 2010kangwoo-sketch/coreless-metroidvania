@@ -10,6 +10,8 @@ on:
       - "tools/verify-rebuild-v4-*.mjs"
       - "v4.html"
       - "v4-style.css"
+      - "v4-reset-*.html"
+      - "v4-reset-*.css"
       - ".github/workflows/rebuild-v4-verify.yml"
       - "server/**"
 
@@ -42,6 +44,8 @@ jobs:
         run: node tools/verify-rebuild-v4-prepass.mjs
       - name: Verify V4 reset Pass 01 room plan
         run: node tools/verify-rebuild-v4-reset-pass01.mjs
+      - name: Verify V4 reset Pass 02 ground movement
+        run: node tools/verify-rebuild-v4-reset-pass02.mjs
       - name: Install account server dependencies
         working-directory: server
         run: npm ci

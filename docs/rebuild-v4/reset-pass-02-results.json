@@ -1,0 +1,191 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass02-ground-movement",
+    "pass": 2,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "ground run, stop, and direction reversal baseline",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-26T11:31:44.617Z",
+  "passed": true,
+  "passedCount": 28,
+  "totalCount": 28,
+  "checks": [
+    {
+      "name": "prepassStillValid",
+      "passed": true
+    },
+    {
+      "name": "resetPass01StillValid",
+      "passed": true
+    },
+    {
+      "name": "passSequenceIsCorrect",
+      "passed": true
+    },
+    {
+      "name": "fixedStepIsOneTwenty",
+      "passed": true
+    },
+    {
+      "name": "runSpeedIsBounded",
+      "passed": true
+    },
+    {
+      "name": "accelerationIsDistinctFromTurn",
+      "passed": true
+    },
+    {
+      "name": "stopIsFasterThanAcceleration",
+      "passed": true
+    },
+    {
+      "name": "turnIsFastestGroundResponse",
+      "passed": true
+    },
+    {
+      "name": "reachesNinetyWithinResponsiveWindow",
+      "passed": true
+    },
+    {
+      "name": "accelerationDistanceIsBounded",
+      "passed": true
+    },
+    {
+      "name": "stopCompletesWithinWindow",
+      "passed": true
+    },
+    {
+      "name": "stopDistanceIsBounded",
+      "passed": true
+    },
+    {
+      "name": "reversalCompletesWithinWindow",
+      "passed": true
+    },
+    {
+      "name": "reversalOvershootIsBounded",
+      "passed": true
+    },
+    {
+      "name": "reversalEndsFacingInput",
+      "passed": true
+    },
+    {
+      "name": "bothDirectionsResolveNeutral",
+      "passed": true
+    },
+    {
+      "name": "positionStepCannotTeleport",
+      "passed": true
+    },
+    {
+      "name": "idleStateObserved",
+      "passed": true
+    },
+    {
+      "name": "runStartStateObserved",
+      "passed": true
+    },
+    {
+      "name": "runLoopStateObserved",
+      "passed": true
+    },
+    {
+      "name": "runStopStateObserved",
+      "passed": true
+    },
+    {
+      "name": "turnStateObserved",
+      "passed": true
+    },
+    {
+      "name": "labLeavesWideRecoverySpace",
+      "passed": true
+    },
+    {
+      "name": "onlyGroundInputsExposed",
+      "passed": true
+    },
+    {
+      "name": "jumpNotImplementedInPassTwo",
+      "passed": true
+    },
+    {
+      "name": "dashNotImplementedInPassTwo",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "passTwoRuntimeAndEvidenceExist",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "acceleration": {
+      "secondsToNinety": 0.15,
+      "distanceToNinety": 27.000000000000004,
+      "maximumStep": 2.916666666666668,
+      "states": [
+        "idle",
+        "run-start",
+        "run-loop"
+      ]
+    },
+    "stop": {
+      "startSpeed": 400,
+      "seconds": 0.12499999999999999,
+      "distance": 25,
+      "maximumStep": 3.2222222222222214,
+      "states": [
+        "run-loop",
+        "run-stop",
+        "idle"
+      ]
+    },
+    "reversal": {
+      "startSpeed": 400,
+      "secondsToOppositeNinety": 0.19166666666666665,
+      "netDisplacement": -0.2291666666666643,
+      "forwardOvershoot": 19.020833333333336,
+      "maximumStep": 3.1875,
+      "endSpeed": -375,
+      "endFacing": -1,
+      "states": [
+        "run-loop",
+        "turn"
+      ]
+    },
+    "bothKeys": {
+      "velocityBefore": 400,
+      "velocityAfter": 373.3333333333333,
+      "resolvedDirection": 0
+    }
+  },
+  "movement": {
+    "fixedStep": 0.008333333333333333,
+    "playerWidth": 40,
+    "playerHeight": 64,
+    "maximumRunSpeed": 400,
+    "groundAcceleration": 2400,
+    "groundStopDeceleration": 3200,
+    "groundTurnAcceleration": 4200,
+    "stopSpeedEpsilon": 0.5,
+    "runLoopSpeedRatio": 0.78,
+    "measuredSpeedRatio": 0.9,
+    "strideLength": 92
+  },
+  "lab": {
+    "width": 1400,
+    "height": 900,
+    "floorY": 730,
+    "spawnX": 680,
+    "leftBoundary": 80,
+    "rightBoundary": 1320,
+    "safeTestWidth": 1240
+  },
+  "missingFiles": []
+}

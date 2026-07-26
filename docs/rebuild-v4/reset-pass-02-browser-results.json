@@ -1,0 +1,233 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass02-ground-movement",
+    "pass": 2,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "ground run, stop, and direction reversal baseline",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-26T11:30:57.745Z",
+  "passed": true,
+  "passedCount": 23,
+  "totalCount": 23,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "staticAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsPass",
+      "passed": true
+    },
+    {
+      "name": "canvasResolutionCorrect",
+      "passed": true
+    },
+    {
+      "name": "actualKeyboardEventsRecorded",
+      "passed": true
+    },
+    {
+      "name": "noSyntheticRepeatDependency",
+      "passed": true
+    },
+    {
+      "name": "accelerationMeasured",
+      "passed": true
+    },
+    {
+      "name": "accelerationTimingResponsive",
+      "passed": true
+    },
+    {
+      "name": "stopMeasured",
+      "passed": true
+    },
+    {
+      "name": "stopTimingBounded",
+      "passed": true
+    },
+    {
+      "name": "stopDistanceBounded",
+      "passed": true
+    },
+    {
+      "name": "reversalMeasured",
+      "passed": true
+    },
+    {
+      "name": "reversalTimingBounded",
+      "passed": true
+    },
+    {
+      "name": "reversalOvershootBounded",
+      "passed": true
+    },
+    {
+      "name": "reversalEndsInOppositeDirection",
+      "passed": true
+    },
+    {
+      "name": "facingChangesOnlyWithRealDirection",
+      "passed": true
+    },
+    {
+      "name": "allGroundMotionStatesObserved",
+      "passed": true
+    },
+    {
+      "name": "positionStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noBoundaryCorrection",
+      "passed": true
+    },
+    {
+      "name": "noResetUsed",
+      "passed": true
+    },
+    {
+      "name": "playerEndsIdle",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "accelerationSamples": [
+      {
+        "seconds": 0.15,
+        "distance": 27,
+        "endSpeed": 360
+      },
+      {
+        "seconds": 0.15,
+        "distance": 27,
+        "endSpeed": 360
+      },
+      {
+        "seconds": 0.15,
+        "distance": 27,
+        "endSpeed": 360
+      }
+    ],
+    "stopSamples": [
+      {
+        "seconds": 0.125,
+        "distance": 25,
+        "startSpeed": 400
+      },
+      {
+        "seconds": 0.125,
+        "distance": 22.5833,
+        "startSpeed": 380
+      },
+      {
+        "seconds": 0.1167,
+        "distance": 20.2778,
+        "startSpeed": 360
+      }
+    ],
+    "reversalSamples": [
+      {
+        "seconds": 0.175,
+        "forwardOvershoot": 15.4167,
+        "netDisplacement": -1.25,
+        "startSpeed": 360,
+        "endSpeed": -360
+      }
+    ],
+    "stateSequence": [
+      "idle",
+      "run-start",
+      "run-loop",
+      "run-stop",
+      "idle",
+      "run-start",
+      "run-loop",
+      "turn",
+      "run-loop",
+      "run-stop",
+      "idle",
+      "run-start",
+      "run-loop",
+      "run-stop",
+      "idle"
+    ],
+    "keyEvents": [
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 0.5083,
+        "x": 680,
+        "vx": 0
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 0.7917,
+        "x": 760,
+        "vx": 400
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 0.925,
+        "x": 785,
+        "vx": 0
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 1.075,
+        "x": 812,
+        "vx": 360
+      },
+      {
+        "type": "down",
+        "code": "KeyA",
+        "at": 1.075,
+        "x": 812,
+        "vx": 360
+      },
+      {
+        "type": "up",
+        "code": "KeyA",
+        "at": 1.2583,
+        "x": 807.6667,
+        "vx": -380
+      },
+      {
+        "type": "down",
+        "code": "ArrowRight",
+        "at": 1.3917,
+        "x": 785.0833,
+        "vx": 0
+      },
+      {
+        "type": "up",
+        "code": "ArrowRight",
+        "at": 1.5417,
+        "x": 812.0833,
+        "vx": 360
+      }
+    ],
+    "maximumPositionStep": 3.3333333333333712,
+    "facingChanges": 2,
+    "boundaryContacts": 0,
+    "fixedFrames": 207
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

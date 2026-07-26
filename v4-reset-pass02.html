@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071217">
+  <meta
+    name="description"
+    content="Coreless V4 새 2차 지상 이동 기준선 시험장"
+  >
+  <title>Coreless · Reset Pass 02 Ground Movement</title>
+  <link rel="stylesheet" href="v4-reset-pass02.css">
+</head>
+<body>
+  <main class="reset-pass02-shell">
+    <header class="reset-pass02-header">
+      <div>
+        <p>CORELESS · NEW 40-PASS RESET</p>
+        <h1>2차 · 지상 이동 기준선</h1>
+      </div>
+      <span id="resetPass02AuditStatus">AUDIT PENDING</span>
+    </header>
+
+    <section class="reset-pass02-panel" aria-label="지상 이동 시험장">
+      <canvas
+        id="resetPass02GroundLab"
+        width="1400"
+        height="900"
+        tabindex="0"
+      ></canvas>
+    </section>
+
+    <section class="reset-pass02-notes" aria-label="시험 기준">
+      <article>
+        <strong>01 · 달리기</strong>
+        <span>정지 상태에서 최고속도의 90%까지 0.12~0.20초 안에 도달합니다.</span>
+      </article>
+      <article>
+        <strong>02 · 정지</strong>
+        <span>이동키를 놓으면 0.10~0.16초, 20~30px 안에서 자연스럽게 멈춥니다.</span>
+      </article>
+      <article>
+        <strong>03 · 방향 전환</strong>
+        <span>반대 입력 뒤 0.16~0.24초 안에 전환하며, 앞으로 밀리는 거리는 24px 이하입니다.</span>
+      </article>
+    </section>
+
+    <p class="reset-pass02-footer">
+      A/D 또는 ←/→만 사용합니다. 점프는 3차, 경사·벽·모서리는 4차에서
+      별도 검증하므로 이번 시험장에는 의도적으로 포함하지 않았습니다.
+    </p>
+  </main>
+  <script type="module" src="src/v4/reset-pass02-main.js"></script>
+</body>
+</html>
