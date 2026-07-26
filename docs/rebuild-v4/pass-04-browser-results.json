@@ -1,0 +1,159 @@
+{
+  "pass": 4,
+  "generatedAt": "2026-07-26T02:45:41.351Z",
+  "passed": true,
+  "passedCount": 30,
+  "totalCount": 30,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "previousAuditsPass",
+      "passed": true
+    },
+    {
+      "name": "statusShowsSavePass",
+      "passed": true
+    },
+    {
+      "name": "canvasHasExpectedResolution",
+      "passed": true
+    },
+    {
+      "name": "cleanStartUsesS01",
+      "passed": true
+    },
+    {
+      "name": "cleanStartCreatesSafeSave",
+      "passed": true
+    },
+    {
+      "name": "tierOneActivatesS06",
+      "passed": true
+    },
+    {
+      "name": "defeatTestStartedAfterCompletedTier",
+      "passed": true
+    },
+    {
+      "name": "defeatReturnsToS06",
+      "passed": true
+    },
+    {
+      "name": "defeatRecoveryIsShort",
+      "passed": true
+    },
+    {
+      "name": "tierTwoActivatesS12",
+      "passed": true
+    },
+    {
+      "name": "fallTestStartedOnTierThree",
+      "passed": true
+    },
+    {
+      "name": "fallReturnsToS12",
+      "passed": true
+    },
+    {
+      "name": "fallRecoveryIsShort",
+      "passed": true
+    },
+    {
+      "name": "reloadRestoresS12",
+      "passed": true
+    },
+    {
+      "name": "corruptSaveFallsBackToS01",
+      "passed": true
+    },
+    {
+      "name": "corruptSaveReplacedWithValidS01",
+      "passed": true
+    },
+    {
+      "name": "fullRouteCompletesAfterFallback",
+      "passed": true
+    },
+    {
+      "name": "allSevenCheckpointsActivated",
+      "passed": true
+    },
+    {
+      "name": "fullRouteSavedS35",
+      "passed": true
+    },
+    {
+      "name": "fullRouteVisitsAllZones",
+      "passed": true
+    },
+    {
+      "name": "fullRouteStreamingStillBounded",
+      "passed": true
+    },
+    {
+      "name": "saveReloadRestoresS35",
+      "passed": true
+    },
+    {
+      "name": "restoredProgressDerivesThirtyFiveZones",
+      "passed": true
+    },
+    {
+      "name": "shortFinalReplayCompletes",
+      "passed": true
+    },
+    {
+      "name": "replayDistanceStaysWithinOneTier",
+      "passed": true
+    },
+    {
+      "name": "fallVisualStepBounded",
+      "passed": true
+    },
+    {
+      "name": "recoveryCameraSnapsOnlyUnderFade",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "checkpoints": 7,
+    "cleanStartCheckpoint": "S01",
+    "defeatOriginTier": 2,
+    "defeatRespawnCheckpoint": "S06",
+    "defeatRecoverySeconds": 0.7083333333333334,
+    "fallOriginTier": 3,
+    "fallRespawnCheckpoint": "S12",
+    "fallRecoverySeconds": 0.7083333333333334,
+    "reloadCheckpoint": "S12",
+    "corruptFallbackCheckpoint": "S01",
+    "activatedCheckpointIds": [
+      "S01",
+      "S06",
+      "S12",
+      "S18",
+      "S24",
+      "S30",
+      "S35"
+    ],
+    "fullRouteCompletionSeconds": 249.5583333332707,
+    "fullRouteVisitedZones": 36,
+    "fullRoutePeakActiveZones": 4,
+    "maximumReplayDistance": 3640.75,
+    "restoredFinalCheckpoint": "S35",
+    "restoredVisitedZones": 35,
+    "finalReplaySeconds": 7.033333333333473
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

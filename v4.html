@@ -4,23 +4,23 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#071015">
-  <meta name="description" content="Coreless V4 16,800×7,400px 대형 월드 카메라와 공간 스트리밍">
-  <title>Coreless V4 · Large World Streaming Pass 03</title>
-  <link rel="stylesheet" href="v4-style.css?v=pass03">
+  <meta name="description" content="Coreless V4 층별 체크포인트와 안전한 브라우저 저장·복귀">
+  <title>Coreless V4 · Checkpoint and Save Pass 04</title>
+  <link rel="stylesheet" href="v4-style.css?v=pass04">
 </head>
 <body>
   <main class="v4-shell">
     <header class="v4-header">
       <div>
         <p>CORELESS · REBUILD V4</p>
-        <h1>PASS 03 / LARGE-WORLD STREAMING</h1>
+        <h1>PASS 04 / CHECKPOINT AND SAVE</h1>
       </div>
       <span id="v4AuditStatus">AUDIT PENDING</span>
     </header>
 
-    <section class="v4-panel v4-lab-panel" aria-label="6층 대형 월드 스트리밍 실험실">
+    <section class="v4-panel v4-lab-panel" aria-label="체크포인트와 브라우저 저장 실험실">
       <canvas
-        id="v4StreamingLab"
+        id="v4CheckpointLab"
         width="1400"
         height="900"
         tabindex="0"
@@ -28,8 +28,8 @@
     </section>
 
     <p class="v4-note v4-lab-note">
-      A/D 이동 · E 층 끝 승강기 · R 재시작.
-      6개 층을 좌우로 번갈아 이동하며 카메라 주변 공간만 불러오고, 승강 중에도 화면이 끊기지 않는지 확인합니다.
+      A/D 이동 · E 층 끝 승강기 · K 패배 복귀 · F 낙하 복귀 · R 체크포인트 재시작 · C 저장 초기화.
+      층 끝과 S35에서 자동 저장되며 새로고침 뒤에도 마지막 안전 지점에서 시작합니다.
     </p>
 
     <section class="v4-panel" aria-label="첫 초대형 방 36공간 청사진">
@@ -49,11 +49,11 @@
     </section>
 
     <p class="v4-note">
-      이번 차수도 최종 그래픽 단계가 아닙니다. 16,800×7,400px 전체 공간을 동시에 처리하지 않고
-      현재 카메라 주변 최대 4개 공간만 활성화해, 이후 36개 공간을 실제 구조물과 적으로 채울 기반을 고정합니다.
+      저장 파일에는 검증된 체크포인트 ID만 기록합니다. 임의 좌표나 손상된 저장값은 사용하지 않으며,
+      복귀는 0.7초 페이드 안에서 처리해 이미 완료한 층 전체를 다시 걷게 하지 않습니다.
     </p>
   </main>
   <noscript>JavaScript가 필요합니다.</noscript>
-  <script type="module" src="src/v4/pass03-main.js?v=pass03"></script>
+  <script type="module" src="src/v4/pass04-main.js?v=pass04"></script>
 </body>
 </html>

@@ -1,0 +1,260 @@
+{
+  "pass": 4,
+  "generatedAt": "2026-07-26T02:45:35.177Z",
+  "passed": true,
+  "passedCount": 34,
+  "totalCount": 34,
+  "checks": [
+    {
+      "name": "pass03StillValid",
+      "passed": true
+    },
+    {
+      "name": "passSequence",
+      "passed": true
+    },
+    {
+      "name": "sevenCheckpoints",
+      "passed": true
+    },
+    {
+      "name": "checkpointIdsMatchContract",
+      "passed": true
+    },
+    {
+      "name": "checkpointOrdersContinuous",
+      "passed": true
+    },
+    {
+      "name": "checkpointSequencesIncrease",
+      "passed": true
+    },
+    {
+      "name": "allCheckpointZonesExist",
+      "passed": true
+    },
+    {
+      "name": "allCheckpointPositionsInsideZones",
+      "passed": true
+    },
+    {
+      "name": "checkpointPositionsUseFloor",
+      "passed": true
+    },
+    {
+      "name": "eastCheckpointsNearExit",
+      "passed": true
+    },
+    {
+      "name": "westCheckpointsNearExit",
+      "passed": true
+    },
+    {
+      "name": "emptyStoreHandled",
+      "passed": true
+    },
+    {
+      "name": "validRecordPersisted",
+      "passed": true
+    },
+    {
+      "name": "validRecordRestored",
+      "passed": true
+    },
+    {
+      "name": "corruptedJsonRejected",
+      "passed": true
+    },
+    {
+      "name": "futureVersionRejected",
+      "passed": true
+    },
+    {
+      "name": "unknownCheckpointRejected",
+      "passed": true
+    },
+    {
+      "name": "invalidRecordCleared",
+      "passed": true
+    },
+    {
+      "name": "unavailableStorageUsesMemory",
+      "passed": true
+    },
+    {
+      "name": "memoryFallbackPreservesCheckpoint",
+      "passed": true
+    },
+    {
+      "name": "restoreTierMatchesCheckpoint",
+      "passed": true
+    },
+    {
+      "name": "restorePositionMatchesCheckpoint",
+      "passed": true
+    },
+    {
+      "name": "visitedProgressDerived",
+      "passed": true
+    },
+    {
+      "name": "noArbitraryCoordinatesPersisted",
+      "passed": true
+    },
+    {
+      "name": "saveRecordIsMinimal",
+      "passed": true
+    },
+    {
+      "name": "checksumChangesPerCheckpoint",
+      "passed": true
+    },
+    {
+      "name": "recoveryUnderOneSecond",
+      "passed": true
+    },
+    {
+      "name": "recoveryUnderConfiguredMaximum",
+      "passed": true
+    },
+    {
+      "name": "replayBoundIsOneTier",
+      "passed": true
+    },
+    {
+      "name": "finalCheckpointBeforeExit",
+      "passed": true
+    },
+    {
+      "name": "finalCheckpointOnTierSix",
+      "passed": true
+    },
+    {
+      "name": "storageKeyIsV4Scoped",
+      "passed": true
+    },
+    {
+      "name": "schemaVersionPositive",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "checkpoints": 7,
+    "schemaVersion": 1,
+    "recoverySeconds": 0.7,
+    "maximumReplayDistance": 16800,
+    "finalCheckpoint": "S35"
+  },
+  "save": {
+    "key": "coreless.v4.megaRoom01.save",
+    "schemaVersion": 1,
+    "recoveryFadeInSeconds": 0.45,
+    "recoveryFadeOutSeconds": 0.25,
+    "maximumRecoverySeconds": 0.75,
+    "maximumReplayDistance": 16800
+  },
+  "checkpoints": [
+    {
+      "id": "S01",
+      "order": 0,
+      "sequence": 1,
+      "tier": 1,
+      "direction": "east",
+      "position": {
+        "x": 120,
+        "y": 7096
+      },
+      "activationRule": "x-at-or-after",
+      "visitedThroughSequence": 1,
+      "label": "arrival"
+    },
+    {
+      "id": "S06",
+      "order": 1,
+      "sequence": 6,
+      "tier": 1,
+      "direction": "east",
+      "position": {
+        "x": 16602,
+        "y": 7096
+      },
+      "activationRule": "x-at-or-after",
+      "visitedThroughSequence": 6,
+      "label": "tier-1-safe-exit"
+    },
+    {
+      "id": "S12",
+      "order": 2,
+      "sequence": 12,
+      "tier": 2,
+      "direction": "west",
+      "position": {
+        "x": 160,
+        "y": 5896
+      },
+      "activationRule": "x-at-or-before",
+      "visitedThroughSequence": 12,
+      "label": "tier-2-safe-exit"
+    },
+    {
+      "id": "S18",
+      "order": 3,
+      "sequence": 18,
+      "tier": 3,
+      "direction": "east",
+      "position": {
+        "x": 16602,
+        "y": 4696
+      },
+      "activationRule": "x-at-or-after",
+      "visitedThroughSequence": 18,
+      "label": "tier-3-safe-exit"
+    },
+    {
+      "id": "S24",
+      "order": 4,
+      "sequence": 24,
+      "tier": 4,
+      "direction": "west",
+      "position": {
+        "x": 160,
+        "y": 3496
+      },
+      "activationRule": "x-at-or-before",
+      "visitedThroughSequence": 24,
+      "label": "tier-4-safe-exit"
+    },
+    {
+      "id": "S30",
+      "order": 5,
+      "sequence": 30,
+      "tier": 5,
+      "direction": "east",
+      "position": {
+        "x": 16602,
+        "y": 2296
+      },
+      "activationRule": "x-at-or-after",
+      "visitedThroughSequence": 30,
+      "label": "tier-5-safe-exit"
+    },
+    {
+      "id": "S35",
+      "order": 6,
+      "sequence": 35,
+      "tier": 6,
+      "direction": "west",
+      "position": {
+        "x": 2960,
+        "y": 1096
+      },
+      "activationRule": "x-at-or-before",
+      "visitedThroughSequence": 35,
+      "label": "tier-6-safe-exit"
+    }
+  ]
+}
