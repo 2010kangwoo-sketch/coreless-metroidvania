@@ -31,7 +31,7 @@ export const PASS05_PROLOGUE = Object.freeze({
   text: "기억도 코어도 없다. 그러나 멈춘 원점 코어가 당신에게만 맥동한다.",
   immediateGoal: "동쪽의 원점 신호를 따라 첫 승강축에 도달하라.",
   campaignPromise:
-    "잃어버린 기능을 되찾고 강해지는 수호자들을 넘어, 검은 공명의 근원에 도달한다.",
+    "첫 구역에서 몸의 기본 반응을 확인한 뒤 두 번째 거대 구역부터 잃어버린 기능을 되찾고, 검은 공명의 근원에 도달한다.",
 });
 
 const objective = (id, startSequence, title, detail) => Object.freeze({
@@ -44,10 +44,10 @@ const objective = (id, startSequence, title, detail) => Object.freeze({
 export const PASS05_OBJECTIVES = Object.freeze([
   objective("wake", 1, "원점의 맥동을 따라가라", "동쪽 관측창과 첫 승강축을 찾는다."),
   objective("ascend-east", 6, "동부 승강축을 가동하라", "E로 승강기를 작동해 2층으로 오른다."),
-  objective("recover-cut", 7, "절단 권한의 봉인을 찾아라", "서쪽으로 진행해 S08 권한실에 도달한다."),
-  objective("test-cut", 8, "되찾은 절단 권한을 시험하라", "안전 표적 뒤 깨어난 관리체를 상대한다."),
+  objective("calibrate-cut", 7, "기초 절단 회로를 교정하라", "서쪽으로 진행해 S08 교정실의 두 안전 표적을 처리한다."),
+  objective("test-cut", 8, "교정된 기본 공격을 시험하라", "두 표적을 처리해 출구를 연 뒤 깨어난 관리체를 상대한다."),
   objective("trace-workers", 13, "철수 기록의 흔적을 추적하라", "주조장과 설비를 지나 기억 승강고로 향한다."),
-  objective("recover-wings", 19, "공명 날개 기능을 복원하라", "이중 도약 기억을 회수하고 안전 우물에서 시험한다."),
+  objective("trace-wings", 19, "공명 날개 잔향을 추적하라", "냉각 수로에서 응답하는 첫 신규 기능의 위치를 확인한다."),
   objective("find-last-memory", 25, "마지막 작업자 기억을 복원하라", "원점 봉인의 진실과 자신의 역할을 확인한다."),
   objective("prepare-guardian", 31, "제련 수호자의 규칙을 읽어라", "전실과 외곽 고리에서 공격 예고를 학습한다."),
   objective("defeat-guardian", 33, "제련 수호자를 멈춰라", "두 단계 공격을 견디고 원점 신호를 되찾는다."),
@@ -68,7 +68,7 @@ export const PASS05_TIER_ARCS = Object.freeze([
     title: "첫 권한",
     spaces: "S07–S12",
     question: "시설은 왜 코어리스를 침입자로 판정하는가?",
-    answer: "코어리스가 스스로 봉인했던 절단 권한을 되찾자 휴면 파수기가 깨어난다.",
+    answer: "코어리스의 기본 절단 회로가 원점 신호에 맞춰 교정되자 휴면 파수기가 깨어난다.",
   }),
   Object.freeze({
     tier: 3,
@@ -79,10 +79,10 @@ export const PASS05_TIER_ARCS = Object.freeze([
   }),
   Object.freeze({
     tier: 4,
-    title: "잃어버린 움직임",
+    title: "잠긴 움직임의 잔향",
     spaces: "S19–S24",
-    question: "공명 날개는 새 장비인가?",
-    answer: "이중 도약은 코어리스가 잃어버린 자신의 움직임이며 검은 공명이 관리체를 잠식했다.",
+    question: "공명 날개의 기억은 어디에서 다시 응답하는가?",
+    answer: "첫 신규 이동 기능은 아직 잠겨 있으며 다음 거대 구역인 냉각 수로에서 해제할 수 있다.",
   }),
   Object.freeze({
     tier: 5,
@@ -131,9 +131,9 @@ const SHORT_CUES = Object.freeze({
   S03: "점프 출력 기록은 손상됐지만 높이는 여전히 조절할 수 있다.",
   S04: "낙하한 아래층에서도 원점의 맥동은 끊어지지 않는다.",
   S05: "관측창의 금빛 파형이 동쪽 승강축을 반복해서 가리킨다.",
-  S06: "상층에서 코어리스가 직접 봉인한 절단 권한이 감지된다.",
+  S06: "상층에서 비상 절단 회로의 오래된 교정 기록이 감지된다.",
   S07: "진행 방향이 뒤집히자 휴면 파수기가 처음으로 고개를 든다.",
-  S08: "관리체를 해치지 않으려 스스로 잠근 절단 권한을 회수한다.",
+  S08: "시작부터 지닌 비상 절단 회로가 원점 신호에 맞춰 다시 교정된다.",
   S09: "검은 공명이 휴면 관리체를 강제로 깨운다.",
   S10: "멈춘 제련소에서도 운반대는 원점 쪽으로 자재를 옮긴다.",
   S11: "방패 파수기는 코어리스를 시설 침입자로 분류한다.",
@@ -144,9 +144,9 @@ const SHORT_CUES = Object.freeze({
   S16: "검은 공명이 안정적이던 증기 주기를 뒤틀고 있다.",
   S17: "서로 다른 파수기들이 하나의 공명 명령을 공유하기 시작한다.",
   S18: "격리된 기능 기억 하나가 바로 위 제단에서 응답한다.",
-  S19: "공명 날개는 장비가 아니라 잃어버린 자신의 움직임이다.",
-  S20: "복원된 기억이 공중 출력을 두 단계로 나눈다.",
-  S21: "안전한 아래 길과 빠른 위 길이 서로 다른 기록을 품고 있다.",
+  S19: "공명 날개의 잠긴 기억이 다음 구역인 냉각 수로에서 응답한다.",
+  S20: "냉각 수로의 압력 변화가 제련소의 상승 기류까지 흔든다.",
+  S21: "안전한 아래 길과 빠른 운반 발판 길이 서로 다른 기록을 품고 있다.",
   S22: "생체 온실의 관리 드론까지 검은 공명에 잠식됐다.",
   S23: "철수대는 원점 구역을 봉쇄하며 뒤쪽 교량을 끊었다.",
   S24: "마지막 철수자의 기억 신호가 다음 층에서 기다린다.",
@@ -274,8 +274,10 @@ export function validatePass05StoryGuidance() {
     ["objectiveBeginsAtS01", PASS05_OBJECTIVES[0].startSequence === 1],
     ["attackObjectiveBeforeCombat", objectiveForSequence(8).id === "test-cut" &&
       objectiveForSequence(9).id === "test-cut"],
-    ["doubleJumpObjectiveBeforeTest", objectiveForSequence(19).id ===
-      "recover-wings" && objectiveForSequence(20).id === "recover-wings"],
+    ["firstSkillIsOnlyForeshadowed", objectiveForSequence(19).id ===
+      "trace-wings" && objectiveForSequence(20).id === "trace-wings"],
+    ["firstSkillPointsToSecondMegaRoom",
+      objectiveForSequence(19).detail.includes("냉각 수로")],
     ["guardianObjectiveBeforeBoss", objectiveForSequence(31).id ===
       "prepare-guardian" && objectiveForSequence(33).id === "defeat-guardian"],
     ["exitObjectiveAtS36", objectiveForSequence(36).id ===

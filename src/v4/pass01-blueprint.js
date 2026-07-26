@@ -5,11 +5,12 @@ import {
   SCALE_CONTRACT,
 } from "./pass01-scale-layout.js";
 
-const CATEGORY_COLORS = Object.freeze({
+export const BLUEPRINT_CATEGORY_COLORS = Object.freeze({
   story: "#43686a",
   navigation: "#35637a",
   recovery: "#47736b",
   transition: "#665a8a",
+  tutorial: "#57717a",
   skill: "#aa7a39",
   combat: "#8a4949",
   hazard: "#8f623d",
@@ -21,11 +22,12 @@ const CATEGORY_COLORS = Object.freeze({
   exit: "#4d7b63",
 });
 
-const CATEGORY_LABELS = Object.freeze({
+export const BLUEPRINT_CATEGORY_LABELS = Object.freeze({
   story: "이야기",
   navigation: "이동",
   recovery: "회수",
   transition: "층 전환",
+  tutorial: "교정",
   skill: "능력",
   combat: "전투",
   hazard: "장애물",
@@ -143,7 +145,7 @@ export function drawMegaRoomBlueprint(canvas) {
     const placement = placementById.get(item.id);
     const x = marginX + (placement.column - 1) * (cardWidth + gapX);
     const y = top + (placement.tier - 1) * (cardHeight + gapY);
-    const color = CATEGORY_COLORS[item.category] ?? "#46545b";
+    const color = BLUEPRINT_CATEGORY_COLORS[item.category] ?? "#46545b";
     context.fillStyle = "rgba(5, 12, 17, 0.96)";
     drawRoundedRect(context, x - 2, y - 2, cardWidth + 4, cardHeight + 4, 10);
     context.fillStyle = color;
@@ -163,7 +165,7 @@ export function drawMegaRoomBlueprint(canvas) {
     wrap(context, item.name, x + 12, y + 52, cardWidth - 24, 17, 2);
     context.fillStyle = "#b5c8c9";
     context.font = "400 11px Arial, sans-serif";
-    context.fillText(`${CATEGORY_LABELS[item.category]} · 강도 ${item.intensity}`, x + 12, y + 91);
+    context.fillText(`${BLUEPRINT_CATEGORY_LABELS[item.category]} · 강도 ${item.intensity}`, x + 12, y + 91);
 
     if (item.checkpoint) {
       context.fillStyle = "#d5c47c";
@@ -177,13 +179,13 @@ export function drawMegaRoomBlueprint(canvas) {
   context.fillStyle = "#9bb4b7";
   context.font = "400 12px Arial, sans-serif";
   context.fillText("색상:", marginX, legendY);
-  const legend = ["story", "navigation", "skill", "combat", "hazard", "transition", "boss", "reward"];
+  const legend = ["story", "navigation", "tutorial", "combat", "hazard", "transition", "boss", "reward"];
   legend.forEach((category, index) => {
     const x = marginX + 48 + index * 142;
-    context.fillStyle = CATEGORY_COLORS[category];
+    context.fillStyle = BLUEPRINT_CATEGORY_COLORS[category];
     context.fillRect(x, legendY - 12, 18, 12);
     context.fillStyle = "#c8d5d5";
-    context.fillText(CATEGORY_LABELS[category], x + 25, legendY);
+    context.fillText(BLUEPRINT_CATEGORY_LABELS[category], x + 25, legendY);
   });
   context.fillStyle = "#d5c47c";
   context.beginPath();

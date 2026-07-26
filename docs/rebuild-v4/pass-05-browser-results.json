@@ -1,6 +1,6 @@
 {
   "pass": 5,
-  "generatedAt": "2026-07-26T04:10:55.673Z",
+  "generatedAt": "2026-07-26T07:18:56.523Z",
   "passed": true,
   "passedCount": 39,
   "totalCount": 39,
@@ -173,10 +173,10 @@
     "objectiveIds": [
       "wake",
       "ascend-east",
-      "recover-cut",
+      "calibrate-cut",
       "test-cut",
       "trace-workers",
-      "recover-wings",
+      "trace-wings",
       "find-last-memory",
       "prepare-guardian",
       "defeat-guardian",

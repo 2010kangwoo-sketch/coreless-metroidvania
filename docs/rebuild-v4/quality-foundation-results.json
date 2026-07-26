@@ -1,0 +1,521 @@
+{
+  "build": {
+    "id": "rebuild-v4-quality-foundation",
+    "afterPass": 5,
+    "beforePass": 6,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "binding room, terrain, chase, motion, object, progression, and approval gates"
+  },
+  "generatedAt": "2026-07-26T07:19:44.146Z",
+  "passed": true,
+  "passedCount": 32,
+  "totalCount": 32,
+  "checks": [
+    {
+      "name": "runsBetweenPassFiveAndSix",
+      "passed": true
+    },
+    {
+      "name": "allTaskZonesExist",
+      "passed": true
+    },
+    {
+      "name": "allZoneCategoriesRenderWithLabels",
+      "passed": true
+    },
+    {
+      "name": "taskIdsAreUnique",
+      "passed": true
+    },
+    {
+      "name": "allTutorialRoomsAreGated",
+      "passed": true
+    },
+    {
+      "name": "allCombatAndBossRoomsAreGated",
+      "passed": true
+    },
+    {
+      "name": "allTasksBlockBypass",
+      "passed": true
+    },
+    {
+      "name": "allTasksHaveReadableFeedback",
+      "passed": true
+    },
+    {
+      "name": "allTasksHaveLocalRecovery",
+      "passed": true
+    },
+    {
+      "name": "ceilingIsSlightlyVisible",
+      "passed": true
+    },
+    {
+      "name": "supportsNeverEndInOpenAir",
+      "passed": true
+    },
+    {
+      "name": "walkableSlopeIsBounded",
+      "passed": true
+    },
+    {
+      "name": "slopeTransitionsAreGradual",
+      "passed": true
+    },
+    {
+      "name": "precisionChainsAreBounded",
+      "passed": true
+    },
+    {
+      "name": "noAutomaticTraversalCorrection",
+      "passed": true
+    },
+    {
+      "name": "noUnreachableFloatingFloors",
+      "passed": true
+    },
+    {
+      "name": "zonePrimaryMechanicsAreUnique",
+      "passed": true
+    },
+    {
+      "name": "motionsCoverTakeoffLandingAndInteraction",
+      "passed": true
+    },
+    {
+      "name": "playerHasDistinctMotionStates",
+      "passed": true
+    },
+    {
+      "name": "enemyTelegraphAndRecoveryRequired",
+      "passed": true
+    },
+    {
+      "name": "objectFamiliesAreDiverse",
+      "passed": true
+    },
+    {
+      "name": "meaninglessCollidersForbidden",
+      "passed": true
+    },
+    {
+      "name": "chaseHasCompleteArc",
+      "passed": true
+    },
+    {
+      "name": "chaseSpawnRequiresTerrain",
+      "passed": true
+    },
+    {
+      "name": "chaseCannotTeleport",
+      "passed": true
+    },
+    {
+      "name": "chaseLeadWindowIsOrdered",
+      "passed": true
+    },
+    {
+      "name": "chaseUsesKnownAbilities",
+      "passed": true
+    },
+    {
+      "name": "firstMegaRoomHasNoNewSkill",
+      "passed": true
+    },
+    {
+      "name": "skillGrowthStartsInSecondMegaRoom",
+      "passed": true
+    },
+    {
+      "name": "startingAbilitiesIncludeBasicCombat",
+      "passed": true
+    },
+    {
+      "name": "manualPlaytestsAreMilestoned",
+      "passed": true
+    },
+    {
+      "name": "automationCannotApproveBadFeel",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "mandatoryRoomTasks": 23,
+    "gatedCombatAndBossRooms": 9,
+    "roomObjectFamilies": 10,
+    "playerMotionStates": 16,
+    "enemyMotionRequirements": 8,
+    "chasePhases": 7,
+    "firstMegaRoomSkillRewards": 0,
+    "secondMegaRoomSkillRewards": 1
+  },
+  "roomTasks": [
+    {
+      "zoneId": "S01",
+      "kind": "tutorial",
+      "completionSignal": "horizontal-movement-demonstrated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "출구 맥동이 밝아진다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S02",
+      "kind": "tutorial",
+      "completionSignal": "low-and-high-jump-gates-cleared",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "높이 표식 두 개가 연결된다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S03",
+      "kind": "tutorial",
+      "completionSignal": "low-ceiling-route-cleared",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "천장 봉인이 부드럽게 해제된다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S04",
+      "kind": "tutorial",
+      "completionSignal": "safe-landing-demonstrated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "회수등이 다음 길을 비춘다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S05",
+      "kind": "observation",
+      "completionSignal": "east-signal-observed",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "승강축 신호가 활성화된다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S06",
+      "kind": "interaction",
+      "completionSignal": "east-lift-activated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "동부 승강문이 천천히 열린다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S08",
+      "kind": "calibration",
+      "completionSignal": "both-safe-targets-cleared",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "교정 고리가 정렬되며 출구가 열린다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S09",
+      "kind": "combat",
+      "completionSignal": "crawler-defeated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "전투 봉인이 사라진다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S11",
+      "kind": "combat",
+      "completionSignal": "shield-sentinel-defeated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "방패 문양이 꺼진다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S12",
+      "kind": "interaction",
+      "completionSignal": "west-lift-activated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "정비축 상부문이 열린다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S14",
+      "kind": "combat",
+      "completionSignal": "all-vent-crawlers-defeated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "환기구 경보가 꺼진다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S17",
+      "kind": "combat",
+      "completionSignal": "all-active-threats-defeated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "세 갈래 봉인이 함께 해제된다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S18",
+      "kind": "interaction",
+      "completionSignal": "memory-lift-activated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "기억 승강고가 상승한다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S22",
+      "kind": "combat",
+      "completionSignal": "flying-sentinel-defeated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "온실 차단막이 걷힌다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S24",
+      "kind": "interaction",
+      "completionSignal": "recovery-lift-activated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "서부 회수문이 열린다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S25",
+      "kind": "story-interaction",
+      "completionSignal": "one-critical-memory-restored",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "기억못의 다음 통로가 떠오른다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S29",
+      "kind": "combat",
+      "completionSignal": "all-arena-threats-defeated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "조립 경기장 출구가 열린다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S30",
+      "kind": "rest",
+      "completionSignal": "rest-checkpoint-confirmed",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "최종 승강기가 호출된다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S31",
+      "kind": "boss-lesson",
+      "completionSignal": "two-guardian-telegraphs-observed",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "외곽 고리 접근문이 열린다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S32",
+      "kind": "combat",
+      "completionSignal": "outer-defenders-defeated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "수호자실 봉인이 약해진다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S33",
+      "kind": "boss",
+      "completionSignal": "guardian-phase-one-cleared",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "중앙 바닥이 2막 형태로 전환된다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S34",
+      "kind": "boss",
+      "completionSignal": "guardian-defeated",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "공명 회수실이 열린다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    },
+    {
+      "zoneId": "S35",
+      "kind": "reward-interaction",
+      "completionSignal": "record-and-shortcut-claimed",
+      "exitRule": "sealed-until-complete",
+      "exitFeedback": "냉각 수로 출구가 활성화된다",
+      "bypassAllowed": false,
+      "failureRecovery": "restart-current-room-with-cleared-entry-space"
+    }
+  ],
+  "roomFraming": {
+    "visibleCeilingFraction": {
+      "minimum": 0.06,
+      "maximum": 0.12
+    },
+    "visibleCeilingPurpose": "show enclosure without hiding jump destinations or reducing playable headroom",
+    "entranceLanguage": "distinct-threshold-light-and-side-frame",
+    "exitLanguage": "distinct-threshold-light-and-side-frame",
+    "roomBoundaryRule": "each room must read as a contained volume with ceiling, side thresholds, floor, and depth layers",
+    "supportTerminationRule": "supports must meet a visible foundation or continue below the camera; never end in open air",
+    "collisionVisibilityRule": "visual silhouettes may decorate collision, but may not imply a walkable or blocking surface that does not exist"
+  },
+  "terrain": {
+    "maximumSustainedWalkableSlopeDegrees": 32,
+    "maximumAdjacentSlopeChangeDegrees": 10,
+    "minimumSlopeBlendLengthPx": 140,
+    "minimumLandingWidthPlayerBodies": 2.2,
+    "precisionLandingWidthPlayerBodies": 1.45,
+    "maximumConsecutivePrecisionLandings": 2,
+    "identicalAdjacentTerrainSignaturesAllowed": false,
+    "suddenVerticalCorrectionAllowed": false,
+    "automaticWallVaultAllowed": false,
+    "unreachableFloatingFloorAllowed": false,
+    "routeRule": "every collision surface must serve traversal, recovery, combat position, hazard timing, interaction, or story staging"
+  },
+  "motionAndEffects": {
+    "fixedSimulationStep": true,
+    "renderInterpolation": true,
+    "cameraUsesDampedFollow": true,
+    "effectEvents": [
+      "takeoff",
+      "landing",
+      "hard-landing",
+      "direction-reversal",
+      "dash-start",
+      "attack-contact",
+      "damage-contact",
+      "structure-break",
+      "room-task-complete"
+    ],
+    "effectRule": "dust, debris, light, and shake must originate at the physical event and inherit its direction; constant decorative emission is forbidden",
+    "cameraShakeRule": "short, amplitude-bounded, event-specific, and never strong enough to hide the next required landing"
+  },
+  "playerMotionStates": [
+    "idle",
+    "run-start",
+    "run-loop",
+    "run-stop",
+    "turn",
+    "jump-anticipation",
+    "rise",
+    "apex",
+    "fall",
+    "soft-land",
+    "hard-land",
+    "attack-start",
+    "attack-active",
+    "attack-recover",
+    "hurt",
+    "defeat"
+  ],
+  "enemyMotionRequirements": [
+    "idle",
+    "locomotion",
+    "notice",
+    "attack-telegraph",
+    "attack-active",
+    "attack-recover",
+    "hurt",
+    "defeat"
+  ],
+  "objectFamilies": [
+    "forged-stone-shell",
+    "ribbed-metal-support",
+    "service-bridge",
+    "lift-and-counterweight",
+    "pipe-and-vent",
+    "memory-terminal",
+    "resonance-seal",
+    "maintenance-flora",
+    "hazard-machinery",
+    "enemy-nest"
+  ],
+  "objectPurpose": {
+    "requiredPurposeTags": [
+      "traversal",
+      "recovery",
+      "combat-position",
+      "hazard",
+      "interaction",
+      "story"
+    ],
+    "minimumPurposeTagsPerCollidableObject": 1,
+    "decorativeCollisionAllowed": false,
+    "unreachableWalkableSurfaceAllowed": false,
+    "rule": "an object with no gameplay or story purpose is removed instead of being used as filler"
+  },
+  "chase": {
+    "phases": [
+      "foreshadow",
+      "safe-launch",
+      "readable-basics",
+      "route-escalation",
+      "short-breather",
+      "combined-climax",
+      "player-caused-resolution"
+    ],
+    "checkpointImmediatelyBefore": true,
+    "introducesNewAbility": false,
+    "pursuerSpawnRule": "spawn on a validated supporting surface behind the player, outside overlap, and never below terrain",
+    "pursuerTeleportAllowed": false,
+    "adaptivePacing": {
+      "minimumLeadPx": 650,
+      "preferredLeadPx": {
+        "minimum": 1800,
+        "maximum": 3600
+      },
+      "maximumLeadPx": 5400,
+      "closeResponse": "decelerate-or-enter-authored-destruction-recovery",
+      "farResponse": "gradual-acceleration-with-bounded-maximum-speed"
+    },
+    "minimumObstacleTelegraphSeconds": 0.55,
+    "minimumRecoveryWindows": 1,
+    "failureResetSecondsMaximum": 0.7,
+    "obstacleRule": "all mandatory obstacles use previously taught inputs and remain readable at chase camera speed",
+    "resolutionRule": "the player closes, breaks, redirects, or escapes through a structure; the pursuer may not simply disappear at a coordinate",
+    "verificationRule": "continuous real key events, no coordinate injection, no pursuer contact, no trapped state, and deterministic restart"
+  },
+  "approval": {
+    "requiredManualPlaytestPasses": [
+      10,
+      20,
+      30,
+      40
+    ],
+    "firstPlayMinutes": {
+      "minimum": 11,
+      "maximum": 14
+    },
+    "repeatPlayMinutes": {
+      "minimum": 8,
+      "maximum": 11
+    },
+    "fastRouteMinutesMinimum": 7,
+    "ordinaryRoomSeconds": {
+      "minimum": 10,
+      "maximum": 35
+    },
+    "bossPairSeconds": {
+      "minimum": 60,
+      "maximum": 100
+    },
+    "actualKeyEventsRequired": true,
+    "coordinateInjectionAllowed": false,
+    "consoleErrorsAllowed": 0,
+    "pageErrorsAllowed": 0,
+    "unresolvedTaskBypassAllowed": false,
+    "approvalRule": "automated checks are necessary but cannot overrule an unfriendly, unnatural, repetitive, or visually misleading playtest result"
+  }
+}

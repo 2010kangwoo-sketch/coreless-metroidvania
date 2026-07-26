@@ -7,6 +7,7 @@ import {
   PASS01_BUILD,
   SCALE_CONTRACT,
   SPACE_EXTENTS,
+  STARTING_ABILITIES,
   validatePass01ScaleLayout,
 } from "../src/v4/pass01-scale-layout.js";
 
@@ -23,6 +24,7 @@ const result = {
   checks: audit.checks,
   measurements: audit.measurements,
   contract: SCALE_CONTRACT,
+  startingAbilities: STARTING_ABILITIES,
   extentTypes: SPACE_EXTENTS,
   firstMegaRoom: FIRST_MEGA_ROOM_ZONES,
   placement: FIRST_MEGA_ROOM_PLACEMENT,

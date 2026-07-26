@@ -1,9 +1,9 @@
 {
   "pass": 5,
-  "generatedAt": "2026-07-26T04:12:30.072Z",
+  "generatedAt": "2026-07-26T07:19:44.100Z",
   "passed": true,
-  "passedCount": 41,
-  "totalCount": 41,
+  "passedCount": 42,
+  "totalCount": 42,
   "checks": [
     {
       "name": "pass04StillValid",
@@ -130,7 +130,11 @@
       "passed": true
     },
     {
-      "name": "doubleJumpObjectiveBeforeTest",
+      "name": "firstSkillIsOnlyForeshadowed",
+      "passed": true
+    },
+    {
+      "name": "firstSkillPointsToSecondMegaRoom",
       "passed": true
     },
     {
@@ -184,7 +188,7 @@
     "speaker": "시설 잔향",
     "text": "기억도 코어도 없다. 그러나 멈춘 원점 코어가 당신에게만 맥동한다.",
     "immediateGoal": "동쪽의 원점 신호를 따라 첫 승강축에 도달하라.",
-    "campaignPromise": "잃어버린 기능을 되찾고 강해지는 수호자들을 넘어, 검은 공명의 근원에 도달한다."
+    "campaignPromise": "첫 구역에서 몸의 기본 반응을 확인한 뒤 두 번째 거대 구역부터 잃어버린 기능을 되찾고, 검은 공명의 근원에 도달한다."
   },
   "ui": {
     "bannerSeconds": 5.25,
@@ -210,16 +214,16 @@
       "detail": "E로 승강기를 작동해 2층으로 오른다."
     },
     {
-      "id": "recover-cut",
+      "id": "calibrate-cut",
       "startSequence": 7,
-      "title": "절단 권한의 봉인을 찾아라",
-      "detail": "서쪽으로 진행해 S08 권한실에 도달한다."
+      "title": "기초 절단 회로를 교정하라",
+      "detail": "서쪽으로 진행해 S08 교정실의 두 안전 표적을 처리한다."
     },
     {
       "id": "test-cut",
       "startSequence": 8,
-      "title": "되찾은 절단 권한을 시험하라",
-      "detail": "안전 표적 뒤 깨어난 관리체를 상대한다."
+      "title": "교정된 기본 공격을 시험하라",
+      "detail": "두 표적을 처리해 출구를 연 뒤 깨어난 관리체를 상대한다."
     },
     {
       "id": "trace-workers",
@@ -228,10 +232,10 @@
       "detail": "주조장과 설비를 지나 기억 승강고로 향한다."
     },
     {
-      "id": "recover-wings",
+      "id": "trace-wings",
       "startSequence": 19,
-      "title": "공명 날개 기능을 복원하라",
-      "detail": "이중 도약 기억을 회수하고 안전 우물에서 시험한다."
+      "title": "공명 날개 잔향을 추적하라",
+      "detail": "냉각 수로에서 응답하는 첫 신규 기능의 위치를 확인한다."
     },
     {
       "id": "find-last-memory",
@@ -327,7 +331,7 @@
       "title": "첫 권한",
       "spaces": "S07–S12",
       "question": "시설은 왜 코어리스를 침입자로 판정하는가?",
-      "answer": "코어리스가 스스로 봉인했던 절단 권한을 되찾자 휴면 파수기가 깨어난다."
+      "answer": "코어리스의 기본 절단 회로가 원점 신호에 맞춰 교정되자 휴면 파수기가 깨어난다."
     },
     {
       "tier": 3,
@@ -338,10 +342,10 @@
     },
     {
       "tier": 4,
-      "title": "잃어버린 움직임",
+      "title": "잠긴 움직임의 잔향",
       "spaces": "S19–S24",
-      "question": "공명 날개는 새 장비인가?",
-      "answer": "이중 도약은 코어리스가 잃어버린 자신의 움직임이며 검은 공명이 관리체를 잠식했다."
+      "question": "공명 날개의 기억은 어디에서 다시 응답하는가?",
+      "answer": "첫 신규 이동 기능은 아직 잠겨 있으며 다음 거대 구역인 냉각 수로에서 해제할 수 있다."
     },
     {
       "tier": 5,
@@ -430,7 +434,7 @@
       "tier": 1,
       "zoneName": "동부 승강축",
       "objectiveId": "ascend-east",
-      "cue": "상층에서 코어리스가 직접 봉인한 절단 권한이 감지된다.",
+      "cue": "상층에서 비상 절단 회로의 오래된 교정 기록이 감지된다.",
       "tutorialId": "use-lift",
       "durationSeconds": 5.25,
       "dismissRule": "time-or-next-higher-priority",
@@ -442,7 +446,7 @@
       "sequence": 7,
       "tier": 2,
       "zoneName": "잔향 회랑",
-      "objectiveId": "recover-cut",
+      "objectiveId": "calibrate-cut",
       "cue": "진행 방향이 뒤집히자 휴면 파수기가 처음으로 고개를 든다.",
       "tutorialId": null,
       "durationSeconds": 5.25,
@@ -454,9 +458,9 @@
       "zoneId": "S08",
       "sequence": 8,
       "tier": 2,
-      "zoneName": "절단 권한실",
+      "zoneName": "절단 교정실",
       "objectiveId": "test-cut",
-      "cue": "관리체를 해치지 않으려 스스로 잠근 절단 권한을 회수한다.",
+      "cue": "시작부터 지닌 비상 절단 회로가 원점 신호에 맞춰 다시 교정된다.",
       "tutorialId": null,
       "durationSeconds": 5.25,
       "dismissRule": "time-or-next-higher-priority",
@@ -597,9 +601,9 @@
       "zoneId": "S19",
       "sequence": 19,
       "tier": 4,
-      "zoneName": "공명 날개 제단",
-      "objectiveId": "recover-wings",
-      "cue": "공명 날개는 장비가 아니라 잃어버린 자신의 움직임이다.",
+      "zoneName": "공명 잔향 제단",
+      "objectiveId": "trace-wings",
+      "cue": "공명 날개의 잠긴 기억이 다음 구역인 냉각 수로에서 응답한다.",
       "tutorialId": null,
       "durationSeconds": 5.25,
       "dismissRule": "time-or-next-higher-priority",
@@ -610,9 +614,9 @@
       "zoneId": "S20",
       "sequence": 20,
       "tier": 4,
-      "zoneName": "이중 도약 우물",
-      "objectiveId": "recover-wings",
-      "cue": "복원된 기억이 공중 출력을 두 단계로 나눈다.",
+      "zoneName": "상승 기류 우물",
+      "objectiveId": "trace-wings",
+      "cue": "냉각 수로의 압력 변화가 제련소의 상승 기류까지 흔든다.",
       "tutorialId": null,
       "durationSeconds": 5.25,
       "dismissRule": "time-or-next-higher-priority",
@@ -624,8 +628,8 @@
       "sequence": 21,
       "tier": 4,
       "zoneName": "상하 분기 공방",
-      "objectiveId": "recover-wings",
-      "cue": "안전한 아래 길과 빠른 위 길이 서로 다른 기록을 품고 있다.",
+      "objectiveId": "trace-wings",
+      "cue": "안전한 아래 길과 빠른 운반 발판 길이 서로 다른 기록을 품고 있다.",
       "tutorialId": null,
       "durationSeconds": 5.25,
       "dismissRule": "time-or-next-higher-priority",
@@ -637,7 +641,7 @@
       "sequence": 22,
       "tier": 4,
       "zoneName": "비행 파수기 온실",
-      "objectiveId": "recover-wings",
+      "objectiveId": "trace-wings",
       "cue": "생체 온실의 관리 드론까지 검은 공명에 잠식됐다.",
       "tutorialId": null,
       "durationSeconds": 5.25,
@@ -650,7 +654,7 @@
       "sequence": 23,
       "tier": 4,
       "zoneName": "무너지는 교량",
-      "objectiveId": "recover-wings",
+      "objectiveId": "trace-wings",
       "cue": "철수대는 원점 구역을 봉쇄하며 뒤쪽 교량을 끊었다.",
       "tutorialId": null,
       "durationSeconds": 5.25,
@@ -663,7 +667,7 @@
       "sequence": 24,
       "tier": 4,
       "zoneName": "서부 수직 회수로",
-      "objectiveId": "recover-wings",
+      "objectiveId": "trace-wings",
       "cue": "마지막 철수자의 기억 신호가 다음 층에서 기다린다.",
       "tutorialId": null,
       "durationSeconds": 5.25,

@@ -166,12 +166,12 @@ try {
   });
 
   const expectedObjectives =
-    "wake,ascend-east,recover-cut,test-cut,trace-workers,recover-wings,find-last-memory,prepare-guardian,defeat-guardian,claim-record,leave-for-waterway";
+    "wake,ascend-east,calibrate-cut,test-cut,trace-workers,trace-wings,find-last-memory,prepare-guardian,defeat-guardian,claim-record,leave-for-waterway";
   const checks = [
     ["documentReady", state.build.id === "rebuild-v4-pass05"],
     ["allStaticAuditsPass", Object.values(state.audits).every(audit => audit.passed)],
     ["statusShowsStoryPass", state.statusState === "pass" &&
-      state.statusText.includes("41/41")],
+      state.statusText.includes("42/42")],
     ["canvasHasExpectedResolution", state.canvas.width === 1400 &&
       state.canvas.height === 900],
     ["prologueIsExplicit", state.story.prologue.text.includes("원점 코어") &&
