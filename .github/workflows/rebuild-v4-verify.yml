@@ -38,6 +38,8 @@ jobs:
         run: node tools/verify-rebuild-v4-start-screen.mjs
       - name: Verify V4 account and save contract
         run: node tools/verify-rebuild-v4-account-save.mjs
+      - name: Verify V4 reset pre-pass production contract
+        run: node tools/verify-rebuild-v4-prepass.mjs
       - name: Install account server dependencies
         working-directory: server
         run: npm ci
