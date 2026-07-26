@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071217">
+  <meta
+    name="description"
+    content="Coreless V4 새 4차 경사·벽·천장·모서리 충돌 시험장"
+  >
+  <title>Coreless · Reset Pass 04 Collision</title>
+  <link rel="stylesheet" href="v4-reset-pass04.css">
+</head>
+<body>
+  <main class="reset-pass04-shell">
+    <header class="reset-pass04-header">
+      <div>
+        <p>CORELESS · NEW 40-PASS RESET</p>
+        <h1>4차 · 경사·벽·천장·모서리 충돌</h1>
+      </div>
+      <span id="resetPass04AuditStatus">AUDIT PENDING</span>
+    </header>
+
+    <section class="reset-pass04-panel" aria-label="충돌 시험장">
+      <canvas
+        id="resetPass04CollisionLab"
+        width="1400"
+        height="900"
+        tabindex="0"
+      ></canvas>
+    </section>
+
+    <section class="reset-pass04-notes" aria-label="충돌 기준">
+      <article>
+        <strong>01 · 연속 경사</strong>
+        <span>경사는 최대 32도이며 인접 각도는 한 번에 8도만 변합니다.</span>
+      </article>
+      <article>
+        <strong>02 · 수직 벽</strong>
+        <span>벽에 계속 입력해도 위로 밀리거나 자동으로 턱을 넘지 않습니다.</span>
+      </article>
+      <article>
+        <strong>03 · 천장</strong>
+        <span>머리가 닿으면 상승만 끝나며 캐릭터가 옆이나 아래로 순간 이동하지 않습니다.</span>
+      </article>
+      <article>
+        <strong>04 · 모서리</strong>
+        <span>벽 위에는 실제 점프로만 올라가며 좌표 보정으로 착지시키지 않습니다.</span>
+      </article>
+    </section>
+
+    <p class="reset-pass04-footer">
+      벽 점프와 벽타기는 이번 차수에 포함하지 않습니다. 벽 옆에서 이동키를
+      비비는 행동만으로 상승하는 기능은 앞으로도 추가하지 않습니다.
+    </p>
+  </main>
+  <script type="module" src="src/v4/reset-pass04-main.js"></script>
+</body>
+</html>

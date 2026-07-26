@@ -1,0 +1,204 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass04-collision",
+    "pass": 4,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "smooth slopes, walls, ceilings, and corner collision",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-26T12:10:09.603Z",
+  "passed": true,
+  "passedCount": 27,
+  "totalCount": 27,
+  "checks": [
+    {
+      "name": "resetPass03StillValid",
+      "passed": true
+    },
+    {
+      "name": "passSequenceIsCorrect",
+      "passed": true
+    },
+    {
+      "name": "slopeTraversalCompletes",
+      "passed": true
+    },
+    {
+      "name": "allSlopeSegmentsVisited",
+      "passed": true
+    },
+    {
+      "name": "slopeTraversalNeverBecomesAirborne",
+      "passed": true
+    },
+    {
+      "name": "maximumSlopeBounded",
+      "passed": true
+    },
+    {
+      "name": "adjacentSlopeChangeBounded",
+      "passed": true
+    },
+    {
+      "name": "slopeBlendLengthBounded",
+      "passed": true
+    },
+    {
+      "name": "slopeRouteReturnsToFloor",
+      "passed": true
+    },
+    {
+      "name": "slopeVerticalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "slopeCombinedStepBounded",
+      "passed": true
+    },
+    {
+      "name": "slopeAdjustmentBounded",
+      "passed": true
+    },
+    {
+      "name": "restingPlayerDoesNotSlide",
+      "passed": true
+    },
+    {
+      "name": "restingPlayerStaysGrounded",
+      "passed": true
+    },
+    {
+      "name": "wallBlocksRepeatedInput",
+      "passed": true
+    },
+    {
+      "name": "wallNeverMovesPlayerUp",
+      "passed": true
+    },
+    {
+      "name": "wallLeavesVerticalVelocityZero",
+      "passed": true
+    },
+    {
+      "name": "ceilingCollisionObserved",
+      "passed": true
+    },
+    {
+      "name": "ceilingCannotBeCrossed",
+      "passed": true
+    },
+    {
+      "name": "ceilingJumpReturnsToGround",
+      "passed": true
+    },
+    {
+      "name": "wallHasMeaningfulLandingTop",
+      "passed": true
+    },
+    {
+      "name": "ceilingContinuesOutOfView",
+      "passed": true
+    },
+    {
+      "name": "automaticWallClimbForbidden",
+      "passed": true
+    },
+    {
+      "name": "automaticCornerVaultForbidden",
+      "passed": true
+    },
+    {
+      "name": "wallJumpDeferred",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "passFourRuntimeAndEvidenceExist",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "slopeTraversal": {
+      "completed": true,
+      "seconds": 5.841666666666747,
+      "maximumVerticalStep": 2.0828978396978073,
+      "maximumPositionStep": 3.930594677873713,
+      "maximumAdjustment": 2.0828978396978073,
+      "airborneFrames": 0,
+      "visitedSegments": [
+        "entry-flat",
+        "rise-08",
+        "rise-16",
+        "rise-24",
+        "rise-32",
+        "crest-soften-24",
+        "crest-soften-16",
+        "crest-soften-08",
+        "crest-flat",
+        "fall-08",
+        "fall-16",
+        "fall-24",
+        "fall-32",
+        "fall-soften-24",
+        "fall-soften-16",
+        "fall-soften-08",
+        "exit-flat"
+      ],
+      "endY": 656,
+      "endSpeed": 400
+    },
+    "wallBlock": {
+      "wallHits": 145,
+      "x": 2510,
+      "y": 656,
+      "startY": 656,
+      "maximumYChange": 0,
+      "verticalSpeed": 0,
+      "grounded": true
+    },
+    "ceilingBlock": {
+      "ceilingHits": 1,
+      "minimumY": 620,
+      "ceilingBottom": 620,
+      "grounded": true,
+      "landings": 1
+    },
+    "restOnSlope": {
+      "xDrift": 0,
+      "yDrift": 0,
+      "grounded": true
+    },
+    "terrain": {
+      "segments": 17,
+      "maximumAbsoluteAngle": 32,
+      "maximumAdjacentAngleChange": 8,
+      "minimumSegmentLength": 140,
+      "finalHeight": 720
+    }
+  },
+  "contract": {
+    "maximumWalkableSlopeDegrees": 32,
+    "maximumAdjacentSlopeChangeDegrees": 8,
+    "minimumSlopeSegmentLength": 140,
+    "slopeGroundSnapTolerance": 0.8,
+    "collisionEpsilon": 0.01,
+    "automaticWallClimbAllowed": false,
+    "automaticCornerVaultAllowed": false,
+    "wallJumpIncluded": false
+  },
+  "lab": {
+    "width": 3400,
+    "height": 900,
+    "viewportWidth": 1400,
+    "viewportHeight": 900,
+    "floorY": 720,
+    "spawnX": 90,
+    "finishX": 3290,
+    "leftBoundary": 20,
+    "rightBoundary": 3380
+  },
+  "missingFiles": []
+}

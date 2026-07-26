@@ -48,6 +48,8 @@ jobs:
         run: node tools/verify-rebuild-v4-reset-pass02.mjs
       - name: Verify V4 reset Pass 03 air movement
         run: node tools/verify-rebuild-v4-reset-pass03.mjs
+      - name: Verify V4 reset Pass 04 collision
+        run: node tools/verify-rebuild-v4-reset-pass04.mjs
       - name: Install account server dependencies
         working-directory: server
         run: npm ci

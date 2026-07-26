@@ -1,0 +1,238 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass04-collision",
+    "pass": 4,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "smooth slopes, walls, ceilings, and corner collision",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-26T12:07:50.399Z",
+  "passed": true,
+  "passedCount": 26,
+  "totalCount": 26,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "staticAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsPass",
+      "passed": true
+    },
+    {
+      "name": "canvasResolutionCorrect",
+      "passed": true
+    },
+    {
+      "name": "actualKeyboardEventsRecorded",
+      "passed": true
+    },
+    {
+      "name": "allTerrainSegmentsVisited",
+      "passed": true
+    },
+    {
+      "name": "slopeTraversalStayedGrounded",
+      "passed": true
+    },
+    {
+      "name": "slopeAdjustmentBounded",
+      "passed": true
+    },
+    {
+      "name": "slopeVerticalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "wallStopsGroundRun",
+      "passed": true
+    },
+    {
+      "name": "wallDoesNotLiftGroundedPlayer",
+      "passed": true
+    },
+    {
+      "name": "wallContactVisible",
+      "passed": true
+    },
+    {
+      "name": "wallTopReachedByActualJump",
+      "passed": true
+    },
+    {
+      "name": "noAutomaticVault",
+      "passed": true
+    },
+    {
+      "name": "ceilingCollisionObserved",
+      "passed": true
+    },
+    {
+      "name": "ceilingStopsAtExactBottom",
+      "passed": true
+    },
+    {
+      "name": "noSolidPenetration",
+      "passed": true
+    },
+    {
+      "name": "onlyTwoIntentionalJumps",
+      "passed": true
+    },
+    {
+      "name": "horizontalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "verticalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "combinedStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noBoundaryCorrection",
+      "passed": true
+    },
+    {
+      "name": "noResetUsed",
+      "passed": true
+    },
+    {
+      "name": "routeCompleted",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "slopeVisitedSegments": 17,
+    "slopeAirborneFrames": 0,
+    "maximumSlopeAdjustment": 2.0828978396978073,
+    "wallContactX": 2510,
+    "groundedWallHits": 1,
+    "landedOnWallTop": true,
+    "ceilingHits": 1,
+    "ceilingContactY": 620,
+    "jumpsStarted": 2,
+    "automaticVaults": 0,
+    "solidOverlapFrames": 0,
+    "maximumHorizontalStep": 3.333333333333485,
+    "maximumVerticalStep": 6.753472222222172,
+    "maximumPositionStep": 7.527923391887955,
+    "maximumCameraStep": 3.3333333333325754,
+    "boundaryContacts": 0,
+    "fixedFrames": 1106,
+    "keyEvents": [
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 0.5167,
+        "x": 90,
+        "y": 656,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 6.65,
+        "x": 2510,
+        "y": 656,
+        "grounded": true
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 6.8,
+        "x": 2510,
+        "y": 656,
+        "grounded": true
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 6.8,
+        "x": 2510,
+        "y": 656,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 7.3667,
+        "x": 2602.2708,
+        "y": 536,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 7.3667,
+        "x": 2602.2708,
+        "y": 536,
+        "grounded": true
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 7.3667,
+        "x": 2602.2708,
+        "y": 536,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 8.3833,
+        "x": 3002.6667,
+        "y": 656,
+        "grounded": true
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 8.3833,
+        "x": 3002.6667,
+        "y": 656,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 8.4333,
+        "x": 3022.3917,
+        "y": 620,
+        "grounded": false
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 8.6167,
+        "x": 3089.9076,
+        "y": 656,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 9.1333,
+        "x": 3295.3528,
+        "y": 656,
+        "grounded": true
+      }
+    ]
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}
