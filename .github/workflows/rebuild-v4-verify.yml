@@ -25,3 +25,5 @@ jobs:
         run: node tools/verify-rebuild-v4-pass01.mjs
       - name: Verify V4 Pass 02 movement budget
         run: node tools/verify-rebuild-v4-pass02.mjs
+      - name: Verify V4 Pass 03 world streaming
+        run: node tools/verify-rebuild-v4-pass03.mjs

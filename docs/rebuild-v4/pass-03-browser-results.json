@@ -1,0 +1,141 @@
+{
+  "pass": 3,
+  "generatedAt": "2026-07-26T02:17:09.439Z",
+  "passed": true,
+  "passedCount": 28,
+  "totalCount": 28,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "pass01StillValid",
+      "passed": true
+    },
+    {
+      "name": "pass02StillValid",
+      "passed": true
+    },
+    {
+      "name": "staticStreamingAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsStreamingPass",
+      "passed": true
+    },
+    {
+      "name": "canvasHasExpectedResolution",
+      "passed": true
+    },
+    {
+      "name": "realKeyboardMovesPlayer",
+      "passed": true
+    },
+    {
+      "name": "realTimeCameraFollows",
+      "passed": true
+    },
+    {
+      "name": "realTimeCameraIsSmooth",
+      "passed": true
+    },
+    {
+      "name": "middleCaptureReachedTierFour",
+      "passed": true
+    },
+    {
+      "name": "fullSixTierRouteCompleted",
+      "passed": true
+    },
+    {
+      "name": "fiveLiftTransitions",
+      "passed": true
+    },
+    {
+      "name": "allThirtySixZonesVisited",
+      "passed": true
+    },
+    {
+      "name": "allThirtySixZonesStreamed",
+      "passed": true
+    },
+    {
+      "name": "activeZonesStayBounded",
+      "passed": true
+    },
+    {
+      "name": "activeZonesNeverEmpty",
+      "passed": true
+    },
+    {
+      "name": "finalActiveSetIsSmall",
+      "passed": true
+    },
+    {
+      "name": "playerNeverTeleports",
+      "passed": true
+    },
+    {
+      "name": "cameraNeverTeleports",
+      "passed": true
+    },
+    {
+      "name": "horizontalCameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "verticalCameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "completionTimeMatchesWorldScale",
+      "passed": true
+    },
+    {
+      "name": "cameraEndsInsideWorld",
+      "passed": true
+    },
+    {
+      "name": "sixDataTiersRendered",
+      "passed": true
+    },
+    {
+      "name": "thirtySixDataZonesRendered",
+      "passed": true
+    },
+    {
+      "name": "streamLoadsAndUnloadsOccurred",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "realtimePlayerX": 947.75,
+    "realtimeCameraMaximumStep": 3.4848434812326445,
+    "completionSeconds": 249.5583333332707,
+    "tierTransitions": 5,
+    "visitedZones": 36,
+    "streamedZones": 36,
+    "peakActiveZones": 4,
+    "finalActiveZones": 2,
+    "streamLoads": 61,
+    "streamUnloads": 59,
+    "maximumPositionStep": 7.1428571428577925,
+    "maximumCameraStep": 7.126266641810844,
+    "maximumHorizontalCameraStep": 3.5,
+    "maximumVerticalCameraStep": 7.126266641810844,
+    "emptyStreamFrames": 0,
+    "fixedFrames": 30006
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}
