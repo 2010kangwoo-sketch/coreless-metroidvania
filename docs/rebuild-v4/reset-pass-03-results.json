@@ -1,0 +1,236 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass03-air-movement",
+    "pass": 3,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "single variable jump, air control, coyote time, and landing input buffer",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-26T11:49:32.809Z",
+  "passed": true,
+  "passedCount": 32,
+  "totalCount": 32,
+  "checks": [
+    {
+      "name": "resetPass02StillValid",
+      "passed": true
+    },
+    {
+      "name": "passSequenceIsCorrect",
+      "passed": true
+    },
+    {
+      "name": "singleJumpOnly",
+      "passed": true
+    },
+    {
+      "name": "earlyAirPressIsNotDoubleJump",
+      "passed": true
+    },
+    {
+      "name": "shortJumpHeightBounded",
+      "passed": true
+    },
+    {
+      "name": "fullJumpHeightBounded",
+      "passed": true
+    },
+    {
+      "name": "variableJumpDifferenceMeaningful",
+      "passed": true
+    },
+    {
+      "name": "shortJumpAirtimeBounded",
+      "passed": true
+    },
+    {
+      "name": "fullJumpAirtimeBounded",
+      "passed": true
+    },
+    {
+      "name": "coyoteWindowIsShort",
+      "passed": true
+    },
+    {
+      "name": "coyoteInsideWindowAccepted",
+      "passed": true
+    },
+    {
+      "name": "coyoteOutsideWindowRejected",
+      "passed": true
+    },
+    {
+      "name": "jumpBufferWindowIsShort",
+      "passed": true
+    },
+    {
+      "name": "minimumHoldPreventsBufferedMicroHop",
+      "passed": true
+    },
+    {
+      "name": "landingBufferAccepted",
+      "passed": true
+    },
+    {
+      "name": "landingBufferCreatesExactlyOneJump",
+      "passed": true
+    },
+    {
+      "name": "bufferedJumpLaunchesUpward",
+      "passed": true
+    },
+    {
+      "name": "airControlAccelerates",
+      "passed": true
+    },
+    {
+      "name": "airDirectionCanReverse",
+      "passed": true
+    },
+    {
+      "name": "airReversalIsNotInstant",
+      "passed": true
+    },
+    {
+      "name": "airReversalDriftIsBounded",
+      "passed": true
+    },
+    {
+      "name": "riseStateObserved",
+      "passed": true
+    },
+    {
+      "name": "apexStateObserved",
+      "passed": true
+    },
+    {
+      "name": "fallStateObserved",
+      "passed": true
+    },
+    {
+      "name": "shortJumpStepIsBounded",
+      "passed": true
+    },
+    {
+      "name": "fullJumpStepIsBounded",
+      "passed": true
+    },
+    {
+      "name": "fallSpeedIsBounded",
+      "passed": true
+    },
+    {
+      "name": "airSpeedBelowGroundSpeed",
+      "passed": true
+    },
+    {
+      "name": "noDoubleJumpConfiguration",
+      "passed": true
+    },
+    {
+      "name": "noDashConfiguration",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "passThreeRuntimeAndEvidenceExist",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "shortJump": {
+      "holdSeconds": 0.06,
+      "height": 85.33715277777787,
+      "airtimeSeconds": 0.4416666666666672,
+      "maximumStep": 6.753472222222172,
+      "states": [
+        "idle",
+        "rise",
+        "apex",
+        "fall",
+        "soft-land"
+      ]
+    },
+    "fullJump": {
+      "holdSeconds": 0.42,
+      "height": 146.1701388888889,
+      "airtimeSeconds": 0.7,
+      "maximumStep": 6.892361111111086,
+      "states": [
+        "idle",
+        "rise",
+        "apex",
+        "fall",
+        "hard-land"
+      ]
+    },
+    "coyoteAccepted": {
+      "requestedDelay": 0.065,
+      "actualDelay": 0.06666666666666667,
+      "jumped": true,
+      "jumpSource": "coyote",
+      "verticalSpeed": -800.8333333333334,
+      "pressed": true
+    },
+    "coyoteRejected": {
+      "requestedDelay": 0.125,
+      "actualDelay": 0.13333333333333333,
+      "jumped": false,
+      "jumpSource": null,
+      "verticalSpeed": 354.16666666666663,
+      "pressed": true
+    },
+    "bufferedLanding": {
+      "pressed": true,
+      "pressHeight": 60.65277777777783,
+      "jumpedOnLanding": true,
+      "jumpCountChange": 1,
+      "verticalSpeed": -820,
+      "seconds": 0.18333333333333332
+    },
+    "airControl": {
+      "speedBeforeTurn": 275,
+      "speedAfterTurn": -230,
+      "turnSeconds": 0.2833333333333334,
+      "displacementDuringTurn": 0.375,
+      "facing": -1
+    },
+    "rejectedAirJump": {
+      "firstJumpCount": 1,
+      "finalJumpCount": 1,
+      "secondPressed": true,
+      "bufferExpired": true,
+      "stillAirborne": true
+    }
+  },
+  "movement": {
+    "jumpSpeed": 820,
+    "gravity": 2300,
+    "releasedJumpGravityMultiplier": 2.7,
+    "fallGravity": 2500,
+    "maximumFallSpeed": 1050,
+    "coyoteSeconds": 0.1,
+    "jumpBufferSeconds": 0.12,
+    "minimumJumpHoldSeconds": 0.055,
+    "apexSpeedThreshold": 55,
+    "airMaximumSpeed": 380,
+    "airAcceleration": 1500,
+    "airTurnAcceleration": 2100,
+    "airNeutralDeceleration": 220,
+    "hardLandingSpeed": 760
+  },
+  "lab": {
+    "width": 1400,
+    "height": 900,
+    "upperFloorY": 690,
+    "upperFloorEndX": 560,
+    "lowerFloorY": 820,
+    "spawnX": 150,
+    "leftBoundary": 50,
+    "rightBoundary": 1350
+  },
+  "missingFiles": []
+}

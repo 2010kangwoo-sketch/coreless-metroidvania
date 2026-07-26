@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071217">
+  <meta
+    name="description"
+    content="Coreless V4 새 3차 가변 점프와 공중 제어 시험장"
+  >
+  <title>Coreless · Reset Pass 03 Variable Jump</title>
+  <link rel="stylesheet" href="v4-reset-pass03.css">
+</head>
+<body>
+  <main class="reset-pass03-shell">
+    <header class="reset-pass03-header">
+      <div>
+        <p>CORELESS · NEW 40-PASS RESET</p>
+        <h1>3차 · 가변 점프와 공중 제어</h1>
+      </div>
+      <span id="resetPass03AuditStatus">AUDIT PENDING</span>
+    </header>
+
+    <section class="reset-pass03-panel" aria-label="가변 점프 시험장">
+      <canvas
+        id="resetPass03AirLab"
+        width="1400"
+        height="900"
+        tabindex="0"
+      ></canvas>
+    </section>
+
+    <section class="reset-pass03-notes" aria-label="시험 기준">
+      <article>
+        <strong>01 · 가변 높이</strong>
+        <span>짧게 누르면 약 85px, 정점까지 누르면 약 146px 상승합니다.</span>
+      </article>
+      <article>
+        <strong>02 · 코요테 타임</strong>
+        <span>발판을 벗어난 뒤 0.10초까지만 단일 점프를 허용합니다.</span>
+      </article>
+      <article>
+        <strong>03 · 입력 버퍼</strong>
+        <span>착지 전 0.12초 이내의 점프 입력을 착지 순간 한 번 사용합니다.</span>
+      </article>
+      <article>
+        <strong>04 · 공중 제어</strong>
+        <span>공중 방향 전환은 가능하지만 즉시 반대 속도로 치환하지 않습니다.</span>
+      </article>
+    </section>
+
+    <p class="reset-pass03-footer">
+      공중에서 점프를 다시 눌러도 이중 점프는 발생하지 않습니다. 경사·벽·모서리
+      충돌은 4차에서 별도 시험하므로 이번 공간에는 수직 벽을 넣지 않았습니다.
+    </p>
+  </main>
+  <script type="module" src="src/v4/reset-pass03-main.js"></script>
+</body>
+</html>

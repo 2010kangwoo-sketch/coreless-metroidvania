@@ -1,0 +1,149 @@
+@font-face {
+  font-family: "Coreless Noto Sans KR";
+  src: url("assets/fonts/noto-sans-kr-korean-700-normal.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+  font-family: "Coreless Noto Sans KR", Arial, "Malgun Gothic", sans-serif;
+  background: #03090d;
+  color: #edf3ed;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(79, 137, 139, 0.22), transparent 48rem),
+    #03090d;
+}
+
+.reset-pass03-shell {
+  width: min(1500px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 28px 0 54px;
+}
+
+.reset-pass03-header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 0 4px 18px;
+}
+
+.reset-pass03-header p,
+.reset-pass03-header h1 {
+  margin: 0;
+}
+
+.reset-pass03-header p {
+  color: #789da0;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.reset-pass03-header h1 {
+  margin-top: 7px;
+  font-size: clamp(24px, 3vw, 38px);
+}
+
+#resetPass03AuditStatus {
+  flex: 0 0 auto;
+  border: 1px solid #426266;
+  border-radius: 999px;
+  padding: 10px 16px;
+  color: #8aa8aa;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+#resetPass03AuditStatus[data-state="pass"] {
+  border-color: #4f8c72;
+  color: #8ed5b0;
+}
+
+.reset-pass03-panel {
+  overflow: hidden;
+  border: 1px solid rgba(112, 158, 160, 0.42);
+  border-radius: 18px;
+  background: #071116;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.34);
+}
+
+#resetPass03AirLab {
+  display: block;
+  width: 100%;
+  height: auto;
+  outline: none;
+}
+
+#resetPass03AirLab:focus-visible {
+  box-shadow: inset 0 0 0 3px rgba(222, 201, 123, 0.7);
+}
+
+.reset-pass03-notes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-top: 16px;
+}
+
+.reset-pass03-notes article {
+  min-height: 136px;
+  border: 1px solid rgba(92, 133, 135, 0.35);
+  border-radius: 14px;
+  padding: 18px 20px;
+  background: rgba(9, 21, 26, 0.86);
+}
+
+.reset-pass03-notes strong,
+.reset-pass03-notes span {
+  display: block;
+}
+
+.reset-pass03-notes strong {
+  color: #e2d18a;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+}
+
+.reset-pass03-notes span {
+  margin-top: 10px;
+  color: #9db2b1;
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.reset-pass03-footer {
+  margin: 18px 4px 0;
+  color: #668487;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+@media (max-width: 980px) {
+  .reset-pass03-notes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 680px) {
+  .reset-pass03-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .reset-pass03-notes {
+    grid-template-columns: 1fr;
+  }
+}
