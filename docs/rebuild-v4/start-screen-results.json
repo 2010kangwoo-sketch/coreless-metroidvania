@@ -1,0 +1,106 @@
+{
+  "build": {
+    "id": "coreless-v4-start-screen",
+    "title": "CORELESS",
+    "subtitle": "중심 없이 깨어난 자",
+    "fadeOutMilliseconds": 620,
+    "menuActions": [
+      "continue",
+      "new",
+      "controls"
+    ],
+    "keyboardNavigation": [
+      "ArrowUp",
+      "ArrowDown",
+      "KeyW",
+      "KeyS",
+      "Enter",
+      "Escape"
+    ],
+    "pointerSupported": true,
+    "continueRequiresValidSave": true,
+    "confirmsBeforeOverwrite": true,
+    "fakeSettingsAllowed": false,
+    "reducedMotionSupported": true
+  },
+  "generatedAt": "2026-07-26T08:00:23.372Z",
+  "passed": true,
+  "passedCount": 12,
+  "totalCount": 12,
+  "checks": [
+    {
+      "name": "threeRealMenuActions",
+      "passed": true
+    },
+    {
+      "name": "continueRequiresSave",
+      "passed": true
+    },
+    {
+      "name": "newGameConfirmsOverwrite",
+      "passed": true
+    },
+    {
+      "name": "keyboardNavigationComplete",
+      "passed": true
+    },
+    {
+      "name": "pointerSupported",
+      "passed": true
+    },
+    {
+      "name": "fadeIsBrief",
+      "passed": true
+    },
+    {
+      "name": "noFakeSettings",
+      "passed": true
+    },
+    {
+      "name": "reducedMotionSupported",
+      "passed": true
+    },
+    {
+      "name": "saveKeyIsV4Scoped",
+      "passed": true
+    },
+    {
+      "name": "emptySaveDisablesContinue",
+      "passed": true
+    },
+    {
+      "name": "validSaveShowsCheckpoint",
+      "passed": true
+    },
+    {
+      "name": "invalidSaveDisablesContinue",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "menuActions": 3,
+    "keyboardBindings": 6,
+    "fadeOutMilliseconds": 620,
+    "emptySave": {
+      "status": "empty",
+      "hasSave": false,
+      "checkpointId": null,
+      "checkpointTier": null,
+      "label": "저장 기록 없음"
+    },
+    "validSave": {
+      "status": "ok",
+      "hasSave": true,
+      "checkpointId": "S24",
+      "checkpointTier": 4,
+      "label": "S24 · 4층 체크포인트"
+    },
+    "invalidSave": {
+      "status": "invalid",
+      "hasSave": false,
+      "checkpointId": null,
+      "checkpointTier": null,
+      "label": "저장 기록 없음"
+    }
+  }
+}

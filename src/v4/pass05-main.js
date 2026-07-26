@@ -32,22 +32,41 @@ import {
   validatePass05StoryGuidance,
 } from "./pass05-story-guidance.js";
 import { Pass05StoryRuntime } from "./pass05-story-runtime.js";
+import {
+  V4_START_SCREEN,
+  V4StartScreenController,
+  inspectStartScreenSave,
+  validateV4StartScreen,
+} from "./start-screen.js";
 
 const pass01Audit = validatePass01ScaleLayout();
 const pass02Audit = validatePass02Movement();
 const pass03Audit = validatePass03WorldStreaming();
 const pass04Audit = validatePass04Checkpoints();
 const audit = validatePass05StoryGuidance();
+const startScreenAudit = validateV4StartScreen();
 const runtimeCanvas = document.querySelector("#v4StoryLab");
 const megaRoomCanvas = document.querySelector("#v4MegaRoomBlueprint");
 const campaignCanvas = document.querySelector("#v4CampaignBlueprint");
 const status = document.querySelector("#v4AuditStatus");
+const startScreenRoot = document.querySelector("#v4StartScreen");
+const initialStartSave = inspectStartScreenSave(window.localStorage);
 
 drawMegaRoomBlueprint(megaRoomCanvas);
 drawCampaignBlueprint(campaignCanvas);
 
 const runtime = new Pass05StoryRuntime(runtimeCanvas);
-runtime.start();
+runtime.render();
+const startScreen = new V4StartScreenController(startScreenRoot, {
+  initialSave: initialStartSave,
+  onContinue() {},
+  onNewGame() {
+    runtime.clearProgress();
+  },
+  onStart() {
+    runtime.start();
+  },
+});
 
 status.textContent = audit.passed
   ? `STORY ${audit.passedCount}/${audit.totalCount}`
@@ -65,6 +84,7 @@ window.__corelessV4 = Object.freeze({
   pass03Audit,
   pass04Audit,
   audit,
+  startScreenAudit,
   streaming: Object.freeze({
     config: PASS03_STREAMING,
     tiers: PASS03_TIERS,
@@ -82,6 +102,8 @@ window.__corelessV4 = Object.freeze({
     zones: PASS05_ZONE_GUIDANCE,
     ui: PASS05_GUIDANCE_UI,
   }),
+  startScreenContract: V4_START_SCREEN,
+  startScreen,
   runtime,
 });
 document.documentElement.dataset.corelessV4Ready = "true";

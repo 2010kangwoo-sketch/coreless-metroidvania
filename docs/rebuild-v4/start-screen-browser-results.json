@@ -1,0 +1,110 @@
+{
+  "build": "coreless-v4-start-screen",
+  "generatedAt": "2026-07-26T08:02:57.525Z",
+  "passed": true,
+  "passedCount": 21,
+  "totalCount": 21,
+  "checks": [
+    {
+      "name": "staticStartScreenAuditPasses",
+      "passed": true
+    },
+    {
+      "name": "modernTitleIsVisible",
+      "passed": true
+    },
+    {
+      "name": "threeRealMenuActions",
+      "passed": true
+    },
+    {
+      "name": "emptySaveDisablesContinue",
+      "passed": true
+    },
+    {
+      "name": "newGameSelectedWithoutSave",
+      "passed": true
+    },
+    {
+      "name": "startScreenLocksPageScroll",
+      "passed": true
+    },
+    {
+      "name": "controlsOpenByPointer",
+      "passed": true
+    },
+    {
+      "name": "escapeClosesControls",
+      "passed": true
+    },
+    {
+      "name": "keyboardChangesSelection",
+      "passed": true
+    },
+    {
+      "name": "enterStartsNewGame",
+      "passed": true
+    },
+    {
+      "name": "newGameBeginsAtS01",
+      "passed": true
+    },
+    {
+      "name": "validSaveEnablesContinue",
+      "passed": true
+    },
+    {
+      "name": "newGameRequiresConfirmation",
+      "passed": true
+    },
+    {
+      "name": "confirmationCanBeCancelled",
+      "passed": true
+    },
+    {
+      "name": "confirmedNewGameClearsProgress",
+      "passed": true
+    },
+    {
+      "name": "savedMenuDefaultsToContinue",
+      "passed": true
+    },
+    {
+      "name": "enterContinuesSavedGame",
+      "passed": true
+    },
+    {
+      "name": "controlsDialogExists",
+      "passed": true
+    },
+    {
+      "name": "overwriteDialogExists",
+      "passed": true
+    },
+    {
+      "name": "consoleErrorsZero",
+      "passed": true
+    },
+    {
+      "name": "pageErrorsZero",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "menuActions": [
+      "continue",
+      "new",
+      "controls"
+    ],
+    "dialogs": [
+      "controls",
+      "new-confirm"
+    ],
+    "emptySaveSelectedAction": "new",
+    "savedCheckpoint": "S35",
+    "confirmedNewCheckpoint": "S01",
+    "continuedCheckpoint": "S35",
+    "consoleErrors": [],
+    "pageErrors": []
+  }
+}

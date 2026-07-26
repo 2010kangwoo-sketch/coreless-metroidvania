@@ -41,9 +41,17 @@ try {
   });
   page.on("pageerror", error => pageErrors.push(String(error)));
 
-  const waitReady = async () => {
+  const waitReady = async mode => {
     await page.waitForFunction(() =>
       document.documentElement.dataset.corelessV4Ready === "true");
+    if (mode === "new") {
+      await page.evaluate(() =>
+        window.__corelessV4.startScreen.startNewGameForAudit());
+    } else if (mode === "continue") {
+      const continued = await page.evaluate(() =>
+        window.__corelessV4.startScreen.continueForAudit());
+      if (!continued) throw new Error("Continue was not available");
+    }
     await page.locator("#v4StoryLab").focus();
     await page.waitForTimeout(80);
   };
@@ -75,9 +83,9 @@ try {
     }
     return state;
   };
-  const reloadReady = async () => {
+  const reloadReady = async mode => {
     await page.reload({ waitUntil: "networkidle" });
-    await waitReady();
+    await waitReady(mode);
     await pause();
     return snapshot();
   };
@@ -85,7 +93,7 @@ try {
   await page.goto("http://127.0.0.1:4255/v4.html", { waitUntil: "networkidle" });
   await waitReady();
   await page.evaluate(() => localStorage.clear());
-  const initial = await reloadReady();
+  const initial = await reloadReady("new");
   await page.locator("#v4StoryLab").screenshot({
     path: `${artifactDirectory}/pass05-prologue.png`,
   });
@@ -119,7 +127,7 @@ try {
     path: `${artifactDirectory}/pass05-full-route.png`,
   });
 
-  const restoredS35 = await reloadReady();
+  const restoredS35 = await reloadReady("continue");
   await page.locator("#v4StoryLab").screenshot({
     path: `${artifactDirectory}/pass05-restored-s35.png`,
   });
@@ -145,6 +153,7 @@ try {
         pass03: { ...v4.pass03Audit },
         pass04: { ...v4.pass04Audit },
         pass05: { ...v4.audit },
+        startScreen: { ...v4.startScreenAudit },
       },
       story: {
         prologue: { ...v4.story.prologue },

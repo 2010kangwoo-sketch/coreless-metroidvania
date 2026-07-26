@@ -33,3 +33,5 @@ jobs:
         run: node tools/verify-rebuild-v4-pass05.mjs
       - name: Verify V4 pre-pass quality foundation
         run: node tools/verify-rebuild-v4-quality-foundation.mjs
+      - name: Verify V4 start screen
+        run: node tools/verify-rebuild-v4-start-screen.mjs
