@@ -29,6 +29,7 @@ export const CANONICAL_DOCUMENTS = frozen([
   "docs/rebuild-v4/roadmap-40pass-reset.md",
   "docs/rebuild-v4/quality-foundation.md",
   "docs/rebuild-v4/account-save-foundation.md",
+  "docs/rebuild-v4/release-cycle/foundation.md",
 ]);
 
 export const RELEASE_VERTICAL_SLICE = frozen({
@@ -216,7 +217,7 @@ const pass = (number, phase, title, acceptance) => frozen({
 });
 
 export const RESET_FORTY_PASS_ROADMAP = frozen([
-  pass(1, "design", "36공간 플레이 설계 확정", "S01-S36 각각의 목적·시간·선택·회수·과제·적·서사·무전 표를 승인한다."),
+  pass(1, "design", "전체 캠페인·M01 36공간 설계 확정", "M02-M20의 역할·능력·서사 의존성과 S01-S36 각각의 목적·시간·선택·회수·과제·적·서사·무전 표를 함께 승인한다."),
   pass(2, "movement", "기본 이동 기준선", "달리기·정지·방향 전환이 실제 키 입력에서 끊김 없이 작동한다."),
   pass(3, "movement", "가변 점프와 공중 제어", "짧은·긴 점프, 코요테 타임, 입력 버퍼가 안전 실험실에서 검증된다."),
   pass(4, "movement", "경사·벽·모서리 충돌", "자동 벽타기·수직 솟구침·급경사 순간 이동이 재현되지 않는다."),

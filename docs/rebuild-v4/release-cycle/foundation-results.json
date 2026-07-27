@@ -1,0 +1,227 @@
+{
+  "build": {
+    "id": "coreless-v4-release-foundation",
+    "cycle": "v4-release-40pass",
+    "stage": 0,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "referenceBaseline": "38001905938f7e19d37d277bae70dc2c6ec88e56",
+    "completedReleasePass": 0,
+    "nextReleasePass": 1,
+    "rule": "earlier V4 reset passes remain reusable evidence, but do not count as completed passes in the release cycle"
+  },
+  "generatedAt": "2026-07-27T04:35:44.038Z",
+  "passed": true,
+  "passedCount": 26,
+  "totalCount": 26,
+  "checks": [
+    {
+      "name": "releaseCycleStartsAtZero",
+      "passed": true
+    },
+    {
+      "name": "campaignAndVerticalSliceScopesAreSeparate",
+      "passed": true
+    },
+    {
+      "name": "firstMegaRoomScaleIsLocked",
+      "passed": true
+    },
+    {
+      "name": "majorSkillStartsInSecondMegaRoom",
+      "passed": true
+    },
+    {
+      "name": "ordinaryTraversalKeepsMargin",
+      "passed": true
+    },
+    {
+      "name": "demandingTraversalKeepsMargin",
+      "passed": true
+    },
+    {
+      "name": "masteryDistancesAreOptional",
+      "passed": true
+    },
+    {
+      "name": "precisionChainsAreShort",
+      "passed": true
+    },
+    {
+      "name": "hazardsHaveReadableWarning",
+      "passed": true
+    },
+    {
+      "name": "failureRecoveryIsFast",
+      "passed": true
+    },
+    {
+      "name": "singleFrameTimingIsForbidden",
+      "passed": true
+    },
+    {
+      "name": "spaceSignatureHasEnoughAxes",
+      "passed": true
+    },
+    {
+      "name": "allSpacesNeedUniqueSignatures",
+      "passed": true
+    },
+    {
+      "name": "adjacentSpacesMustChangeMaterially",
+      "passed": true
+    },
+    {
+      "name": "eachTierNeedsShapeAndRhythmVariety",
+      "passed": true
+    },
+    {
+      "name": "threeRoomRhythmLoopsAreForbidden",
+      "passed": true
+    },
+    {
+      "name": "highIntensityChainsAreBounded",
+      "passed": true
+    },
+    {
+      "name": "meaninglessTerrainIsForbidden",
+      "passed": true
+    },
+    {
+      "name": "releaseRequiresRealCompletion",
+      "passed": true
+    },
+    {
+      "name": "releaseRequiresZeroRuntimeErrors",
+      "passed": true
+    },
+    {
+      "name": "releasePerformanceTargetIsLocked",
+      "passed": true
+    },
+    {
+      "name": "automationCannotApproveBadFeel",
+      "passed": true
+    },
+    {
+      "name": "manualApprovalMilestonesAreLocked",
+      "passed": true
+    },
+    {
+      "name": "failedPassCannotAdvance",
+      "passed": true
+    },
+    {
+      "name": "completedPassRequiresEvidence",
+      "passed": true
+    },
+    {
+      "name": "mainMergeIsForbidden",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "campaignMegaRooms": 20,
+    "releaseRuntimeMegaRooms": 1,
+    "firstMegaRoomSpaces": 36,
+    "ordinaryReachRatioMaximum": 0.8,
+    "demandingReachRatioMaximum": 0.9,
+    "adjacentAxesDifferentMinimum": 3,
+    "requiredUniqueSignatures": 36,
+    "completionEvidenceItems": 8
+  },
+  "scope": {
+    "campaignMegaRooms": 20,
+    "campaignTargetMinutes": 240,
+    "releaseCycleRuntimeScope": "M01 빈 제련소",
+    "firstMegaRoomTiers": 6,
+    "firstMegaRoomSpaces": 36,
+    "firstMegaRoomTargetMinutes": {
+      "minimum": 11,
+      "target": 12,
+      "maximum": 15
+    },
+    "laterMegaRooms": "design-contract-only",
+    "firstNewMajorAbilityMegaRoom": "M02 냉각 수로",
+    "target": "a browser-playable release candidate, not a prototype, tech demo, or automatic-audit showcase"
+  },
+  "traversalForgiveness": {
+    "requiredOrdinaryReachRatioMaximum": 0.8,
+    "requiredDemandingReachRatioMaximum": 0.9,
+    "optionalMasteryReachRatioMaximum": 0.96,
+    "requiredRouteMayUseMasteryRatio": false,
+    "ordinaryLandingWidthPlayerBodiesMinimum": 2.2,
+    "precisionLandingWidthPlayerBodiesMinimum": 1.45,
+    "consecutivePrecisionLandingsMaximum": 2,
+    "requiredHazardTelegraphSecondsMinimum": 0.55,
+    "failureRestartSecondsMaximum": 0.7,
+    "recoveryAfterHighIntensityRequired": true,
+    "destinationVisibleBeforeCommitRequired": true,
+    "singleFrameTimingRequiredAllowed": false,
+    "hiddenPhysicsCorrectionAllowed": false,
+    "principle": "difficulty comes from readable decisions, rhythm, and learned combinations rather than near-perfect distance or frame timing"
+  },
+  "spaceSignatureAxes": [
+    "silhouette",
+    "primary-direction",
+    "elevation-pattern",
+    "anchor-structure",
+    "traversal-rhythm",
+    "hazard-or-enemy-role",
+    "lighting-depth",
+    "story-purpose"
+  ],
+  "spatialDiversity": {
+    "uniqueSpaceSignaturesRequired": 36,
+    "adjacentAxesDifferentMinimum": 3,
+    "silhouettesPerTierMinimum": 4,
+    "traversalRhythmsPerTierMinimum": 3,
+    "anchorStructuresPerTierMinimum": 3,
+    "identicalAdjacentSignatureAllowed": false,
+    "identicalThreeRoomRhythmAllowed": false,
+    "highIntensitySpacesConsecutiveMaximum": 2,
+    "fillerCollisionAllowed": false,
+    "unreachableWalkableDecorationAllowed": false,
+    "supportEndingInOpenAirAllowed": false,
+    "principle": "spaces share one world language while changing shape, elevation, rhythm, structure, hazard, lighting, and purpose"
+  },
+  "releaseQuality": {
+    "placeholderCollisionArtAllowedAtPass40": false,
+    "continuousRealKeyboardCompletionRequired": true,
+    "coordinateInjectionMayProveCompletion": false,
+    "consoleErrorsAllowed": 0,
+    "pageErrorsAllowed": 0,
+    "progressionBlockersAllowed": 0,
+    "targetFramesPerSecond": 60,
+    "heavySceneFramesPerSecondMinimum": 50,
+    "saveRestoreRequired": true,
+    "checkpointRestoreRequired": true,
+    "browserDirectLaunchRequired": true,
+    "finalUserApprovalRequired": true,
+    "automatedAuditMayOverrideBadFeel": false,
+    "completionEvidence": [
+      "verified commit sha",
+      "verified bundle ancestry",
+      "continuous real-key completion record",
+      "deterministic regression results",
+      "console and page error report",
+      "representative screenshots",
+      "performance measurements",
+      "known-limitations report"
+    ]
+  },
+  "passGates": {
+    "manualApprovalPasses": [
+      10,
+      20,
+      30,
+      40
+    ],
+    "passMayAdvanceWithFailedAcceptance": false,
+    "previousPassMustRunBeforeImplementation": true,
+    "realKeyTestRequiredEveryImplementationPass": true,
+    "deterministicTestRequiredEveryImplementationPass": true,
+    "browserInspectionRequiredEveryImplementationPass": true,
+    "commitAndBundleRequiredEveryCompletedPass": true,
+    "mainMergeAllowed": false
+  }
+}

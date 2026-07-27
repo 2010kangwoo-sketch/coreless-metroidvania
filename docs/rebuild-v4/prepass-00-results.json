@@ -7,7 +7,7 @@
     "firstImplementationPass": 1,
     "purpose": "lock the vertical-slice scope, story, radio logic, quality gates, reuse ledger, and forty-pass order before implementation restarts"
   },
-  "generatedAt": "2026-07-26T10:46:50.907Z",
+  "generatedAt": "2026-07-27T04:35:44.247Z",
   "passed": true,
   "passedCount": 36,
   "totalCount": 36,
@@ -394,8 +394,8 @@
     {
       "number": 1,
       "phase": "design",
-      "title": "36공간 플레이 설계 확정",
-      "acceptance": "S01-S36 각각의 목적·시간·선택·회수·과제·적·서사·무전 표를 승인한다."
+      "title": "전체 캠페인·M01 36공간 설계 확정",
+      "acceptance": "M02-M20의 역할·능력·서사 의존성과 S01-S36 각각의 목적·시간·선택·회수·과제·적·서사·무전 표를 함께 승인한다."
     },
     {
       "number": 2,
