@@ -1,0 +1,219 @@
+{
+  "build": {
+    "id": "coreless-v4-release-pass02-ground-baseline",
+    "cycle": "v4-release-40pass",
+    "pass": 2,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "parentCommit": "bcf5317970a59b087263cccc039cfa85731aa71f",
+    "scope": "release ground movement baseline with real-key evidence",
+    "reusedEvidence": "rebuild-v4-reset-pass02-ground-movement",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-27T05:03:53.205Z",
+  "passed": true,
+  "passedCount": 24,
+  "totalCount": 24,
+  "checks": [
+    {
+      "name": "releaseFoundationStillValid",
+      "passed": true
+    },
+    {
+      "name": "releasePass01StillValid",
+      "passed": true
+    },
+    {
+      "name": "releasePassSequenceIsCorrect",
+      "passed": true
+    },
+    {
+      "name": "verifiedGroundModuleStillValid",
+      "passed": true
+    },
+    {
+      "name": "groundModuleIsReusedWithoutRetuning",
+      "passed": true
+    },
+    {
+      "name": "fixedStepRemainsDeterministic",
+      "passed": true
+    },
+    {
+      "name": "accelerationReachesNinetyInWindow",
+      "passed": true
+    },
+    {
+      "name": "accelerationDistanceLeavesControl",
+      "passed": true
+    },
+    {
+      "name": "releaseStopsInTimeWindow",
+      "passed": true
+    },
+    {
+      "name": "releaseStopsInDistanceWindow",
+      "passed": true
+    },
+    {
+      "name": "releaseReversesInTimeWindow",
+      "passed": true
+    },
+    {
+      "name": "releaseReversalOvershootIsBounded",
+      "passed": true
+    },
+    {
+      "name": "turnClearanceIsAtLeastThreeBodies",
+      "passed": true
+    },
+    {
+      "name": "turnClearanceLeavesTwoBodyRecoveryAfterOvershoot",
+      "passed": true
+    },
+    {
+      "name": "allRequiredGroundStatesAreMeasured",
+      "passed": true
+    },
+    {
+      "name": "ordinaryTraversalStillKeepsTwentyPercentMargin",
+      "passed": true
+    },
+    {
+      "name": "ordinaryLandingStillExceedsTwoBodyWidths",
+      "passed": true
+    },
+    {
+      "name": "testLabCannotForceBoundaryCorrection",
+      "passed": true
+    },
+    {
+      "name": "realKeyboardEvidenceIsMandatory",
+      "passed": true
+    },
+    {
+      "name": "deterministicEvidenceIsMandatory",
+      "passed": true
+    },
+    {
+      "name": "browserInspectionIsMandatory",
+      "passed": true
+    },
+    {
+      "name": "airMovementDoesNotCountAsPassTwo",
+      "passed": true
+    },
+    {
+      "name": "noFinalArt",
+      "passed": true
+    },
+    {
+      "name": "releasePassTwoRuntimeAndEvidenceExist",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "ground": {
+      "acceleration": {
+        "secondsToNinety": 0.15,
+        "distanceToNinety": 27.000000000000004,
+        "maximumStep": 2.916666666666668,
+        "states": [
+          "idle",
+          "run-start",
+          "run-loop"
+        ]
+      },
+      "stop": {
+        "startSpeed": 400,
+        "seconds": 0.12499999999999999,
+        "distance": 25,
+        "maximumStep": 3.2222222222222214,
+        "states": [
+          "run-loop",
+          "run-stop",
+          "idle"
+        ]
+      },
+      "reversal": {
+        "startSpeed": 400,
+        "secondsToOppositeNinety": 0.19166666666666665,
+        "netDisplacement": -0.2291666666666643,
+        "forwardOvershoot": 19.020833333333336,
+        "maximumStep": 3.1875,
+        "endSpeed": -375,
+        "endFacing": -1,
+        "states": [
+          "run-loop",
+          "turn"
+        ]
+      },
+      "bothKeys": {
+        "velocityBefore": 400,
+        "velocityAfter": 373.3333333333333,
+        "resolvedDirection": 0
+      }
+    },
+    "maximumOrdinaryReachRatio": 0.8,
+    "minimumOrdinaryLandingBodies": 2.2,
+    "directionTurnClearancePixels": 120,
+    "reversalRecoveryMarginPixels": 100.97916666666666,
+    "labRecoveryWidthPixels": 1240
+  },
+  "movement": {
+    "fixedStep": 0.008333333333333333,
+    "playerWidth": 40,
+    "playerHeight": 64,
+    "maximumRunSpeed": 400,
+    "groundAcceleration": 2400,
+    "groundStopDeceleration": 3200,
+    "groundTurnAcceleration": 4200,
+    "targetSecondsToNinety": {
+      "minimum": 0.12,
+      "maximum": 0.2
+    },
+    "targetStopSeconds": {
+      "minimum": 0.1,
+      "maximum": 0.16
+    },
+    "targetStopDistance": {
+      "minimum": 20,
+      "maximum": 30
+    },
+    "targetReversalSeconds": {
+      "minimum": 0.16,
+      "maximum": 0.24
+    },
+    "targetReversalOvershoot": {
+      "minimum": 15,
+      "maximum": 24
+    },
+    "directionTurnClearancePlayerBodiesMinimum": 3,
+    "principle": "direction changes remain deliberate but never consume the whole landing or trap the player against nearby terrain"
+  },
+  "acceptance": {
+    "actualKeyboardRequired": true,
+    "deterministicMeasurementRequired": true,
+    "browserInspectionRequired": true,
+    "ordinaryRequiredReachRatioMaximum": 0.8,
+    "testInputs": [
+      "KeyA",
+      "KeyD",
+      "ArrowLeft",
+      "ArrowRight"
+    ],
+    "requiredStates": [
+      "idle",
+      "run-start",
+      "run-loop",
+      "run-stop",
+      "turn"
+    ],
+    "forbiddenInThisPass": [
+      "jump tuning completion",
+      "collision correction",
+      "camera tuning",
+      "final environment art"
+    ]
+  },
+  "missingFiles": []
+}

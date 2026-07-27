@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071217">
+  <meta
+    name="description"
+    content="Coreless V4 출시 목표 2차 지상 이동 기준선 시험장"
+  >
+  <title>Coreless · Release Pass 02 Ground Baseline</title>
+  <link rel="stylesheet" href="v4-release-pass02.css">
+</head>
+<body>
+  <main class="reset-pass02-shell">
+    <header class="reset-pass02-header">
+      <div>
+        <p>CORELESS · V4 RELEASE CYCLE</p>
+        <h1>2차 · 기본 이동 기준선</h1>
+      </div>
+      <span id="releasePass02AuditStatus">AUDIT PENDING</span>
+    </header>
+
+    <section class="reset-pass02-panel" aria-label="출시판 지상 이동 시험장">
+      <canvas
+        id="releasePass02GroundLab"
+        width="1400"
+        height="900"
+        tabindex="0"
+      ></canvas>
+    </section>
+
+    <section class="reset-pass02-notes" aria-label="출시판 이동 기준">
+      <article>
+        <strong>01 · 가속</strong>
+        <span>최고 속도의 90%까지 0.12~0.20초 안에 도달해 첫 입력이 늦지 않게 반응합니다.</span>
+      </article>
+      <article>
+        <strong>02 · 정지</strong>
+        <span>키를 놓은 뒤 0.10~0.16초, 20~30px 안에서 멈춰 좁은 착지면에서도 미끄러지지 않습니다.</span>
+      </article>
+      <article>
+        <strong>03 · 방향 전환</strong>
+        <span>0.16~0.24초 안에 반전하고, M01에는 최소 세 몸 폭의 전환 공간을 남깁니다.</span>
+      </article>
+    </section>
+
+    <p class="reset-pass02-footer">
+      A/D 또는 ←/→로 직접 시험합니다. 점프 높이·코요테 타임·입력 버퍼는
+      다음 3차에서 별도의 실제 키 입력 기준으로 확정합니다.
+    </p>
+  </main>
+  <script type="module" src="src/v4/release-pass02-main.js"></script>
+</body>
+</html>

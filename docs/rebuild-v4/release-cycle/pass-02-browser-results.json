@@ -1,0 +1,241 @@
+{
+  "build": {
+    "id": "coreless-v4-release-pass02-ground-baseline",
+    "cycle": "v4-release-40pass",
+    "pass": 2,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "parentCommit": "bcf5317970a59b087263cccc039cfa85731aa71f",
+    "scope": "release ground movement baseline with real-key evidence",
+    "reusedEvidence": "rebuild-v4-reset-pass02-ground-movement",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-27T05:03:36.588Z",
+  "passed": true,
+  "passedCount": 24,
+  "totalCount": 24,
+  "checks": [
+    {
+      "name": "releaseDocumentReady",
+      "passed": true
+    },
+    {
+      "name": "staticAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsPass",
+      "passed": true
+    },
+    {
+      "name": "canvasResolutionCorrect",
+      "passed": true
+    },
+    {
+      "name": "actualKeyboardEventsRecorded",
+      "passed": true
+    },
+    {
+      "name": "bothKeyboardLayoutsExercised",
+      "passed": true
+    },
+    {
+      "name": "noSyntheticRepeatDependency",
+      "passed": true
+    },
+    {
+      "name": "accelerationMeasured",
+      "passed": true
+    },
+    {
+      "name": "accelerationTimingResponsive",
+      "passed": true
+    },
+    {
+      "name": "stopMeasured",
+      "passed": true
+    },
+    {
+      "name": "stopTimingBounded",
+      "passed": true
+    },
+    {
+      "name": "stopDistanceBounded",
+      "passed": true
+    },
+    {
+      "name": "reversalMeasured",
+      "passed": true
+    },
+    {
+      "name": "reversalTimingBounded",
+      "passed": true
+    },
+    {
+      "name": "reversalOvershootBounded",
+      "passed": true
+    },
+    {
+      "name": "reversalEndsInOppositeDirection",
+      "passed": true
+    },
+    {
+      "name": "turnClearanceExceedsOvershootByTwoBodies",
+      "passed": true
+    },
+    {
+      "name": "allGroundMotionStatesObserved",
+      "passed": true
+    },
+    {
+      "name": "positionStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noBoundaryCorrection",
+      "passed": true
+    },
+    {
+      "name": "noResetUsed",
+      "passed": true
+    },
+    {
+      "name": "playerEndsIdle",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "accelerationSamples": [
+      {
+        "seconds": 0.15,
+        "distance": 27,
+        "endSpeed": 360
+      },
+      {
+        "seconds": 0.15,
+        "distance": 27,
+        "endSpeed": 360
+      },
+      {
+        "seconds": 0.15,
+        "distance": 27,
+        "endSpeed": 360
+      }
+    ],
+    "stopSamples": [
+      {
+        "seconds": 0.125,
+        "distance": 25,
+        "startSpeed": 400
+      },
+      {
+        "seconds": 0.125,
+        "distance": 25,
+        "startSpeed": 400
+      },
+      {
+        "seconds": 0.1167,
+        "distance": 20.2778,
+        "startSpeed": 360
+      }
+    ],
+    "reversalSamples": [
+      {
+        "seconds": 0.175,
+        "forwardOvershoot": 15.4167,
+        "netDisplacement": -1.25,
+        "startSpeed": 360,
+        "endSpeed": -360
+      }
+    ],
+    "stateSequence": [
+      "idle",
+      "run-start",
+      "run-loop",
+      "run-stop",
+      "idle",
+      "run-start",
+      "run-loop",
+      "turn",
+      "run-loop",
+      "run-stop",
+      "idle",
+      "run-start",
+      "run-loop",
+      "run-stop",
+      "idle"
+    ],
+    "keyEvents": [
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 0.625,
+        "x": 680,
+        "vx": 0
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 0.9083,
+        "x": 760,
+        "vx": 400
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 1.0417,
+        "x": 785,
+        "vx": 0
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 1.1917,
+        "x": 812,
+        "vx": 360
+      },
+      {
+        "type": "down",
+        "code": "KeyA",
+        "at": 1.1917,
+        "x": 812,
+        "vx": 360
+      },
+      {
+        "type": "up",
+        "code": "KeyA",
+        "at": 1.3833,
+        "x": 804.4167,
+        "vx": -400
+      },
+      {
+        "type": "down",
+        "code": "ArrowRight",
+        "at": 1.5083,
+        "x": 779.4167,
+        "vx": 0
+      },
+      {
+        "type": "up",
+        "code": "ArrowRight",
+        "at": 1.6583,
+        "x": 806.4167,
+        "vx": 360
+      }
+    ],
+    "maximumPositionStep": 3.3333333333333712,
+    "facingChanges": 2,
+    "boundaryContacts": 0,
+    "fixedFrames": 223,
+    "directionTurnClearancePixels": 120
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}
