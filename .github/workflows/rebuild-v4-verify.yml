@@ -44,6 +44,8 @@ jobs:
         run: node tools/verify-rebuild-v4-prepass.mjs
       - name: Verify V4 release-cycle foundation
         run: node tools/verify-rebuild-v4-release-foundation.mjs
+      - name: Verify V4 release-cycle Pass 01 design
+        run: node tools/verify-rebuild-v4-release-pass01.mjs
       - name: Verify V4 reset Pass 01 room plan
         run: node tools/verify-rebuild-v4-reset-pass01.mjs
       - name: Verify V4 reset Pass 02 ground movement

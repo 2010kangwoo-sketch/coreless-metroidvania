@@ -1,0 +1,1365 @@
+{
+  "build": {
+    "id": "coreless-v4-release-pass01-design",
+    "cycle": "v4-release-40pass",
+    "pass": 1,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "parent": "5e3705981dfe0ab6d09b032cb08b12007e7780a3",
+    "scope": "lock twenty-mega-room progression and the eight-axis, forgiving 36-space M01 design before runtime implementation",
+    "runtimeChanged": false,
+    "finalArtChanged": false
+  },
+  "generatedAt": "2026-07-27T04:54:57.041Z",
+  "passed": true,
+  "passedCount": 30,
+  "totalCount": 30,
+  "checks": [
+    {
+      "name": "releaseFoundationStillValid",
+      "passed": true
+    },
+    {
+      "name": "releasePassOne",
+      "passed": true
+    },
+    {
+      "name": "designOnlyPass",
+      "passed": true
+    },
+    {
+      "name": "twentyCampaignRooms",
+      "passed": true
+    },
+    {
+      "name": "campaignIdsAreContinuous",
+      "passed": true
+    },
+    {
+      "name": "campaignNamesRemainCanonical",
+      "passed": true
+    },
+    {
+      "name": "campaignDependenciesAreResolved",
+      "passed": true
+    },
+    {
+      "name": "firstRoomGrantsNoAbility",
+      "passed": true
+    },
+    {
+      "name": "firstAbilityIsInM02",
+      "passed": true
+    },
+    {
+      "name": "everyCampaignRoomHasPurpose",
+      "passed": true
+    },
+    {
+      "name": "everyCampaignRoomHasDistinctVisualIdentity",
+      "passed": true
+    },
+    {
+      "name": "campaignUsesVariedClimaxes",
+      "passed": true
+    },
+    {
+      "name": "everyCampaignRoomChangesObjective",
+      "passed": true
+    },
+    {
+      "name": "thirtySixM01SpaceDesigns",
+      "passed": true
+    },
+    {
+      "name": "m01IdsAreContinuous",
+      "passed": true
+    },
+    {
+      "name": "m01DesignsMatchCanonicalRooms",
+      "passed": true
+    },
+    {
+      "name": "spaceSignatureUsesEightAxes",
+      "passed": true
+    },
+    {
+      "name": "allM01SignaturesAreUnique",
+      "passed": true
+    },
+    {
+      "name": "adjacentSpacesChangeAtLeastThreeAxes",
+      "passed": true
+    },
+    {
+      "name": "eachTierHasEnoughSilhouettes",
+      "passed": true
+    },
+    {
+      "name": "eachTierHasEnoughRhythms",
+      "passed": true
+    },
+    {
+      "name": "eachTierHasEnoughAnchors",
+      "passed": true
+    },
+    {
+      "name": "ordinaryRoutesStayWithinEightyPercent",
+      "passed": true
+    },
+    {
+      "name": "demandingRoutesStayWithinNinetyPercent",
+      "passed": true
+    },
+    {
+      "name": "ordinaryLandingsRemainWide",
+      "passed": true
+    },
+    {
+      "name": "precisionLandingsRespectMinimum",
+      "passed": true
+    },
+    {
+      "name": "precisionChainsAreBounded",
+      "passed": true
+    },
+    {
+      "name": "allRequiredDestinationsAreVisible",
+      "passed": true
+    },
+    {
+      "name": "allSpacesHaveRecovery",
+      "passed": true
+    },
+    {
+      "name": "firstRoomScaleMatchesReleaseScope",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "campaignRooms": 20,
+    "campaignAbilityRewards": 11,
+    "campaignClimaxTypes": 20,
+    "m01Spaces": 36,
+    "m01UniqueSignatures": 36,
+    "minimumAdjacentAxesDifferent": 6,
+    "maximumRequiredReachRatio": 0.88,
+    "minimumLandingWidthBodies": 1.65,
+    "maximumPrecisionLandingChain": 2,
+    "tierDiversity": [
+      {
+        "tier": 1,
+        "silhouettes": 6,
+        "rhythms": 6,
+        "anchors": 6
+      },
+      {
+        "tier": 2,
+        "silhouettes": 6,
+        "rhythms": 6,
+        "anchors": 6
+      },
+      {
+        "tier": 3,
+        "silhouettes": 6,
+        "rhythms": 6,
+        "anchors": 6
+      },
+      {
+        "tier": 4,
+        "silhouettes": 6,
+        "rhythms": 6,
+        "anchors": 6
+      },
+      {
+        "tier": 5,
+        "silhouettes": 6,
+        "rhythms": 6,
+        "anchors": 6
+      },
+      {
+        "tier": 6,
+        "silhouettes": 6,
+        "rhythms": 6,
+        "anchors": 6
+      }
+    ],
+    "unresolvedRequirements": []
+  },
+  "campaign": [
+    {
+      "id": "M01",
+      "purpose": "기본 조작과 세계 규칙을 신뢰하게 만들고 원점 신호를 추적할 첫 이유를 제공",
+      "requires": [],
+      "reward": null,
+      "teaches": [
+        "variable_jump",
+        "air_control",
+        "basic_attack",
+        "room_task"
+      ],
+      "visualIdentity": "비어 있는 제련소·청록 공명광·거대한 갈비형 지지대",
+      "climaxType": "guardian-duel",
+      "storyReveal": "시설은 코어리스를 기억하지만 침입자로 판정한다.",
+      "exitObjective": "냉각 수로에서 반응하는 공명 날개 잔향을 추적한다."
+    },
+    {
+      "id": "M02",
+      "purpose": "첫 신규 이동 능력을 안전하게 익히고 수직 탐색의 범위를 확장",
+      "requires": [
+        "variable_jump",
+        "air_control"
+      ],
+      "reward": {
+        "id": "resonance_wings",
+        "name": "공명 날개"
+      },
+      "teaches": [
+        "resonance_wings",
+        "vertical-route-choice"
+      ],
+      "visualIdentity": "침수 냉각 수로·푸른 압력광·수직 수문",
+      "climaxType": "flood-escape",
+      "storyReveal": "검은 공명은 원점에서 설비 전체로 흐르고 있다.",
+      "exitObjective": "수로 위 유리 온실의 생체 오염 근원을 조사한다."
+    },
+    {
+      "id": "M03",
+      "purpose": "벽면 고정과 공명 날개를 결합해 복수 높이의 길을 선택",
+      "requires": [
+        "resonance_wings"
+      ],
+      "reward": {
+        "id": "wall_anchor",
+        "name": "벽면 고정각"
+      },
+      "teaches": [
+        "wall_anchor",
+        "multi-height-navigation"
+      ],
+      "visualIdentity": "파열된 유리 온실·황록 생체광·휘어진 성장 지지대",
+      "climaxType": "containment-break",
+      "storyReveal": "생체 잔재도 원점의 기억을 흡수하며 변형된다.",
+      "exitObjective": "온실을 감시하던 파수기 첨탑의 봉쇄망을 해제한다."
+    },
+    {
+      "id": "M04",
+      "purpose": "1막 능력을 조합하고 첫 장거리 봉쇄망을 해제",
+      "requires": [
+        "resonance_wings",
+        "wall_anchor"
+      ],
+      "reward": null,
+      "teaches": [
+        "vertical-combat",
+        "guardian-routing"
+      ],
+      "visualIdentity": "높은 파수기 첨탑·백색 탐조광·비대칭 감시교",
+      "climaxType": "vertical-siege",
+      "storyReveal": "원점 방어망은 도시 전체를 하나의 침입 감지기로 사용한다.",
+      "exitObjective": "철수대의 마지막 운행 기록을 따라 폐철도로 진입한다."
+    },
+    {
+      "id": "M05",
+      "purpose": "지상 속도 변화와 공간 관성을 이용하는 빠른 횡단을 도입",
+      "requires": [
+        "resonance_wings",
+        "wall_anchor"
+      ],
+      "reward": {
+        "id": "pulse_dash",
+        "name": "맥동 대시"
+      },
+      "teaches": [
+        "pulse_dash",
+        "momentum-control"
+      ],
+      "visualIdentity": "폐철도 심장부·적동 경고광·거대 왕복 레일",
+      "climaxType": "train-chase",
+      "storyReveal": "철수대는 원점에서 멀어지는 대신 특정 물체를 안쪽으로 운반했다.",
+      "exitObjective": "침수된 종착역에서 운반 화물의 행방을 찾는다."
+    },
+    {
+      "id": "M06",
+      "purpose": "대시의 수평 관성과 연결사 집게의 곡선 이동을 결합",
+      "requires": [
+        "pulse_dash",
+        "resonance_wings"
+      ],
+      "reward": {
+        "id": "linker_grapple",
+        "name": "연결사 집게"
+      },
+      "teaches": [
+        "linker_grapple",
+        "swing-release"
+      ],
+      "visualIdentity": "침수 정거장·남청 반사광·매달린 객차 골격",
+      "climaxType": "submerged-pursuit",
+      "storyReveal": "코어리스는 시설을 통과한 생존자가 아니라 시설을 정비한 연결사였다.",
+      "exitObjective": "집게에 남은 작업 좌표를 따라 공명 채석장으로 이동한다."
+    },
+    {
+      "id": "M07",
+      "purpose": "대시와 집게를 넓은 파괴 지형에서 조합하고 경로 판단을 강화",
+      "requires": [
+        "pulse_dash",
+        "linker_grapple"
+      ],
+      "reward": null,
+      "teaches": [
+        "destructible-route",
+        "grapple-dash-combination"
+      ],
+      "visualIdentity": "공명 채석장·자주 결정광·원호형 절단면",
+      "climaxType": "colossus-collapse",
+      "storyReveal": "검은 공명이 우발적으로 샌 것이 아니라 방어 목적으로 방출된 흔적이 있다.",
+      "exitObjective": "방출 명령의 주체를 확인하기 위해 봉인 기록고를 연다."
+    },
+    {
+      "id": "M08",
+      "purpose": "기억 투시로 보이지 않던 경로와 과거 사건을 함께 해석",
+      "requires": [
+        "linker_grapple",
+        "pulse_dash"
+      ],
+      "reward": {
+        "id": "memory_sight",
+        "name": "기억 투시"
+      },
+      "teaches": [
+        "memory_sight",
+        "past-present-route"
+      ],
+      "visualIdentity": "봉인 기록고·회백 기록광·접히는 서고층",
+      "climaxType": "archive-defense",
+      "storyReveal": "코어 분리는 외부 명령이 아니라 코어리스 자신의 승인으로 시작됐다.",
+      "exitObjective": "분리 장치의 생체 부품이 제작된 유기 제련로를 조사한다."
+    },
+    {
+      "id": "M09",
+      "purpose": "낙하 공격으로 수직 이동과 전투의 방향을 연결",
+      "requires": [
+        "memory_sight",
+        "resonance_wings"
+      ],
+      "reward": {
+        "id": "falling_cut",
+        "name": "낙하 절단"
+      },
+      "teaches": [
+        "falling_cut",
+        "downward-combat-route"
+      ],
+      "visualIdentity": "유기 제련로·주홍 용광광·살아 움직이는 금속 늑골",
+      "climaxType": "furnace-organism",
+      "storyReveal": "관리 기계와 생체 조직의 융합은 원점 봉인 실험의 부산물이었다.",
+      "exitObjective": "원점이 되비추는 기억을 확인하기 위해 거울 저수지로 간다."
+    },
+    {
+      "id": "M10",
+      "purpose": "공격을 피하는 것에 더해 읽고 되돌리는 전투 판단을 도입",
+      "requires": [
+        "memory_sight",
+        "falling_cut"
+      ],
+      "reward": {
+        "id": "resonance_counter",
+        "name": "공명 반격"
+      },
+      "teaches": [
+        "resonance_counter",
+        "telegraph-reading"
+      ],
+      "visualIdentity": "거울 저수지·은청 반사광·상하 대칭 수면",
+      "climaxType": "reflection-trial",
+      "storyReveal": "원점 코어는 코어리스의 기억을 공격이 아니라 질문의 형태로 되돌린다.",
+      "exitObjective": "철수대 봉인의 실패 지점인 터빈 묘지로 이동한다."
+    },
+    {
+      "id": "M11",
+      "purpose": "공중 대시로 긴 공백을 건너며 기존 수직 능력과 속도를 통합",
+      "requires": [
+        "pulse_dash",
+        "resonance_wings",
+        "resonance_counter"
+      ],
+      "reward": {
+        "id": "air_dash",
+        "name": "공중 대시"
+      },
+      "teaches": [
+        "air_dash",
+        "air-route-commitment"
+      ],
+      "visualIdentity": "터빈 묘지·회청 폭풍광·다층 회전날개",
+      "climaxType": "storm-chase",
+      "storyReveal": "철수대는 원점 봉인을 완성하지 못했고 코어리스만 안쪽에 남았다.",
+      "exitObjective": "왜 혼자 남았는지 확인하기 위해 기억 감옥에 진입한다."
+    },
+    {
+      "id": "M12",
+      "purpose": "3막의 이동·전투 능력을 기억 선택과 결합해 분리의 진실을 확정",
+      "requires": [
+        "memory_sight",
+        "air_dash",
+        "resonance_counter"
+      ],
+      "reward": null,
+      "teaches": [
+        "memory-gauntlet",
+        "truth-choice"
+      ],
+      "visualIdentity": "기억 감옥·무채색 봉인광·반복이 끊기는 감방 고리",
+      "climaxType": "memory-gauntlet",
+      "storyReveal": "코어리스는 폭주를 멈추기 위해 스스로 자신의 중심을 분리했다.",
+      "exitObjective": "분리 이후 검게 변한 방어체의 제작소를 추적한다."
+    },
+    {
+      "id": "M13",
+      "purpose": "공명 파쇄로 장갑·벽·방어 규칙을 능동적으로 바꿈",
+      "requires": [
+        "air_dash",
+        "resonance_counter"
+      ],
+      "reward": {
+        "id": "resonance_break",
+        "name": "공명 파쇄"
+      },
+      "teaches": [
+        "resonance_break",
+        "armor-and-route-break"
+      ],
+      "visualIdentity": "검은 주조소·암적 공명광·겹쳐진 장갑판",
+      "climaxType": "armored-forgemaster",
+      "storyReveal": "검은 공명은 기억을 먹을수록 방어체를 더 단단하게 만든다.",
+      "exitObjective": "주조소가 움직이기 시작한 붕괴 도시를 통과한다."
+    },
+    {
+      "id": "M14",
+      "purpose": "무너지는 대도시에서 집게 실패를 회수하며 긴 추격을 해결",
+      "requires": [
+        "linker_grapple",
+        "air_dash",
+        "resonance_break"
+      ],
+      "reward": {
+        "id": "grapple_recall",
+        "name": "집게 회수 강화"
+      },
+      "teaches": [
+        "grapple_recall",
+        "destruction-chase"
+      ],
+      "visualIdentity": "붕괴 도시·모래빛 역광·기울어진 거대 건축",
+      "climaxType": "city-collapse-chase",
+      "storyReveal": "원점 방어 의식은 설비뿐 아니라 도시 구조 자체를 움직인다.",
+      "exitObjective": "모든 수호자를 연결하는 방어 신경망에 접속한다."
+    },
+    {
+      "id": "M15",
+      "purpose": "연속 대시를 통해 여러 짧은 판단을 하나의 속도 흐름으로 연결",
+      "requires": [
+        "pulse_dash",
+        "air_dash",
+        "grapple_recall"
+      ],
+      "reward": {
+        "id": "chain_dash",
+        "name": "연속 대시"
+      },
+      "teaches": [
+        "chain_dash",
+        "route-sequencing"
+      ],
+      "visualIdentity": "방어 신경망·전기 청백광·갈라지는 신경 통로",
+      "climaxType": "network-assault",
+      "storyReveal": "서로 다른 수호자들은 원점 코어의 하나의 방어 의식을 나눠 가진다.",
+      "exitObjective": "신경망이 보여 주는 거짓 원점을 확인한다."
+    },
+    {
+      "id": "M16",
+      "purpose": "능력으로 길을 여는 것과 거짓 목표를 거부하는 판단을 결합",
+      "requires": [
+        "memory_sight",
+        "resonance_break",
+        "chain_dash"
+      ],
+      "reward": null,
+      "teaches": [
+        "false-route-rejection",
+        "full-kit-choice"
+      ],
+      "visualIdentity": "거짓 원점·백색 무중력광·완벽해 보이는 대칭 구조",
+      "climaxType": "false-core-decision",
+      "storyReveal": "누군가 코어리스를 파괴로 유도하기 위해 원점의 기억을 모방했다.",
+      "exitObjective": "모방 신호를 버리고 실제 근원 접근로로 향한다."
+    },
+    {
+      "id": "M17",
+      "purpose": "모든 핵심 능력을 넓은 전장과 다중 경로에서 독립적으로 선택",
+      "requires": [
+        "chain_dash",
+        "grapple_recall",
+        "resonance_break"
+      ],
+      "reward": null,
+      "teaches": [
+        "full-kit-siege",
+        "resource-priority"
+      ],
+      "visualIdentity": "근원 접근로·검푸른 심층광·끝이 보이지 않는 방어교",
+      "climaxType": "multi-sentinel-siege",
+      "storyReveal": "원점 코어는 외부 장치가 아니라 코어리스에게서 분리된 중심이다.",
+      "exitObjective": "자가 방어가 폭주한 방어 나선의 중심으로 내려간다."
+    },
+    {
+      "id": "M18",
+      "purpose": "완성된 이동 능력을 실제 지형을 따라오는 대형 추격체와 대조",
+      "requires": [
+        "chain_dash",
+        "grapple_recall",
+        "air_dash"
+      ],
+      "reward": null,
+      "teaches": [
+        "terrain-bound-pursuit",
+        "full-kit-chase"
+      ],
+      "visualIdentity": "방어 나선·암청 낙하광·거대한 원호형 하강 구조",
+      "climaxType": "spiral-boulder-chase",
+      "storyReveal": "근원의 자가 방어체는 코어리스의 귀환을 재결합 위험으로 판단한다.",
+      "exitObjective": "수호자가 만들어진 내부 공간으로 진입한다."
+    },
+    {
+      "id": "M19",
+      "purpose": "최종전 직전 모든 전투 규칙을 짧고 명확한 조합으로 재확인",
+      "requires": [
+        "memory_sight",
+        "resonance_counter",
+        "resonance_break"
+      ],
+      "reward": null,
+      "teaches": [
+        "guardian-origin",
+        "final-combat-rehearsal"
+      ],
+      "visualIdentity": "수호자의 태내·어두운 적자광·맥동하는 방어막 층",
+      "climaxType": "guardian-prelude",
+      "storyReveal": "수호자는 코어리스를 미워해서가 아니라 중심을 다시 잃을까 두려워 태어났다.",
+      "exitObjective": "실시간 교신이 끊긴 채 원점 코어에 홀로 진입한다."
+    },
+    {
+      "id": "M20",
+      "purpose": "기억을 지우거나 중심을 파괴하지 않고 전체 능력과 선택을 결산",
+      "requires": [
+        "chain_dash",
+        "grapple_recall",
+        "resonance_break",
+        "memory_sight"
+      ],
+      "reward": null,
+      "teaches": [
+        "final-integration",
+        "reconnection-choice"
+      ],
+      "visualIdentity": "원점 코어·흑백에서 청록으로 회복되는 광원·겹쳐지는 기억 공간",
+      "climaxType": "root-guardian-and-reconnection",
+      "storyReveal": "중심을 되찾는 것은 과거로 돌아가는 일이 아니라 결과를 안고 다시 연결되는 일이다.",
+      "exitObjective": "안정화된 도시와 다시 연결된 마렌의 신호로 엔딩을 완성한다."
+    }
+  ],
+  "firstMegaRoomSpaces": [
+    {
+      "id": "S01",
+      "signature": {
+        "silhouette": "낮고 넓은 비대칭 도착실",
+        "primaryDirection": "east",
+        "elevationPattern": "평지와 얕은 단차",
+        "anchorStructure": "꺼진 원점 제단",
+        "traversalRhythm": "관찰 후 이동",
+        "hazardOrEnemyRole": "위험 없음",
+        "lightingDepth": "동쪽 청록 맥동의 깊은 원근",
+        "storyPurpose": "각성과 첫 목표"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.55,
+        "landingWidthBodies": 3.4,
+        "precisionLandings": 0,
+        "recoveryType": "위험 없는 연속 시작 바닥",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S02",
+      "signature": {
+        "silhouette": "부서진 계단 테라스",
+        "primaryDirection": "east",
+        "elevationPattern": "두 높이의 완만한 상승",
+        "anchorStructure": "갈라진 제련 계단",
+        "traversalRhythm": "짧은 점프와 긴 점프 비교",
+        "hazardOrEnemyRole": "위험 없음",
+        "lightingDepth": "계단 아래 따뜻한 하부광",
+        "storyPurpose": "몸의 기본 반응 확인"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.72,
+        "landingWidthBodies": 2.8,
+        "precisionLandings": 0,
+        "recoveryType": "연속 회수 바닥",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S03",
+      "signature": {
+        "silhouette": "압축된 갈비 통로",
+        "primaryDirection": "east",
+        "elevationPattern": "낮은 천장 아래 수평",
+        "anchorStructure": "휘어진 보수 갈비",
+        "traversalRhythm": "점프 높이 절제",
+        "hazardOrEnemyRole": "천장 접촉",
+        "lightingDepth": "좁은 측광과 먼 배경 틈",
+        "storyPurpose": "제어 기록 손상"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.64,
+        "landingWidthBodies": 2.6,
+        "precisionLandings": 0,
+        "recoveryType": "동일 높이 안전 바닥",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S04",
+      "signature": {
+        "silhouette": "세로로 열린 완충 우물",
+        "primaryDirection": "east",
+        "elevationPattern": "단계적 하강",
+        "anchorStructure": "매달린 회수대",
+        "traversalRhythm": "낙하 중 방향 선택",
+        "hazardOrEnemyRole": "비치명 낙하",
+        "lightingDepth": "아래에서 올라오는 부드러운 광원",
+        "storyPurpose": "원점 신호 지속"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.68,
+        "landingWidthBodies": 3.1,
+        "precisionLandings": 0,
+        "recoveryType": "우물 전체 연속 완충 바닥",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S05",
+      "signature": {
+        "silhouette": "분리된 유지보수 작업실",
+        "primaryDirection": "east",
+        "elevationPattern": "낮은 작업대 순환",
+        "anchorStructure": "송수신기 보관함",
+        "traversalRhythm": "관찰·전원·분리·획득",
+        "hazardOrEnemyRole": "고장 감시장치",
+        "lightingDepth": "보관함의 좁은 작업등",
+        "storyPurpose": "무전기 획득"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.58,
+        "landingWidthBodies": 3,
+        "precisionLandings": 0,
+        "recoveryType": "잠금 없는 작업 바닥",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S06",
+      "signature": {
+        "silhouette": "높은 평형추 승강축",
+        "primaryDirection": "east",
+        "elevationPattern": "수직 상승",
+        "anchorStructure": "쌍중량 승강기",
+        "traversalRhythm": "이동하며 첫 교신",
+        "hazardOrEnemyRole": "승강기 낙하 방지",
+        "lightingDepth": "상하로 길게 이어지는 중계광",
+        "storyPurpose": "마렌과 첫 교신"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.62,
+        "landingWidthBodies": 2.8,
+        "precisionLandings": 0,
+        "recoveryType": "승강기 아래 고정 안전대",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S07",
+      "signature": {
+        "silhouette": "상하가 어긋난 갈비 회랑",
+        "primaryDirection": "west",
+        "elevationPattern": "아래 안전길·위 빠른길",
+        "anchorStructure": "기울어진 제련 늑골",
+        "traversalRhythm": "경로 비교",
+        "hazardOrEnemyRole": "휴면 실루엣",
+        "lightingDepth": "서쪽 역광과 상층 그림자",
+        "storyPurpose": "침입자 판정 예고"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.76,
+        "landingWidthBodies": 2.4,
+        "precisionLandings": 0,
+        "recoveryType": "출구 전 재합류",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S08",
+      "signature": {
+        "silhouette": "원형 절단 교정실",
+        "primaryDirection": "west",
+        "elevationPattern": "낮은 표적과 높은 표적",
+        "anchorStructure": "회전 교정 고리",
+        "traversalRhythm": "정지·공격·확인",
+        "hazardOrEnemyRole": "무해 표적",
+        "lightingDepth": "중앙 집중광과 어두운 외곽",
+        "storyPurpose": "기본 공격 교정"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.6,
+        "landingWidthBodies": 3.2,
+        "precisionLandings": 0,
+        "recoveryType": "적과 피해가 없는 완전 안전실",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S09",
+      "signature": {
+        "silhouette": "움푹 팬 화덕 둥지",
+        "primaryDirection": "west",
+        "elevationPattern": "중앙 저지대와 후퇴대",
+        "anchorStructure": "꺼진 화덕",
+        "traversalRhythm": "예고·회피·반격",
+        "hazardOrEnemyRole": "크롤러",
+        "lightingDepth": "화덕 잔광과 적 실루엣",
+        "storyPurpose": "첫 활성 관리체"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.72,
+        "landingWidthBodies": 2.7,
+        "precisionLandings": 0,
+        "recoveryType": "적이 넘지 못하는 입구 후퇴대",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S10",
+      "signature": {
+        "silhouette": "길게 열린 왕복 운반교",
+        "primaryDirection": "west",
+        "elevationPattern": "수평 이동 바닥과 하부 길",
+        "anchorStructure": "이중 운반대",
+        "traversalRhythm": "탑승·위치 유지·하차",
+        "hazardOrEnemyRole": "이동 플랫폼",
+        "lightingDepth": "멀어지는 레일 점광",
+        "storyPurpose": "시설 기능 관찰"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.78,
+        "landingWidthBodies": 2.3,
+        "precisionLandings": 0,
+        "recoveryType": "하부 고정 보수교",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S11",
+      "signature": {
+        "silhouette": "방패형 반원 전투 둥지",
+        "primaryDirection": "west",
+        "elevationPattern": "낮은 중앙과 상층 우회",
+        "anchorStructure": "파수기 방패벽",
+        "traversalRhythm": "유도·우회·후방 반격",
+        "hazardOrEnemyRole": "방패 파수기",
+        "lightingDepth": "정면 냉광과 후방 약점광",
+        "storyPurpose": "시설의 적대 확정"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.79,
+        "landingWidthBodies": 2.4,
+        "precisionLandings": 0,
+        "recoveryType": "공격이 닿지 않는 좌우 재정비대",
+        "demanding": true,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S12",
+      "signature": {
+        "silhouette": "서쪽으로 접힌 정비축",
+        "primaryDirection": "west",
+        "elevationPattern": "단계적 수직 상승",
+        "anchorStructure": "중앙 평형추",
+        "traversalRhythm": "오르기·대기·층 전환",
+        "hazardOrEnemyRole": "움직이는 승강판",
+        "lightingDepth": "위층을 먼저 보여주는 수직광",
+        "storyPurpose": "철수 기록 발견"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.74,
+        "landingWidthBodies": 2.6,
+        "precisionLandings": 0,
+        "recoveryType": "각 높이에 배치된 중간 휴식 홈",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S13",
+      "signature": {
+        "silhouette": "비대칭 작업대 주조장",
+        "primaryDirection": "east",
+        "elevationPattern": "서로 다른 세 높이",
+        "anchorStructure": "파손된 주조대",
+        "traversalRhythm": "안전 연속 점프 또는 지름길",
+        "hazardOrEnemyRole": "낙하 가능",
+        "lightingDepth": "용광로 잔광과 깊은 작업 배경",
+        "storyPurpose": "코어리스 정비 표식"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.8,
+        "landingWidthBodies": 2.2,
+        "precisionLandings": 0,
+        "recoveryType": "완만한 경사 회수면",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S14",
+      "signature": {
+        "silhouette": "낮고 넓은 환기실",
+        "primaryDirection": "east",
+        "elevationPattern": "환기구와 중앙 전투면",
+        "anchorStructure": "차단 가능한 환기구",
+        "traversalRhythm": "소리 관찰·봉쇄·전투",
+        "hazardOrEnemyRole": "크롤러 2체",
+        "lightingDepth": "환기 경고등과 낮은 안개층",
+        "storyPurpose": "오염체의 감각"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.75,
+        "landingWidthBodies": 2.6,
+        "precisionLandings": 0,
+        "recoveryType": "출구 안전 발판",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S15",
+      "signature": {
+        "silhouette": "십자형 기중기 교차장",
+        "primaryDirection": "east",
+        "elevationPattern": "수평·수직 발판 교차",
+        "anchorStructure": "매달린 대형 기중기",
+        "traversalRhythm": "주기 관찰·탑승·중간 대기",
+        "hazardOrEnemyRole": "교차 이동 발판",
+        "lightingDepth": "상부 역광과 하부 깊은 낙차",
+        "storyPurpose": "봉인 부품 운반"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.84,
+        "landingWidthBodies": 1.75,
+        "precisionLandings": 2,
+        "recoveryType": "낙하 경로 아래 두 층 고정 안전대",
+        "demanding": true,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S16",
+      "signature": {
+        "silhouette": "들쭉날쭉한 증기 수로",
+        "primaryDirection": "east",
+        "elevationPattern": "낮은 홈이 반복되는 수평",
+        "anchorStructure": "노출 증기관",
+        "traversalRhythm": "짧은 이동·정지·재이동",
+        "hazardOrEnemyRole": "비치명 증기",
+        "lightingDepth": "예고등과 증기 사이 명암",
+        "storyPurpose": "불규칙해진 설비"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.76,
+        "landingWidthBodies": 2.3,
+        "precisionLandings": 0,
+        "recoveryType": "각 분사기 사이 안전 홈",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S17",
+      "signature": {
+        "silhouette": "세 갈래 높이 전투뜰",
+        "primaryDirection": "east",
+        "elevationPattern": "상·중·하 전투 위치",
+        "anchorStructure": "세 방향 전원주",
+        "traversalRhythm": "우선순위 선택·후퇴·재진입",
+        "hazardOrEnemyRole": "세 역할 적",
+        "lightingDepth": "적 역할별 높이 조명",
+        "storyPurpose": "공유 공명 명령"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.8,
+        "landingWidthBodies": 2.3,
+        "precisionLandings": 0,
+        "recoveryType": "엄폐물과 입구 후퇴",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S18",
+      "signature": {
+        "silhouette": "기억층이 감긴 승강고",
+        "primaryDirection": "east",
+        "elevationPattern": "느린 수직 상승",
+        "anchorStructure": "기억 기록 승강기",
+        "traversalRhythm": "호흡·기록·전환",
+        "hazardOrEnemyRole": "위험 없음",
+        "lightingDepth": "기억 잔상이 층별로 이동",
+        "storyPurpose": "격리된 기능 기억"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.6,
+        "landingWidthBodies": 3,
+        "precisionLandings": 0,
+        "recoveryType": "안전 체크포인트",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S19",
+      "signature": {
+        "silhouette": "열린 공명 제단 전망실",
+        "primaryDirection": "west",
+        "elevationPattern": "평평한 조망대",
+        "anchorStructure": "공명 날개 잔향 제단",
+        "traversalRhythm": "정지·분석·다음 목표 확인",
+        "hazardOrEnemyRole": "위험 없음",
+        "lightingDepth": "냉각 수로 쪽 청백 신호",
+        "storyPurpose": "M02 능력 예고"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.52,
+        "landingWidthBodies": 3.5,
+        "precisionLandings": 0,
+        "recoveryType": "피해와 낙사가 없는 완전 안전실",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S20",
+      "signature": {
+        "silhouette": "돛형 발판의 상승 우물",
+        "primaryDirection": "west",
+        "elevationPattern": "기류를 타는 큰 수직 상승",
+        "anchorStructure": "공명 돛 발판",
+        "traversalRhythm": "점프·부유·착지",
+        "hazardOrEnemyRole": "상승 기류",
+        "lightingDepth": "아래에서 위로 흐르는 입자광",
+        "storyPurpose": "냉각 압력 변화"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.78,
+        "landingWidthBodies": 2.5,
+        "precisionLandings": 0,
+        "recoveryType": "우물 바닥 재상승 기류",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S21",
+      "signature": {
+        "silhouette": "상하로 갈라진 공방",
+        "primaryDirection": "west",
+        "elevationPattern": "위 빠른길·아래 전투길",
+        "anchorStructure": "중앙 재합류 작업대",
+        "traversalRhythm": "경로 선택·재합류",
+        "hazardOrEnemyRole": "선택형 크롤러",
+        "lightingDepth": "위 밝음·아래 따뜻한 작업광",
+        "storyPurpose": "기록과 잔향의 선택"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.8,
+        "landingWidthBodies": 2.2,
+        "precisionLandings": 0,
+        "recoveryType": "중앙 회수 공간",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S22",
+      "signature": {
+        "silhouette": "돔형 생체 온실",
+        "primaryDirection": "west",
+        "elevationPattern": "낮은 엄폐와 높은 선제대",
+        "anchorStructure": "파열된 온실 돔",
+        "traversalRhythm": "유인·고도 변경·공격",
+        "hazardOrEnemyRole": "비행 파수기",
+        "lightingDepth": "황록 생체광과 낮은 그림자",
+        "storyPurpose": "생체 오염 확장"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.8,
+        "landingWidthBodies": 2.3,
+        "precisionLandings": 0,
+        "recoveryType": "양쪽 넓은 착지면",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S23",
+      "signature": {
+        "silhouette": "길고 처진 지지탑 교량",
+        "primaryDirection": "west",
+        "elevationPattern": "완만한 하강과 붕괴",
+        "anchorStructure": "세 개의 하부 지지탑",
+        "traversalRhythm": "예고 확인·달리기·짧은 대기",
+        "hazardOrEnemyRole": "지연 붕괴",
+        "lightingDepth": "뒤에서 꺼지는 교량 조명",
+        "storyPurpose": "철수대의 봉쇄"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.86,
+        "landingWidthBodies": 1.65,
+        "precisionLandings": 1,
+        "recoveryType": "아래 보수 통로",
+        "demanding": true,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S24",
+      "signature": {
+        "silhouette": "서쪽 지그재그 회수로",
+        "primaryDirection": "west",
+        "elevationPattern": "완만한 다단 상승",
+        "anchorStructure": "평형추 회수문",
+        "traversalRhythm": "속도 완화·안전 상승",
+        "hazardOrEnemyRole": "낙하 가능",
+        "lightingDepth": "상층 기억 신호의 유도광",
+        "storyPurpose": "마지막 철수자 예고"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.72,
+        "landingWidthBodies": 2.7,
+        "precisionLandings": 0,
+        "recoveryType": "세 개 중간 휴식대",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S25",
+      "signature": {
+        "silhouette": "잔잔한 작업자 기억못",
+        "primaryDirection": "east",
+        "elevationPattern": "평지와 얕은 수면 단차",
+        "anchorStructure": "세 갈래 기억 기둥",
+        "traversalRhythm": "선택·기억 재생·회복",
+        "hazardOrEnemyRole": "위험 없음",
+        "lightingDepth": "수면 반사와 낮은 기억광",
+        "storyPurpose": "중심 분리의 첫 단서"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.5,
+        "landingWidthBodies": 3.6,
+        "precisionLandings": 0,
+        "recoveryType": "완전 안전 구간",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S26",
+      "signature": {
+        "silhouette": "엇갈린 압착기 회랑",
+        "primaryDirection": "east",
+        "elevationPattern": "위 빠른길·아래 안전길",
+        "anchorStructure": "세 쌍의 압착기",
+        "traversalRhythm": "예고 관찰·통과·대기",
+        "hazardOrEnemyRole": "비치명 압착",
+        "lightingDepth": "경고광이 시간차로 이동",
+        "storyPurpose": "직접적인 시설 방어"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.84,
+        "landingWidthBodies": 1.7,
+        "precisionLandings": 2,
+        "recoveryType": "압착기 전후 안전대",
+        "demanding": true,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S27",
+      "signature": {
+        "silhouette": "거대한 갈비뼈형 용광로",
+        "primaryDirection": "east",
+        "elevationPattern": "곡선 상승과 하강",
+        "anchorStructure": "용광로 외곽 늑골",
+        "traversalRhythm": "곡선 이동·내외곽 선택",
+        "hazardOrEnemyRole": "열기 경계",
+        "lightingDepth": "주홍 중심광과 어두운 외곽",
+        "storyPurpose": "수호자 형태의 암시"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.79,
+        "landingWidthBodies": 2.25,
+        "precisionLandings": 0,
+        "recoveryType": "하부 경사 회수면",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S28",
+      "signature": {
+        "silhouette": "역류하는 다층 운반 회랑",
+        "primaryDirection": "east",
+        "elevationPattern": "반대 이동대와 하부 통로",
+        "anchorStructure": "대형 역행 운반대",
+        "traversalRhythm": "달리기·관성 보정·우회",
+        "hazardOrEnemyRole": "역방향 이동 지형",
+        "lightingDepth": "바깥쪽으로 흐르는 적동광",
+        "storyPurpose": "봉인 부품의 역류"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.85,
+        "landingWidthBodies": 1.7,
+        "precisionLandings": 1,
+        "recoveryType": "하부 무피해 보수로",
+        "demanding": true,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S29",
+      "signature": {
+        "silhouette": "타원형 혼성 조립 경기장",
+        "primaryDirection": "east",
+        "elevationPattern": "세 높이의 전투 구역",
+        "anchorStructure": "분리 가능한 포탑 전원",
+        "traversalRhythm": "우선순위·엄폐·고도 변경",
+        "hazardOrEnemyRole": "방패·비행·포탑",
+        "lightingDepth": "각 적 역할을 분리하는 조명",
+        "storyPurpose": "통합된 공명 전투군"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.8,
+        "landingWidthBodies": 2.35,
+        "precisionLandings": 0,
+        "recoveryType": "세 곳 엄폐와 입구 후퇴",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S30",
+      "signature": {
+        "silhouette": "동쪽으로 열린 휴식 승강고",
+        "primaryDirection": "east",
+        "elevationPattern": "안전 평지와 최종 상승",
+        "anchorStructure": "회복 장치·기록·승강기",
+        "traversalRhythm": "회복·저장·목표 확인",
+        "hazardOrEnemyRole": "위험 없음",
+        "lightingDepth": "수호자 문양을 비추는 상부광",
+        "storyPurpose": "최종 목표 확인"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.55,
+        "landingWidthBodies": 3.4,
+        "precisionLandings": 0,
+        "recoveryType": "안전 체크포인트",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S31",
+      "signature": {
+        "silhouette": "고요한 장축 전실",
+        "primaryDirection": "west",
+        "elevationPattern": "넓은 평지와 관찰대",
+        "anchorStructure": "두 개의 패턴 모형",
+        "traversalRhythm": "관찰·비교·확인",
+        "hazardOrEnemyRole": "무해한 보스 예고",
+        "lightingDepth": "수호자실에서 새어 나오는 역광",
+        "storyPurpose": "수호자의 기억"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.55,
+        "landingWidthBodies": 3.8,
+        "precisionLandings": 0,
+        "recoveryType": "완전 안전 준비실",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S32",
+      "signature": {
+        "silhouette": "원형 외곽 방어 고리",
+        "primaryDirection": "west",
+        "elevationPattern": "낮은 엄폐와 단일 점프대",
+        "anchorStructure": "수호자 외곽 링",
+        "traversalRhythm": "예고·회피·반격 예행",
+        "hazardOrEnemyRole": "외곽 방어체",
+        "lightingDepth": "회전하는 두 방향 경고광",
+        "storyPurpose": "보스 리듬 학습"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.78,
+        "landingWidthBodies": 2.5,
+        "precisionLandings": 0,
+        "recoveryType": "넓은 후퇴 입구",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S33",
+      "signature": {
+        "silhouette": "긴 타원형 제련 심장실",
+        "primaryDirection": "west",
+        "elevationPattern": "평지 중심과 파괴 가능 기둥",
+        "anchorStructure": "제련 수호자 외피",
+        "traversalRhythm": "거리 조절·단일 점프·반격",
+        "hazardOrEnemyRole": "수호자 1막",
+        "lightingDepth": "돌진선을 읽는 측광",
+        "storyPurpose": "원점 폭주에 대한 오해"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.84,
+        "landingWidthBodies": 2.45,
+        "precisionLandings": 0,
+        "recoveryType": "패턴 뒤 1.2초 반격 창",
+        "demanding": true,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S34",
+      "signature": {
+        "silhouette": "상하가 벌어진 공명 격실",
+        "primaryDirection": "west",
+        "elevationPattern": "상층 반격대·하층 안전 바닥",
+        "anchorStructure": "노출되는 수호자 핵",
+        "traversalRhythm": "고도 선택·공명파 회피·반격",
+        "hazardOrEnemyRole": "수호자 2막",
+        "lightingDepth": "약점 노출 때만 켜지는 핵광",
+        "storyPurpose": "자발적 분리 단서"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.88,
+        "landingWidthBodies": 1.65,
+        "precisionLandings": 2,
+        "recoveryType": "즉사 없는 하부 전투 바닥",
+        "demanding": true,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S35",
+      "signature": {
+        "silhouette": "부채꼴 공명 회수실",
+        "primaryDirection": "west",
+        "elevationPattern": "평지와 되돌아가는 지름길",
+        "anchorStructure": "기억 기록·회복 장치",
+        "traversalRhythm": "보상·기록·선택",
+        "hazardOrEnemyRole": "위험 없음",
+        "lightingDepth": "냉각 수로 방향의 밝은 조망광",
+        "storyPurpose": "수호자 기록 회수"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.5,
+        "landingWidthBodies": 3.6,
+        "precisionLandings": 0,
+        "recoveryType": "체크포인트와 지름길",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    },
+    {
+      "id": "S36",
+      "signature": {
+        "silhouette": "서쪽 절벽 전망 출구",
+        "primaryDirection": "west",
+        "elevationPattern": "넓은 출구와 멀리 보이는 하강",
+        "anchorStructure": "냉각 수로 관문",
+        "traversalRhythm": "조망·목표 확인·이탈",
+        "hazardOrEnemyRole": "위험 없음",
+        "lightingDepth": "다음 메가룸의 푸른 원경",
+        "storyPurpose": "M02 진입 동기"
+      },
+      "traversalBudget": {
+        "reachRatio": 0.48,
+        "landingWidthBodies": 4,
+        "precisionLandings": 0,
+        "recoveryType": "영구 안전 출구",
+        "demanding": false,
+        "destinationVisible": true,
+        "requiredRoute": true
+      }
+    }
+  ]
+}
