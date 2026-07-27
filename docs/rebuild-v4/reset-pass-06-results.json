@@ -1,0 +1,194 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass06-camera",
+    "pass": 6,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "large-world horizontal and vertical camera follow, directional lead, hit damping, and three depth layers",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-27T03:03:58.592Z",
+  "passed": true,
+  "passedCount": 25,
+  "totalCount": 25,
+  "checks": [
+    {
+      "name": "previousCombatContractPasses",
+      "passed": true
+    },
+    {
+      "name": "qualityFoundationPasses",
+      "passed": true
+    },
+    {
+      "name": "roadmapPassNumberIsSix",
+      "passed": true
+    },
+    {
+      "name": "worldIsWiderThanViewport",
+      "passed": true
+    },
+    {
+      "name": "worldIsTallerThanViewport",
+      "passed": true
+    },
+    {
+      "name": "horizontalFollowIsFasterThanVertical",
+      "passed": true
+    },
+    {
+      "name": "followIsDamped",
+      "passed": true
+    },
+    {
+      "name": "lookAheadIsBounded",
+      "passed": true
+    },
+    {
+      "name": "lookAheadChangesGradually",
+      "passed": true
+    },
+    {
+      "name": "reverseLookAheadObserved",
+      "passed": true
+    },
+    {
+      "name": "horizontalFrameStepBounded",
+      "passed": true
+    },
+    {
+      "name": "verticalFrameStepBounded",
+      "passed": true
+    },
+    {
+      "name": "cameraNeverTeleports",
+      "passed": true
+    },
+    {
+      "name": "cameraStaysInsideWorld",
+      "passed": true
+    },
+    {
+      "name": "hitLookAheadDoesNotFollowKnockback",
+      "passed": true
+    },
+    {
+      "name": "hitCameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "hitShakeIsShort",
+      "passed": true
+    },
+    {
+      "name": "hitShakeIsSmall",
+      "passed": true
+    },
+    {
+      "name": "threeParallaxLayers",
+      "passed": true
+    },
+    {
+      "name": "parallaxDepthIsOrdered",
+      "passed": true
+    },
+    {
+      "name": "farLayerMovesSlowly",
+      "passed": true
+    },
+    {
+      "name": "nearLayerRemainsBehindGameplay",
+      "passed": true
+    },
+    {
+      "name": "liftCreatesVerticalTransition",
+      "passed": true
+    },
+    {
+      "name": "noUnexplainedPlayerCorrection",
+      "passed": true
+    },
+    {
+      "name": "passSixRuntimeAndEvidenceExist",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "maximumHorizontalStep": 5.627218861548954,
+    "maximumVerticalStep": 21.4022656020245,
+    "positiveLead": 164.68750000000003,
+    "negativeLead": -159.54101562499997,
+    "hitCameraStep": 4.099886582251873,
+    "finalCamera": {
+      "x": 868.5214271653366,
+      "y": 394.85000882316996,
+      "lookAheadX": -154.999192603774,
+      "shakeRemaining": 0.14,
+      "shakeSerial": 1
+    },
+    "parallax": {
+      "far": {
+        "x": -160,
+        "y": -80
+      },
+      "middle": {
+        "x": -380,
+        "y": -190
+      },
+      "near": {
+        "x": -680,
+        "y": -340
+      }
+    }
+  },
+  "contract": {
+    "horizontalHalfLifeSeconds": 0.16,
+    "verticalHalfLifeSeconds": 0.24,
+    "lookAheadHalfLifeSeconds": 0.2,
+    "lookAheadDistancePx": 170,
+    "lookAheadMinimumSpeedPxPerSecond": 80,
+    "playerScreenHorizontalFraction": 0.5,
+    "playerScreenVerticalFraction": 0.58,
+    "hitLookAheadScale": 0,
+    "maximumHitShakePx": 5,
+    "hitShakeSeconds": 0.14,
+    "parallaxRatios": {
+      "far": 0.16,
+      "middle": 0.38,
+      "near": 0.68
+    },
+    "cameraTeleportAllowed": false,
+    "unexplainedPlayerCorrectionAllowed": false
+  },
+  "world": {
+    "width": 5200,
+    "height": 2200,
+    "viewportWidth": 1400,
+    "viewportHeight": 900,
+    "lowerFloorY": 1800,
+    "upperFloorY": 900,
+    "spawnX": 120,
+    "finishX": 4980,
+    "leftBoundary": 20,
+    "rightBoundary": 5180
+  },
+  "lift": {
+    "id": "counterweight-lift",
+    "x": 1900,
+    "width": 430,
+    "height": 32,
+    "startY": 1800,
+    "endY": 900,
+    "speed": 235,
+    "activationInset": 45
+  },
+  "hazard": {
+    "id": "camera-impact-pad",
+    "x": 3820,
+    "y": 884,
+    "width": 110,
+    "height": 16,
+    "sourceX": 3875,
+    "damage": 1
+  },
+  "missingFiles": []
+}

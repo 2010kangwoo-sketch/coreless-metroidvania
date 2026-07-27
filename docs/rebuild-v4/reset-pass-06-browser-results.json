@@ -1,0 +1,1067 @@
+{
+  "build": {
+    "id": "rebuild-v4-reset-pass06-camera",
+    "pass": 6,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "scope": "large-world horizontal and vertical camera follow, directional lead, hit damping, and three depth layers",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-27T03:01:42.924Z",
+  "passed": true,
+  "passedCount": 31,
+  "totalCount": 31,
+  "checks": [
+    {
+      "name": "documentReady",
+      "passed": true
+    },
+    {
+      "name": "staticAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsPass",
+      "passed": true
+    },
+    {
+      "name": "canvasResolutionCorrect",
+      "passed": true
+    },
+    {
+      "name": "actualRightInputRecorded",
+      "passed": true
+    },
+    {
+      "name": "actualLeftInputRecorded",
+      "passed": true
+    },
+    {
+      "name": "actualJumpInputRecorded",
+      "passed": true
+    },
+    {
+      "name": "actualAttackInputRecorded",
+      "passed": true
+    },
+    {
+      "name": "directionReversalObserved",
+      "passed": true
+    },
+    {
+      "name": "positiveLookAheadObserved",
+      "passed": true
+    },
+    {
+      "name": "negativeLookAheadObserved",
+      "passed": true
+    },
+    {
+      "name": "horizontalCameraTravelObserved",
+      "passed": true
+    },
+    {
+      "name": "liftActivated",
+      "passed": true
+    },
+    {
+      "name": "liftArrived",
+      "passed": true
+    },
+    {
+      "name": "upperDeckReached",
+      "passed": true
+    },
+    {
+      "name": "verticalCameraTravelObserved",
+      "passed": true
+    },
+    {
+      "name": "horizontalFrameStepBounded",
+      "passed": true
+    },
+    {
+      "name": "verticalFrameStepBounded",
+      "passed": true
+    },
+    {
+      "name": "combinedFrameStepBounded",
+      "passed": true
+    },
+    {
+      "name": "hitObserved",
+      "passed": true
+    },
+    {
+      "name": "invulnerableContactIgnored",
+      "passed": true
+    },
+    {
+      "name": "hitCameraStepBounded",
+      "passed": true
+    },
+    {
+      "name": "hitShakeBounded",
+      "passed": true
+    },
+    {
+      "name": "threeParallaxLayersOrdered",
+      "passed": true
+    },
+    {
+      "name": "cameraNeverLeftWorld",
+      "passed": true
+    },
+    {
+      "name": "noBoundaryCorrection",
+      "passed": true
+    },
+    {
+      "name": "noResetUsed",
+      "passed": true
+    },
+    {
+      "name": "routeCompleted",
+      "passed": true
+    },
+    {
+      "name": "cameraSamplesRecorded",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "maximumHorizontalCameraStep": 5.474694665842776,
+    "maximumVerticalCameraStep": 2.026314939161921,
+    "maximumCameraStep": 5.474694665842776,
+    "maximumPlayerStep": 6.753472222222172,
+    "maximumPositiveLead": 169.99995180037624,
+    "maximumNegativeLead": -164.34608266979416,
+    "horizontalTravel": 3799.969736021325,
+    "verticalTravel": 956.425516920252,
+    "cameraHitStep": 2.9529637388505057,
+    "cameraShakeMaximum": 4.848888923992263,
+    "damageTaken": 1,
+    "damageIgnored": 56,
+    "finalHealth": 3,
+    "finalPlayer": {
+      "x": 5005.183333333324,
+      "y": 836
+    },
+    "finalCamera": {
+      "x": 3799.969736021325,
+      "y": 345.99995880712,
+      "lookAheadX": 123.72837261654149,
+      "shakeRemaining": 0,
+      "shakeSerial": 1
+    },
+    "fixedFrames": 2498,
+    "keyEvents": [
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 0.6417,
+        "playerX": 120,
+        "playerY": 1736,
+        "cameraX": 0,
+        "cameraY": 1246
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 3.9417,
+        "playerX": 1406.6667,
+        "playerY": 1736,
+        "cameraX": 805.9879,
+        "cameraY": 1246
+      },
+      {
+        "type": "down",
+        "code": "KeyA",
+        "at": 4.1583,
+        "playerX": 1431.6667,
+        "playerY": 1736,
+        "cameraX": 859.2733,
+        "cameraY": 1246
+      },
+      {
+        "type": "up",
+        "code": "KeyA",
+        "at": 5.2083,
+        "playerX": 1045,
+        "playerY": 1736,
+        "cameraX": 310.0716,
+        "cameraY": 1246
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 5.4583,
+        "playerX": 1020,
+        "playerY": 1736,
+        "cameraX": 244.4766,
+        "cameraY": 1246
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 5.625,
+        "playerX": 1020,
+        "playerY": 1631.2778,
+        "cameraX": 258.2869,
+        "cameraY": 1221.4034
+      },
+      {
+        "type": "down",
+        "code": "KeyB",
+        "at": 6.0083,
+        "playerX": 1020,
+        "playerY": 1736,
+        "cameraX": 304.8165,
+        "cameraY": 1190.4361
+      },
+      {
+        "type": "up",
+        "code": "KeyB",
+        "at": 6.0417,
+        "playerX": 1020,
+        "playerY": 1736,
+        "cameraX": 307.7833,
+        "cameraY": 1195.5358
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 6.3583,
+        "playerX": 1020,
+        "playerY": 1736,
+        "cameraX": 326.8667,
+        "cameraY": 1225.7795
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 8.9917,
+        "playerX": 2040,
+        "playerY": 1657.6667,
+        "cameraX": 1439.2324,
+        "cameraY": 1217.3507
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 12.5,
+        "playerX": 2065,
+        "playerY": 836,
+        "cameraX": 1385.0058,
+        "cameraY": 423.6856
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 17.2833,
+        "playerX": 3788.5167,
+        "playerY": 836,
+        "cameraX": 3181.9924,
+        "cameraY": 344.8866
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 17.6333,
+        "playerX": 3813.5167,
+        "playerY": 836,
+        "cameraX": 3208.1503,
+        "cameraY": 345.5948
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 20.6333,
+        "playerX": 4980.1833,
+        "playerY": 836,
+        "cameraX": 3799.933,
+        "cameraY": 345.9999
+      }
+    ],
+    "cameraSamples": [
+      {
+        "phase": "lower",
+        "playerX": 120,
+        "playerY": 1736,
+        "cameraX": 0,
+        "cameraY": 1246,
+        "lookAheadX": 0
+      },
+      {
+        "phase": "lower",
+        "playerX": 120,
+        "playerY": 1736,
+        "cameraX": 0,
+        "cameraY": 1246,
+        "lookAheadX": 0
+      },
+      {
+        "phase": "lower",
+        "playerX": 120,
+        "playerY": 1736,
+        "cameraX": 0,
+        "cameraY": 1246,
+        "lookAheadX": 0
+      },
+      {
+        "phase": "lower",
+        "playerX": 136.3333,
+        "playerY": 1736,
+        "cameraX": 0,
+        "cameraY": 1246,
+        "lookAheadX": 46.2695
+      },
+      {
+        "phase": "lower",
+        "playerX": 233.3333,
+        "playerY": 1736,
+        "cameraX": 0,
+        "cameraY": 1246,
+        "lookAheadX": 117.9777
+      },
+      {
+        "phase": "lower",
+        "playerX": 333.3333,
+        "playerY": 1736,
+        "cameraX": 0,
+        "cameraY": 1246,
+        "lookAheadX": 148.1273
+      },
+      {
+        "phase": "lower",
+        "playerX": 433.3333,
+        "playerY": 1736,
+        "cameraX": 0,
+        "cameraY": 1246,
+        "lookAheadX": 160.8037
+      },
+      {
+        "phase": "lower",
+        "playerX": 533.3333,
+        "playerY": 1736,
+        "cameraX": 2.1817,
+        "cameraY": 1246,
+        "lookAheadX": 166.1334
+      },
+      {
+        "phase": "lower",
+        "playerX": 633.3333,
+        "playerY": 1736,
+        "cameraX": 54.6354,
+        "cameraY": 1246,
+        "lookAheadX": 168.3743
+      },
+      {
+        "phase": "lower",
+        "playerX": 733.3333,
+        "playerY": 1736,
+        "cameraX": 139.4423,
+        "cameraY": 1246,
+        "lookAheadX": 169.3165
+      },
+      {
+        "phase": "lower",
+        "playerX": 833.3333,
+        "playerY": 1736,
+        "cameraX": 234.6787,
+        "cameraY": 1246,
+        "lookAheadX": 169.7126
+      },
+      {
+        "phase": "lower",
+        "playerX": 933.3333,
+        "playerY": 1736,
+        "cameraX": 333.2258,
+        "cameraY": 1246,
+        "lookAheadX": 169.8792
+      },
+      {
+        "phase": "lower",
+        "playerX": 1033.3333,
+        "playerY": 1736,
+        "cameraX": 432.8011,
+        "cameraY": 1246,
+        "lookAheadX": 169.9492
+      },
+      {
+        "phase": "lower",
+        "playerX": 1133.3333,
+        "playerY": 1736,
+        "cameraX": 532.6856,
+        "cameraY": 1246,
+        "lookAheadX": 169.9786
+      },
+      {
+        "phase": "lower",
+        "playerX": 1233.3333,
+        "playerY": 1736,
+        "cameraX": 632.6584,
+        "cameraY": 1246,
+        "lookAheadX": 169.991
+      },
+      {
+        "phase": "lower",
+        "playerX": 1333.3333,
+        "playerY": 1736,
+        "cameraX": 732.6542,
+        "cameraY": 1246,
+        "lookAheadX": 169.9962
+      },
+      {
+        "phase": "lower",
+        "playerX": 1426.2222,
+        "playerY": 1736,
+        "cameraX": 831.8963,
+        "cameraY": 1246,
+        "lookAheadX": 169.9984
+      },
+      {
+        "phase": "lower",
+        "playerX": 1419.6667,
+        "playerY": 1736,
+        "cameraX": 845.0609,
+        "cameraY": 1246,
+        "lookAheadX": 39.0326
+      },
+      {
+        "phase": "lower",
+        "playerX": 1325,
+        "playerY": 1736,
+        "cameraX": 710.6161,
+        "cameraY": 1246,
+        "lookAheadX": -82.1126
+      },
+      {
+        "phase": "lower",
+        "playerX": 1225,
+        "playerY": 1736,
+        "cameraX": 550.2163,
+        "cameraY": 1246,
+        "lookAheadX": -133.0479
+      },
+      {
+        "phase": "lower",
+        "playerX": 1125,
+        "playerY": 1736,
+        "cameraX": 409.2111,
+        "cameraY": 1246,
+        "lookAheadX": -154.4636
+      },
+      {
+        "phase": "lower",
+        "playerX": 1029,
+        "playerY": 1736,
+        "cameraX": 287.0296,
+        "cameraY": 1246,
+        "lookAheadX": -163.4677
+      },
+      {
+        "phase": "lower",
+        "playerX": 1020,
+        "playerY": 1697.875,
+        "cameraX": 246.3985,
+        "cameraY": 1242.8878,
+        "lookAheadX": -79.8337
+      },
+      {
+        "phase": "lower",
+        "playerX": 1020,
+        "playerY": 1621.9434,
+        "cameraX": 276.0912,
+        "cameraY": 1191.9494,
+        "lookAheadX": -33.566
+      },
+      {
+        "phase": "lower",
+        "playerX": 1020,
+        "playerY": 1736,
+        "cameraX": 304.8165,
+        "cameraY": 1190.4361,
+        "lookAheadX": -14.1127
+      },
+      {
+        "phase": "lower",
+        "playerX": 1020,
+        "playerY": 1736,
+        "cameraX": 322.3926,
+        "cameraY": 1219.0089,
+        "lookAheadX": -5.9337
+      },
+      {
+        "phase": "lower",
+        "playerX": 1047,
+        "playerY": 1736,
+        "cameraX": 352.3726,
+        "cameraY": 1232.8887,
+        "lookAheadX": 57.2738
+      },
+      {
+        "phase": "lower",
+        "playerX": 1146.6667,
+        "playerY": 1736,
+        "cameraX": 468.8029,
+        "cameraY": 1239.631,
+        "lookAheadX": 122.6045
+      },
+      {
+        "phase": "lower",
+        "playerX": 1246.6667,
+        "playerY": 1736,
+        "cameraX": 600.7302,
+        "cameraY": 1242.9061,
+        "lookAheadX": 150.0726
+      },
+      {
+        "phase": "lower",
+        "playerX": 1346.6667,
+        "playerY": 1736,
+        "cameraX": 722.6251,
+        "cameraY": 1244.4971,
+        "lookAheadX": 161.6216
+      },
+      {
+        "phase": "lower",
+        "playerX": 1446.6667,
+        "playerY": 1736,
+        "cameraX": 834.6987,
+        "cameraY": 1245.2699,
+        "lookAheadX": 166.4773
+      },
+      {
+        "phase": "lower",
+        "playerX": 1546.6667,
+        "playerY": 1736,
+        "cameraX": 940.7461,
+        "cameraY": 1245.6454,
+        "lookAheadX": 168.5189
+      },
+      {
+        "phase": "lower",
+        "playerX": 1646.6667,
+        "playerY": 1736,
+        "cameraX": 1043.6174,
+        "cameraY": 1245.8277,
+        "lookAheadX": 169.3773
+      },
+      {
+        "phase": "lower",
+        "playerX": 1746.6667,
+        "playerY": 1736,
+        "cameraX": 1144.936,
+        "cameraY": 1245.9163,
+        "lookAheadX": 169.7382
+      },
+      {
+        "phase": "lower",
+        "playerX": 1846.6667,
+        "playerY": 1736,
+        "cameraX": 1245.528,
+        "cameraY": 1245.9593,
+        "lookAheadX": 169.8899
+      },
+      {
+        "phase": "lower",
+        "playerX": 1946.6667,
+        "playerY": 1712.5,
+        "cameraX": 1345.7897,
+        "cameraY": 1242.6465,
+        "lookAheadX": 169.9537
+      },
+      {
+        "phase": "lift",
+        "playerY": 1700.75,
+        "cameraY": 1238.9974
+      },
+      {
+        "phase": "lift",
+        "playerY": 1653.75,
+        "cameraY": 1214.8772
+      },
+      {
+        "phase": "lower",
+        "playerX": 2046.2222,
+        "playerY": 1653.75,
+        "cameraX": 1445.8845,
+        "cameraY": 1214.8772,
+        "lookAheadX": 169.9805
+      },
+      {
+        "phase": "lift",
+        "playerY": 1606.75,
+        "cameraY": 1180.718
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1595,
+        "cameraX": 1490.9828,
+        "cameraY": 1171.1765,
+        "lookAheadX": 92.685
+      },
+      {
+        "phase": "lift",
+        "playerY": 1559.75,
+        "cameraY": 1140.9247
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1536.25,
+        "cameraX": 1458.2871,
+        "cameraY": 1119.737,
+        "lookAheadX": 38.9692
+      },
+      {
+        "phase": "lift",
+        "playerY": 1512.75,
+        "cameraY": 1097.9693
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1477.5,
+        "cameraX": 1425.5393,
+        "cameraY": 1064.5382,
+        "lookAheadX": 16.3845
+      },
+      {
+        "phase": "lift",
+        "playerY": 1465.75,
+        "cameraY": 1053.2392
+      },
+      {
+        "phase": "lift",
+        "playerY": 1418.75,
+        "cameraY": 1007.5132
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1418.75,
+        "cameraX": 1405.3375,
+        "cameraY": 1007.5132,
+        "lookAheadX": 6.8889
+      },
+      {
+        "phase": "lift",
+        "playerY": 1371.75,
+        "cameraY": 961.2282
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1360,
+        "cameraX": 1394.6657,
+        "cameraY": 949.6012,
+        "lookAheadX": 2.8964
+      },
+      {
+        "phase": "lift",
+        "playerY": 1324.75,
+        "cameraY": 914.6295
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1301.25,
+        "cameraX": 1389.4414,
+        "cameraY": 891.2582,
+        "lookAheadX": 1.2178
+      },
+      {
+        "phase": "lift",
+        "playerY": 1277.75,
+        "cameraY": 867.8547
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1242.5,
+        "cameraX": 1386.9952,
+        "cameraY": 832.706,
+        "lookAheadX": 0.512
+      },
+      {
+        "phase": "lift",
+        "playerY": 1230.75,
+        "cameraY": 820.9811
+      },
+      {
+        "phase": "lift",
+        "playerY": 1183.75,
+        "cameraY": 774.052
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1183.75,
+        "cameraX": 1385.8821,
+        "cameraY": 774.052,
+        "lookAheadX": 0.2153
+      },
+      {
+        "phase": "lift",
+        "playerY": 1136.75,
+        "cameraY": 727.0918
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1125,
+        "cameraX": 1385.3855,
+        "cameraY": 715.3487,
+        "lookAheadX": 0.0905
+      },
+      {
+        "phase": "lift",
+        "playerY": 1089.75,
+        "cameraY": 680.1142
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1066.25,
+        "cameraX": 1385.1671,
+        "cameraY": 656.6214,
+        "lookAheadX": 0.0381
+      },
+      {
+        "phase": "lift",
+        "playerY": 1042.75,
+        "cameraY": 633.1267
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 1007.5,
+        "cameraX": 1385.0719,
+        "cameraY": 597.8824,
+        "lookAheadX": 0.016
+      },
+      {
+        "phase": "lift",
+        "playerY": 995.75,
+        "cameraY": 586.1338
+      },
+      {
+        "phase": "lift",
+        "playerY": 948.75,
+        "cameraY": 539.1377
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 948.75,
+        "cameraX": 1385.0308,
+        "cameraY": 539.1377,
+        "lookAheadX": 0.0067
+      },
+      {
+        "phase": "lift",
+        "playerY": 901.75,
+        "cameraY": 492.1399
+      },
+      {
+        "phase": "lower",
+        "playerX": 2065,
+        "playerY": 890,
+        "cameraX": 1385.0131,
+        "cameraY": 480.3903,
+        "lookAheadX": 0.0028
+      },
+      {
+        "phase": "lift",
+        "playerY": 854.75,
+        "cameraY": 445.1412
+      },
+      {
+        "phase": "upper",
+        "playerX": 2065.0833,
+        "playerY": 836,
+        "cameraX": 1385.0085,
+        "cameraY": 421.8382,
+        "lookAheadX": 0.0012
+      },
+      {
+        "phase": "upper",
+        "playerX": 2135,
+        "playerY": 836,
+        "cameraX": 1447.5647,
+        "cameraY": 382.8396,
+        "lookAheadX": 94.2741
+      },
+      {
+        "phase": "upper",
+        "playerX": 2235,
+        "playerY": 836,
+        "cameraX": 1574.3896,
+        "cameraY": 363.8954,
+        "lookAheadX": 138.1612
+      },
+      {
+        "phase": "upper",
+        "playerX": 2335,
+        "playerY": 836,
+        "cameraX": 1701.1832,
+        "cameraY": 354.693,
+        "lookAheadX": 156.6134
+      },
+      {
+        "phase": "upper",
+        "playerX": 2435,
+        "playerY": 836,
+        "cameraX": 1817.7014,
+        "cameraY": 350.2228,
+        "lookAheadX": 164.3716
+      },
+      {
+        "phase": "upper",
+        "playerX": 2535,
+        "playerY": 836,
+        "cameraX": 1926.4248,
+        "cameraY": 348.0513,
+        "lookAheadX": 167.6336
+      },
+      {
+        "phase": "upper",
+        "playerX": 2635,
+        "playerY": 836,
+        "cameraX": 2030.6947,
+        "cameraY": 346.9964,
+        "lookAheadX": 169.005
+      },
+      {
+        "phase": "upper",
+        "playerX": 2735,
+        "playerY": 836,
+        "cameraX": 2132.6938,
+        "cameraY": 346.484,
+        "lookAheadX": 169.5817
+      },
+      {
+        "phase": "upper",
+        "playerX": 2835,
+        "playerY": 836,
+        "cameraX": 2233.6034,
+        "cameraY": 346.2351,
+        "lookAheadX": 169.8241
+      },
+      {
+        "phase": "upper",
+        "playerX": 2935,
+        "playerY": 836,
+        "cameraX": 2334.0091,
+        "cameraY": 346.1142,
+        "lookAheadX": 169.926
+      },
+      {
+        "phase": "upper",
+        "playerX": 3035,
+        "playerY": 836,
+        "cameraX": 2434.1877,
+        "cameraY": 346.0555,
+        "lookAheadX": 169.9689
+      },
+      {
+        "phase": "upper",
+        "playerX": 3135,
+        "playerY": 836,
+        "cameraX": 2534.2654,
+        "cameraY": 346.027,
+        "lookAheadX": 169.9869
+      },
+      {
+        "phase": "upper",
+        "playerX": 3235,
+        "playerY": 836,
+        "cameraX": 2634.299,
+        "cameraY": 346.0131,
+        "lookAheadX": 169.9945
+      },
+      {
+        "phase": "upper",
+        "playerX": 3335,
+        "playerY": 836,
+        "cameraX": 2734.3134,
+        "cameraY": 346.0064,
+        "lookAheadX": 169.9977
+      },
+      {
+        "phase": "upper",
+        "playerX": 3435,
+        "playerY": 836,
+        "cameraX": 2834.3196,
+        "cameraY": 346.0031,
+        "lookAheadX": 169.999
+      },
+      {
+        "phase": "upper",
+        "playerX": 3535,
+        "playerY": 836,
+        "cameraX": 2934.3222,
+        "cameraY": 346.0015,
+        "lookAheadX": 169.9996
+      },
+      {
+        "phase": "upper",
+        "playerX": 3635,
+        "playerY": 836,
+        "cameraX": 3034.3233,
+        "cameraY": 346.0007,
+        "lookAheadX": 169.9998
+      },
+      {
+        "phase": "upper",
+        "playerX": 3735,
+        "playerY": 836,
+        "cameraX": 3134.3238,
+        "cameraY": 346.0004,
+        "lookAheadX": 169.9999
+      },
+      {
+        "phase": "hit",
+        "playerX": 3751.8889,
+        "playerY": 832.7656,
+        "cameraX": 3195.3396,
+        "cameraY": 343.5745,
+        "lookAheadX": 107.0933
+      },
+      {
+        "phase": "upper",
+        "playerX": 3778.6,
+        "playerY": 836,
+        "cameraX": 3178.0217,
+        "cameraY": 344.8032,
+        "lookAheadX": 107.9339
+      },
+      {
+        "phase": "upper",
+        "playerX": 3813.5167,
+        "playerY": 836,
+        "cameraX": 3216.12,
+        "cameraY": 345.4187,
+        "lookAheadX": 80.9977
+      },
+      {
+        "phase": "upper",
+        "playerX": 3832.2667,
+        "playerY": 836,
+        "cameraX": 3208.0295,
+        "cameraY": 345.7176,
+        "lookAheadX": 83.8472
+      },
+      {
+        "phase": "upper",
+        "playerX": 3930.1833,
+        "playerY": 836,
+        "cameraX": 3287.4988,
+        "cameraY": 345.8628,
+        "lookAheadX": 133.7772
+      },
+      {
+        "phase": "upper",
+        "playerX": 4030.1833,
+        "playerY": 836,
+        "cameraX": 3400.6663,
+        "cameraY": 345.9334,
+        "lookAheadX": 154.7702
+      },
+      {
+        "phase": "upper",
+        "playerX": 4130.1833,
+        "playerY": 836,
+        "cameraX": 3513.5966,
+        "cameraY": 345.9676,
+        "lookAheadX": 163.5967
+      },
+      {
+        "phase": "upper",
+        "playerX": 4230.1833,
+        "playerY": 836,
+        "cameraX": 3621.5364,
+        "cameraY": 345.9843,
+        "lookAheadX": 167.3077
+      },
+      {
+        "phase": "upper",
+        "playerX": 4330.1833,
+        "playerY": 836,
+        "cameraX": 3723.5826,
+        "cameraY": 345.9924,
+        "lookAheadX": 168.868
+      },
+      {
+        "phase": "upper",
+        "playerX": 4430.1833,
+        "playerY": 836,
+        "cameraX": 3774.1278,
+        "cameraY": 345.9963,
+        "lookAheadX": 169.5241
+      },
+      {
+        "phase": "upper",
+        "playerX": 4530.1833,
+        "playerY": 836,
+        "cameraX": 3791.2406,
+        "cameraY": 345.9982,
+        "lookAheadX": 169.7999
+      },
+      {
+        "phase": "upper",
+        "playerX": 4630.1833,
+        "playerY": 836,
+        "cameraX": 3797.0344,
+        "cameraY": 345.9991,
+        "lookAheadX": 169.9159
+      },
+      {
+        "phase": "upper",
+        "playerX": 4730.1833,
+        "playerY": 836,
+        "cameraX": 3798.996,
+        "cameraY": 345.9996,
+        "lookAheadX": 169.9646
+      },
+      {
+        "phase": "upper",
+        "playerX": 4830.1833,
+        "playerY": 836,
+        "cameraX": 3799.6601,
+        "cameraY": 345.9998,
+        "lookAheadX": 169.9851
+      },
+      {
+        "phase": "upper",
+        "playerX": 4930.1833,
+        "playerY": 836,
+        "cameraX": 3799.8849,
+        "cameraY": 345.9999,
+        "lookAheadX": 169.9937
+      },
+      {
+        "phase": "upper",
+        "playerX": 5005.1833,
+        "playerY": 836,
+        "cameraX": 3799.961,
+        "cameraY": 346,
+        "lookAheadX": 151.4502
+      }
+    ]
+  },
+  "errors": {
+    "console": [],
+    "page": []
+  }
+}

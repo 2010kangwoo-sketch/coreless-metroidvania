@@ -291,6 +291,7 @@ export function stepResetCombatPlayer(
   input = {},
   dt = RESET_GROUND_MOVEMENT.fixedStep,
   incomingHit = null,
+  environment = {},
 ) {
   const damageAccepted = Boolean(
     incomingHit &&
@@ -359,7 +360,7 @@ export function stepResetCombatPlayer(
     working,
     movementInput,
     dt,
-    RESET_PASS05_SOLIDS,
+    environment.solids ?? RESET_PASS05_SOLIDS,
   );
 
   if (inHitstun) {
@@ -387,8 +388,8 @@ export function stepResetCombatPlayer(
 
   player.x = clamp(
     player.x,
-    RESET_PASS05_LAB.leftBoundary,
-    RESET_PASS05_LAB.rightBoundary -
+    environment.leftBoundary ?? RESET_PASS05_LAB.leftBoundary,
+    (environment.rightBoundary ?? RESET_PASS05_LAB.rightBoundary) -
       RESET_GROUND_MOVEMENT.playerWidth,
   );
   player.hitstunRemaining = Math.max(

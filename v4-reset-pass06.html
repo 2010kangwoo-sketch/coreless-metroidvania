@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071217">
+  <meta
+    name="description"
+    content="Coreless V4 새 6차 대형 월드 카메라 시험장"
+  >
+  <title>Coreless · Reset Pass 06 Camera</title>
+  <link rel="stylesheet" href="v4-reset-pass06.css">
+</head>
+<body>
+  <main class="reset-pass06-shell">
+    <header class="reset-pass06-header">
+      <div>
+        <p>CORELESS · NEW 40-PASS RESET</p>
+        <h1>6차 · 대형 월드 카메라</h1>
+      </div>
+      <span id="resetPass06AuditStatus">AUDIT PENDING</span>
+    </header>
+
+    <section class="reset-pass06-panel" aria-label="대형 월드 카메라 시험장">
+      <canvas
+        id="resetPass06CameraLab"
+        width="1400"
+        height="900"
+        tabindex="0"
+      ></canvas>
+    </section>
+
+    <section class="reset-pass06-notes" aria-label="카메라 기준">
+      <article>
+        <strong>01 · 수평·수직 분리</strong>
+        <span>수평은 빠르게, 수직은 더 차분하게 따라가며 승강 전환에서도 순간 이동하지 않습니다.</span>
+      </article>
+      <article>
+        <strong>02 · 진행 방향 선행</strong>
+        <span>달리는 방향으로 최대 170px를 먼저 보여 주되 방향 전환 때 부드럽게 넘어갑니다.</span>
+      </article>
+      <article>
+        <strong>03 · 피격 완충</strong>
+        <span>넉백은 카메라 선행 방향을 뒤집지 않으며 짧고 작은 화면 반응만 남깁니다.</span>
+      </article>
+      <article>
+        <strong>04 · 깊이 분리</strong>
+        <span>원경 16%, 중경 38%, 근경 68% 시차로 실제 지형보다 느린 배경 깊이를 확인합니다.</span>
+      </article>
+    </section>
+
+    <p class="reset-pass06-footer">
+      7차에서는 이 카메라를 실제 공간 경계와 결합해 천장 노출률,
+      하부 지지대, 공간별 프레이밍과 최대 활성 공간 수를 검증합니다.
+    </p>
+  </main>
+  <script type="module" src="src/v4/reset-pass06-main.js"></script>
+</body>
+</html>
