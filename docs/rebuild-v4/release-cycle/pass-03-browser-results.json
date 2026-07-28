@@ -1,0 +1,442 @@
+{
+  "build": {
+    "id": "coreless-v4-release-pass03-air-forgiveness",
+    "cycle": "v4-release-40pass",
+    "pass": 3,
+    "branch": "rebuild/mega-room-v4-40pass",
+    "parentCommit": "dc2ada7f0df3d3e99b02833492c6cbe2dd85cc78",
+    "scope": "variable jump, air control, coyote time, landing buffer, and reach budgets",
+    "reusedEvidence": "rebuild-v4-reset-pass03-air-movement",
+    "finalArtIncluded": false
+  },
+  "generatedAt": "2026-07-28T04:04:46.152Z",
+  "passed": true,
+  "passedCount": 31,
+  "totalCount": 31,
+  "checks": [
+    {
+      "name": "releaseDocumentReady",
+      "passed": true
+    },
+    {
+      "name": "staticAuditPassed",
+      "passed": true
+    },
+    {
+      "name": "statusShowsPass",
+      "passed": true
+    },
+    {
+      "name": "canvasResolutionCorrect",
+      "passed": true
+    },
+    {
+      "name": "actualKeyboardEventsRecorded",
+      "passed": true
+    },
+    {
+      "name": "shortJumpMeasured",
+      "passed": true
+    },
+    {
+      "name": "fullJumpMeasured",
+      "passed": true
+    },
+    {
+      "name": "variableHeightVisible",
+      "passed": true
+    },
+    {
+      "name": "earlyAirPressRejected",
+      "passed": true
+    },
+    {
+      "name": "airPressRecorded",
+      "passed": true
+    },
+    {
+      "name": "airControlStartsRight",
+      "passed": true
+    },
+    {
+      "name": "airControlReversesLeft",
+      "passed": true
+    },
+    {
+      "name": "coyoteJumpRecorded",
+      "passed": true
+    },
+    {
+      "name": "coyoteSourceRecorded",
+      "passed": true
+    },
+    {
+      "name": "bufferedLandingJumpRecorded",
+      "passed": true
+    },
+    {
+      "name": "bufferAddsExactlyOneJump",
+      "passed": true
+    },
+    {
+      "name": "bufferLaunchesUpward",
+      "passed": true
+    },
+    {
+      "name": "bufferSourceRecorded",
+      "passed": true
+    },
+    {
+      "name": "sixCompletedJumpProfiles",
+      "passed": true
+    },
+    {
+      "name": "airStatesObserved",
+      "passed": true
+    },
+    {
+      "name": "groundStatesPreserved",
+      "passed": true
+    },
+    {
+      "name": "ordinaryReachHasTwentyPercentReserve",
+      "passed": true
+    },
+    {
+      "name": "demandingReachHasTenPercentReserve",
+      "passed": true
+    },
+    {
+      "name": "horizontalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "verticalStepBounded",
+      "passed": true
+    },
+    {
+      "name": "combinedStepBounded",
+      "passed": true
+    },
+    {
+      "name": "noBoundaryCorrection",
+      "passed": true
+    },
+    {
+      "name": "noResetUsed",
+      "passed": true
+    },
+    {
+      "name": "playerEndsGroundedIdle",
+      "passed": true
+    },
+    {
+      "name": "noConsoleErrors",
+      "passed": true
+    },
+    {
+      "name": "noPageErrors",
+      "passed": true
+    }
+  ],
+  "measurements": {
+    "jumpProfiles": [
+      {
+        "source": "ground",
+        "height": 78.5837,
+        "airtimeSeconds": 0.4333,
+        "horizontalDistance": 0,
+        "landingY": 626
+      },
+      {
+        "source": "ground",
+        "height": 139.4167,
+        "airtimeSeconds": 0.6917,
+        "horizontalDistance": 0,
+        "landingY": 626
+      },
+      {
+        "source": "ground",
+        "height": 139.4167,
+        "airtimeSeconds": 0.6917,
+        "horizontalDistance": -33.3757,
+        "landingY": 626
+      },
+      {
+        "source": "coyote",
+        "height": 85.3771,
+        "airtimeSeconds": 0.5917,
+        "horizontalDistance": 195.4694,
+        "landingY": 756
+      },
+      {
+        "source": "ground",
+        "height": 85.3771,
+        "airtimeSeconds": 0.4417,
+        "horizontalDistance": 95.3632,
+        "landingY": 756
+      },
+      {
+        "source": "buffered-landing",
+        "height": 81.7781,
+        "airtimeSeconds": 0.4167,
+        "horizontalDistance": 50.625,
+        "landingY": 756
+      }
+    ],
+    "jumpStarts": 6,
+    "landings": 6,
+    "coyoteJumps": 1,
+    "bufferedLandingJumps": 1,
+    "airJumpPresses": 3,
+    "airSpeedBeforeTurn": 250,
+    "airSpeedAfterTurn": -225,
+    "fullRunningJumpReach": 266.1458333333331,
+    "ordinaryRequiredReachPixels": 212.9166666666665,
+    "demandingRequiredReachPixels": 239.53124999999977,
+    "reservedOrdinaryReachPixels": 53.22916666666661,
+    "reservedDemandingReachPixels": 26.614583333333304,
+    "maximumHorizontalStep": 3.3333333333333712,
+    "maximumVerticalStep": 8.616666666666674,
+    "maximumPositionStep": 8.903658113217737,
+    "boundaryContacts": 0,
+    "stateSequence": [
+      "idle",
+      "rise",
+      "apex",
+      "fall",
+      "soft-land",
+      "idle",
+      "rise",
+      "apex",
+      "fall",
+      "hard-land",
+      "rise",
+      "apex",
+      "fall",
+      "hard-land",
+      "turn",
+      "run-loop",
+      "apex",
+      "fall",
+      "rise",
+      "apex",
+      "fall",
+      "hard-land",
+      "rise",
+      "apex",
+      "fall",
+      "rise",
+      "apex",
+      "fall",
+      "soft-land",
+      "run-stop",
+      "idle"
+    ],
+    "keyEvents": [
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 0.5333,
+        "x": 150,
+        "y": 626,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 0.6,
+        "x": 150,
+        "y": 576.4444,
+        "vx": 0,
+        "vy": -666.6667,
+        "grounded": false
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 0.9833,
+        "x": 150,
+        "y": 626,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 1.35,
+        "x": 150,
+        "y": 479.9514,
+        "vx": 0,
+        "vy": 25,
+        "grounded": false
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 1.3833,
+        "x": 150,
+        "y": 482.1736,
+        "vx": 0,
+        "vy": 108.3333,
+        "grounded": false
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 1.4167,
+        "x": 150,
+        "y": 487.1736,
+        "vx": 0,
+        "vy": 191.6667,
+        "grounded": false
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 1.6833,
+        "x": 150,
+        "y": 626,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 1.6833,
+        "x": 150,
+        "y": 626,
+        "vx": 0,
+        "vy": 0,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 1.85,
+        "x": 170.8333,
+        "y": 521.2778,
+        "vx": 250,
+        "vy": -436.6667,
+        "grounded": false
+      },
+      {
+        "type": "down",
+        "code": "KeyA",
+        "at": 1.85,
+        "x": 170.8333,
+        "y": 521.2778,
+        "vx": 250,
+        "vy": -436.6667,
+        "grounded": false
+      },
+      {
+        "type": "up",
+        "code": "KeyA",
+        "at": 2.1167,
+        "x": 168.8542,
+        "y": 487.1736,
+        "vx": -225,
+        "vy": 191.6667,
+        "grounded": false
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 2.1167,
+        "x": 168.8542,
+        "y": 487.1736,
+        "vx": -225,
+        "vy": 191.6667,
+        "grounded": false
+      },
+      {
+        "type": "down",
+        "code": "KeyD",
+        "at": 2.3833,
+        "x": 116.6764,
+        "y": 626,
+        "vx": -166.3333,
+        "vy": 0,
+        "grounded": true
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 3.6333,
+        "x": 577.2736,
+        "y": 628.1701,
+        "vx": 380,
+        "vy": 104.1667,
+        "grounded": false
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 3.7167,
+        "x": 608.9403,
+        "y": 567.8229,
+        "vx": 380,
+        "vy": -628.3333,
+        "grounded": false
+      },
+      {
+        "type": "up",
+        "code": "KeyD",
+        "at": 3.7167,
+        "x": 608.9403,
+        "y": 567.8229,
+        "vx": 380,
+        "vy": -628.3333,
+        "grounded": false
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 4.2333,
+        "x": 775.9097,
+        "y": 756,
+        "vx": 266.3333,
+        "vy": 0,
+        "grounded": true
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 4.3167,
+        "x": 797.3403,
+        "y": 695.6528,
+        "vx": 248,
+        "vy": -628.3333,
+        "grounded": false
+      },
+      {
+        "type": "down",
+        "code": "Space",
+        "at": 4.5667,
+        "x": 852.4653,
+        "y": 695.4031,
+        "vx": 193,
+        "vy": 398.5833,
+        "grounded": false
+      },
+      {
+        "type": "up",
+        "code": "Space",
+        "at": 4.5833,
+        "x": 855.6514,
+        "y": 702.3934,
+        "vx": 189.3333,
+        "vy": 440.25,
+        "grounded": false
+      }
+    ],
+    "fixedFrames": 620
+  },
+  "consoleErrors": [],
+  "pageErrors": []
+}

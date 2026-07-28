@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071217">
+  <meta
+    name="description"
+    content="Coreless V4 출시 목표 3차 가변 점프와 공중 관용성 시험장"
+  >
+  <title>Coreless · Release Pass 03 Air Forgiveness</title>
+  <link rel="stylesheet" href="v4-release-pass03.css">
+</head>
+<body>
+  <main class="reset-pass03-shell">
+    <header class="reset-pass03-header">
+      <div>
+        <p>CORELESS · V4 RELEASE CYCLE</p>
+        <h1>3차 · 가변 점프와 공중 관용성</h1>
+      </div>
+      <span id="releasePass03AuditStatus">AUDIT PENDING</span>
+    </header>
+
+    <section class="reset-pass03-panel" aria-label="출시판 공중 이동 시험장">
+      <canvas
+        id="releasePass03AirLab"
+        width="1400"
+        height="900"
+        tabindex="0"
+      ></canvas>
+    </section>
+
+    <section class="reset-pass03-notes" aria-label="출시판 공중 이동 기준">
+      <article>
+        <strong>01 · 가변 높이</strong>
+        <span>짧은 입력은 약 85px, 유지 입력은 약 146px로 높이가 분명히 구분됩니다.</span>
+      </article>
+      <article>
+        <strong>02 · 코요테 타임</strong>
+        <span>발판을 떠난 직후 0.10초 동안만 늦은 점프를 받아줍니다.</span>
+      </article>
+      <article>
+        <strong>03 · 입력 버퍼</strong>
+        <span>착지 전 0.12초 이내 입력은 착지 순간 한 번만 실행됩니다.</span>
+      </article>
+      <article>
+        <strong>04 · 공중 제어</strong>
+        <span>공중 반전은 가능하지만 속도를 즉시 뒤집는 숨은 보정은 사용하지 않습니다.</span>
+      </article>
+    </section>
+
+    <p class="reset-pass03-footer">
+      A/D 또는 ←/→와 Space로 직접 시험합니다. 일반 필수 점프는 최대
+      도달 거리의 80% 이하, 어려운 필수 점프는 90% 이하로 제한합니다.
+    </p>
+  </main>
+  <script type="module" src="src/v4/release-pass03-main.js"></script>
+</body>
+</html>

@@ -50,6 +50,8 @@ jobs:
         run: node tools/verify-rebuild-v4-release-pass01.mjs
       - name: Verify V4 release-cycle Pass 02 ground baseline
         run: node tools/verify-rebuild-v4-release-pass02.mjs
+      - name: Verify V4 release-cycle Pass 03 air forgiveness
+        run: node tools/verify-rebuild-v4-release-pass03.mjs
       - name: Verify V4 reset Pass 01 room plan
         run: node tools/verify-rebuild-v4-reset-pass01.mjs
       - name: Verify V4 reset Pass 02 ground movement

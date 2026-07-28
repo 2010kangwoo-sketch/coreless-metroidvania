@@ -1,0 +1,28 @@
+@import url("v4-reset-pass03.css");
+
+#releasePass03AuditStatus {
+  flex: 0 0 auto;
+  border: 1px solid #426266;
+  border-radius: 999px;
+  padding: 10px 16px;
+  color: #8aa8aa;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+#releasePass03AuditStatus[data-state="pass"] {
+  border-color: #4f8c72;
+  color: #8ed5b0;
+}
+
+#releasePass03AirLab {
+  display: block;
+  width: 100%;
+  height: auto;
+  outline: none;
+}
+
+#releasePass03AirLab:focus-visible {
+  box-shadow: inset 0 0 0 3px rgba(222, 201, 123, 0.7);
+}
